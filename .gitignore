@@ -3,6 +3,7 @@
 ##
 
 build/
+source/engine/include/Ballistic.Config.h
 
 #################
 ## Eclipse
