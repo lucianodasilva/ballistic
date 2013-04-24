@@ -4,6 +4,9 @@
 #include "ballistic.engine.icomponent.h"
 
 #include <string>
+#include <type_traits>
+
+#define MSG_NOT_COMPONENT_TYPE "Constructor template parameter must be derived from icontructor!"
 
 using namespace std;
 
@@ -22,6 +25,8 @@ namespace ballistic {
 		template < class component_t >
 		class component_constructor {
 		private:
+			static_assert ( is_base_of < icomponent, component_t >::value, MSG_NOT_COMPONENT_TYPE);
+
 			string _name;
 		public:
 
