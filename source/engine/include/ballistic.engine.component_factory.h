@@ -15,12 +15,16 @@ namespace ballistic {
 		public:
 
 			typedef size_t component_id_t;
-
+		
 		private:
 
-			static map < component_id_t, icomponent_constructor * > _constructors;
+			typedef map < component_id_t, icomponent_constructor * > constructor_map_t;
+			static constructor_map_t _constructors;
 
 		public:
+
+			component_factory ();
+			virtual ~component_factory ();
 
 			template < class component_t >
 			inline static void define ( const string & name );

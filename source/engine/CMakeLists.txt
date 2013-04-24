@@ -15,4 +15,4 @@ file ( GLOB engine_source
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
-add_library ( engine SHARED ${engine_source} )
+add_library ( engine STATIC ${engine_source} )

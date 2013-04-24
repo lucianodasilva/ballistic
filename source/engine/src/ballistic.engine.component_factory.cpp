@@ -1,10 +1,13 @@
 #include "ballistic.engine.component_factory.h"
 
+#include <map>
+
+using namespace std;
+
 namespace ballistic {
 	namespace engine {
 
-		// implement static variable
-		map < component_factory::component_id_t, icomponent_constructor * > component_factory::_constructors;
+		component_factory::constructor_map_t component_factory::_constructors;
 
 	}
 }

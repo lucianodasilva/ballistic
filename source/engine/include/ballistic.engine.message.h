@@ -24,7 +24,7 @@ namespace ballistic {
 
 		public:
 
-			inline message ( message_id_t & message_id );
+			inline message ( message_id_t message_id );
 			inline message ( const message & orig );
 
 			inline message_id_t get_id () const;
@@ -37,7 +37,7 @@ namespace ballistic {
 
 		};
 
-		message::message ( message_id_t & message_id ) : _message_id (message_id) {}
+		message::message ( message_id_t message_id ) : _message_id (message_id) {}
 
 		message::message ( const message & orig ) : _message_id ( orig._message_id ), _attributes (orig._attributes) {}
 

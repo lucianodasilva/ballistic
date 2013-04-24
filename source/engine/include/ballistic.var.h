@@ -96,7 +96,7 @@ private:
 	template < class t >
 	struct _setter_int {
 		inline static void set ( var & var_ref, const t & val ) {
-			nomad::convert ( val, var_ref._data._int64_v );
+			ballistic::convert ( val, var_ref._data._int64_v );
 			var_ref._type = var_type_int64;
 		}
 	};
@@ -104,7 +104,7 @@ private:
 	template < class t >
 	struct _setter_uint {
 		inline static void set ( var & var_ref, const t & val ) {
-			nomad::convert ( val, var_ref._data._uint64_v );
+			ballistic::convert ( val, var_ref._data._uint64_v );
 			var_ref._type = var_type_uint64;
 		}
 	};
@@ -112,7 +112,7 @@ private:
 	template < class t >
 	struct _setter_double {
 		inline static void set ( var & var_ref, const t & val ) {
-			nomad::convert ( val, var_ref._data._double_v );
+			ballistic::convert ( val, var_ref._data._double_v );
 			var_ref._type = var_type_double;
 		}
 	};

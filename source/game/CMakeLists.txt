@@ -13,5 +13,5 @@ file ( GLOB game_source
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
-add_library ( game SHARED ${game_source} )
+add_library ( game STATIC ${game_source} )
 target_link_libraries ( game engine )

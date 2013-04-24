@@ -23,7 +23,7 @@ namespace ballistic {
 		};
 
 		template < class component_t >
-		class component_constructor {
+		class component_constructor : public icomponent_constructor {
 		private:
 			static_assert ( is_base_of < icomponent, component_t >::value, MSG_NOT_COMPONENT_TYPE);
 
