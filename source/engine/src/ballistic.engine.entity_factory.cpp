@@ -3,11 +3,11 @@
 namespace ballistic {
 	namespace engine {
 		
-		atomic < uint32 > entity_factory::_current_id = 0;
+		atomic < uint32 > entity_factory::_current_id = 1;
 		
 		entity_factory::entity_definition_map entity_factory::_definitions;
 		
-		entity_definition const & entity_factory::define ( const string & name ) {
+		entity_definition & entity_factory::define ( const string & name ) {
 			
 			entity_definition * new_def = new entity_definition (name);
 			

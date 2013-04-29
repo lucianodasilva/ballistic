@@ -29,7 +29,7 @@ namespace ballistic {
 			
 			const string & get_name () const;
 			
-			entity_definition const & operator << (const string & component_name );
+			entity_definition & operator << (const string & component_name );
 			
 		};
 

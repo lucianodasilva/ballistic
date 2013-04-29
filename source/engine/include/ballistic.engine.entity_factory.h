@@ -25,7 +25,7 @@ namespace ballistic {
 			
 		public:
 			
-			static entity_definition const & define (const string & name);
+			static entity_definition & define (const string & name);
 			
 			static entity * create (const string & type);
 			static entity * create (entity_type_t type);

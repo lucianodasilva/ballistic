@@ -18,7 +18,7 @@ namespace ballistic {
 			return _name;
 		}
 		
-		entity_definition const & entity_definition::operator << (const string & component_name) {
+		entity_definition & entity_definition::operator << (const string & component_name) {
 			
 			component_id_t id = hash < string > () (component_name);
 			

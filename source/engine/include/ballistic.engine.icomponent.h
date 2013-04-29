@@ -6,17 +6,27 @@
 
 namespace ballistic {
 	namespace engine {
+
+		class entity;
 	
 		class icomponent {
+		private:
+
+			entity * _entity;
+
 		public:
 
-			virtual inline ~icomponent () {}
+			entity * get_entity () const;
+			void set_entity ( entity * ent );
+
+			icomponent ();
+			virtual ~icomponent ();
 			
 			virtual void notify ( ballistic::engine::message & message ) = 0;
 			
 		};
 
-		template < void (*message_handle)( ballistic::engine::message & ) >
+		template < void (*message_handle)( entity * this_entity, ballistic::engine::message & ) >
 		class func_component : public icomponent {
 		public:
 
@@ -24,9 +34,9 @@ namespace ballistic {
 
 		};
 
-		template < void (*message_handle)( ballistic::engine::message & ) >
+		template < void (*message_handle)( entity * this_entity, ballistic::engine::message & ) >
 		void func_component < message_handle >::notify ( ballistic::engine::message & message ) {
-			message_handle (message);
+			message_handle (get_entity (), message);
 		}
 
 	}
