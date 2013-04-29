@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#include "ballistic.engine.component_constructor.h"
+#include "ballistic.engine.component_factory.h"
 
 using namespace std;
 
@@ -27,7 +27,7 @@ namespace ballistic {
 
 			entity_definition ( const string & name );
 			
-			string & get_name () const;
+			const string & get_name () const;
 			
 			entity_definition const & operator << (const string & component_name );
 			

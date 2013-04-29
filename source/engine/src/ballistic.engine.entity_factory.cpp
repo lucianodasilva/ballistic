@@ -5,7 +5,7 @@ namespace ballistic {
 		
 		atomic < uint32 > entity_factory::_current_id = 0;
 		
-		entity_definition_map entity_factory::_definitions;
+		entity_factory::entity_definition_map entity_factory::_definitions;
 		
 		entity_definition const & entity_factory::define ( const string & name ) {
 			
@@ -32,7 +32,9 @@ namespace ballistic {
 				end = def->end ();
 			
 			for (; it != end; ++it) {
-				new_entity->add_component (*it);
+				new_entity->add_component (
+					component_factory::create (*it)
+				);
 			}
 			
 			return new_entity;

@@ -11,10 +11,10 @@
 namespace ballistic {
 	namespace engine {
 		
+		typedef size_t entity_type_t;
+
 		class entity_factory {
 		public:
-			
-			typedef size_t entity_type_t;
 			
 			typedef map < entity_type_t, entity_definition * > entity_definition_map;
 			

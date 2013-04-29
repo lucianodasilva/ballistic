@@ -11,11 +11,9 @@
 namespace ballistic {
 	namespace engine {
 
-		class component_factory {
-		public:
+		typedef size_t component_id_t;
 
-			typedef size_t component_id_t;
-		
+		class component_factory {
 		private:
 
 			typedef map < component_id_t, icomponent_constructor * > constructor_map_t;

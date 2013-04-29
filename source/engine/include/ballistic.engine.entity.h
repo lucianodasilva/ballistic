@@ -10,11 +10,9 @@ using namespace std;
 namespace ballistic {
 	namespace engine {
 
-		class entity {
-		public:
-			
-			typedef uint32 entity_id_t;
-			
+		typedef uint32 entity_id_t;
+
+		class entity {	
 		private:
 
 			entity_id_t _id;
@@ -25,6 +23,7 @@ namespace ballistic {
 			entity_id_t get_id ();
 			
 			void add_component ( icomponent * component );
+			virtual void notify ( ballistic::engine::message & message );
 
 			entity ( entity_id_t id );
 			~entity ();

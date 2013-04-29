@@ -4,21 +4,21 @@
 namespace ballistic {
 	namespace engine {
 		
-		iterator entity_definition::begin () {
+		entity_definition::iterator entity_definition::begin () {
 			return _components.begin ();
 		}
 		
-		iterator entity_definition::end () {
+		entity_definition::iterator entity_definition::end () {
 			return _components.end ();
 		}
 		
 		entity_definition::entity_definition ( const string & name ) : _name (name) {}
 		
-		string entity_definition::get_name () {
+		const string & entity_definition::get_name () const {
 			return _name;
 		}
 		
-		entity_definition const & operator << (const string & component_name) {
+		entity_definition const & entity_definition::operator << (const string & component_name) {
 			
 			component_id_t id = hash < string > () (component_name);
 			
