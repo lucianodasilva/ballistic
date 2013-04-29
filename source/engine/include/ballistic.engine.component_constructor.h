@@ -16,6 +16,7 @@ namespace ballistic {
 		class icomponent_constructor {
 		public:
 
+			virtual inline ~icomponent_constructor (){}
 			virtual string get_name () = 0;
 
 			virtual icomponent * create () = 0;

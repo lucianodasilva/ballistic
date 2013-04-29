@@ -10,6 +10,8 @@ namespace ballistic {
 		class icomponent {
 		public:
 
+			virtual inline ~icomponent () {}
+			
 			virtual void notify ( ballistic::engine::message & message ) = 0;
 			
 		};

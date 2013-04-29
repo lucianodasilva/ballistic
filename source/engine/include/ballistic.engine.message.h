@@ -39,7 +39,7 @@ namespace ballistic {
 
 		message::message ( message_id_t message_id ) : _message_id (message_id) {}
 
-		message::message ( const message & orig ) : _message_id ( orig._message_id ), _attributes (orig._attributes) {}
+		message::message ( const message & orig ) : _attributes (orig._attributes), _message_id ( orig._message_id ) {}
 
 		inline message::message_id_t message::get_id () const { return _message_id; }
 
