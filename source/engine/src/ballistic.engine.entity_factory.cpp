@@ -3,7 +3,7 @@
 namespace ballistic {
 	namespace engine {
 		
-		atomic < uint32 > entity_factory::_current_id = 1;
+		atomic < uint32 > entity_factory::_current_id (1);
 		
 		entity_factory::entity_definition_map entity_factory::_definitions;
 		

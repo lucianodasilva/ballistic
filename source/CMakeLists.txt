@@ -6,14 +6,25 @@ project ( ballistic )
 # Load engine library and main projects
 set ( proj_dir ${CMAKE_CURRENT_LIST_DIR} )
 
+set ( deps_dir      ${proj_dir}/deps )
 set ( engine_dir 	${proj_dir}/engine )
 set ( game_dir 		${proj_dir}/game )
+set ( demo_dir	    ${proj_dir}/demo )
 
+set ( deps_dir      ${deps_dir}     CACHE STRING "Path to dependency containing folder" )
 set ( engine_dir 	${engine_dir} 	CACHE STRING "Path to Engine Library" )
 set ( game_dir 		${game_dir} 	CACHE STRING "Path to Game Implementation" )
+set ( demo_dir      ${demo_dir}     CACHE STRING "Path to Demo implementation" )
+
+# include dependencies
+set_property (GLOBAL PROPERTY USE_FOLDERS ON)
+# glfw
+add_subdirectory ( ${deps_dir}/glfw/ )
+set_property (TARGET glfw PROPERTY FOLDER "dependencies")
 
 include ( ${engine_dir}/CMakeLists.txt )
 include ( ${game_dir}/CMakeLists.txt )
+include ( ${demo_dir}/CMakeLists.txt )
 
 # enable c++11
 if (NOT CMAKE_DEFINED_COMPILER MATCHES BALLISTIC_MSVC)

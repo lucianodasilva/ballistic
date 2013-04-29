@@ -8,6 +8,8 @@
 #include "ballistic.engine.entity.h"
 #include "ballistic.engine.entity_definition.h"
 
+using namespace std;
+
 namespace ballistic {
 	namespace engine {
 		
