@@ -10,17 +10,8 @@ set(GLFW_VERSION "${GLFW_VERSION_MAJOR}.${GLFW_VERSION_MINOR}")
 set(GLFW_VERSION_FULL "${GLFW_VERSION}.${GLFW_VERSION_PATCH}${GLFW_VERSION_EXTRA}")
 set(LIB_SUFFIX "" CACHE STRING "Takes an empty string or 64. Directory where lib will be installed: lib or lib64")
 
-option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" ON)
-option(GLFW_BUILD_TESTS "Build the GLFW test programs" ON)
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
-set(DOXYGEN_SKIP_DOT TRUE)
-find_package(Doxygen)
-
-option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
-if (GLFW_DOCUMENT_INTERNALS)
-    set(GLFW_DOC_HEADERS "${GLFW_SOURCE_DIR}/src/internal.h")
-endif()
+set (GLFW_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR})
+include_directories ( ${GLFW_SOURCE_DIR}/include )
 
 if (APPLE)
     option(GLFW_USE_CHDIR "Make glfwInit chdir to Contents/Resources" ON)
@@ -70,13 +61,6 @@ find_package(Threads REQUIRED)
 #--------------------------------------------------------------------
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-Wall)
-endif()
-
-#--------------------------------------------------------------------
-# Export shared library / dynamic library / DLL build option
-#--------------------------------------------------------------------
-if (BUILD_SHARED_LIBS)
-    set(_GLFW_BUILD_DLL 1)
 endif()
 
 #--------------------------------------------------------------------
@@ -341,67 +325,16 @@ set(GLFW_LIBRARIES ${glfw_LIBRARIES} CACHE STRING "Dependencies of GLFW")
 #--------------------------------------------------------------------
 # Choose library output name
 #--------------------------------------------------------------------
-if (BUILD_SHARED_LIBS AND UNIX)
-    # On Unix-like systems, shared libraries can use the soname system.
-    set(GLFW_LIB_NAME glfw)
-else()
-    set(GLFW_LIB_NAME glfw3)
-endif()
+set(GLFW_LIB_NAME glfw3)
 
 #--------------------------------------------------------------------
 # Add subdirectories
 #--------------------------------------------------------------------
-add_subdirectory(src)
-
-if (GLFW_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
-
-if (GLFW_BUILD_TESTS)
-    add_subdirectory(tests)
-endif()
-
-if (DOXYGEN_FOUND)
-    add_subdirectory(docs)
-endif()
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/src)
 
 #--------------------------------------------------------------------
 # Create generated files
 #--------------------------------------------------------------------
-configure_file(${GLFW_SOURCE_DIR}/docs/Doxyfile.in
-               ${GLFW_BINARY_DIR}/docs/Doxyfile @ONLY)
-
 configure_file(${GLFW_SOURCE_DIR}/src/config.h.in 
                ${GLFW_BINARY_DIR}/src/config.h @ONLY)
-
-#--------------------------------------------------------------------
-# Install the public headers
-# The src directory's CMakeLists.txt file installs the library
-#--------------------------------------------------------------------
-install(DIRECTORY include/GL DESTINATION include 
-        FILES_MATCHING PATTERN glfw3.h PATTERN glfw3native.h)
-
-#--------------------------------------------------------------------
-# Create and install pkg-config file on supported platforms
-#--------------------------------------------------------------------
-if (UNIX)
-    configure_file(${GLFW_SOURCE_DIR}/src/glfw3.pc.in
-                   ${GLFW_BINARY_DIR}/src/glfw3.pc @ONLY)
-
-    install(FILES ${GLFW_BINARY_DIR}/src/glfw3.pc
-            DESTINATION lib${LIB_SUFFIX}/pkgconfig)
-endif()
-
-#--------------------------------------------------------------------
-# Uninstall operation
-# Don't generate this target if a higher-level project already has
-#--------------------------------------------------------------------
-if (NOT TARGET uninstall)
-    configure_file(${GLFW_SOURCE_DIR}/cmake_uninstall.cmake.in
-                   ${GLFW_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
-
-    add_custom_target(uninstall
-                      ${CMAKE_COMMAND} -P
-                      ${GLFW_BINARY_DIR}/cmake_uninstall.cmake)
-endif()
 

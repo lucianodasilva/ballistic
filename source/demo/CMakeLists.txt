@@ -13,5 +13,5 @@ file ( GLOB demo_source
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
-add_library ( demo STATIC ${demo_source} )
-target_link_libraries ( game engine glfw )
+add_executable ( demo ${demo_source} )
+target_link_libraries ( demo game engine glfw ${glfw_LIBRARIES})

@@ -19,8 +19,7 @@ set ( demo_dir      ${demo_dir}     CACHE STRING "Path to Demo implementation" )
 # include dependencies
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 # glfw
-add_subdirectory ( ${deps_dir}/glfw/ )
-include_directories ( ${deps_dir}/glfw/include )
+include ( ${deps_dir}/glfw/CMakeLists.txt )
 set_property (TARGET glfw PROPERTY FOLDER "dependencies")
 
 include ( ${engine_dir}/CMakeLists.txt )

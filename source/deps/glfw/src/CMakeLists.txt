@@ -47,39 +47,6 @@ if (APPLE)
     set_source_files_properties(${glfw_SOURCES} PROPERTIES LANGUAGE C)
 endif()
 
-add_library(glfw ${glfw_SOURCES} ${glfw_HEADERS})
+add_library(glfw STATIC ${glfw_SOURCES} ${glfw_HEADERS})
 set_target_properties(glfw PROPERTIES OUTPUT_NAME "${GLFW_LIB_NAME}")
-
-if (BUILD_SHARED_LIBS)
-    # Include version information in the output
-    set_target_properties(glfw PROPERTIES VERSION ${GLFW_VERSION})
-    if (UNIX)
-        set_target_properties(glfw PROPERTIES SOVERSION ${GLFW_VERSION_MAJOR})
-    endif()
-
-    if (WIN32)
-        # The GLFW DLL needs a special compile-time macro and import library name
-        set_target_properties(glfw PROPERTIES PREFIX "" IMPORT_PREFIX "")
-
-        if (MINGW)
-            set_target_properties(glfw PROPERTIES IMPORT_SUFFIX "dll.a")
-        else()
-            set_target_properties(glfw PROPERTIES IMPORT_SUFFIX "dll.lib")
-        endif()
-    elseif (APPLE)
-        # Append -fno-common to the compile flags to work around a bug in
-        # Apple's GCC
-        get_target_property(glfw_CFLAGS glfw COMPILE_FLAGS)
-        if (NOT glfw_CFLAGS)
-            set(glfw_CFLAGS "")
-        endif()
-        set_target_properties(glfw PROPERTIES
-                              COMPILE_FLAGS "${glfw_CFLAGS} -fno-common")
-    endif()
-
-    target_link_libraries(glfw ${glfw_LIBRARIES})
-    target_link_libraries(glfw LINK_INTERFACE_LIBRARIES)
-endif()
-
-install(TARGETS glfw DESTINATION lib${LIB_SUFFIX} )
 
