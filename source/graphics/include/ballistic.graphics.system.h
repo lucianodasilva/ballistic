@@ -9,7 +9,7 @@ namespace ballistic {
 	namespace graphics {
 		
 		class system : public ballistic::engine::icomponent {
-			
+		
 		};
 		
 	}
