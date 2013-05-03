@@ -13,7 +13,7 @@ set ( game_dir 		${proj_dir}/game )
 set ( demo_dir	    ${proj_dir}/demo )
 
 set ( deps_dir      ${deps_dir}     CACHE STRING "Path to dependency containing folder" )
-set ( engine_dir 	${engine_dir} CACHE STRING "Path to Engine Library" )
+set ( engine_dir 	${engine_dir} 	CACHE STRING "Path to Engine Library" )
 set ( graphics_dir 	${graphics_dir} CACHE STRING "Path to Graphics Library" )
 set ( game_dir 		${game_dir} 	CACHE STRING "Path to Game Implementation" )
 set ( demo_dir      ${demo_dir}     CACHE STRING "Path to Demo implementation" )

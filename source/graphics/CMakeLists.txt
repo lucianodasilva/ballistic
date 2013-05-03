@@ -15,6 +15,14 @@ file ( GLOB graphics_source
 
 add_library ( graphics STATIC ${graphics_source} )
 
-find_package(OpenGL REQUIRED)
+if (APPLE)
+	include_directories (/System/Library/Frameworks)
+	find_library ( OpenGL_LIBRARY OpenGL )
+	mark_as_advanced ( 
+			OpenGL_LIBRARY
+	)
+else ()
+	find_package(OpenGL REQUIRED)
+endif ()
 
-target_link_libraries ( graphics engine ${OPENGL_gl_LIBRARY} )
+target_link_libraries ( graphics engine ${OpenGL_LIBRARY} )

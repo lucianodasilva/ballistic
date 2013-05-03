@@ -9,7 +9,13 @@ namespace ballistic {
 	namespace graphics {
 		
 		class system : public ballistic::engine::icomponent {
-		
+		private:
+			
+			
+			
+		public:
+			virtual void notify ( ballistic::engine::message & message );
+			
 		};
 		
 	}
