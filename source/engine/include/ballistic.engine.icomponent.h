@@ -17,7 +17,7 @@ namespace ballistic {
 		public:
 
 			entity * get_entity () const;
-			void set_entity ( entity * ent );
+			virtual void set_entity ( entity * ent );
 
 			icomponent ();
 			virtual ~icomponent ();

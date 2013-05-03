@@ -25,4 +25,4 @@ else ()
 	find_package(OpenGL REQUIRED)
 endif ()
 
-target_link_libraries ( graphics engine ${OpenGL_LIBRARY} )
+target_link_libraries ( graphics engine glfw ${glfw_LIBRARIES} ${OpenGL_LIBRARY} )

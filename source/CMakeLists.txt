@@ -27,6 +27,9 @@ set_property (TARGET glfw PROPERTY FOLDER "dependencies")
 include ( ${deps_dir}/glm/CMakeLists.txt )
 set_property (TARGET glm PROPERTY FOLDER "dependencies")
 
+# GLEXT files
+include_directories ( ${deps_dir}/glext )
+
 include ( ${engine_dir}/CMakeLists.txt )
 include ( ${graphics_dir}/CMakeLists.txt )
 include ( ${game_dir}/CMakeLists.txt )

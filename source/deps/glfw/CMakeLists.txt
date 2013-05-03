@@ -36,12 +36,6 @@ if (GLFW_USE_EGL)
 
     set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake/modules)
     find_package(EGL REQUIRED)
-
-    if (NOT _GLFW_USE_OPENGL)
-        set(GLFW_BUILD_EXAMPLES OFF)
-        set(GLFW_BUILD_TESTS OFF)
-        message(STATUS "NOTE: Examples and tests require OpenGL")
-    endif()
 else()
     set(_GLFW_USE_OPENGL 1)
 endif()
@@ -118,10 +112,6 @@ if (_GLFW_WIN32)
     endif()
 
     set(_GLFW_NO_DLOAD_WINMM ${BUILD_SHARED_LIBS})
-
-    if (BUILD_SHARED_LIBS)
-        list(APPEND glfw_LIBRARIES winmm)
-    endif()
 endif()
 
 #--------------------------------------------------------------------
