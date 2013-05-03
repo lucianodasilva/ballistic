@@ -36,7 +36,7 @@ namespace ballistic {
 			virtual void notify ( ballistic::engine::message & message );
 
 			entity ( entity_id_t id );
-			~entity ();
+			virtual ~entity ();
 			
 		};
 	};
