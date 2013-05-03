@@ -8,11 +8,12 @@ set ( proj_dir ${CMAKE_CURRENT_LIST_DIR} )
 
 set ( deps_dir      ${proj_dir}/deps )
 set ( engine_dir 	${proj_dir}/engine )
+set ( graphics_dir 	${proj_dir}/graphics )
 set ( game_dir 		${proj_dir}/game )
 set ( demo_dir	    ${proj_dir}/demo )
 
 set ( deps_dir      ${deps_dir}     CACHE STRING "Path to dependency containing folder" )
-set ( engine_dir 	${engine_dir} 	CACHE STRING "Path to Engine Library" )
+set ( graphics_dir 	${graphics_dir} CACHE STRING "Path to Graphics Library" )
 set ( game_dir 		${game_dir} 	CACHE STRING "Path to Game Implementation" )
 set ( demo_dir      ${demo_dir}     CACHE STRING "Path to Demo implementation" )
 
@@ -22,7 +23,11 @@ set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 include ( ${deps_dir}/glfw/CMakeLists.txt )
 set_property (TARGET glfw PROPERTY FOLDER "dependencies")
 
+include ( ${deps_dir}/glm/CMakeLists.txt )
+set_property (TARGET glm PROPERTY FOLDER "dependencies")
+
 include ( ${engine_dir}/CMakeLists.txt )
+include ( ${graphics_dir}/CMakeLists.txt )
 include ( ${game_dir}/CMakeLists.txt )
 include ( ${demo_dir}/CMakeLists.txt )
 
