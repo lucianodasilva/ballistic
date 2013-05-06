@@ -3,6 +3,30 @@
 
 namespace ballistic {
 	namespace engine {
+		
+		bool entity::has_attribute(const string &key) {
+			return has_attribute(hash < string > () (key));
+		}
+		
+		bool entity::has_attribute(engine::attribute::id_t id) {
+			return _attributes.find (id) != _attributes.end ();
+		}
+		
+		attribute & entity::attribute(const string &key) {
+			return attribute(hash < string > () (key));
+		}
+		
+		attribute & entity::attribute(engine::attribute::id_t id ) {
+			return _attributes [id];
+		}
+		
+		void entity::add_attribute(const string &key) {
+			add_attribute (hash < string > () (key));
+		}
+		
+		void entity::add_attribute ( engine::attribute::id_t id ) {
+			
+		}
 
 		game * entity::get_game () { return _game; }
 		void entity::set_game ( game * g ) { _game = g; }
@@ -11,6 +35,8 @@ namespace ballistic {
 		
 		void entity::add_component ( icomponent * component ) {
 			component->set_entity (this);
+			component->setup ();
+			
 			_components.push_back (component);
 		}
 

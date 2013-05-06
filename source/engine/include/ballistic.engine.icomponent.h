@@ -22,6 +22,8 @@ namespace ballistic {
 			icomponent ();
 			virtual ~icomponent ();
 			
+			virtual void setup ();
+			
 			virtual void notify ( ballistic::engine::message & message ) = 0;
 			
 		};
