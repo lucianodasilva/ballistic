@@ -9,31 +9,31 @@ namespace ballistic {
 			: _v_buffer_id (0), _i_buffer_id (0), _face_count(0)
 		{}
 
-		mesh::mesh ( vertex v_buffer [], uint16 index_buffer [] ) 
+		mesh::mesh ( vertex v_buffer [], int32 v_buffer_size, uint16 i_buffer [], int32 i_buffer_size ) 
 			: _v_buffer_id (0), _i_buffer_id (0), _face_count (0)
 		{
-			set_data (v_buffer, index_buffer);
+			set_data (v_buffer, v_buffer_size, i_buffer, i_buffer_size);
 		}
 
 		mesh::~mesh() {
 			clear_data ();
 		}
 
-		void mesh::set_data ( vertex v_buffer [], uint16 index_buffer [] ) {
+		void mesh::set_data ( vertex v_buffer [], int32 v_buffer_size, uint16 i_buffer [], int32 i_buffer_size ) {
 			clear_data ();
 			//Copy vertex buffers
 			glGenBuffers (1, (GLuint *)&_v_buffer_id);
 
 			glBindBuffer (GL_ARRAY_BUFFER, _v_buffer_id );
-			glBufferData (GL_ARRAY_BUFFER, sizeof (v_buffer), &v_buffer [0].position[0], GL_STATIC_DRAW);
+			glBufferData (GL_ARRAY_BUFFER, v_buffer_size * sizeof (vertex), &v_buffer [0].position[0], GL_STATIC_DRAW);
 
 			//Copy index buffers
 			glGenBuffers (1, (GLuint *)&_i_buffer_id);
 
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _i_buffer_id );
-			glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof (index_buffer), &index_buffer [0], GL_STATIC_DRAW);
+			glBufferData (GL_ELEMENT_ARRAY_BUFFER, i_buffer_size * sizeof (uint16), &i_buffer [0], GL_STATIC_DRAW);
 
-			_face_count = (sizeof ( index_buffer ) / sizeof ( uint16 ) / 3);
+			_face_count = i_buffer_size / 3;
 		}
 
 		void mesh::clear_data () {

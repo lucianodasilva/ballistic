@@ -28,10 +28,10 @@ namespace ballistic {
 		public:
 
 			mesh ();
-			mesh ( vertex v_buffer [], uint16 index_buffer [] );
+			mesh ( vertex v_buffer [], int32 v_buffer_size, uint16 i_buffer [], int32 i_buffer_size );
 			virtual ~mesh ();
 
-			void set_data ( vertex v_buffer [], uint16 index_buffer [] );
+			void set_data ( vertex v_buffer [], int32 v_buffer_size, uint16 i_buffer [], int32 i_buffer_size );
 			void clear_data ();
 
 			virtual void render ();

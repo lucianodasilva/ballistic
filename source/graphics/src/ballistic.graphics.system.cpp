@@ -35,6 +35,7 @@ namespace ballistic {
 					glLoadMatrixf (&item.transform[0][0]);
 					irenderable * render_object = _render_items [i].render_object;
 
+					render_object->render();
 				}
 
 			}
