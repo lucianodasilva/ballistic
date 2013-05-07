@@ -1,5 +1,4 @@
 #include "ballistic.graphics.mesh.h"
-
 #include "ballistic.graphics.defines.h"
 
 namespace ballistic {

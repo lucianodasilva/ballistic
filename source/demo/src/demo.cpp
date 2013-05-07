@@ -1,17 +1,76 @@
-#include <GL/glfw3.h>
-
 #include <stdlib.h>
 #include <stdio.h>
+
+#include <Ballistic.h>
+#include <ballistic.graphics.h>
+
+GLFWwindow* window;
 
 static void error_callback(int error, const char* description)
 {
     fputs(description, stderr);
 }
 
+void rotate_component ( ballistic::engine::entity * this_entity, ballistic::engine::message & message ) {
+
+}
+
+using namespace ballistic::engine;
+using namespace ballistic::graphics;
+
+void setup (ballistic::engine::game *& game) {
+
+	game = new ballistic::engine::game ();
+
+	// Define rotation component
+	component_factory::define < func_component < rotate_component > > ("rotate_component");
+	// Define graphics components
+	component_factory::define < visual_component > ("visual_component");
+	// Define graphics system component
+	component_factory::define < ballistic::graphics::system > ("visual_system");
+
+	// --------------------------------------------
+
+	// Define entity
+	ballistic::engine::entity_factory::define ("demo_triangle")
+		<< "rotate_component"
+		<< "visual_component";
+
+	// entities assemble... :D
+	game->create_component ("visual_system");
+	entity * ent = game->create_entity ("demo_triangle");
+
+	// resources
+	mesh::vertex v_buffer [4] = {
+		{vec3 (-1.0F, -1.0F, 0.0F), vec2 (0.0F, 0.0F)},
+		{vec3 (1.0F, -1.0F, 0.0F), vec2 (0.0F, 0.0F)},
+		{vec3 (1.0F, 1.0F, 0.0F), vec2 (0.0F, 0.0F)},
+		{vec3 (-1.0F, 1.0F, 0.0F), vec2 (0.0F, 0.0F)}
+	};
+
+	uint16 i_buffer [6] = { 0, 1, 2, 0, 2, 3 };
+
+	mesh * new_mesh = new mesh (v_buffer, 4, i_buffer, 6);
+	material * mat = new material ();
+	mat->color = vec4 (1.0F, 0.0F, 0.0F, 1.0F);
+
+	ent->attribute (visual_component::mesh_attribute_id).set (new_mesh);
+	ent->attribute (visual_component::material_attribute_id).set (mat);
+}
+
+void loop_callback ( ballistic::engine::game * game ) {
+
+	if (glfwWindowShouldClose(window))
+		game->terminate ();
+
+	glfwSwapBuffers(window);
+	glfwPollEvents();
+
+}
+
 int main(void)
 {
-    GLFWwindow* window;
-	
+	glewInit ();
     glfwSetErrorCallback(error_callback);
 	
     if (!glfwInit())
@@ -25,38 +84,11 @@ int main(void)
     }
 	
     glfwMakeContextCurrent(window);
-	
-    while (!glfwWindowShouldClose(window))
-    {
-        float ratio;
-        int width, height;
-		
-        glfwGetWindowSize(window, &width, &height);
-        ratio = width / (float) height;
-		
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-		
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        glMatrixMode(GL_MODELVIEW);
-		
-        glLoadIdentity();
-        glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
-		
-        glBegin(GL_TRIANGLES);
-        glColor3f(1.f, 0.f, 0.f);
-        glVertex3f(-0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 1.f, 0.f);
-        glVertex3f(0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 0.f, 1.f);
-        glVertex3f(0.f, 0.6f, 0.f);
-        glEnd();
-		
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+
+	ballistic::engine::game * game;
+
+	setup (game);
+	game->loop (loop_callback);
 	
     glfwDestroyWindow(window);
 	

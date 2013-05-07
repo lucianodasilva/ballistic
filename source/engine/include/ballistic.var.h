@@ -167,6 +167,11 @@ private:
 	template < class t >
 	struct _getter_struct {
 		inline static void get ( const var & var_ref, t & val ) {
+			if (var_ref._type == var_type_none) {
+				val = t ();
+				return;
+			}
+
 			if ( var_ref._type != var_type_struct )
 				throw MSG_CANNOT_CONVERT_FROM_STRUCT;
 

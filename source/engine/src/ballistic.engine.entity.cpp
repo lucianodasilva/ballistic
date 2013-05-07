@@ -19,14 +19,6 @@ namespace ballistic {
 		attribute & entity::attribute(engine::attribute::id_t id ) {
 			return _attributes [id];
 		}
-		
-		void entity::add_attribute(const string &key) {
-			add_attribute (hash < string > () (key));
-		}
-		
-		void entity::add_attribute ( engine::attribute::id_t id ) {
-			
-		}
 
 		game * entity::get_game () { return _game; }
 		void entity::set_game ( game * g ) { _game = g; }

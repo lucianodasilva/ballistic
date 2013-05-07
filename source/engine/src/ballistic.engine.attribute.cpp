@@ -22,12 +22,14 @@ namespace ballistic {
 		void attribute::set ( const var & v ) {
 			_value = v;
 			
-			message m (_parent, message_attribute_changed);
+			if (_parent) {
+				message m (_parent, message_attribute_changed);
 			
-			m [message_attribute_id] = _id;
-			m [message_attribute_value] = v;
+				m [message_attribute_id] = _id;
+				m [message_attribute_value] = v;
 			
-			_parent->get_game ()->send_message (m);
+				_parent->get_game ()->send_message (m);
+			}
 		}
 		
 	}

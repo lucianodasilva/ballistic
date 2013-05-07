@@ -38,9 +38,6 @@ namespace ballistic {
 			engine::attribute & attribute ( const string & key );
 			engine::attribute & attribute ( engine::attribute::id_t id );
 			
-			void add_attribute ( const string & key );
-			void add_attribute ( engine::attribute::id_t id );
-			
 			game * get_game ();
 			void set_game (game * g);
 

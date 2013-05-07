@@ -29,7 +29,7 @@ namespace ballistic {
 
 			system ();
 
-			void add_render_item ( irenderable * renderable, const mat4 & transform );
+			void add_render_item ( irenderable * renderable, const mat4 & transform, graphics::material * mat );
 
 			virtual void notify ( ballistic::engine::message & message );
 			
