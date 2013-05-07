@@ -247,7 +247,8 @@ public:
 	virtual ~var() {
 		if (_type == var_type_string ||
 			_type == var_type_struct ||
-			_type == var_type_pointer)
+			_type == var_type_pointer
+		)
 			delete _data._box_v;
 	}
 

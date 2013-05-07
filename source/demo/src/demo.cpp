@@ -70,7 +70,6 @@ void loop_callback ( ballistic::engine::game * game ) {
 
 int main(void)
 {
-	glewInit ();
     glfwSetErrorCallback(error_callback);
 	
     if (!glfwInit())
@@ -84,6 +83,8 @@ int main(void)
     }
 	
     glfwMakeContextCurrent(window);
+	
+	glewInit ();
 
 	ballistic::engine::game * game;
 
