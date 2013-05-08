@@ -25,7 +25,7 @@ namespace ballistic {
 				
 				_render_items.clear ();
 
-				glClearColor (0, 0, 0, 255); // Clear black
+				glClearColor (0.0F, 0.75F, 1.0F, 1.0F); // Clear black
 				glClear (GL_COLOR_BUFFER_BIT);
 				
 				glMatrixMode (GL_PROJECTION);
