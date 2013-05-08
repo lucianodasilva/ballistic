@@ -56,7 +56,7 @@ namespace ballistic {
 			
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _i_buffer_id);
 			// -------------------------------------------
-			glDrawElements (GL_TRIANGLES, _face_count, GL_UNSIGNED_SHORT, 0);
+			glDrawElements (GL_TRIANGLES, _face_count * 3 * sizeof (float), GL_UNSIGNED_SHORT, 0);
 
 			// Delete client state -----------------------
 			glDisableClientState (GL_VERTEX_ARRAY);

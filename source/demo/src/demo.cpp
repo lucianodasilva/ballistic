@@ -4,7 +4,15 @@
 #include <Ballistic.h>
 #include <ballistic.graphics.h>
 
+#include <glm.hpp>
+#include <ext.hpp>
+
+
+using namespace ballistic::engine;
+using namespace ballistic::graphics;
+
 GLFWwindow* window;
+float angle;
 
 static void error_callback(int error, const char* description)
 {
@@ -12,11 +20,17 @@ static void error_callback(int error, const char* description)
 }
 
 void rotate_component ( ballistic::engine::entity * this_entity, ballistic::engine::message & message ) {
-
+	
+	if (message.get_id () != message_update)
+		return;
+	
+	float time = message [message_game_time];
+	float angle = 180.0F * time;
+	
+	glm::mat4 rotate = glm::rotate(angle, 0.0F, 0.0F, 1.0F);
+	
+	this_entity->attribute (visual_component::transform_attribute_id).set (rotate);
 }
-
-using namespace ballistic::engine;
-using namespace ballistic::graphics;
 
 void setup (ballistic::engine::game *& game) {
 
@@ -42,10 +56,10 @@ void setup (ballistic::engine::game *& game) {
 
 	// resources
 	mesh::vertex v_buffer [4] = {
-		{vec3 (-1.0F, -1.0F, 0.0F), vec2 (0.0F, 0.0F)},
-		{vec3 (1.0F, -1.0F, 0.0F), vec2 (0.0F, 0.0F)},
-		{vec3 (1.0F, 1.0F, 0.0F), vec2 (0.0F, 0.0F)},
-		{vec3 (-1.0F, 1.0F, 0.0F), vec2 (0.0F, 0.0F)}
+		{vec3 (-1.0F, -1.0F, 0.0F)},
+		{vec3 (1.0F, -1.0F, 0.0F)},
+		{vec3 (1.0F, 1.0F, 0.0F)},
+		{vec3 (-1.0F, 1.0F, 0.0F)}
 	};
 
 	uint16 i_buffer [6] = { 0, 1, 2, 0, 2, 3 };
@@ -85,6 +99,9 @@ int main(void)
     glfwMakeContextCurrent(window);
 	
 	glewInit ();
+	
+	glViewport(0, 0, 640, 480);
+	glOrtho(-10, 10, 10, -10, 10, -10);
 
 	ballistic::engine::game * game;
 

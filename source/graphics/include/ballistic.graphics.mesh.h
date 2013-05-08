@@ -16,7 +16,7 @@ namespace ballistic {
 
 			struct vertex {
 				vec3 position;
-				vec2 uv;
+				//vec2 uv;
 			};
 
 		private:
