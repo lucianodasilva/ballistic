@@ -1,6 +1,7 @@
 #ifndef _ballistic_graphics_h_
 #define _ballistic_graphics_h_
 
+#include "ballistic.common_id.h"
 #include "ballistic.graphics.defines.h"
 #include "ballistic.graphics.irenderable.h"
 #include "ballistic.graphics.material.h"

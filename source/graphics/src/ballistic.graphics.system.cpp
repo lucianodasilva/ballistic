@@ -1,17 +1,18 @@
 #include "ballistic.graphics.system.h"
 #include "ballistic.graphics.defines.h"
+#include "ballistic.graphics.common_id.h"
 
 namespace ballistic {
 	namespace graphics {
 
-		void system::set_entity ( engine::entity * ent ) {
-			_message_inst = engine::message (ent, message_render_frame);
-			_message_inst [message_render_frame_system] = this;
+		void system::set_entity ( entity * ent ) {
+			_message_inst = message (ent, id::message_render);
+			_message_inst [id::render_system] = this;
 
-			engine::icomponent::set_entity (ent);
+			icomponent::set_entity (ent);
 		}
 
-		system::system () : _message_inst (nullptr, message_render_frame), _render_items (100) {
+		system::system () : _message_inst (nullptr, id::message_render), _render_items (100) {
 		}
 
 		void system::add_render_item ( irenderable * renderable, const mat4 & transform, graphics::material * mat ) {
@@ -19,9 +20,9 @@ namespace ballistic {
 				_render_items.push_back (render_item (renderable, transform, mat));
 		}
 		
-		void system::notify(ballistic::engine::message &message) {
+		void system::notify(ballistic::message &message) {
 			
-			if (message.get_id() == engine::message_update) {
+			if (message.get_id() == ballistic::id::message_update) {
 				
 				_render_items.clear ();
 
@@ -35,7 +36,7 @@ namespace ballistic {
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
 				// signal renderables that the show is about to start
-				get_entity ()->get_game ()->send_message (_message_inst);
+				get_entity ().get_game ()->send_message (_message_inst);
 				
 				int32 length = _render_items.size ();
 				for (int32 i = 0; i < length; ++i) {

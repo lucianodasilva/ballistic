@@ -14,24 +14,21 @@ using namespace glm;
 namespace ballistic {
 	namespace graphics {
 
-		const auto message_render_frame	= hash < string > ()("message_render_frame");
-		const auto message_render_frame_system = hash < string > ()("message_render_frame_system");
-
-		class system : public ballistic::engine::icomponent {
+		class system : public ballistic::icomponent {
 		private:
 			
-			engine::message			_message_inst;
+			ballistic::message			_message_inst;
 			vector < render_item >	_render_items;
 			
 		public:
 
-			virtual void set_entity ( engine::entity * ent );
+			virtual void set_entity ( entity * ent );
 
 			system ();
 
 			void add_render_item ( irenderable * renderable, const mat4 & transform, graphics::material * mat );
 
-			virtual void notify ( ballistic::engine::message & message );
+			virtual void notify ( ballistic::message & message );
 			
 		};
 		

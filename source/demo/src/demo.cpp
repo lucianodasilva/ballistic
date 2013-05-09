@@ -8,7 +8,7 @@
 #include <ext.hpp>
 
 
-using namespace ballistic::engine;
+using namespace ballistic;
 using namespace ballistic::graphics;
 
 GLFWwindow* window;
@@ -18,15 +18,15 @@ static void error_callback(int error, const char* description)
     fputs(description, stderr);
 }
 
-void rotate_component ( ballistic::engine::entity * this_entity, ballistic::engine::message & message ) {
+void rotate_component ( ballistic::entity & this_entity, ballistic::message & message ) {
 	
-	if (message.get_id () != message_update)
+	if (message.get_id () != id::message_update)
 		return;
 	
-	float time = message [message_game_time];
+	float time = message [id::game_time];
 	float angle = 180.0F * time;
 	
-	glm::vec3 pos = this_entity->attribute("position").get().as < glm::vec3 > ();
+	glm::vec3 pos = this_entity ["position"].as < glm::vec3 > ();
 	
 	if (pos.x < 0.0F) {
 		angle = 360.0F - (angle / 2.0F);
@@ -39,12 +39,12 @@ void rotate_component ( ballistic::engine::entity * this_entity, ballistic::engi
 	//glm::vec3 pos = this_entity->attribute("position").get().as < glm::vec3 > ();
 	//transform = glm::translate (transform, pos);
 	
-	this_entity->attribute (visual_component::transform_attribute_id).set (transform);
+	this_entity[id::transform] = transform;
 }
 
-void setup (ballistic::engine::game *& game) {
+void setup (ballistic::game *& game) {
 
-	game = new ballistic::engine::game ();
+	game = new ballistic::game ();
 
 	// Define rotation component
 	component_factory::define < func_component < rotate_component > > ("rotate_component");
@@ -56,15 +56,15 @@ void setup (ballistic::engine::game *& game) {
 	// --------------------------------------------
 
 	// Define entity
-	ballistic::engine::entity_factory::define ("demo_triangle")
+	ballistic::entity_factory::define ("demo_triangle")
 		<< "rotate_component"
 		<< "visual_component";
 
 	// entities assemble... :D
 	game->create_component ("visual_system");
 	
-	entity * ent1 = game->create_entity ("demo_triangle");
-	entity * ent2 = game->create_entity ("demo_triangle");
+	entity & ent1 = game->create_entity ("demo_triangle");
+	entity & ent2 = game->create_entity ("demo_triangle");
 	
 	// resources
 	mesh::vertex v_buffer [4] = {
@@ -84,16 +84,16 @@ void setup (ballistic::engine::game *& game) {
 	material * mat2 = new material ();
 	mat2->color = vec4 (0.0F, 1.0F, 0.0F, 1.0F);
 
-	ent1->attribute (visual_component::mesh_attribute_id).set (new_mesh);
-	ent1->attribute (visual_component::material_attribute_id).set (mat1);
-	ent1->attribute ("position").set (vec3(-4.0F, 0.0F, 0.0F));
+	ent1 [graphics::id::mesh] = new_mesh;
+	ent1 [graphics::id::material] = mat1;
+	ent1 ["position"] = vec3(-4.0F, 0.0F, 0.0F);
 	
-	ent2->attribute (visual_component::mesh_attribute_id).set (new_mesh);
-	ent2->attribute (visual_component::material_attribute_id).set (mat2);
-	ent2->attribute ("position").set (vec3(4.0F, 0.0F, 0.0F));
+	ent2 [graphics::id::mesh] = new_mesh;
+	ent2 [graphics::id::material] = mat2;
+	ent2 ["position"] = vec3(4.0F, 0.0F, 0.0F);
 }
 
-void loop_callback ( ballistic::engine::game * game ) {
+void loop_callback ( ballistic::game * game ) {
 
 	if (glfwWindowShouldClose(window))
 		game->terminate ();
@@ -124,7 +124,7 @@ int main(void)
 	glViewport(0, 0, 640, 480);
 	glOrtho(-10, 10, 10, -10, 10, -10);
 
-	ballistic::engine::game * game;
+	ballistic::game * game;
 
 	setup (game);
 	game->loop (loop_callback);
