@@ -1,5 +1,5 @@
-#include "ballistic.graphics.visual_component.h"
-#include "ballistic.graphics.system.h"
+#include "ballistic.graphics.visual.h"
+#include "ballistic.graphics.device.h"
 #include "ballistic.graphics.common_id.h"
 
 #include <Ballistic.h>
@@ -12,7 +12,7 @@ using namespace glm;
 namespace ballistic {
 	namespace graphics {
 
-		void visual_component::setup () {
+		void visual::setup () {
 			// Reserve properties
 
 			entity & ent = get_entity ();
@@ -21,15 +21,15 @@ namespace ballistic {
 			ent [graphics::id::material];
 		}
 		
-		void visual_component::notify ( ballistic::message & message ) {
+		void visual::notify ( ballistic::message & message ) {
 		
 			if (message.get_id () != graphics::id::message_render)
 				return;
 			
-			system * v_system = message [graphics::id::render_system];
+			device * visual_device = message [graphics::id::render_device];
 			entity & ent = get_entity ();
 
-			v_system->add_render_item (
+			visual_device->add_render_item (
 				ent [graphics::id::mesh].as <irenderable *>(),
 				ent [ballistic::id::transform].as <mat4>(),
 				ent [graphics::id::material].as < material * > ()

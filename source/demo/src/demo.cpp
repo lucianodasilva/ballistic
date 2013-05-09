@@ -20,10 +20,10 @@ static void error_callback(int error, const char* description)
 
 void rotate_component ( ballistic::entity & this_entity, ballistic::message & message ) {
 	
-	if (message.get_id () != id::message_update)
+	if (message.get_id () != ballistic::id::message_update)
 		return;
 	
-	float time = message [id::game_time];
+	float time = message [ballistic::id::game_time];
 	float angle = 180.0F * time;
 	
 	glm::vec3 pos = this_entity ["position"].as < glm::vec3 > ();
@@ -39,7 +39,7 @@ void rotate_component ( ballistic::entity & this_entity, ballistic::message & me
 	//glm::vec3 pos = this_entity->attribute("position").get().as < glm::vec3 > ();
 	//transform = glm::translate (transform, pos);
 	
-	this_entity[id::transform] = transform;
+	this_entity[ballistic::id::transform] = transform;
 }
 
 void setup (ballistic::game *& game) {
@@ -49,22 +49,22 @@ void setup (ballistic::game *& game) {
 	// Define rotation component
 	component_factory::define < func_component < rotate_component > > ("rotate_component");
 	// Define graphics components
-	component_factory::define < visual_component > ("visual_component");
+	component_factory::define < visual > ("visual");
 	// Define graphics system component
-	component_factory::define < ballistic::graphics::system > ("visual_system");
+	component_factory::define < ballistic::graphics::device > ("visual_device");
 
 	// --------------------------------------------
 
 	// Define entity
-	ballistic::entity_factory::define ("demo_triangle")
+	ballistic::entity_factory::define ("demo_quad")
 		<< "rotate_component"
-		<< "visual_component";
+		<< "visual";
 
 	// entities assemble... :D
-	game->create_component ("visual_system");
+	game->create_component ("visual_device");
 	
-	entity & ent1 = game->create_entity ("demo_triangle");
-	entity & ent2 = game->create_entity ("demo_triangle");
+	entity & ent1 = game->create_entity ("demo_quad");
+	entity & ent2 = game->create_entity ("demo_quad");
 	
 	// resources
 	mesh::vertex v_buffer [4] = {
@@ -95,6 +95,8 @@ void setup (ballistic::game *& game) {
 
 void loop_callback ( ballistic::game * game ) {
 
+	
+	
 	if (glfwWindowShouldClose(window))
 		game->terminate ();
 

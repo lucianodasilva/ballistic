@@ -14,9 +14,11 @@ namespace ballistic {
 
 			const auto message_render				= to_id ("message_render");
 
-			const auto render_system				= to_id ("render_system");
+			const auto render_device				= to_id ("render_device");
 			const auto mesh							= to_id ("mesh");
 			const auto material						= to_id ("material");
+			const auto projection					= to_id ("projection");
+			
 		}
 	}
 }

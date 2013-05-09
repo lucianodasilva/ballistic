@@ -1,12 +1,12 @@
-#ifndef _ballistic_graphics_visual_component_h_
-#define _ballistic_graphics_visual_component_h_
+#ifndef _ballistic_graphics_visual_h_
+#define _ballistic_graphics_visual_h_
 
 #include <Ballistic.h>
 
 namespace ballistic {
 	namespace graphics {
 		
-		class visual_component : public icomponent {
+		class visual : public icomponent {
 		public:
 
 			virtual void setup ();
