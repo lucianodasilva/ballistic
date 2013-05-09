@@ -13,6 +13,8 @@ namespace ballistic {
 
 		icomponent::icomponent () : _entity (nullptr) {}
 		icomponent::~icomponent () {}
+		
+		void icomponent::setup () {}
 
 	}
 }

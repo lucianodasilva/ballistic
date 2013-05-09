@@ -76,6 +76,12 @@ private:
 	template < class t >
 	struct _setter_pointer {
 		inline static void set ( var & var_ref, const t & val ) {
+			if (val == nullptr) {
+				var_ref._data._box_v = nullptr;
+				var_ref._type = var_type_none;
+				return;
+			}
+			
 			var_ref._data._box_v = new _var_box < t > (val);
 			var_ref._type = var_type_pointer;
 		}
@@ -167,6 +173,11 @@ private:
 	template < class t >
 	struct _getter_struct {
 		inline static void get ( const var & var_ref, t & val ) {
+			if (var_ref._type == var_type_none) {
+				val = t ();
+				return;
+			}
+
 			if ( var_ref._type != var_type_struct )
 				throw MSG_CANNOT_CONVERT_FROM_STRUCT;
 
@@ -242,7 +253,8 @@ public:
 	virtual ~var() {
 		if (_type == var_type_string ||
 			_type == var_type_struct ||
-			_type == var_type_pointer)
+			_type == var_type_pointer
+		)
 			delete _data._box_v;
 	}
 
@@ -251,18 +263,18 @@ public:
 		_data ( origin._data ),
 		_type ( origin._type )
 	{
-		if (_type == var_type_string || _type == var_type_struct || _type == var_type_struct )
+		if (_type == var_type_string || _type == var_type_struct || _type == var_type_pointer )
 			_data._box_v = origin._data._box_v->copy ();
 	}
 
 	inline var operator = ( const var & origin ) {
-		if (_type == var_type_string || _type == var_type_struct || _type == var_type_struct)
+		if (_type == var_type_string || _type == var_type_struct || _type == var_type_pointer)
 			delete _data._box_v;
 
 		_data = origin._data;
 		_type = origin._type;
 
-		if (_type == var_type_string || _type == var_type_struct || _type == var_type_struct )
+		if (_type == var_type_string || _type == var_type_struct || _type == var_type_pointer )
 			_data._box_v = origin._data._box_v->copy ();
 		
 		return origin;
@@ -270,7 +282,7 @@ public:
 
 	// value setters
 	template < class t >
-	inline var ( const t & origin ) {
+	inline var ( const t & origin ) : _type (var_type_none) {
 		_var_handler < t >::set ( *this, origin );
 	}
 	

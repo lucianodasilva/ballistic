@@ -20,6 +20,15 @@ namespace ballistic {
 
 		// -----------------------------------------
 		const auto message_initialize		= hash < string > () ("message_initialize");
+		
+		// -----------------------------------------
+		const auto message_attribute_changed= hash < string > () ("message_attribute_changes");
+		
+		const auto message_attribute_name	= hash < string > () ("message_attribute_name");
+		
+		const auto message_attribute_id		= hash < string > () ("message_attribute_id");
+		
+		const auto message_attribute_value	= hash < string > () ("message_attribute_value");
 	}
 }
 

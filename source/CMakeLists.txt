@@ -20,15 +20,15 @@ set ( demo_dir      ${demo_dir}     CACHE STRING "Path to Demo implementation" )
 
 # include dependencies
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
-# glfw
+# glew
+include ( ${deps_dir}/glew/CMakeLists.txt )
+set_property (TARGET glew PROPERTY FOLDER "dependencies")
+# glfw (opengl windowing framework)
 include ( ${deps_dir}/glfw/CMakeLists.txt )
 set_property (TARGET glfw PROPERTY FOLDER "dependencies")
-
+# glm (math lib)
 include ( ${deps_dir}/glm/CMakeLists.txt )
 set_property (TARGET glm PROPERTY FOLDER "dependencies")
-
-# GLEXT files
-include_directories ( ${deps_dir}/glext )
 
 include ( ${engine_dir}/CMakeLists.txt )
 include ( ${graphics_dir}/CMakeLists.txt )

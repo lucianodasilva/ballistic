@@ -3,9 +3,9 @@
 
 #include <ballistic.h>
 
+#define GLEW_STATIC
+#include <gl/glew.h>
 #include <gl/glfw3.h>
 
-#define GL_GLEXT_PROTOTYPES 1
-#include <gl/glext.h>
 
 #endif

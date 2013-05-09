@@ -77,6 +77,7 @@ namespace ballistic {
 		}
 
 		game::game () : entity (0) {
+			set_game (this);
 			_entity_map [this->get_id ()] = this;
 		}
 
