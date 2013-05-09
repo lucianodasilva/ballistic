@@ -74,7 +74,7 @@ void setup (ballistic::engine::game *& game) {
 		{vec3 (-1.0F, 1.0F, 0.0F)}
 	};
 
-	uint16 i_buffer [6] = { 0, 1, 2, 0, 2, 3 };
+	::uint16 i_buffer [6] = { 0, 1, 2, 0, 2, 3 };
 
 	mesh * new_mesh = new mesh (v_buffer, 4, i_buffer, 6);
 	
