@@ -27,7 +27,7 @@ namespace ballistic {
 		}
 		
 		void device::setup () {
-			_projection = glm::ortho(-10, 10, 10, -10, 10, -10);
+			_projection = glm::ortho(-10.0F, 10.0F, 10.0F, -10.0F, 10.0F, -10.0F);
 		}
 		
 		void device::notify(ballistic::message &message) {
@@ -41,14 +41,13 @@ namespace ballistic {
 				
 				glMatrixMode (GL_PROJECTION);
 				glLoadIdentity();
-				glOrtho(-10, 10, 10, -10, 10, -10);
-				//glMultMatrixf (value_ptr (_projection));
+				glMultMatrixf (value_ptr (_projection));
 				
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
-				//glMultMatrixf (value_ptr (_projection));
 				
 				// signal renderables that the show is about to start
+				// this will not work in a multithreaded system.
 				get_entity ().get_game ()->send_message (_message_inst);
 				
 				int32 length = _render_items.size ();
