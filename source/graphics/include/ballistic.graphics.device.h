@@ -21,6 +21,7 @@ namespace ballistic {
 			vector < render_item >	_render_items;
 			
 			mat4 _projection;
+			mat4 _view;
 			
 		public:
 
@@ -31,6 +32,7 @@ namespace ballistic {
 			void add_render_item ( irenderable * renderable, const mat4 & transform, graphics::material * mat );
 			
 			mat4 & projection_matrix ();
+			mat4 & view_matrix ();
 
 			virtual void setup ();
 			virtual void notify ( ballistic::message & message );

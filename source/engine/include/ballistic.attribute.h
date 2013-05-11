@@ -24,7 +24,9 @@ namespace ballistic {
 		attribute ( entity * parent, id_t id );
 		attribute ( const attribute & orig );
 
-		inline operator var ();
+		template < class t >
+		inline operator t ();
+		
 		template < class t >
 		inline t as ();
 
@@ -35,8 +37,9 @@ namespace ballistic {
 
 	};
 		
-	attribute::operator var () {
-		return _value;
+	template < class t >
+	attribute::operator t () {
+		return _value.operator t ();
 	}
 
 	template < class t >

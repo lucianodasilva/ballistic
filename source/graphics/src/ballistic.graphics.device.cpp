@@ -26,6 +26,10 @@ namespace ballistic {
 			return _projection;
 		}
 		
+		mat4 & device::view_matrix () {
+			return _view;
+		}
+		
 		void device::setup () {
 			_projection = glm::ortho(-10.0F, 10.0F, 10.0F, -10.0F, 10.0F, -10.0F);
 		}
@@ -45,6 +49,7 @@ namespace ballistic {
 				
 				glMatrixMode(GL_MODELVIEW);
 				glLoadIdentity();
+				glMultMatrixf (value_ptr (_view));
 				
 				// signal renderables that the show is about to start
 				// this will not work in a multithreaded system.
@@ -57,7 +62,7 @@ namespace ballistic {
 
 					item.material->activate ();
 
-					glLoadMatrixf (value_ptr (item.transform));
+					glMultMatrixf (value_ptr (item.transform));
 					irenderable * render_object = _render_items [i].render_object;
 					render_object->render();
 
