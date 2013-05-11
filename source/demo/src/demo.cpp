@@ -8,25 +8,54 @@
 #include <ext.hpp>
 
 
-using namespace ballistic::engine;
+using namespace ballistic;
 using namespace ballistic::graphics;
 
-GLFWwindow* window;
+GLFWwindow *		_window;
+ballistic::game *	_game;
 
-static void error_callback(int error, const char* description)
-{
+double				_lx, _ly;
+bool				_mouse_down = false;
+
+static void error_callback(int error, const char* description) {
     fputs(description, stderr);
 }
 
-void rotate_component ( ballistic::engine::entity * this_entity, ballistic::engine::message & message ) {
+static void mouse_scroll (GLFWwindow* window,double x,double y) {
+	if (y != 0.0) {
+		message m (_game, std::hash < std::string > ()("mouse_moved"));
+		m ["mouse_move_vector"] = glm::vec3 (0, 0, y / 250.0F);
+		
+		_game->send_message(m);
+	}
+}
+
+static void mouse_down (GLFWwindow * window, int button, int state) {
+	_mouse_down = button == 0 && state;
+}
+
+static void mouse_moved ( GLFWwindow * window, double x, double y ) {
 	
-	if (message.get_id () != message_update)
+	if (_mouse_down) {
+		message m (_game, std::hash < std::string > ()("mouse_moved"));
+		m ["mouse_move_vector"] = glm::vec3 (x - _lx, y - _ly, 0.0F);
+		
+		_game->send_message(m);
+	}
+	
+	_lx = x;
+	_ly = y;
+}
+
+void rotate_component ( ballistic::entity & this_entity, ballistic::message & message ) {
+	
+	if (message.get_id () != ballistic::id::message_update)
 		return;
 	
-	float time = message [message_game_time];
+	float time = message [ballistic::id::game_time];
 	float angle = 180.0F * time;
 	
-	glm::vec3 pos = this_entity->attribute("position").get().as < glm::vec3 > ();
+	glm::vec3 pos = this_entity ["position"];
 	
 	if (pos.x < 0.0F) {
 		angle = 360.0F - (angle / 2.0F);
@@ -39,39 +68,78 @@ void rotate_component ( ballistic::engine::entity * this_entity, ballistic::engi
 	//glm::vec3 pos = this_entity->attribute("position").get().as < glm::vec3 > ();
 	//transform = glm::translate (transform, pos);
 	
-	this_entity->attribute (visual_component::transform_attribute_id).set (transform);
+	this_entity[ballistic::id::transform] = transform;
 }
 
-void setup (ballistic::engine::game *& game) {
+void camera_update_view ( ballistic::entity & this_entity, ballistic::message & message ) {
+	if (message.get_id () != graphics::id::message_render)
+		return;
+	
+	device * visual_device = message [graphics::id::render_device];
+	visual_device->view_matrix () = this_entity ["view"];
+	
+	glm::vec3 pos = this_entity ["position"];
+	visual_device->projection_matrix() = glm::ortho(-300.0F * pos.z, 300.0F * pos.z, 300.0F * pos.z, -300.0F * pos.z, 10.0F, -10.0F);
+}
 
-	game = new ballistic::engine::game ();
+void camera_move ( ballistic::entity & this_entity, ballistic::message & message ) {
+	
+	if (message.get_id () != std::hash < std::string > ()("mouse_moved"))
+		return;
+	
+	glm::vec3 mov_vec = message ["mouse_move_vector"];
+	glm::vec3 pos = this_entity ["position"];
+	
+	pos += mov_vec;
+	
+	this_entity ["position"] = pos;
+	// view matrix, must be inverted so we invert
+	// the position
+	this_entity ["view"] = glm::translate(-pos.x * pos.z, -pos.y * pos.z, 0.0F);
+}
+
+void setup (ballistic::game *& game) {
+
+	game = new ballistic::game ();
 
 	// Define rotation component
 	component_factory::define < func_component < rotate_component > > ("rotate_component");
 	// Define graphics components
-	component_factory::define < visual_component > ("visual_component");
+	component_factory::define < visual > ("visual");
 	// Define graphics system component
-	component_factory::define < ballistic::graphics::system > ("visual_system");
+	component_factory::define < ballistic::graphics::device > ("visual_device");
+	
+	// Define camera component
+	component_factory::define < func_component< camera_update_view > > ("camera_update_view");
+	component_factory::define < func_component< camera_move > > ("camera_move");
 
 	// --------------------------------------------
 
 	// Define entity
-	ballistic::engine::entity_factory::define ("demo_triangle")
+	ballistic::entity_factory::define ("demo_quad")
 		<< "rotate_component"
-		<< "visual_component";
+		<< "visual";
+	
+	ballistic::entity_factory::define ("camera")
+		<< "camera_move"
+		<< "camera_update_view";
 
 	// entities assemble... :D
-	game->create_component ("visual_system");
+	graphics::device * graph_dev = (graphics::device *)game->create_component ("visual_device");
+	graph_dev->projection_matrix() = glm::ortho(-300.0F, 300.0F, 300.0F, -300.0F, 10.0F, -10.0F);
 	
-	entity * ent1 = game->create_entity ("demo_triangle");
-	entity * ent2 = game->create_entity ("demo_triangle");
+	entity & cam = game->create_entity ("camera");
+	cam ["position"] = glm::vec3 (0.0F, 0.0F, 1.0F);
+	
+	entity & ent1 = game->create_entity ("demo_quad");
+	entity & ent2 = game->create_entity ("demo_quad");
 	
 	// resources
 	mesh::vertex v_buffer [4] = {
-		{vec3 (-1.0F, -1.0F, 0.0F)},
-		{vec3 (1.0F, -1.0F, 0.0F)},
-		{vec3 (1.0F, 1.0F, 0.0F)},
-		{vec3 (-1.0F, 1.0F, 0.0F)}
+		{vec3 (-50.0F, -50.0F, 0.0F)},
+		{vec3 (50.0F, -50.0F, 0.0F)},
+		{vec3 (50.0F, 50.0F, 0.0F)},
+		{vec3 (-50.0F, 50.0F, 0.0F)}
 	};
 
 	::uint16 i_buffer [6] = { 0, 1, 2, 0, 2, 3 };
@@ -84,21 +152,21 @@ void setup (ballistic::engine::game *& game) {
 	material * mat2 = new material ();
 	mat2->color = vec4 (0.0F, 1.0F, 0.0F, 1.0F);
 
-	ent1->attribute (visual_component::mesh_attribute_id).set (new_mesh);
-	ent1->attribute (visual_component::material_attribute_id).set (mat1);
-	ent1->attribute ("position").set (vec3(-4.0F, 0.0F, 0.0F));
+	ent1 [graphics::id::mesh] = new_mesh;
+	ent1 [graphics::id::material] = mat1;
+	ent1 ["position"] = vec3(-150.0F, 0.0F, 0.0F);
 	
-	ent2->attribute (visual_component::mesh_attribute_id).set (new_mesh);
-	ent2->attribute (visual_component::material_attribute_id).set (mat2);
-	ent2->attribute ("position").set (vec3(4.0F, 0.0F, 0.0F));
+	ent2 [graphics::id::mesh] = new_mesh;
+	ent2 [graphics::id::material] = mat2;
+	ent2 ["position"] = vec3(150.0F, 0.0F, 0.0F);
 }
 
-void loop_callback ( ballistic::engine::game * game ) {
-
-	if (glfwWindowShouldClose(window))
+void loop_callback ( ballistic::game * game ) {
+	
+	if (glfwWindowShouldClose(_window))
 		game->terminate ();
 
-	glfwSwapBuffers(window);
+	glfwSwapBuffers(_window);
 	glfwPollEvents();
 
 }
@@ -110,26 +178,28 @@ int main(void)
     if (!glfwInit())
         exit(EXIT_FAILURE);
 	
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-    if (!window)
+    _window = glfwCreateWindow(600, 600, "Simple example", NULL, NULL);
+	
+	glfwSetScrollCallback(_window, mouse_scroll);
+	glfwSetMouseButtonCallback(_window, mouse_down);
+	glfwSetCursorPosCallback(_window, mouse_moved);
+	
+    if (!_window)
     {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 	
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(_window);
 	
 	glewInit ();
 	
-	glViewport(0, 0, 640, 480);
-	glOrtho(-10, 10, 10, -10, 10, -10);
+	glViewport(0, 0, 600, 600);
 
-	ballistic::engine::game * game;
-
-	setup (game);
-	game->loop (loop_callback);
+	setup (_game);
+	_game->loop (loop_callback);
 	
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(_window);
 	
     glfwTerminate();
     exit(EXIT_SUCCESS);
