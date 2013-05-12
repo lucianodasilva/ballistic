@@ -1,8 +1,6 @@
 #ifndef _ballistic_component_constructor_h_
 #define _ballistic_component_constructor_h_
 
-#include "ballistic.icomponent.h"
-
 #include <string>
 #include <type_traits>
 
@@ -11,6 +9,8 @@
 using namespace std;
 
 namespace ballistic {
+	
+	class icomponent;
 
 	class icomponent_constructor {
 	public:

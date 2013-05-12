@@ -1,6 +1,7 @@
 #ifndef _ballistic_attribute_h
 #define _ballistic_attribute_h
 
+#include "ballistic.id.h"
 #include "ballistic.var.h"
 
 namespace ballistic {
@@ -8,8 +9,6 @@ namespace ballistic {
 	class entity;
 		
 	class attribute {
-	public:
-		typedef size_t id_t;
 	private:
 			
 		var			_value;
@@ -23,6 +22,8 @@ namespace ballistic {
 		attribute ();
 		attribute ( entity * parent, id_t id );
 		attribute ( const attribute & orig );
+		
+		inline operator var ();
 
 		template < class t >
 		inline operator t ();
@@ -31,11 +32,17 @@ namespace ballistic {
 		inline t as ();
 
 		template < class t >
-		var & operator = ( const t & value );
+		inline var & operator = ( const t & value );
+		
+		inline var & operator = ( const var & value );
 			
 		id_t get_id ();
 
 	};
+	
+	attribute::operator var () {
+		return _value;
+	}
 		
 	template < class t >
 	attribute::operator t () {
@@ -51,9 +58,16 @@ namespace ballistic {
 	var & attribute::operator = (const t & value) {
 		_value.operator = < t > (value);
 		raise_changed_event ();
-
 		return _value;
 	}
+	
+	var & attribute::operator = ( const var & value ) {
+		_value = value;
+		raise_changed_event ();
+		return _value;
+	}
+	
+	
 }
 
 #endif

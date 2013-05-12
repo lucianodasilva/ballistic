@@ -11,7 +11,7 @@ namespace ballistic {
 			_message_inst = message (ent, id::message_render);
 			_message_inst [id::render_device] = this;
 
-			icomponent::set_entity (ent);
+			component::set_entity (ent);
 		}
 
 		device::device () : _message_inst (nullptr, id::message_render), _render_items (100) {

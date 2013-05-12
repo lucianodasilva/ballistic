@@ -5,9 +5,12 @@
 
 
 #include "ballistic.attribute.h"
+#include "ballistic.entity_definition.h"
 #include "ballistic.icomponent.h"
+#include "ballistic.id.h"
 #include "ballistic.component_factory.h"
 #include "ballistic.var.h"
+
 
 using namespace std;
 
@@ -18,9 +21,7 @@ namespace ballistic {
 	class entity {
 	public:
 
-		typedef uint32 id_t;
-
-		typedef map < attribute::id_t, attribute > entity_attribute_map;
+		typedef map < id_t, attribute > entity_attribute_map;
 	private:
 
 		game *					_game;
@@ -35,10 +36,10 @@ namespace ballistic {
 	public:
 			
 		bool has_attribute ( const string & key );
-		bool has_attribute ( attribute::id_t id );
+		bool has_attribute ( id_t id );
 			
 		attribute & operator [] ( const string & key );
-		attribute & operator [] ( attribute::id_t id );
+		attribute & operator [] ( id_t id );
 			
 		game * get_game ();
 		void set_game (game * g);
@@ -47,13 +48,14 @@ namespace ballistic {
 			
 		void add_component ( icomponent * component );
 		icomponent * create_component ( const string & id );
-		icomponent * create_component ( component_id_t id );
+		icomponent * create_component ( id_t id );
 
 		virtual void notify ( ballistic::message & message );
 
 		entity ( id_t id );
 		virtual ~entity ();
-			
+		
+		static entity_definition & define ( const string & entity_type_id );	
 	};
 }
 

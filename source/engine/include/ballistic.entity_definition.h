@@ -5,32 +5,43 @@
 #include <vector>
 #include <string>
 
-#include "ballistic.component_factory.h"
+#include "ballistic.id.h"
+#include "ballistic.var.h"
 
 using namespace std;
 
 namespace ballistic {
+	
+	class entity_factory;
 
-	class entity_definition {	
+	class entity_definition {
+	public:
+		
+		friend class entity_factory;
+		
+		typedef vector < pair < id_t, var > > attribute_vector;
+		typedef vector < id_t > component_vector;
 	private:
 
 		string _name;
-		vector < component_id_t > _components;
+		
+		attribute_vector _attributes;
+		component_vector _components;
+		
+		void set_name ( const string & name );
 
 	public:
-			
-		typedef vector < component_id_t >::iterator iterator;
-			
-		iterator begin ();
-		iterator end ();
-
-		entity_definition ( const string & name );
-			
+		
 		const string & get_name () const;
-			
-		entity_definition & operator << (const string & component_name );
-			
+
+		attribute_vector & get_attributes ();
+		component_vector & get_components ();
+		
+		entity_definition & attributes ( attribute_vector && attributes );
+		entity_definition & components ( component_vector && components );
+
 	};
+
 }
 
 #endif

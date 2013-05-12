@@ -11,6 +11,7 @@
 #include "ballistic.entity_factory.h"
 #include "ballistic.game.h"
 #include "ballistic.icomponent.h"
+#include "ballistic.id.h"
 #include "ballistic.message.h"
 #include "ballistic.system.h"
 #include "ballistic.var.h"

@@ -5,17 +5,16 @@
 #include <map>
 #include <string>
 
-#include "ballistic.icomponent.h"
+#include "ballistic.id.h"
 #include "ballistic.component_constructor.h"
 
 namespace ballistic {
 
-	typedef size_t component_id_t;
-
+	class icomponent;
 	class component_factory {
 	private:
 
-		typedef map < component_id_t, icomponent_constructor * > constructor_map_t;
+		typedef map < id_t, icomponent_constructor * > constructor_map_t;
 		static constructor_map_t _constructors;
 
 	public:
@@ -27,10 +26,10 @@ namespace ballistic {
 		inline static void define ( const string & name );
 
 		inline static bool contains ( const string & name );
-		inline static bool contains ( component_id_t id ); 
+		inline static bool contains ( id_t id );
 
 		inline static icomponent * create ( const string & name );
-		inline static icomponent * create ( component_id_t id );
+		inline static icomponent * create ( id_t id );
 
 	};
 
@@ -41,18 +40,18 @@ namespace ballistic {
 	}
 
 	bool component_factory::contains ( const string & name ) {
-		return contains ( hash < string > ()(name) );
+		return contains ( string_to_id (name) );
 	}
 
-	bool component_factory::contains ( component_id_t id ) {
+	bool component_factory::contains ( id_t id ) {
 		return _constructors.find (id) != _constructors.end ();
 	}
 
 	icomponent * component_factory::create ( const string & name ) {
-		return create ( hash < string >()(name));
+		return create ( string_to_id (name));
 	}
 
-	icomponent * component_factory::create ( component_id_t id ) {
+	icomponent * component_factory::create ( id_t id ) {
 		return _constructors [id]->create ();
 	}
 

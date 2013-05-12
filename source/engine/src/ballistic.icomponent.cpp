@@ -1,19 +1,20 @@
 #include "ballistic.icomponent.h"
 
 namespace ballistic {
+	
+	icomponent::~icomponent () {}
 
-	entity & icomponent::get_entity () const {
+	entity & component::get_entity () const {
 		return *_entity;
 	}
 
-	void icomponent::set_entity ( entity * ent ) {
+	void component::set_entity ( entity * ent ) {
 		_entity = ent;
 	}
 
-	icomponent::icomponent () : _entity (nullptr) {}
-	icomponent::~icomponent () {}
+	component::component () : _entity (nullptr) {}
 		
-	void icomponent::setup () {}
+	void component::setup () {}
 
 
 }

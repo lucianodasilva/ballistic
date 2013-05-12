@@ -1,4 +1,5 @@
 #include "ballistic.entity.h"
+#include "ballistic.entity_factory.cpp"
 #include <functional>
 
 namespace ballistic {
@@ -7,7 +8,7 @@ namespace ballistic {
 		return has_attribute(hash < string > () (key));
 	}
 		
-	bool entity::has_attribute(attribute::id_t id) {
+	bool entity::has_attribute(id_t id) {
 		return _attributes.find (id) != _attributes.end ();
 	}
 		
@@ -15,14 +16,14 @@ namespace ballistic {
 		return operator [] (hash < string > () (key));
 	}
 		
-	attribute & entity::operator [] (attribute::id_t id ) {
+	attribute & entity::operator [] (id_t id ) {
 		return _attributes [id];
 	}
 
 	game * entity::get_game () { return _game; }
 	void entity::set_game ( game * g ) { _game = g; }
 		
-	entity::id_t entity::get_id () { return _id; }
+	id_t entity::get_id () { return _id; }
 		
 	void entity::add_component ( icomponent * component ) {
 		component->set_entity (this);
@@ -35,7 +36,7 @@ namespace ballistic {
 		return create_component (hash < string > ()(id));
 	}
 
-	icomponent * entity::create_component ( component_id_t id ) {
+	icomponent * entity::create_component ( id_t id ) {
 		icomponent * new_component = component_factory::create (id);
 
 		add_component (new_component);
@@ -48,12 +49,16 @@ namespace ballistic {
 		}
 	}
 
-	entity::entity ( entity::id_t id ) : _game (nullptr), _id (id) {}
+	entity::entity ( id_t id ) : _game (nullptr), _id (id) {}
 
 	entity::~entity () {
 		for ( icomponent * it : _components ) {
 			delete it;
 		}
+	}
+	
+	entity_definition & entity::define ( const string & entity_type_id ) {
+		return entity_factory::define (entity_type_id);
 	}
 		
 }

@@ -6,7 +6,7 @@
 namespace ballistic {
 	namespace graphics {
 		
-		class visual : public icomponent {
+		class visual : public component {
 		public:
 
 			virtual void setup ();

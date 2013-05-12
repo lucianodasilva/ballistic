@@ -5,24 +5,19 @@
 
 using namespace std;
 
-#	define to_id(x) \
-	hash < string > ()(x)
-
 namespace ballistic {
 	namespace graphics {
 		namespace id {
 
-			const auto message_render				= to_id ("message_render");
+			const id_t message_render				= string_to_id ("message_render");
 
-			const auto render_device				= to_id ("render_device");
-			const auto mesh							= to_id ("mesh");
-			const auto material						= to_id ("material");
-			const auto projection					= to_id ("projection");
+			const id_t render_device				= string_to_id ("render_device");
+			const id_t mesh							= string_to_id ("mesh");
+			const id_t material						= string_to_id ("material");
+			const id_t projection					= string_to_id ("projection");
 			
 		}
 	}
 }
-
-#undef to_id
 
 #endif

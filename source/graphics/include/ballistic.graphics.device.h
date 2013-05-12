@@ -14,7 +14,7 @@ using namespace glm;
 namespace ballistic {
 	namespace graphics {
 
-		class device : public ballistic::icomponent {
+		class device : public ballistic::component {
 		private:
 			
 			ballistic::message			_message_inst;

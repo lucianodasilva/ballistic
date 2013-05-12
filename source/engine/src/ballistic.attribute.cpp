@@ -6,12 +6,12 @@
 namespace ballistic {
 	attribute::attribute () : _id (0), _parent (nullptr) {}
 
-	attribute::attribute ( entity * parent, attribute::id_t id ) : _id (id), _parent (parent) {}
+	attribute::attribute ( entity * parent, id_t id ) : _id (id), _parent (parent) {}
 		
 	attribute::attribute ( const attribute & orig )
 	: _value (orig._value), _id (orig._id), _parent (orig._parent) {}
 		
-	attribute::id_t attribute::get_id () { return _id; }
+	id_t attribute::get_id () { return _id; }
 		
 	void attribute::raise_changed_event ( ) {
 		if (_parent) {

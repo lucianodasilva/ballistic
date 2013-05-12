@@ -5,6 +5,7 @@
 #include <functional>
 #include <string>
 
+#include "ballistic.id.h"
 #include "ballistic.entity.h"
 #include "ballistic.entity_definition.h"
 
@@ -12,12 +13,10 @@ using namespace std;
 
 namespace ballistic {
 		
-	typedef size_t entity_type_t;
-
 	class entity_factory {
 	public:
 			
-		typedef map < entity_type_t, entity_definition * > entity_definition_map;
+		typedef map < id_t, entity_definition > entity_definition_map;
 			
 	private:
 			
@@ -29,7 +28,7 @@ namespace ballistic {
 		static entity_definition & define (const string & name);
 			
 		static entity * create (const string & type);
-		static entity * create (entity_type_t type);
+		static entity * create (id_t type);
 			
 	};
 		

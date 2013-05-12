@@ -17,7 +17,7 @@ namespace ballistic {
 	class game : public entity {
 	private:
 
-		typedef map < entity::id_t, entity * > entity_map_t;
+		typedef map < id_t, entity * > entity_map_t;
 		entity_map_t _entity_map;
 
 		bool _running;
@@ -27,9 +27,9 @@ namespace ballistic {
 	public:
 
 		entity &	create_entity ( const string & name );
-		entity &	create_entity ( entity_type_t type );
+		entity &	create_entity ( id_t type );
 
-		entity &	get_entity ( entity::id_t id );
+		entity &	get_entity ( id_t id );
 
 		virtual void send_message ( ballistic::message & message );
 

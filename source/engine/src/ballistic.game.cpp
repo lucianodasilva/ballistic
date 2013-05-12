@@ -19,7 +19,7 @@ namespace ballistic {
 		return create_entity (hash < string > ()(name));
 	}
 
-	entity & game::create_entity ( entity_type_t type ) {
+	entity & game::create_entity ( id_t type ) {
 		entity * new_entity = entity_factory::create (type);
 
 		add_entity (new_entity);

@@ -1,40 +1,35 @@
 #ifndef	_ballistic_engine_common_id_h_
 #define _ballistic_engine_common_id_h_
 
-#include <functional>
+#include "ballistic.id.h"
 
 using namespace std;
 
 namespace ballistic {
 
-#	define to_id(x) \
-	hash < string > ()(x)
-
 	namespace id {
-		const auto message_update				= to_id ("message_update");
+		const id_t message_update				= string_to_id ("message_update");
 
-		const auto game_time					= to_id ("game_time");
-		const auto frame_time					= to_id ("frame_time");
-		const auto frame_count					= to_id ("frame_count");
-
-		// -------------------------------------- 
-		const auto message_terminate			= to_id ("message_terminate");
+		const id_t game_time					= string_to_id ("game_time");
+		const id_t frame_time					= string_to_id ("frame_time");
+		const id_t frame_count					= string_to_id ("frame_count");
 
 		// -------------------------------------- 
-		const auto message_initialize			= to_id ("initialize");
+		const id_t message_terminate			= string_to_id ("message_terminate");
 
 		// -------------------------------------- 
-		const auto message_attribute_changed	= to_id ("message_attribute_changes");
+		const id_t message_initialize			= string_to_id ("initialize");
 
-		const auto name							= to_id ("name");
-		const auto id							= to_id ("id");
-		const auto value						= to_id ("value");
+		// -------------------------------------- 
+		const id_t message_attribute_changed	= string_to_id ("message_attribute_changes");
+
+		const id_t name							= string_to_id ("name");
+		const id_t id							= string_to_id ("id");
+		const id_t value						= string_to_id ("value");
 
 		// --------------------------------------
-		const auto transform					= to_id ("transform");
+		const id_t transform					= string_to_id ("transform");
 	}
 }
-
-#	undef to_id
 
 #endif

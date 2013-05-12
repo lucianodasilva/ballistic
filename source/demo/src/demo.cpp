@@ -101,64 +101,65 @@ void camera_move ( ballistic::entity & this_entity, ballistic::message & message
 void setup (ballistic::game *& game) {
 
 	game = new ballistic::game ();
-
-	// Define rotation component
-	component_factory::define < func_component < rotate_component > > ("rotate_component");
-	// Define graphics components
-	component_factory::define < visual > ("visual");
-	// Define graphics system component
-	component_factory::define < ballistic::graphics::device > ("visual_device");
 	
-	// Define camera component
-	component_factory::define < func_component< camera_update_view > > ("camera_update_view");
-	component_factory::define < func_component< camera_move > > ("camera_move");
-
-	// --------------------------------------------
-
-	// Define entity
-	ballistic::entity_factory::define ("demo_quad")
-		<< "rotate_component"
-		<< "visual";
-	
-	ballistic::entity_factory::define ("camera")
-		<< "camera_move"
-		<< "camera_update_view";
-
-	// entities assemble... :D
-	graphics::device * graph_dev = (graphics::device *)game->create_component ("visual_device");
-	graph_dev->projection_matrix() = glm::ortho(-300.0F, 300.0F, 300.0F, -300.0F, 10.0F, -10.0F);
-	
-	entity & cam = game->create_entity ("camera");
-	cam ["position"] = glm::vec3 (0.0F, 0.0F, 1.0F);
-	
-	entity & ent1 = game->create_entity ("demo_quad");
-	entity & ent2 = game->create_entity ("demo_quad");
-	
-	// resources
+	// Resources ----------------------------------
 	mesh::vertex v_buffer [4] = {
 		{vec3 (-50.0F, -50.0F, 0.0F)},
 		{vec3 (50.0F, -50.0F, 0.0F)},
 		{vec3 (50.0F, 50.0F, 0.0F)},
 		{vec3 (-50.0F, 50.0F, 0.0F)}
 	};
-
+	
 	::uint16 i_buffer [6] = { 0, 1, 2, 0, 2, 3 };
-
+	
 	mesh * new_mesh = new mesh (v_buffer, 4, i_buffer, 6);
 	
-	material * mat1 = new material ();
-	mat1->color = vec4 (1.0F, 0.0F, 0.0F, 1.0F);
+	material * mat = new material ();
+	mat->color = vec4 (1.0F, 0.0F, 0.0F, 1.0F);
 	
-	material * mat2 = new material ();
-	mat2->color = vec4 (0.0F, 1.0F, 0.0F, 1.0F);
+	// Components ---------------------------------
 
-	ent1 [graphics::id::mesh] = new_mesh;
-	ent1 [graphics::id::material] = mat1;
-	ent1 ["position"] = vec3(-150.0F, 0.0F, 0.0F);
+	// Define rotation component
+	component::define < rotate_component > ("rotate_component");
+	// Define graphics components
+	component::define < visual > ("visual");
+	// Define graphics system component
+	component::define < ballistic::graphics::device > ("visual_device");
 	
-	ent2 [graphics::id::mesh] = new_mesh;
-	ent2 [graphics::id::material] = mat2;
-	ent2 ["position"] = vec3(150.0F, 0.0F, 0.0F);
+	// Define camera component
+	component::define < camera_update_view > ("camera_update_view");
+	component::define < camera_move > ("camera_move");
+
+	// --------------------------------------------
+
+	// Define entity
+	entity::define ("demo_quad")
+		.attributes ({
+			{graphics::id::mesh, new_mesh },
+			{graphics::id::material, mat }
+		})
+		.components ({
+			string_to_id ("rotate_component"),
+			string_to_id ("visual")
+		});
+	
+	entity::define ("camera")
+		.attributes ({
+			{string_to_id ("position"), glm::vec3 (0.0F, 0.0F, 1.0F)}
+		})
+		.components ({
+			string_to_id ("camera_update_view"),
+			string_to_id ("camera_move")
+		});
+
+	// entities assemble... :D
+	graphics::device * graph_dev = (graphics::device *)game->create_component ("visual_device");
+	graph_dev->projection_matrix() = glm::ortho(-300.0F, 300.0F, 300.0F, -300.0F, 10.0F, -10.0F);
+	
+	game->create_entity ("camera");
+	game->create_entity ("demo_quad") ["position"] = vec3(-150.0F, 0.0F, 0.0F);
+	game->create_entity ("demo_quad") ["position"] = vec3(150.0F, 0.0F, 0.0F);
+
 }
 
 void loop_callback ( ballistic::game * game ) {
