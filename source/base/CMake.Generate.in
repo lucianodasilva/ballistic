@@ -1,0 +1,35 @@
+#pragma once
+#ifndef _ballistic_config_h_
+#define _ballistic_config_h_
+
+/*  cmake generated operating system definitions
+*
+*   BALLISTIC_LINUX for linux
+*   BALLISTIC_WIN for Windows
+*   BALLISTIC_SUNOS for solaris
+*
+*/
+#   define ${CMAKE_DEFINED_OS}
+
+/*  cmake generated compiler definition
+*
+*   BALLISTIC_GNUXX for gnu c++
+*   BALLISTIC_GNUCC for gnu c
+*   BALLISTIC_MSVC for Microsoft Visual C++
+*
+*/
+#   define ${CMAKE_DEFINED_COMPILER}
+
+// cmake define int data types
+${CMAKE_DEFINED_INTTYPES}
+
+typedef float		real;
+
+/* cmake defined platform endianess
+*
+*   BALLISTIC_BIG_ENDIAN
+*   BALLISTIC_LITTLE_ENDIAN
+*/
+#define ${CMAKE_DEFINED_ENDIANESS}
+
+#endif

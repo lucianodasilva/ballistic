@@ -1,0 +1,77 @@
+# set operating system preprocessor definitions
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    # linux
+    set (CMAKE_DEFINED_OS BALLISTIC_LINUX)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    # windows
+    set (CMAKE_DEFINED_OS BALLISTIC_WIN)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # darwin ( macosx )
+    set (CMAKE_DEFINED_OS BALLISTIC_MACOSX)
+endif ()
+
+# set compiler id preprocessor definitions
+if (CMAKE_COMPILER_IS_GNUXX)
+    # gnu C++
+    set ( CMAKE_DEFINED_COMPILER BALLISTIC_GNUXX )
+elseif (CMAKE_COMPILER_IS_GNUCC)
+    # gnu c
+    set ( CMAKE_DEFINED_COMPILER BALLISTIC_GNUCC )
+elseif (MSVC)
+    # msvc++
+    set ( CMAKE_DEFINED_COMPILER BALLISTIC_MSVC )
+endif ()
+
+# setting basic numeric types
+
+# first check if stdint.h is available
+include (CheckIncludeFile)
+check_include_file ("stdint.h" HAS_STDINT_H)
+
+if (HAS_STDINT_H)
+# set generated integer types to stdint.h
+    set (CMAKE_DEFINED_INTTYPES
+		"#include <stdint.h>
+
+typedef int8_t      int8;
+typedef uint8_t     uint8;
+typedef int16_t     int16;
+typedef uint16_t    uint16;
+typedef int32_t     int32;
+typedef uint32_t    uint32;
+typedef int64_t     int64;
+typedef uint64_t    uint64;"
+	)
+else ()
+    if (MSVC)
+		# set generated for msvc without stdint.h
+        set (CMAKE_DEFINED_INTTYPES
+			"
+typedef __int8              int8;
+typedef unsigned __int8     uint8;
+typedef __int16             int16;
+typedef unsigned __int16    uint16;
+typedef __int32             int32;
+typedef unsigned __int32    uint32;
+typedef __int64             int64;
+typedef unsgined __int64    uint64;
+			"
+		)
+    else ()
+        # unrecognized integer configuration
+        message ( FATAL_ERROR "Cannot find suitable integer type configuration!" )
+    endif ()
+endif ()
+
+# test endianess
+include (TestBigEndian)
+test_big_endian (TEST_ENDIAN)
+
+if (TEST_ENDIAN)
+    set (CMAKE_DEFINED_ENDIANESS BALLISTIC_BIG_ENDIAN)
+else ()
+    set (CMAKE_DEFINED_ENDIANESS BALLISTIC_LITTLE_ENDIAN)
+endif ()
+
+# configure
+configure_file ( ${CMAKE_CURRENT_LIST_DIR}/CMake.Generate.in ${CMAKE_CURRENT_LIST_DIR}/include/ballistic.config.h)
