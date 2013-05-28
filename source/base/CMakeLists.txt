@@ -12,6 +12,7 @@ include_directories (
 file ( GLOB base_source
 	${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
 	${CMAKE_CURRENT_LIST_DIR}/include/*.h
+	${CMAKE_CURRENT_LIST_DIR}/include/*.inl
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
