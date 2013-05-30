@@ -22,6 +22,13 @@ elseif (MSVC)
     set ( CMAKE_DEFINED_COMPILER BALLISTIC_MSVC )
 endif ()
 
+# set graphics library of choice
+if (Ballistic_DXGraphics)
+    set ( CMAKE_DEFINED_GRAPHICS BALLISTIC_DIRECTX )
+else ()
+    set ( CMAKE_DEFINED_GRAPHICS BALLISTIC_OPENGL )
+endif ()
+
 # setting basic numeric types
 
 # first check if stdint.h is available

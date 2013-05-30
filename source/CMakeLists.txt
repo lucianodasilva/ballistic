@@ -6,17 +6,21 @@ project ( ballistic_graphics )
 # Load engine library and main projects
 set ( proj_dir ${CMAKE_CURRENT_LIST_DIR} )
 
-set ( base_dir      ${proj_dir}/base )
-set ( graphics_dir 	${proj_dir}/graphics )
-set ( demo_dir	    ${proj_dir}/demo )
+set ( Ballistic_Base_Dir      ${proj_dir}/base )
+set ( Ballistic_Graphics_Dir  ${proj_dir}/graphics )
+set ( Ballistic_Demo_Dir      ${proj_dir}/demo )
 
-set ( base_dir 		${base_dir} 	CACHE STRING "Path to Base Library" )
-set ( graphics_dir 	${graphics_dir} CACHE STRING "Path to Graphics Library" )
-set ( demo_dir      ${demo_dir}     CACHE STRING "Path to Demo implementation" )
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set ( Ballistic_DXGraphics TRUE CACHE BOOL "Build for DirectX 9.0")
+endif ()
 
-include ( ${base_dir}/CMakeLists.txt )
-include ( ${graphics_dir}/CMakeLists.txt )
-include ( ${demo_dir}/CMakeLists.txt )
+set ( Ballistic_Base_Dir      ${Ballistic_Base_Dir}     CACHE PATH "Path to Base Library" )
+set ( Ballistic_Graphics_Dir  ${Ballistic_Graphics_Dir} CACHE PATH "Path to Graphics Library" )
+set ( Ballistic_Demo_Dir      ${Ballistic_Demo_Dir}     CACHE PATH  "Path to Demo implementation" )
+
+include ( ${Ballistic_Base_Dir}/CMakeLists.txt )
+include ( ${Ballistic_Graphics_Dir}/CMakeLists.txt )
+include ( ${Ballistic_Demo_Dir}/CMakeLists.txt )
 
 # enable c++11
 if (NOT CMAKE_DEFINED_COMPILER MATCHES BALLISTIC_MSVC)

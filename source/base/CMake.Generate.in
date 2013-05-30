@@ -20,6 +20,14 @@
 */
 #   define ${CMAKE_DEFINED_COMPILER}
 
+/*  cmake generated graphics definition
+*
+*   BALLISTIC_DIRECTX for MS DirectX 9.0
+*   BALLISTIC_OPENGL  for OpenGL
+*
+*/
+#   define ${CMAKE_DEFINED_GRAPHICS}
+
 // cmake define int data types
 ${CMAKE_DEFINED_INTTYPES}
 

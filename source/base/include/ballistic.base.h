@@ -4,6 +4,7 @@
 #define BALLISTIC_BASE_EXPORT
 
 #include "ballistic.config.h"
-#include "ballistic.vec3.h"
+#include "ballistic.math.h"
+#include "ballistic.vectors.h"
 
 #endif
