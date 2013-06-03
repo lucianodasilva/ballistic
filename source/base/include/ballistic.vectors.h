@@ -4,7 +4,13 @@
 #include "ballistic.config.h"
 
 struct vec2 {
-	real x, y;
+
+	static const uint32 data_length = 2;
+
+	union {
+		real data [data_length];
+		struct { real x, y; };
+	};
 
 	inline vec2 ( real vx, real vy );
 	inline vec2 ( );
@@ -29,8 +35,11 @@ struct vec2 {
 };
 
 struct vec3 {
+
+	static const uint32 data_length = 3;
 	
 	union {
+		real data [data_length];
 		struct { real x, y, z; };
 		struct { real r, g, b; };
 	};
@@ -58,8 +67,11 @@ struct vec3 {
 };
 
 struct vec4 {
+
+	static const uint32 data_length = 4;
 	
 	union {
+		real data [data_length];
 		struct { real x, y, z, w;};
 #if defined (BALLISTIC_DIRECTX)
 		struct { real a, r, g, b; };

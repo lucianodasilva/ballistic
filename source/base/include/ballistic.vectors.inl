@@ -61,7 +61,7 @@ vec2 & vec2::operator /= ( real v ) {
 }
 
 vec2::operator real * () {
-	return (real *)this;
+	return &data [0];
 }
 
 // ----------------------------------------------------------------------------
@@ -130,7 +130,7 @@ vec3 & vec3::operator /= ( real v ) {
 
 
 vec3::operator real * () {
-	return (real *)this;
+	return &data [0];
 }
 
 // ----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ vec4 vec4::operator / ( real v ) const {
 }
 
 vec4::operator real * () {
-	return (real *)this;
+	return &data [0];
 }
 
 vec4 & vec4::operator += ( const vec4 & v ) {
