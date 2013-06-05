@@ -3,12 +3,16 @@
 
 #include "ballistic.config.h"
 
+enum axis_index : uint32 {
+	axis_index_x = 0U,
+	axis_index_y = 1U,
+	axis_index_z = 2U
+};
+
 struct vec2 {
 
-	static const uint32 data_length = 2;
-
 	union {
-		real data [data_length];
+		real data [2];
 		struct { real x, y; };
 	};
 
@@ -36,10 +40,8 @@ struct vec2 {
 
 struct vec3 {
 
-	static const uint32 data_length = 3;
-	
 	union {
-		real data [data_length];
+		real data [3];
 		struct { real x, y, z; };
 		struct { real r, g, b; };
 	};
@@ -68,10 +70,8 @@ struct vec3 {
 
 struct vec4 {
 
-	static const uint32 data_length = 4;
-	
 	union {
-		real data [data_length];
+		real data [4];
 		struct { real x, y, z, w;};
 #if defined (BALLISTIC_DIRECTX)
 		struct { real a, r, g, b; };

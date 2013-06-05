@@ -3,6 +3,7 @@
 
 #define BALLISTIC_BASE_EXPORT
 
+#include "ballistic.aabox.h"
 #include "ballistic.config.h"
 #include "ballistic.math.h"
 #include "ballistic.matrixes.h"

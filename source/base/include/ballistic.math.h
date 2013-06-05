@@ -12,7 +12,7 @@ namespace ballistic {
 		inline real dot ( const v_t & v1, const v_t & v2 ) {
 			real r = real ();
 
-			for ( uint32 i = 0; i < v_t::data_length; ++i) 
+			for ( uint32 i = 0; i < sizeof (v_t) / sizeof (real); ++i) 
 				r += v1.data [i] * v2.data [i];
 			
 			return r;
@@ -55,7 +55,7 @@ namespace ballistic {
 		inline v_t lerp ( const v_t & v1, const v_t & v2, real alpha ) {
 			v_t v;
 
-			for (int i = 0; i < v_t::data_length; ++i)
+			for (int i = 0; i < sizeof (v_t) / sizeof (real); ++i)
 				v.data [i] = lerp (v1.data [i], v2.data [i], alpha);
 
 			return v;
