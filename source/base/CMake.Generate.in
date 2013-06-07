@@ -33,6 +33,9 @@ ${CMAKE_DEFINED_INTTYPES}
 
 typedef float		real;
 
+const real real_zero = real (0);
+const real real_one	= real (1);
+
 /* cmake defined platform endianess
 *
 *   BALLISTIC_BIG_ENDIAN

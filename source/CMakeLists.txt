@@ -22,6 +22,15 @@ include ( ${Ballistic_Base_Dir}/CMakeLists.txt )
 include ( ${Ballistic_Graphics_Dir}/CMakeLists.txt )
 include ( ${Ballistic_Demo_Dir}/CMakeLists.txt )
 
+# --------- frontends ---------
+set_property (GLOBAL PROPERTY USE_FOLDERS ON)
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	include ( ${proj_dir}/frontend/win_desktop/CMakeLists.txt )
+	set_property (TARGET win_desktop PROPERTY FOLDER "frontend")
+endif ()
+# -----------------------------
+
 # enable c++11
 if (NOT CMAKE_DEFINED_COMPILER MATCHES BALLISTIC_MSVC)
 	if (CMAKE_GENERATOR STREQUAL Xcode)
