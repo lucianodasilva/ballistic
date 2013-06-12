@@ -17,3 +17,4 @@ file ( GLOB base_source
 )
 
 add_library ( base STATIC ${base_source} )
+target_link_libraries ( base tinyxml2 )
