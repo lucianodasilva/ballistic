@@ -26,7 +26,8 @@
 *   BALLISTIC_OPENGL  for OpenGL
 *
 */
-#   define ${CMAKE_DEFINED_GRAPHICS}
+${CMAKE_DEFINED_DX}
+${CMAKE_DEFINED_OPENGL}
 
 // cmake define int data types
 ${CMAKE_DEFINED_INTTYPES}

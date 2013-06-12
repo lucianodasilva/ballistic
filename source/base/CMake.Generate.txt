@@ -24,21 +24,18 @@ endif ()
 
 # set graphics library of choice
 if (Ballistic_DXGraphics)
-    set ( CMAKE_DEFINED_GRAPHICS BALLISTIC_DIRECTX )
-else ()
-    set ( CMAKE_DEFINED_GRAPHICS BALLISTIC_OPENGL )
+    set ( CMAKE_DEFINED_DX "#   define BALLISTIC_DIRECTX" )
+endif ()
+
+if (Ballistic_OpenGLGraphics)
+    set ( CMAKE_DEFINED_OPENGL "#   define BALLISTIC_OPENGL"  )
 endif ()
 
 # setting basic numeric types
 
-# first check if stdint.h is available
-include (CheckIncludeFile)
-check_include_file ("stdint.h" HAS_STDINT_H)
-
-if (HAS_STDINT_H)
-# set generated integer types to stdint.h
-    set (CMAKE_DEFINED_INTTYPES
-		"#include <stdint.h>
+# set integer types to cstdint
+set (CMAKE_DEFINED_INTTYPES
+		"#include <cstdint>
 
 typedef int8_t      int8;
 typedef uint8_t     uint8;
@@ -49,26 +46,6 @@ typedef uint32_t    uint32;
 typedef int64_t     int64;
 typedef uint64_t    uint64;"
 	)
-else ()
-    if (MSVC)
-		# set generated for msvc without stdint.h
-        set (CMAKE_DEFINED_INTTYPES
-			"
-typedef __int8              int8;
-typedef unsigned __int8     uint8;
-typedef __int16             int16;
-typedef unsigned __int16    uint16;
-typedef __int32             int32;
-typedef unsigned __int32    uint32;
-typedef __int64             int64;
-typedef unsgined __int64    uint64;
-			"
-		)
-    else ()
-        # unrecognized integer configuration
-        message ( FATAL_ERROR "Cannot find suitable integer type configuration!" )
-    endif ()
-endif ()
 
 # test endianess
 include (TestBigEndian)
