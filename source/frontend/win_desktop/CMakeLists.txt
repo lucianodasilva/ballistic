@@ -15,3 +15,4 @@ file ( GLOB win_desktop_source
 )
 
 add_executable ( win_desktop ${win_desktop_source} )
+target_link_libraries ( win_desktop base )
