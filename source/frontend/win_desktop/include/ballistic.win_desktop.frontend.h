@@ -2,7 +2,6 @@
 #define _ballistic_win_desktop_frontend_h_
 
 #include <ballistic.base.h>
-
 #include <Windows.h>
 
 namespace ballistic {
@@ -28,6 +27,7 @@ namespace ballistic {
 			virtual void show ();
 			virtual void destroy ();
 
+			virtual void update (ballistic::game * game);
 		};
 
 	}

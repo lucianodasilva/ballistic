@@ -15,9 +15,9 @@ namespace math {
 	template < class T >
 	struct aabox_t {
 
-		vec3_t < T > min, max;
+		vec3_t < T > v_min, v_max;
 		
-		inline aabox_t ( const vec3_t < T > & min, const vec3_t < T > & max );
+		inline aabox_t ( const vec3_t < T > & v_min, const vec3_t < T > & v_max );
 		inline aabox_t ( const aabox_t < T > & v );
 
 		inline aabox_t < T > & operator = ( const aabox_t < T > & v );

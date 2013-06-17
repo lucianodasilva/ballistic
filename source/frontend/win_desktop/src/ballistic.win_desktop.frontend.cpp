@@ -71,5 +71,8 @@ namespace ballistic {
 			DestroyWindow (_window_handle);
 		}
 
+		void frontend::update (ballistic::game * game) {
+
+		}
 	}
 }
