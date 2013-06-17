@@ -2,9 +2,11 @@
 #include <iostream>
 #include "ballistic.win_desktop.frontend.h"
 
+#include <ballistic.base.h>
+
 int main () {
 
-	ballistic::win_desktop::frontend window_instance (point (800, 600));
+	ballistic::win_desktop::frontend window_instance (point (800, 640));
 
 	if (!window_instance.create ()) {
 		std::cout << "Failed to create frontend window!";
@@ -12,6 +14,11 @@ int main () {
 	}
 
 	window_instance.show ();
+
+	ballistic::game game_instance;
+
+	game_instance.on_initialize ();
+	game_instance.do_loop (&window_instance);
 
 	return 0;
 }

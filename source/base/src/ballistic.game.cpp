@@ -49,10 +49,6 @@ namespace ballistic {
 		send_message (m);
 	}
 
-	void game::do_loop(ifrontend * frontend) {
-		do_loop (frontend, nullptr);
-	}
-
 	void game::do_loop (ifrontend * frontend, function < void ( game * ) > system_callback) {
 		_running = true;
 

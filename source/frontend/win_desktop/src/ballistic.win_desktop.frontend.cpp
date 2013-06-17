@@ -10,7 +10,7 @@ namespace ballistic {
 					PostQuitMessage(0);
 					return 0;
 			}
-
+			
 			return DefWindowProc(hWnd, msg, wParam, lParam);
 		}
 
@@ -73,6 +73,16 @@ namespace ballistic {
 
 		void frontend::update (ballistic::game * game) {
 
+			// Process windows events ------------------------------------
+			MSG msg;
+			while(PeekMessage(&msg, _window_handle, 0, 0, PM_REMOVE) > 0)
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+			// -----------------------------------------------------------
+			// TODO: Fire all input events into the message system here
+			// -----------------------------------------------------------
 		}
 	}
 }
