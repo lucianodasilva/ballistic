@@ -8,9 +8,6 @@
 
 namespace ballistic {
 
-	entity::entity ( const entity & orig ) {}
-	entity & entity::operator = ( const entity & orig ) { return *this; }
-
 	void game::add_entity ( entity * ent ) {
 		_entity_map [ent->get_id ()] = ent;
 		ent->set_game (this);
@@ -45,40 +42,42 @@ namespace ballistic {
 	}
 
 	void game::on_initialize () {
+
+		_frame_start = _game_start_time = system::get_time_now ();
+		_frame_id = 1;
+		_running = true;
+
 		message m (this, id::message_initialize);
 		send_message (m);
 	}
 
 	void game::do_loop (ifrontend * frontend, function < void ( game * ) > system_callback) {
-		_running = true;
-
 		on_initialize ();
 
-		auto loop_start_time = system::get_time_now ();
-		auto frame_start = system::get_time_now ();
+		while (
+			frame (frontend, system_callback)
+		){}
+	}
 
-		uint32 frame_id = 1;
-		message m_update (this, id::message_update);
+	bool game::frame (ifrontend * frontend, function < void ( game * ) > system_callback ) {
+		
+		_m_update [id::game_time] = system::get_elapsed_seconds (_game_start_time);
+		_m_update [id::frame_time] = system::get_elapsed_seconds (_frame_start);
+		_m_update [id::frame_count] = _frame_id;
 
-		while (_running) {
+		_frame_start = system::get_time_now ();
 
-			// update message attributes
-			m_update [id::game_time] = system::get_elapsed_seconds (loop_start_time);
-			m_update [id::frame_time] = system::get_elapsed_seconds (frame_start);
-			m_update [id::frame_count] = frame_id;
+		send_message (_m_update);
 
-			frame_start = system::get_time_now ();
+		if (system_callback)
+			system_callback (this);
 
-			send_message (m_update);
+		if (frontend)
+			frontend->update (this);
 
-			if (system_callback)
-				system_callback (this);
+		_frame_id++;
 
-			if (frontend)
-				frontend->update (this);
-
-			frame_id++;
-		}
+		return _running;
 	}
 
 	void game::terminate () {
@@ -89,7 +88,7 @@ namespace ballistic {
 		_running = false;
 	}
 
-	game::game () : entity (0) {
+	game::game () : entity (0), _m_update (this, id::message_update) {
 		set_game (this);
 		_entity_map [this->get_id ()] = this;
 	}

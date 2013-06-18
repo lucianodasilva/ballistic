@@ -4,6 +4,7 @@
 #include "ballistic.entity.h"
 #include "ballistic.ifrontend.h"
 #include "ballistic.message.h"
+#include "ballistic.system.h"
 
 #include <functional>
 #include <map>
@@ -15,7 +16,7 @@ using namespace std;
 namespace ballistic {
 
 	class game : public entity {
-	private:
+	protected:
 
 		typedef map < id_t, entity * > entity_map_t;
 		entity_map_t _entity_map;
@@ -23,6 +24,14 @@ namespace ballistic {
 		bool _running;
 
 		void		add_entity ( entity * ent );
+
+		// game state ---
+		system::ballistic_time_t
+				_game_start_time,
+				_frame_start;
+
+		uint32	_frame_id;
+		message _m_update;
 
 	public:
 
@@ -36,6 +45,8 @@ namespace ballistic {
 		virtual void on_initialize ();
 
 		virtual void do_loop (ifrontend * frontend = nullptr, function < void ( game * )> system_callback = nullptr);
+
+		virtual bool frame (ifrontend * frontend = nullptr, function < void ( game *) > system_callback = nullptr);
 
 		virtual void terminate ();
 
