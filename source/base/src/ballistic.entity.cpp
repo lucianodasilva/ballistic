@@ -37,7 +37,7 @@ namespace ballistic {
 	}
 
 	icomponent * entity::create_component ( id_t id ) {
-		icomponent * new_component = component_factory::create (id);
+		icomponent * new_component = component_factory::instance ().create (id);
 
 		add_component (new_component);
 		return new_component;

@@ -4,10 +4,11 @@
 #include <tinyxml2.h>
 
 #include <string>
+#include <iostream>
 
-using namespace std;
 
 void main () {
 
+	ballistic::component_factory::instance ().define (23, nullptr );
 
 }

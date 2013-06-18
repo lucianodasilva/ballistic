@@ -5,5 +5,7 @@
 using namespace std;
 
 namespace ballistic {
-	component_factory::constructor_map_t component_factory::_constructors;
+	
+	component_factory * component_factory::_instance = nullptr;
+
 }
