@@ -21,8 +21,13 @@ if (APPLE)
 	mark_as_advanced ( 
 			OpenGL_LIBRARY
 	)
+
+	set (opengl_dep ${OpenGL_LIBRARY})
+	
+else ()
+	find_package (OpenGL REQUIRED)
+	set ( opengl_dep ${OPENGL_LIBRARY})
 endif ()
 
-set (opengl_dep ${OpenGL_LIBRARY})
 
 target_link_libraries ( graphics_opengl base graphics ${opengl_dep})

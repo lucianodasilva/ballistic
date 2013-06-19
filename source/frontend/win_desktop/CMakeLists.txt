@@ -27,7 +27,11 @@ endif ()
 if (Ballistic_OpenGLGraphics)
 	project ( win_desktop_gl )
 	add_executable ( win_desktop_gl ${win_desktop_source} )
-	target_link_libraries ( win_desktop_gl base graphics_opengl )
+
+	find_package ( OpenGL REQUIRED )
+
+
+	target_link_libraries ( win_desktop_gl base graphics_opengl ${OPENGL_LIBRARY})
 
 	set_property (TARGET win_desktop_gl PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_WIN_GL )
 

@@ -8,6 +8,10 @@ namespace ballistic {
 	namespace graphics {
 		
 		class opengl_device {
+		private:
+
+			color _clear_color;
+
 		public:
 			
 			virtual imaterial * create_material ();
@@ -19,8 +23,12 @@ namespace ballistic {
 			virtual itexture *	load_texture ( const string & filename );
 			
 			virtual void		set_transform ( const mat4 & matrix );
-			
-			virtual void		start_frame ();
+
+			virtual void		set_clear_color ( const color & cr ) ;
+
+			virtual void		clear ();
+
+			virtual void		begin_frame ();
 			virtual void		end_frame ();
 			
 			virtual void		set_current_mesh ( imesh * mesh );

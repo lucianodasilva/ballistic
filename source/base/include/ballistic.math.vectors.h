@@ -100,11 +100,7 @@ namespace math {
 		union {
 			T data [4];
 			struct { T x, y, z, w;};
-	#if defined (BALLISTIC_DIRECTX)
-			struct { T a, r, g, b; };
-	#elif defined (BALLISTIC_OPENGL)
 			struct { T r, g, b, a; };
-	#endif
 		};
 
 		inline vec4_t (T vx, T vy, T vz, T vw);

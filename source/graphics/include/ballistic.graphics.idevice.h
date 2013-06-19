@@ -26,7 +26,11 @@ namespace ballistic {
 			
 			virtual void		set_transform ( const mat4 & matrix ) = 0;
 
-			virtual void		start_frame () = 0;
+			virtual void		set_clear_color ( const color & cr ) = 0;
+
+			virtual void		clear () = 0;
+
+			virtual void		begin_frame () = 0;
 			virtual void		end_frame () = 0;
 
 			virtual void		set_current_mesh ( imesh * mesh ) = 0;

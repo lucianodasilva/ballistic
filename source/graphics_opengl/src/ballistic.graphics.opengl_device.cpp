@@ -48,10 +48,25 @@ namespace ballistic {
 			mat4 rev = matrix.transpose();
 			glLoadMatrixf (&rev.data [0]);
 		}
+
+		void opengl_device::set_clear_color ( const color & cr ) {
+			_clear_color = cr;
+		}
+
+		void opengl_device::clear () {
+			glClearColor (
+				_clear_color.r,
+				_clear_color.g,
+				_clear_color.b,
+				_clear_color.a
+			);
+
+			glClear (GL_COLOR_BUFFER_BIT);
+		}
 		
-		void opengl_device::start_frame ()
+		void opengl_device::begin_frame ()
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClear(GL_DEPTH_BUFFER_BIT);
 		}
 		
 		void opengl_device::end_frame ()

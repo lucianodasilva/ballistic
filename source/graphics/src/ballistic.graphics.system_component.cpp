@@ -7,7 +7,7 @@ namespace ballistic {
 
 			if (message.get_id () != ballistic::id::message_update) return;
 
-			_device->start_frame ();
+			_device->begin_frame ();
 
 
 			_device->end_frame ();
