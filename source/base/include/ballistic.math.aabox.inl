@@ -3,7 +3,7 @@ namespace ballistic {
 	namespace math {
 
 	template < class T >
-	aabox_t < T >::aabox_t ( const vec3_t < T > & v_min, const vec3_t < T > & v_max ) : this->v_min (v_min), this->v_max (v_max) {}
+	aabox_t < T >::aabox_t ( const vec3_t < T > & v_min, const vec3_t < T > & v_max ) : v_min (v_min), v_max (v_max) {}
 
 	template < class T >
 	aabox_t < T >::aabox_t ( const aabox_t < T > & v ) : v_min ( v.v_min ), v_max ( v.v_max ) {}

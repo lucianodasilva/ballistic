@@ -12,7 +12,7 @@ namespace ballistic {
 		inline typename T::type dot ( const T & v1, const T & v2 ) {
 			typename T::type r = T::type ();
 
-			for ( uint32 i = 0; i < v_t::count < v_t > (); ++i) 
+			for ( uint32 i = 0; i < T::count (); ++i)
 				r += v1.data [i] * v2.data [i];
 			
 			return r;
@@ -56,7 +56,7 @@ namespace ballistic {
 		inline T lerp ( const T & v1, const T & v2, real alpha ) {
 			T v;
 
-			for (int i = 0; i < v_t::count; ++i)
+			for (int i = 0; i < T::count; ++i)
 				v.data [i] = lerp (v1.data [i], v2.data [i], alpha);
 
 			return v;

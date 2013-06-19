@@ -23,6 +23,8 @@ namespace ballistic {
 			virtual imaterial * load_material ( const string & filename ) = 0;
 			virtual imesh *		load_mesh ( const string & filename ) = 0;
 			virtual itexture *	load_texture ( const string & filename ) = 0;
+			
+			virtual void		set_transform ( const mat4 & matrix ) = 0;
 
 			virtual void		start_frame () = 0;
 			virtual void		end_frame () = 0;

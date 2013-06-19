@@ -23,7 +23,7 @@ namespace math {
 
 	template < class T >
 	mat4_t < T > & mat4_t < T >::operator = ( const mat4_t & v ) {
-		for ( int i = 0; i < data_length; ++i )
+		for ( int i = 0; i < count; ++i )
 			data [i] = v.data [i];
 
 		return *this;
