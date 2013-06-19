@@ -35,7 +35,7 @@ set ( Ballistic_Graphics_OpenGL_Dir ${Ballistic_Graphics_OpenGL_Dir} CACHE PATH 
 
 # --------- dependencies ----------
 include (${proj_dir}/deps/tinyxml2/CMakeLists.txt )
-set_property (TARGET tinyxml2 PROPERTY FOLDER "deps")
+include (${proj_dir}/deps/glew/CMakeLists.txt)
 
 # --------- core projects ----------
 include ( ${Ballistic_Base_Dir}/CMakeLists.txt )

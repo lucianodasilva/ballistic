@@ -26,3 +26,4 @@ endif(MSVC)
 
 add_library(tinyxml2 STATIC ${CMAKE_CURRENT_LIST_DIR}/tinyxml2.cpp ${CMAKE_CURRENT_LIST_DIR}/tinyxml2.h)
 
+set_property (TARGET tinyxml2 PROPERTY FOLDER "deps")

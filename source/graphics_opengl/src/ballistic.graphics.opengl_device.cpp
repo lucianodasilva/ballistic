@@ -1,17 +1,14 @@
 #include "ballistic.graphics.opengl_device.h"
 
 // if building on macosx
-#ifdef BALLISTIC_MACOSX
-#	include <OpenGL/gl.h>
-#else
-#	ifdef BALLISTIC_WIN
-#		include <Windows.h>
-#	endif
-#	include <gl/GL.h>
-#endif
+#include <GL/glew.h>
 
 namespace ballistic {
 	namespace graphics {
+		
+		opengl_device::opengl_device () {
+			glewInit ();
+		}
 	
 		imaterial * opengl_device::create_material ()
 		{

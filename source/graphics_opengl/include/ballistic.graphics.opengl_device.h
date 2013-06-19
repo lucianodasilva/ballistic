@@ -14,6 +14,8 @@ namespace ballistic {
 
 		public:
 			
+			opengl_device ();
+			
 			virtual imaterial * create_material ();
 			virtual imesh *		create_mesh ();
 			virtual itexture *	create_texture (const point & size);

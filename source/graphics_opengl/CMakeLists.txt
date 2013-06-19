@@ -29,5 +29,4 @@ else ()
 	set ( opengl_dep ${OPENGL_LIBRARY})
 endif ()
 
-
-target_link_libraries ( graphics_opengl base graphics ${opengl_dep})
+target_link_libraries ( graphics_opengl base graphics ${opengl_dep} glew )
