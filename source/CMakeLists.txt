@@ -57,13 +57,11 @@ include ( ${Ballistic_Demo_Dir}/CMakeLists.txt )
 # windows desktop frontend
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	include ( ${proj_dir}/frontend/win_desktop/CMakeLists.txt )
-	set_property (TARGET win_desktop PROPERTY FOLDER "frontend")
 endif ()
 
 # mac-osx desktop frontend
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	include ( ${proj_dir}/frontend/mac_desktop/CMakeLists.txt )
-	set_property (TARGET mac_desktop PROPERTY FOLDER "frontend")
 endif ()
 # -----------------------------
 

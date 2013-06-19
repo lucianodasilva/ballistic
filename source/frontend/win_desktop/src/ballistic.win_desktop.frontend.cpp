@@ -60,6 +60,49 @@ namespace ballistic {
 				return false;
 			}
 
+#			ifdef BALLISTIC_DESKTOP_WIN_GL 
+
+			PIXELFORMATDESCRIPTOR pfd = {
+				sizeof (PIXELFORMATDESCRIPTOR),
+				1, // version number
+				PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
+				PFD_TYPE_RGBA,
+				24, // color depth
+				0, 0, 0, 0, 0, 0,
+				0, 
+				0,
+				0,
+				0, 0, 0, 0,
+				32, // 32 bit z buffer
+				0,	// no stencil buffer
+				0,
+				PFD_MAIN_PLANE,
+				0, 
+				0, 0, 0
+			};
+
+			_window_dc = GetDC (_window_handle);
+
+			int pixel_format = ChoosePixelFormat (_window_dc, & pfd); 
+			if (pixel_format == 0) {
+				// Failed. TODO: insert super logging here
+				return false;
+			}
+
+			if (SetPixelFormat (_window_dc, pixel_format, &pfd) == FALSE) {
+				// Failed. TODO: insert logging here
+				return false;
+			}
+
+			_window_gl_rc = wglCreateContext (_window_dc);
+			if (_window_gl_rc == NULL) 
+				return false;
+
+			if (wglMakeCurrent (_window_dc, _window_gl_rc) == NULL)
+				return false;
+
+#			endif
+
 			return true;
 		}
 

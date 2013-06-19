@@ -14,5 +14,22 @@ file ( GLOB win_desktop_source
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
-add_executable ( win_desktop ${win_desktop_source} )
-target_link_libraries ( win_desktop base )
+if (Ballistic_DXGraphics)
+	project ( win_desktop_dx )
+	add_executable ( win_desktop_dx ${win_desktop_source} )
+	target_link_libraries ( win_desktop_dx base graphics_directx)
+
+	set_property (TARGET win_desktop_dx PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_WIN_DX )
+
+	set_property (TARGET win_desktop_dx PROPERTY FOLDER "frontend")
+endif ()
+
+if (Ballistic_OpenGLGraphics)
+	project ( win_desktop_gl )
+	add_executable ( win_desktop_gl ${win_desktop_source} )
+	target_link_libraries ( win_desktop_gl base graphics_opengl )
+
+	set_property (TARGET win_desktop_gl PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_WIN_GL )
+
+	set_property (TARGET win_desktop_gl PROPERTY FOLDER "frontend")
+endif ()

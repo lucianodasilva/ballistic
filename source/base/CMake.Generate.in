@@ -4,9 +4,9 @@
 
 /*  cmake generated operating system definitions
 *
-*   BALLISTIC_LINUX for linux
+*   BALLISTIC_LINUX for Linux
 *   BALLISTIC_WIN for Windows
-*   BALLISTIC_SUNOS for solaris
+*   BALLISTIC_MACOSX for Mac OSX
 *
 */
 #   define ${CMAKE_DEFINED_OS}

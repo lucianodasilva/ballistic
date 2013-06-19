@@ -13,8 +13,13 @@ namespace ballistic {
 			point	_window_client_size;
 			HWND	_window_handle;
 
+#			ifdef BALLISTIC_DESKTOP_WIN_GL
+				 HDC _window_dc;
+				 HGLRC _window_gl_rc;
+#			endif
+
 			static LRESULT CALLBACK message_proc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
-			 
+
 		public:
 
 			virtual point get_client_size ();

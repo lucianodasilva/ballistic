@@ -20,4 +20,4 @@ endif ()
 
 add_library ( graphics_directx STATIC ${graphics_source} )
 
-target_link_libraries ( graphics_directx base graphics DirectX_LIBRARY )
+target_link_libraries ( graphics_directx base graphics ${DirectX_LIBRARY} )

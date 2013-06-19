@@ -1,7 +1,14 @@
 #include "ballistic.graphics.opengl_device.h"
 
-#include <OpenGL/gl.h>
-
+// if building on macosx
+#ifdef BALLISTIC_MACOSX
+#	include <OpenGL/gl.h>
+#else
+#	ifdef BALLISTIC_WIN
+#		include <Windows.h>
+#	endif
+#	include <gl/GL.h>
+#endif
 
 namespace ballistic {
 	namespace graphics {

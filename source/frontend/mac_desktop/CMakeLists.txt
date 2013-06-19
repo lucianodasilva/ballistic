@@ -28,3 +28,5 @@ set (opengl_dep ${COCOA_LIBRARY} ${GLUT_LIBRARY} ${OpenGL_LIBRARY})
 
 add_executable ( mac_desktop ${mac_desktop_source} )
 target_link_libraries ( mac_desktop base graphics_opengl ${opengl_dep})
+
+set_property (TARGET mac_desktop PROPERTY FOLDER "frontend")
