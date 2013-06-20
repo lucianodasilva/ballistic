@@ -14,19 +14,16 @@ file ( GLOB mac_desktop_source
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
-include_directories ( /System/Library/Frameworks )
 find_library(COCOA_LIBRARY Cocoa)
 find_library(GLUT_LIBRARY GLUT )
-find_library(OpenGL_LIBRARY OpenGL )
 mark_as_advanced (
 	COCOA_LIBRARY
     GLUT_LIBRARY
-    OpenGL_LIBRARY
 )
 
-set (opengl_dep ${COCOA_LIBRARY} ${GLUT_LIBRARY} ${OpenGL_LIBRARY})
+set (BALLISTIC_MAC_GL ${COCOA_LIBRARY} ${GLUT_LIBRARY} ${BALLISTIC_GL_LIBRARIES})
 
 add_executable ( mac_desktop ${mac_desktop_source} )
-target_link_libraries ( mac_desktop base graphics_opengl ${opengl_dep})
+target_link_libraries ( mac_desktop base graphics_opengl ${BALLISTIC_MAC_GL})
 
 set_property (TARGET mac_desktop PROPERTY FOLDER "frontend")

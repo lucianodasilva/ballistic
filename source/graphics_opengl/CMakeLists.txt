@@ -15,18 +15,4 @@ file ( GLOB graphics_gl_source
 
 add_library ( graphics_opengl STATIC ${graphics_gl_source} )
 
-if (APPLE)
-	include_directories (/System/Library/Frameworks)
-	find_library ( OpenGL_LIBRARY OpenGL )
-	mark_as_advanced ( 
-			OpenGL_LIBRARY
-	)
-
-	set (opengl_dep ${OpenGL_LIBRARY})
-	
-else ()
-	find_package (OpenGL REQUIRED)
-	set ( opengl_dep ${OPENGL_LIBRARY})
-endif ()
-
-target_link_libraries ( graphics_opengl base graphics ${opengl_dep} glew )
+target_link_libraries ( graphics_opengl base graphics ${BALLISTIC_GL_LIBRARIES} glew )

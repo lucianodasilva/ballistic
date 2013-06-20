@@ -9,7 +9,7 @@ set (glew_dir ${CMAKE_CURRENT_LIST_DIR})
 
 file ( GLOB glew_source
 	${glew_dir}/src/*.c
-	${glew_dir}/include/*.h
+	${glew_dir}/include/GL/*.h
 )
 
 add_library(glew STATIC ${glew_source})
@@ -21,13 +21,13 @@ if (APPLE)
 			OpenGL_LIBRARY
 	)
 
-	set (opengl_dep ${OpenGL_LIBRARY})
+	set (BALLISTIC_GL_LIBRARIES ${OpenGL_LIBRARY})
 	
 else ()
 	find_package (OpenGL REQUIRED)
-	set ( opengl_dep ${OPENGL_LIBRARY})
+	set ( BALLISTIC_GL_LIBRARIES ${OPENGL_LIBRARY})
 endif ()
 
-target_link_libraries ( glew ${opengl_dep})
+target_link_libraries ( glew ${BALLISTIC_GL_LIBRARIES})
 
 set_property (TARGET glew PROPERTY FOLDER "deps")

@@ -28,12 +28,8 @@ if (Ballistic_OpenGLGraphics)
 	project ( win_desktop_gl )
 	add_executable ( win_desktop_gl ${win_desktop_source} )
 
-	find_package ( OpenGL REQUIRED )
-
-
-	target_link_libraries ( win_desktop_gl base graphics_opengl ${OPENGL_LIBRARY})
+	target_link_libraries ( win_desktop_gl base graphics_opengl ${BALLISTIC_GL_LIBRARIES} glew)
 
 	set_property (TARGET win_desktop_gl PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_WIN_GL )
-
 	set_property (TARGET win_desktop_gl PROPERTY FOLDER "frontend")
 endif ()

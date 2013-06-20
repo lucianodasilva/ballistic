@@ -1,6 +1,5 @@
 #include "ballistic.graphics.opengl_device.h"
 
-// if building on macosx
 #include <GL/glew.h>
 
 namespace ballistic {
