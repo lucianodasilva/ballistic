@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 
+#include "ballistic.graphics.opengl_mesh.h"
+
 namespace ballistic {
 	namespace graphics {
 		
@@ -16,7 +18,7 @@ namespace ballistic {
 		
 		imesh *	opengl_device::create_mesh ()
 		{
-			return nullptr;
+			return new opengl_mesh ();
 		}
 		
 		itexture * opengl_device::create_texture (const point & size)
@@ -42,7 +44,16 @@ namespace ballistic {
 		void opengl_device::set_transform(const mat4 & matrix)
 		{
 			mat4 rev = matrix.transpose();
-			glLoadMatrixf (&rev.data [0]);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glMultMatrixf (&rev.data [0]);
+		}
+		
+		void opengl_device::set_projection ( const mat4 & matrix ) {
+			mat4 rev = matrix.transpose ();
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glMultMatrixf (&rev.data [0]);
 		}
 
 		void opengl_device::set_clear_color ( const color & cr ) {
@@ -67,7 +78,7 @@ namespace ballistic {
 		
 		void opengl_device::end_frame ()
 		{
-			glFlush ();
+			//glFlush ();
 		}
 		
 		void opengl_device::set_current_mesh ( imesh * mesh )

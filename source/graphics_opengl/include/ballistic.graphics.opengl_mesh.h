@@ -21,13 +21,18 @@ namespace ballistic {
 		public:
 			
 			opengl_mesh ();
+			~opengl_mesh ();
 			
 			virtual void set_data (
-				vertex * vert_buffer,
+				vertex vert_buffer [],
 				uint32 vert_buffer_size,
-				uint16 * index_buffer,
+				uint16 index_buffer [],
 				uint32 index_buffer_size
 			);
+			
+			virtual void attach ();
+			virtual void render ();
+			virtual void detach ();
 			
 		};
 		
