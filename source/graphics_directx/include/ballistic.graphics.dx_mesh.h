@@ -4,6 +4,8 @@
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
 
+#include <d3d9.h>
+
 namespace ballistic {
 	namespace graphics {
 		
@@ -11,16 +13,14 @@ namespace ballistic {
 		{
 		private:
 			
-			uint32
-				_vertex_buffer_id,
-				_vertex_buffer_size,
-				_index_buffer_id,
-				_index_buffer_size;
-			
+			LPDIRECT3DDEVICE9 _device;
+
+			LPDIRECT3DVERTEXBUFFER9 _buffer;
+			LPDIRECT3DINDEXBUFFER9 _index;
 			
 		public:
 			
-			dx_mesh ();
+			dx_mesh (LPDIRECT3DDEVICE9 device);
 			~dx_mesh ();
 			
 			virtual void set_data (

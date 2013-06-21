@@ -8,6 +8,19 @@ ballistic::graphics::idevice *	_device;
 
 ballistic::graphics::imesh *	_mesh;
 
+#ifdef BALLISTIC_WIN
+#	include "ballistic.win_frontend.h"
+
+ballistic::ifrontend * create_frontend ( const point & size ) {
+	return new ballistic::win_desktop::frontend (size);
+}
+
+#elif defined (BALLISTIC_MACOSX)
+#	include "ballistic.mac_frontend.h"
+#	include <GLUT/GLUT.h>
+	return new ballistic::mac_desktop::frontend (size);
+#endif
+
 #ifdef BALLISTIC_DESKTOP_GL
 #	include <ballistic.graphics.opengl.h>
 
@@ -21,22 +34,11 @@ ballistic::graphics::idevice * create_device () {
 #	include <ballistic.graphics.directx.h>
 
 ballistic::graphics::idevice * create_device () {
-	return nullptr;
+	return new ballistic::graphics::dx_device (
+		((ballistic::win_desktop::frontend *)_frontend)->get_window_handle ()
+	);
 }
 
-#endif
-
-#ifdef BALLISTIC_WIN
-#	include "ballistic.win_frontend.h"
-
-ballistic::ifrontend * create_frontend ( const point & size ) {
-	return new ballistic::win_desktop::frontend (size);
-}
-
-#elif defined (BALLISTIC_MACOSX)
-#	include "ballistic.mac_frontend.h"
-#	include <GLUT/GLUT.h>
-	return new ballistic::mac_desktop::frontend (size);
 #endif
 
 

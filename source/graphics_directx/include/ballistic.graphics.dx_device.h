@@ -4,6 +4,8 @@
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
 
+#include <d3d9.h>
+
 namespace ballistic {
 	namespace graphics {
 		
@@ -12,9 +14,12 @@ namespace ballistic {
 
 			color _clear_color;
 
+			LPDIRECT3D9			_d3d;
+			LPDIRECT3DDEVICE9	_d3d_device;
+
 		public:
 			
-			dx_device ();
+			dx_device (HWND hWnd);
 			
 			virtual imaterial * create_material ();
 			virtual imesh *		create_mesh ();

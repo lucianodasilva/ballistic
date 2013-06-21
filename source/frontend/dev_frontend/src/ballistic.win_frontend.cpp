@@ -139,6 +139,8 @@ namespace ballistic {
 				SwapBuffers (_window_dc);
 #			endif
 		}
+
+		HWND frontend::get_window_handle () { return _window_handle; }
 	}
 }
 #endif
