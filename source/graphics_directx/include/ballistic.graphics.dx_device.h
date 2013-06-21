@@ -1,5 +1,5 @@
-#ifndef ballistic_graphics_opengl_device_h
-#define ballistic_graphics_opengl_device_h
+#ifndef ballistic_graphics_dx_device_h
+#define ballistic_graphics_dx_device_h
 
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
@@ -7,14 +7,14 @@
 namespace ballistic {
 	namespace graphics {
 		
-		class opengl_device : public idevice{
+		class dx_device : public idevice{
 		private:
 
 			color _clear_color;
 
 		public:
 			
-			opengl_device ();
+			dx_device ();
 			
 			virtual imaterial * create_material ();
 			virtual imesh *		create_mesh ();

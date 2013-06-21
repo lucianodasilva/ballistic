@@ -54,15 +54,9 @@ include ( ${Ballistic_Demo_Dir}/CMakeLists.txt )
 
 # --------- frontends ---------
 
-# windows desktop frontend
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	include ( ${proj_dir}/frontend/win_desktop/CMakeLists.txt )
-endif ()
+# development frontend
+include ( ${proj_dir}/frontend/dev_frontend/CMakeLists.txt )
 
-# mac-osx desktop frontend
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	include ( ${proj_dir}/frontend/mac_desktop/CMakeLists.txt )
-endif ()
 # -----------------------------
 
 # enable c++11
