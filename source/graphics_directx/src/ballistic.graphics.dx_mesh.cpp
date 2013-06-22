@@ -8,20 +8,20 @@ namespace ballistic {
 		dx_mesh::dx_mesh (LPDIRECT3DDEVICE9 device) : _device (device) {}
 		
 		dx_mesh::~dx_mesh() {
-
+			if (_buffer)
+				_buffer->Release ();
 		}
 		
 		void dx_mesh::set_data (
 			vertex vert_buffer [],
-			uint32 vert_buffer_size,
-			uint16 index_buffer [],
-			uint32 index_buffer_size
+			uint16 index_buffer []
 		){
 
 			_device->CreateVertexBuffer (
-				sizeof (vertex) * vert_buffer_size,
-				0,
-				D3DFVF_XYZ | D3DFVF_TEXCOORDSIZE2 (0),
+				sizeof (vert_buffer),
+				D3DUSAGE_WRITEONLY,
+				//D3DFVF_XYZ | D3DFVF_TEXCOORDSIZE2 (0),
+				D3DFVF_XYZ,
 				D3DPOOL_MANAGED,
 				&_buffer,
 				NULL);
@@ -33,7 +33,7 @@ namespace ballistic {
 			_buffer->Unlock ();
 
 			_device->CreateIndexBuffer (
-				sizeof (uint16) * index_buffer_size,
+				sizeof (index_buffer),
 				D3DUSAGE_WRITEONLY,
 				D3DFMT_INDEX16,
 				D3DPOOL_MANAGED,
@@ -41,7 +41,7 @@ namespace ballistic {
 				NULL);
 
 			VOID* index_void;
-			_index->Lock (0, 0, (void**)&index_void, 0);
+			_index->Lock (0, sizeof (index_buffer), (void**)&index_void, 0);
 			memcpy (index_void, index_buffer, sizeof (index_buffer));
 			_index->Unlock ();
 		}

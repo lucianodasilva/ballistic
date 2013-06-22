@@ -37,6 +37,8 @@ namespace ballistic {
 
 			virtual void update (ballistic::game * game);
 
+			virtual void do_event_loop (ballistic::game * game);
+
 			HWND get_window_handle ();
 		};
 

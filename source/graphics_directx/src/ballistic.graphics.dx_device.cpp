@@ -1,12 +1,15 @@
 #include "ballistic.graphics.dx_device.h"
 
 #include <d3d9.h>
+#include <iostream>
 #include "ballistic.graphics.dx_mesh.h"
 
 namespace ballistic {
 	namespace graphics {
 		
 		dx_device::dx_device (HWND hWnd) {
+
+			HRESULT hr;
 
 			_d3d = Direct3DCreate9 (D3D_SDK_VERSION);
 			if (FAILED (_d3d))
@@ -17,14 +20,15 @@ namespace ballistic {
 
 			D3DDISPLAYMODE mode;
 
-			if (FAILED (_d3d->GetAdapterDisplayMode (D3DADAPTER_DEFAULT, &mode)))
+			if (FAILED (hr = _d3d->GetAdapterDisplayMode (D3DADAPTER_DEFAULT, &mode))) {
 				throw "Unable to get adapter display mode";
+			}
 
 			pp.Windowed = TRUE;
 			pp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 			pp.BackBufferFormat = mode.Format;
 
-			if (FAILED (_d3d->CheckDeviceType (
+			if (FAILED (hr = _d3d->CheckDeviceType (
 							D3DADAPTER_DEFAULT,
 							D3DDEVTYPE_HAL,
 							pp.BackBufferFormat,
@@ -34,8 +38,15 @@ namespace ballistic {
 				throw "Unsuported device type";
 			}
 
-			if (FAILED (_d3d->CreateDevice ( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_PUREDEVICE, &pp, &_d3d_device)))
+			//if (FAILED (hr = _d3d->CreateDevice ( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_PUREDEVICE, &pp, &_d3d_device))) {
+			//	throw "Unable to create device";
+			//}
+
+
+			if (FAILED (hr = _d3d->CreateDevice ( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &pp, &_d3d_device))) {
 				throw "Unable to create device";
+			}
+
 
 		}
 	

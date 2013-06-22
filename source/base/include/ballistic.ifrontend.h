@@ -26,6 +26,8 @@ namespace ballistic {
 
 		virtual void update (ballistic::game * game) = 0;
 
+		virtual void do_event_loop (ballistic::game * game) = 0;
+
 	};
 
 }

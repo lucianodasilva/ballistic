@@ -15,7 +15,7 @@ namespace ballistic {
 
 		public:
 
-			system_component ( idevice * device );
+			virtual void set_device (idevice * device);
 
 			virtual void notify ( ballistic::message & message );
 		};

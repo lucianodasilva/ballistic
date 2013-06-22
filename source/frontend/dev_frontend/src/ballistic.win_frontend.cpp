@@ -123,7 +123,6 @@ namespace ballistic {
 		}
 
 		void frontend::update (ballistic::game * game) {
-
 			// Process windows events ------------------------------------
 			MSG msg;
 			while(PeekMessage(&msg, _window_handle, 0, 0, PM_REMOVE) > 0)
@@ -134,10 +133,15 @@ namespace ballistic {
 			// -----------------------------------------------------------
 			// TODO: Fire all input events into the message system here
 			// -----------------------------------------------------------
-
 #			ifdef BALLISTIC_DESKTOP_GL
 				SwapBuffers (_window_dc);
 #			endif
+		}
+
+		void frontend::do_event_loop (ballistic::game * game) {
+			while (game->frame ()) {
+				update (game);
+			}
 		}
 
 		HWND frontend::get_window_handle () { return _window_handle; }

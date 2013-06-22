@@ -41,19 +41,6 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-
-void update (ballistic::game * game) {
-	_device->clear ();
-	_device->begin_frame ();
-	
-	//_mesh->attach();
-	//_mesh->render ();
-	//_mesh->detach();
-	
-	_game->frame (_frontend);
-	_device->end_frame();
-}
-
 int main ( int argc, char ** argv) {
 
 	_frontend = create_frontend (point ( 1024, 700));
@@ -65,6 +52,9 @@ int main ( int argc, char ** argv) {
 	
 	_game = new ballistic::game ();
 	_game->on_initialize ();
+
+	ballistic::component::define < ballistic::graphics::system_component > ("graphics_system");
+	((ballistic::graphics::system_component *)_game->create_component ("graphics_system"))->set_device (_device);
 	
 	_mesh = _device->create_mesh();
 	
@@ -81,9 +71,8 @@ int main ( int argc, char ** argv) {
 		3, 1, 2
 	};
 	
-	//_mesh->set_data(&vbuffer [0], 4, &index[0], 3);
-
-	while (_game->frame (_frontend, update)) {}
+	//_mesh->set_data(vbuffer, index);
+	_frontend->do_event_loop (_game);
 
 	return 0;
 }

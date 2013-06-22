@@ -14,8 +14,7 @@ namespace ballistic {
 			uint32
 				_vertex_buffer_id,
 				_vertex_buffer_size,
-				_index_buffer_id,
-				_index_buffer_size;
+				_index_buffer_id;
 			
 			
 		public:
@@ -25,9 +24,7 @@ namespace ballistic {
 			
 			virtual void set_data (
 				vertex vert_buffer [],
-				uint32 vert_buffer_size,
-				uint16 index_buffer [],
-				uint32 index_buffer_size
+				uint16 index_buffer []
 			);
 			
 			virtual void attach ();

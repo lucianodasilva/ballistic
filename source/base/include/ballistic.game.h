@@ -44,9 +44,11 @@ namespace ballistic {
 
 		virtual void on_initialize ();
 
+		virtual bool is_running ();
+
 		virtual void do_loop (ifrontend * frontend = nullptr, function < void ( game * )> system_callback = nullptr);
 
-		virtual bool frame (ifrontend * frontend = nullptr, function < void ( game *) > system_callback = nullptr);
+		virtual bool frame ();
 
 		virtual void terminate ();
 

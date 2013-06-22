@@ -16,23 +16,20 @@ namespace ballistic {
 		
 		void opengl_mesh::set_data (
 			vertex vert_buffer [],
-			uint32 vert_buffer_size,
-			uint16 index_buffer [],
-			uint32 index_buffer_size
+			uint16 index_buffer []
 		){
-			
-			_vertex_buffer_size = vert_buffer_size;
-			_index_buffer_size = index_buffer_size;
 			
 			glGenBuffers (1, &_vertex_buffer_id);
 			glGenBuffers (1, &_index_buffer_id);
 			
 			// Interleaved vertex buffer
 			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
-			glBufferData (GL_ARRAY_BUFFER, sizeof (vertex) * _vertex_buffer_size, (GLvoid *)&vert_buffer[0], GL_STATIC_DRAW);
+			glBufferData (GL_ARRAY_BUFFER, sizeof (vert_buffer), (GLvoid *)&vert_buffer[0], GL_STATIC_DRAW);
 			
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
-			glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof (uint16) * _index_buffer_size, (GLvoid *)&index_buffer[0], GL_STATIC_DRAW);
+			glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof (index_buffer), (GLvoid *)&index_buffer[0], GL_STATIC_DRAW);
+
+			_vertex_buffer_size = sizeof (vert_buffer) / sizeof (vertex);
 		}
 		
 		void opengl_mesh::attach () {

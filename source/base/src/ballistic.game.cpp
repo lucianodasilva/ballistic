@@ -51,15 +51,21 @@ namespace ballistic {
 		send_message (m);
 	}
 
+	bool game::is_running () { return _running; }
+
 	void game::do_loop (ifrontend * frontend, function < void ( game * ) > system_callback) {
 		on_initialize ();
 
-		while (
-			frame (frontend, system_callback)
-		){}
+		while (frame ()){
+			if (system_callback)
+				system_callback (this);
+
+			if (frontend)
+				frontend->update (this);
+		}
 	}
 
-	bool game::frame (ifrontend * frontend, function < void ( game * ) > system_callback ) {
+	bool game::frame () {
 		
 		_m_update [id::game_time] = system::get_elapsed_seconds (_game_start_time);
 		_m_update [id::frame_time] = system::get_elapsed_seconds (_frame_start);
@@ -68,12 +74,6 @@ namespace ballistic {
 		_frame_start = system::get_time_now ();
 
 		send_message (_m_update);
-
-		if (system_callback)
-			system_callback (this);
-
-		if (frontend)
-			frontend->update (this);
 
 		_frame_id++;
 

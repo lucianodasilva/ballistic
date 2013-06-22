@@ -32,6 +32,10 @@ namespace ballistic {
 			
 		}
 
+		void frontend::do_event_loop ( ballistic::game * game ) {
+			glutMainLoop ();
+		}
+
 	}
 }
 #endif
