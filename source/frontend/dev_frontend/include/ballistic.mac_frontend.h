@@ -13,6 +13,11 @@ namespace ballistic {
 		class frontend : public ballistic::ifrontend {
 		private:
 			point _window_client_size;
+			
+			static ballistic::game * _game;
+			
+			static void update_frame ();
+			
 		public:
 
 			virtual point get_client_size ();
@@ -27,6 +32,8 @@ namespace ballistic {
 			
 			virtual void update ( ballistic::game * game );
 
+			virtual void do_event_loop ( ballistic::game * game );
+			
 		};
 
 	}

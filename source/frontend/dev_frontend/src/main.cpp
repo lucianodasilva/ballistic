@@ -18,7 +18,9 @@ ballistic::ifrontend * create_frontend ( const point & size ) {
 #elif defined (BALLISTIC_MACOSX)
 #	include "ballistic.mac_frontend.h"
 #	include <GLUT/GLUT.h>
+ballistic::ifrontend * create_frontend (const point & size) {
 	return new ballistic::mac_desktop::frontend (size);
+}
 #endif
 
 #ifdef BALLISTIC_DESKTOP_GL
@@ -71,7 +73,7 @@ int main ( int argc, char ** argv) {
 		3, 1, 2
 	};
 	
-	//_mesh->set_data(vbuffer, index);
+	_mesh->set_data(vbuffer, index);
 	_frontend->do_event_loop (_game);
 
 	return 0;

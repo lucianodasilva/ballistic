@@ -27,7 +27,21 @@ if (Ballistic_OpenGLGraphics)
 	project ( dev_gl )
 	add_executable ( dev_gl ${win_desktop_source} )
 
-	target_link_libraries ( dev_gl base graphics_opengl ${BALLISTIC_GL_LIBRARIES} glew)
+	if (APPLE)
+		find_library(COCOA_LIBRARY Cocoa)
+		find_library(GLUT_LIBRARY GLUT )
+		mark_as_advanced (
+			COCOA_LIBRARY
+		    GLUT_LIBRARY
+		)
+
+		set (BALLISTIC_MAC_GL_LIB ${COCOA_LIBRARY} ${GLUT_LIBRARY} ${BALLISTIC_GL_LIBRARIES})
+		target_link_libraries ( dev_gl base graphics_opengl ${BALLISTIC_MAC_GL_LIB} glew)
+	else ()
+		target_link_libraries ( dev_gl base graphics_opengl ${BALLISTIC_GL_LIBRARIES} glew)
+	endif ()
+
+	
 
 	set_property (TARGET dev_gl PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_GL )
 	set_property (TARGET dev_gl PROPERTY FOLDER "frontend")

@@ -6,6 +6,13 @@
 
 namespace ballistic {
 	namespace mac_desktop {
+		
+		ballistic::game * frontend::_game;
+		
+		void frontend::update_frame(){
+			_game->frame ();
+			glutSwapBuffers();
+		}
 
 		point frontend::get_client_size () { return _window_client_size; }
 
@@ -15,7 +22,10 @@ namespace ballistic {
 		frontend::~frontend () {}
 
 		bool frontend::create () {
-			glutInit ( &1, nullptr );
+			int			dummy_c = 1;
+			char *		dummy_v;
+			
+			glutInit ( &dummy_c, &dummy_v );
 			glutInitDisplayMode  (GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 			glutInitWindowSize(_window_client_size.x, _window_client_size.y);
 			return true;
@@ -33,6 +43,9 @@ namespace ballistic {
 		}
 
 		void frontend::do_event_loop ( ballistic::game * game ) {
+			_game = game;
+			
+			glutDisplayFunc(update_frame);
 			glutMainLoop ();
 		}
 
