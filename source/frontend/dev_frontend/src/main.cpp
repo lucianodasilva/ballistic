@@ -45,99 +45,60 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-// --------------------------------------------------
-#include <tinyxml2.h>
-
-class ireadable {
-public:
-	
-	virtual ~ireadable () {}
-	
-};
-
-class entity : public ireadable {
-public:
-	
-	
-	
-};
-
-struct faux_factory {
-	
-	static string handles () {
-		return "entity";
-	}
-	
-	static ireadable * read (tinyxml2::XMLElement * source) {
-		return new entity ();
-	}
-	
-};
-
-class i_readable_factory {
-public:
-	virtual ireadable * read (tinyxml2::XMLElement * source) = 0;
-};
-
-template < class T >
-class readable_factory : public i_readable_factory {
-public:
-	
-	virtual ireadable * read (tinyxml2::XMLElement * source) {
-		return T::read (source);
-	}
-	
-};
-
-class reader {
-public:
-	
-	typedef std::map < string, i_readable_factory * > factory_map_t;
-	
+class component_info {
 private:
 	
-	static factory_map_t _factory_map;
-	
 public:
 	
-	template < class T >
-	static void define () {
-		_factory_map [T::handles ()] = new readable_factory<T> ();
+	inline component_info ( const string & name ) {
+		
 	}
-
-	static ireadable * read (tinyxml2::XMLElement * source ) {
-		factory_map_t::iterator it = _factory_map.find (source->Name());
-		
-		if (it == _factory_map.end ())
-			throw "Undefind element type found!";
-		
-		i_readable_factory * fact = it->second;
-		
-		return fact->read(source);
+	
+	template < class T >
+	component_info & attribute ( const string & name, T value ) {
+		return *this;
 	}
 	
 };
 
-reader::factory_map_t reader::_factory_map;
+class entity_info {
+private:
+public:
+	
+	entity_info & component (const string & name) {
+		return *this;
+	}
+	
+	entity_info & component ( const component_info & ref ) {
+		return *this;
+	}
+	
+};
 
-// --------------------------------------------------
+class game {
+public:
+
+	entity_info _var;
+	
+	inline entity_info & define (const string & name) {
+		return _var;
+	}
+	
+};
+
 
 int main ( int argc, char ** argv) {
+
+	game g;
 	
-	entity * ent;
-	
-	tinyxml2::XMLDocument doc;
-	doc.Parse(
-			  "<entity name=\"yada\">"
-			  "		<vec3 name=\"yada\"/>"
-			  "</entity>"
-			  "<entity>"
-			  "</entity>"
-	);
-	
-	reader::define < faux_factory > ();
-	ent = dynamic_cast < entity * > (reader::read (doc.RootElement ()));
-	
+	g.define ("blah")
+		.component ("stuff")
+		.component ("coiso")
+		.component (
+			component_info ("big")
+					.attribute("position", vec3 (.4,.5,.7))
+		)
+	;
 	
 	return 0;
 

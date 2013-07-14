@@ -3,6 +3,17 @@ cmake_minimum_required(VERSION 2.8)
 project ( dev_frontend )
 # ----------------------------------------------------------------
 
+project (frontend_resources)
+
+file ( GLOB resource_files 
+	${CMAKE_CURRENT_LIST_DIR}/resources/*
+) 
+
+add_custom_target(
+    frontend_resources
+    SOURCES ${resource_files}
+)
+
 include_directories (
 	${CMAKE_CURRENT_LIST_DIR}/include
 )
@@ -21,11 +32,19 @@ if (Ballistic_DXGraphics )
 
 	set_property (TARGET dev_dx PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_DX )
 	set_property (TARGET dev_dx PROPERTY FOLDER "frontend")
+
+	add_custom_command(TARGET dev_dx PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_CURRENT_LIST_DIR}/resources $<TARGET_FILE_DIR:dev_dx>/resources)
 endif ()
 
 if (Ballistic_OpenGLGraphics)
 	project ( dev_gl )
 	add_executable ( dev_gl ${win_desktop_source} )
+
+	add_custom_command(TARGET dev_gl PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_CURRENT_LIST_DIR}/resources $<TARGET_FILE_DIR:dev_gl>/resources)
 
 	if (APPLE)
 		find_library(COCOA_LIBRARY Cocoa)
@@ -46,3 +65,4 @@ if (Ballistic_OpenGLGraphics)
 	set_property (TARGET dev_gl PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_GL )
 	set_property (TARGET dev_gl PROPERTY FOLDER "frontend")
 endif ()
+
