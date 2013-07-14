@@ -6,10 +6,13 @@
 #include "ballistic.message.h"
 #include "ballistic.system.h"
 
+#include "ballistic.resources.stack.h"
+
 #include <functional>
 #include <map>
 #include <queue>
 #include <string>
+
 
 using namespace std;
 
@@ -32,8 +35,13 @@ namespace ballistic {
 
 		uint32	_frame_id;
 		message _m_update;
+		
+		// internal systems
+		resources::stack _resources;
 
 	public:
+		
+		resources::stack & get_resources ();
 
 		entity &	create_entity ( const string & name );
 		entity &	create_entity ( id_t type );

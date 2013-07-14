@@ -22,6 +22,7 @@
 #include "ballistic.math.rect.h"
 #include "ballistic.math.vectors.h"
 #include "ballistic.message.h"
+#include "ballistic.resources.h"
 #include "ballistic.system.h"
 #include "ballistic.var.h"
 

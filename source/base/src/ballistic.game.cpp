@@ -12,6 +12,10 @@ namespace ballistic {
 		_entity_map [ent->get_id ()] = ent;
 		ent->set_game (this);
 	}
+	
+	resources::stack & game::get_resources() {
+		return _resources;
+	}
 
 	entity & game::create_entity ( const string & name ) {
 		return create_entity (hash < string > ()(name));

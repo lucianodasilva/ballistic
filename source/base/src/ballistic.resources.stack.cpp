@@ -6,55 +6,56 @@
 //
 //
 
-#include "ballistic.resource_stack.h"
+#include "ballistic.resources.stack.h"
+#include "ballistic.resources.storage_filesystem.h"
 
 namespace ballistic {
+	namespace resources {
 	
-	void resource_stack::resource_stack_layer::clear () {
-		resource_map_t::iterator
-		it = resources.begin (),
-		end = resources.end ();
-		
-		while (it != end) {
-			it->second->dispose ();
-			delete it->second;
-			++it;
+	void stack::layer::clear () {
+		for (auto res_pair : resources) {
+			res_pair.second->dispose ();
+			delete res_pair.second;
 		}
-		
 		resources.clear ();
 	}
 	
-	resource_stack::resource_stack_layer::~resource_stack_layer () {
+	stack::layer::~layer () {
 		// clean up
 		clear ();
 	}
 	
-	resource_stack::~resource_stack() {
-		for ( resources::iloader * loader : _loaders)
+	stack::stack () {
+		// add default storage to list
+		_storage_handlers.push_back ( new resources::storage_filesystem ());
+	}
+	
+	stack::~stack() {
+		for ( iloader * loader : _loaders)
 			delete loader;
 		
-		for ( resources::istorage * storage : _storage_handlers)
+		for ( istorage * storage : _storage_handlers)
 			delete storage;
 		
 		_stacked_resources.clear ();
 		_global_resources.clear ();
 	}
 	
-	void resource_stack::register_loader(resources::iloader *loader) {
+	void stack::register_loader(iloader *loader) {
 		//TODO: validate nulls
 		_loaders.push_back (loader);
 	}
 	
-	void resource_stack::register_storage(resources::istorage *storage) {
+	void stack::register_storage(istorage *storage) {
 		//TODO: validate nulls
 		_storage_handlers.push_back(storage);
 	}
 	
-	void resource_stack::push () {
-		_stacked_resources.push_front(resource_stack_layer ());
+	void stack::push () {
+		_stacked_resources.push_front(layer ());
 	}
 	
-	bool resource_stack::pop () {
+	bool stack::pop () {
 		if (_stacked_resources.size() > 0) {
 			_stacked_resources.pop_front();
 			return true;
@@ -62,12 +63,12 @@ namespace ballistic {
 			return false;
 	}
 	
-	resources::iresource * resource_stack::get_resource(const string & name) {
+	iresource * stack::get_resource(const string & name) {
 		
 		resource_map_t::iterator res_it;
 	
 		// check for loaded resources first
-		for ( resource_stack_layer & layer : _stacked_resources ) {
+		for ( stack::layer & layer : _stacked_resources ) {
 			res_it = layer.resources.find (name);
 			
 			if (res_it != layer.resources.end ())
@@ -83,9 +84,9 @@ namespace ballistic {
 		}
 		
 		// check for a loader capable of handling the file
-		resources::iloader * loader = nullptr;
+		iloader * loader = nullptr;
 		
-		for ( resources::iloader * l_it : _loaders ) {
+		for ( iloader * l_it : _loaders ) {
 			if (l_it->handles(name)) {
 				loader = l_it;
 				break;
@@ -97,7 +98,7 @@ namespace ballistic {
 			return nullptr;
 		
 		// search for container
-		for (resources::istorage * storage : _storage_handlers) {
+		for (istorage * storage : _storage_handlers) {
 			if (storage->contains(name)) {
 				return storage->load (loader, name);
 			}
@@ -106,5 +107,6 @@ namespace ballistic {
 		// no container found
 		return nullptr;
 	}
-	
+		
+	}
 }
