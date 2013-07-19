@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "ballistic.resources.iresource.h"
+#include "ballistic.resources.stack.h"
 
 using namespace std;
 
@@ -24,9 +25,9 @@ namespace ballistic {
 			
 			virtual bool handles ( const string & name ) = 0;
 			
-			virtual iresource * load ( istream & source ) = 0;
+			virtual iresource * load ( istream & source, ballistic::resources::stack & stack ) = 0;
 			
-			virtual ~iloader () = 0;
+			virtual ~iloader () {};
 		};
 		
 	}

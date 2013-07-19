@@ -31,6 +31,7 @@ distribution.
 #   include <stdlib.h>
 #   include <string.h>
 #   include <stdarg.h>
+#	include <fstream.h>
 #else
 #   include <cctype>
 #   include <climits>
@@ -38,6 +39,7 @@ distribution.
 #   include <cstdlib>
 #   include <cstring>
 #   include <cstdarg>
+#	include <fstream>
 #endif
 
 /*
@@ -1451,6 +1453,8 @@ public:
     	an errorID.
     */
     XMLError LoadFile( FILE* );
+	
+	XMLError LoadFile( std::istream & );
 
     /**
     	Save the XML file to disk.

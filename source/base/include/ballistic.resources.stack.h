@@ -9,8 +9,7 @@
 #ifndef _ballistic_resources_stack_h_
 #define _ballistic_resources_stack_h_
 
-#include "ballistic.resources.iloader.h"
-#include "ballistic.resources.istorage.h"
+#include "ballistic.resources.id.h"
 #include "ballistic.resources.iresource.h"
 #include "ballistic.id.h"
 
@@ -23,30 +22,37 @@
 namespace ballistic {
 	namespace resources {
 	
+		class iloader;
+		class istorage;
+		
 		class stack {
 		private:
 		
-			typedef std::map < string, iresource * >	resource_map_t;
-		
-			typedef std::vector < istorage * >		storage_vector_t;
-		
-			typedef std::vector < iloader * >			loader_vector_t;
-		
-			storage_vector_t								_storage_handlers;
-			loader_vector_t									_loaders;
-		
-			struct layer {
+			typedef std::map < id_t, iresource * >
+				resource_map_t;
 			
-				resource_map_t resources;
-			
-				void clear ();
-			
-				virtual ~layer ();
-			
-			};
+			typedef std::vector < id_t >
+				resource_id_vector_t;
 		
-			layer			_global_resources;
-			list < layer >	_stacked_resources;
+			typedef std::vector < istorage * >
+				storage_vector_t;
+		
+			typedef std::vector < iloader * >
+				loader_vector_t;
+			
+			// -----------
+		
+			storage_vector_t
+				_storage_handlers;
+			
+			loader_vector_t
+				_loaders;
+			
+			resource_map_t
+				_resources;
+		
+			list < resource_id_vector_t >
+				_stacked_resources;
 		
 		public:
 		
@@ -60,17 +66,40 @@ namespace ballistic {
 			void push ();
 			bool pop ();
 		
-			iresource * get_resource ( const string & name );
+			// -------------
+			
+			stack & add_to_global ( id_t res_id, iresource * resource);
+			
+			stack & add_to_global ( const string & name, iresource * resource);
+			
+			stack & add_to_level ( id_t res_id, iresource * resource );
+			
+			stack & add_to_level ( const string & name, iresource * resource);
+			
+			// -------------
+			
+			iresource * get_resource ( const res_id_t & res_id );
 		
 			template < class T >
-			inline T * get_resource ( const string & name );
+			inline T * get_resource ( const res_id_t & res_id );
 		
+			iresource * operator [] ( const res_id_t & res_id );
+			
+			template < class T >
+			inline T * operator [] ( const res_id_t & res_id );
+			
 		};
-	
+		
 		template < class T >
-		T * stack::get_resource(const string &name) {
-			return dynamic_cast<T *>(get_resource (name));
+		T * stack::get_resource(const res_id_t &res_id) {
+			return dynamic_cast<T *>(get_resource(res_id));
 		}
+		
+		template < class T >
+		T * stack::operator [] ( const res_id_t & res_id ) {
+			return get_resource <T> (res_id);
+		}
+		
 	}
 }
 

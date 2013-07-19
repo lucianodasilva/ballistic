@@ -1,6 +1,7 @@
 #ifndef	_ballistic_game_h_
 #define _ballistic_game_h_
 
+#include "ballistic.component_constructor.h"
 #include "ballistic.entity.h"
 #include "ballistic.ifrontend.h"
 #include "ballistic.message.h"
@@ -17,6 +18,8 @@
 using namespace std;
 
 namespace ballistic {
+	
+	class icomponent;
 
 	class game : public entity {
 	protected:
@@ -41,12 +44,23 @@ namespace ballistic {
 
 	public:
 		
-		resources::stack & get_resources ();
+		// resource handling
+		
+		template < class T >
+		inline void define_component ( const string & id );
+		
+		virtual icomponent * create_component ( const res_id_t & res_id );
+		virtual entity * create_entity ( const res_id_t & res_id );
+		
+		virtual resources::iresource *	get_resource (const res_id_t & res_id);
+		
+		virtual void push_resource_level ();
+		virtual bool pop_resource_level ();
+		
+		resources::stack & get_resource_stack ();
+		// -----------------
 
-		entity &	create_entity ( const string & name );
-		entity &	create_entity ( id_t type );
-
-		entity &	find_entity ( id_t id );
+		virtual entity & find_entity ( id_t id );
 
 		virtual void send_message ( ballistic::message & message );
 
@@ -64,6 +78,11 @@ namespace ballistic {
 		virtual ~game ();
 
 	};
+	
+	template < class T >
+	void game::define_component ( const string & id ) {
+		_resources.add_to_global ( id, new component_constructor < T > () );
+	}
 }
 
 #endif

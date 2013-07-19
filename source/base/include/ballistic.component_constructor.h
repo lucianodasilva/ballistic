@@ -4,6 +4,8 @@
 #include <string>
 #include <type_traits>
 
+#include "ballistic.resources.iresource.h"
+
 #define MSG_NOT_COMPONENT_TYPE "Constructor template parameter must be derived from icontructor!"
 
 using namespace std;
@@ -12,11 +14,10 @@ namespace ballistic {
 	
 	class icomponent;
 
-	class icomponent_constructor {
+	class icomponent_constructor : public resources::iresource {
 	public:
 
 		virtual inline ~icomponent_constructor (){}
-		virtual string get_name () = 0;
 
 		virtual icomponent * create () = 0;
 
@@ -26,13 +27,7 @@ namespace ballistic {
 	class component_constructor : public icomponent_constructor {
 	private:
 		static_assert ( is_base_of < icomponent, component_t >::value, MSG_NOT_COMPONENT_TYPE);
-
-		string _name;
 	public:
-
-		inline component_constructor ( const string & name ) : _name (name) {}
-
-		virtual inline string get_name () { return _name; }
 
 		virtual icomponent * create () { return new component_t (); }
 

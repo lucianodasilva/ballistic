@@ -1,5 +1,25 @@
 
-<entity name="rotating_square">
+<package>
 
+	<texture name="little_doll.image" source="materials/textures/little_doll.png"/>
 
-</entity>
+	<entity_type name="rotating_square">
+
+		<attributes>
+			<position type="int" value="12"/>
+			<color	  type="color" value="255,255,123"/>
+		</attributes>
+
+		<components>
+			<colidable/>
+
+			<visible>
+				<mesh type="res" value="little_doll.mesh"/>
+				<material type="res" value="little_doll.material"/>
+			</visible>
+
+		</components>
+
+	</entity_type>
+
+</package>

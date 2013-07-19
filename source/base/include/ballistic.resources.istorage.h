@@ -12,21 +12,23 @@
 #include <iostream>
 #include <string>
 
-#include "ballistic.resources.iloader.h"
-#include "ballistic.resources.iresource.h"
+#include "ballistic.resources.stack.h"
 
 using namespace std;
 
 namespace ballistic {
 	namespace resources {
 		
+		class iloader;
+		class iresource;
+		
 		class istorage {
 		public:
 	
-			virtual ~istorage () = 0;
+			virtual ~istorage (){};
 	
 			virtual bool contains ( const string & path ) = 0;
-			virtual iresource * load ( iloader * loader, const string & path ) = 0;
+			virtual iresource * load ( iloader * loader, const string & path, ballistic::resources::stack & stack ) = 0;
 	
 		};
 

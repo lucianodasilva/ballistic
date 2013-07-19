@@ -13,9 +13,7 @@ namespace ballistic {
 	namespace resources {
 		class iresource {
 		public:
-			virtual void dispose () = 0;
-		
-			virtual ~iresource ();
+			virtual ~iresource () {}
 		};
 	}
 }

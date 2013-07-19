@@ -45,62 +45,18 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-class component_info {
-private:
-	
-public:
-	
-	inline component_info ( const string & name ) {
-		
-	}
-	
-	template < class T >
-	component_info & attribute ( const string & name, T value ) {
-		return *this;
-	}
-	
-};
-
-class entity_info {
-private:
-public:
-	
-	entity_info & component (const string & name) {
-		return *this;
-	}
-	
-	entity_info & component ( const component_info & ref ) {
-		return *this;
-	}
-	
-};
-
-class game {
-public:
-
-	entity_info _var;
-	
-	inline entity_info & define (const string & name) {
-		return _var;
-	}
-	
-};
-
+ballistic::res_id_t ref_rotating_square ("rotating_square", "/Users/luciano/Documents/ballistic_graphics/source/frontend/dev_frontend/resources/game.xml");
 
 int main ( int argc, char ** argv) {
-
-	game g;
 	
-	g.define ("blah")
-		.component ("stuff")
-		.component ("coiso")
-		.component (
-			component_info ("big")
-					.attribute("position", vec3 (.4,.5,.7))
-		)
-	;
+	_game = new ballistic::game ();
+	
+	_game->get_resource_stack().register_loader (new ballistic::resources::entity_loader ());
+	
+	auto res = _game->get_resource(ref_rotating_square);
 	
 	return 0;
+	// --------
 
 	_frontend = create_frontend (point ( 1024, 700));
 	_frontend->create ();
@@ -110,10 +66,11 @@ int main ( int argc, char ** argv) {
 	_device->set_clear_color(color (.0, .6, 1., 1.));
 	
 	_game = new ballistic::game ();
+	
 	_game->on_initialize ();
 
-	ballistic::component::define < ballistic::graphics::system_component > ("graphics_system");
-	((ballistic::graphics::system_component *)_game->create_component ("graphics_system"))->set_device (_device);
+	//ballistic::component::define < ballistic::graphics::system_component > ("graphics_system");
+	//((ballistic::graphics::system_component *)_game->create_component ("graphics_system"))->set_device (_device);
 	
 	_mesh = _device->create_mesh();
 	

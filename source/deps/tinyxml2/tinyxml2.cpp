@@ -1633,6 +1633,43 @@ XMLError XMLDocument::LoadFile( FILE* fp )
     ParseDeep( _charBuffer + (p-_charBuffer), 0 );
     return _errorID;
 }
+	
+XMLError XMLDocument::LoadFile( std::istream & input )
+{
+	Clear();
+	
+	//input.seekg(input.end);
+	size_t size = input.tellg();
+	input.seekg(input.beg);
+	
+	if ( size == 0 ) {
+		SetError( XML_ERROR_EMPTY_DOCUMENT, 0, 0 );
+		return _errorID;
+	}
+	
+	_charBuffer = new char[size+1];
+	
+	input.read(_charBuffer, size);
+	size_t read = input.gcount();
+	
+	if ( read != size ) {
+		SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );
+		return _errorID;
+	}
+	
+	_charBuffer[size] = 0;
+	
+	const char* p = _charBuffer;
+	p = XMLUtil::SkipWhiteSpace( p );
+	p = XMLUtil::ReadBOM( p, &_writeBOM );
+	if ( !p || !*p ) {
+		SetError( XML_ERROR_EMPTY_DOCUMENT, 0, 0 );
+		return _errorID;
+	}
+	
+	ParseDeep( _charBuffer + (p-_charBuffer), 0 );
+	return _errorID;
+}
 
 
 XMLError XMLDocument::SaveFile( const char* filename, bool compact )

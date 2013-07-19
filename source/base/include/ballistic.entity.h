@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "ballistic.attribute.h"
-#include "ballistic.entity_definition.h"
 #include "ballistic.icomponent.h"
 #include "ballistic.id.h"
 #include "ballistic.var.h"
@@ -16,17 +15,13 @@ namespace ballistic {
 	class game;
 
 	class entity {
-	public:
-
-		typedef map < id_t, attribute > entity_attribute_map;
-
 	private:
 
 		game *					_game;
 		id_t					_id;
 		vector < icomponent * > _components;
 			
-		entity_attribute_map	_attributes;
+		attribute_map_t	_attributes;
 
 		entity ( const entity & orig );
 		entity & operator = ( const entity & orig );
@@ -45,16 +40,14 @@ namespace ballistic {
 		id_t get_id ();
 			
 		void add_component ( icomponent * component );
-		icomponent * create_component ( const string & id );
-		icomponent * create_component ( id_t id );
 
 		virtual void notify ( ballistic::message & message );
 
 		entity ( id_t id );
 		virtual ~entity ();
 		
-		static entity_definition & define ( const string & entity_type_id );	
 	};
+	
 }
 
 #endif

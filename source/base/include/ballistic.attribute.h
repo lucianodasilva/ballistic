@@ -4,6 +4,12 @@
 #include "ballistic.id.h"
 #include "ballistic.var.h"
 
+#include <map>
+#include <vector>
+#include <tinyxml2.h>
+
+using namespace std;
+
 namespace ballistic {
 		
 	class entity;
@@ -20,6 +26,7 @@ namespace ballistic {
 	public:
 			
 		attribute ();
+		attribute ( id_t id );
 		attribute ( entity * parent, id_t id );
 		attribute ( const attribute & orig );
 		
@@ -37,6 +44,8 @@ namespace ballistic {
 		inline var & operator = ( const var & value );
 			
 		id_t get_id ();
+		
+		static vector < attribute > from_xml ( tinyxml2::XMLElement * attribute_element );
 
 	};
 	
@@ -67,7 +76,7 @@ namespace ballistic {
 		return _value;
 	}
 	
-	
+	typedef map < id_t, attribute > attribute_map_t;
 }
 
 #endif

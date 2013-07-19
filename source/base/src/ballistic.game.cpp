@@ -1,7 +1,8 @@
 #include "ballistic.game.h"
 
 #include "ballistic.common_id.h"
-#include "ballistic.entity_factory.h"
+#include "ballistic.component_constructor.h"
+#include "ballistic.entity_constructor.h"
 #include "ballistic.system.h"
 
 #include <functional>
@@ -13,20 +14,42 @@ namespace ballistic {
 		ent->set_game (this);
 	}
 	
-	resources::stack & game::get_resources() {
-		return _resources;
+	// resource handling -------
+	icomponent * game::create_component( const res_id_t & res_id ) {
+		auto ctor = dynamic_cast < icomponent_constructor * > (_resources [res_id]);
+		
+		if (ctor)
+			return ctor->create ();
+		else
+			return nullptr;
 	}
+	
+	entity * game::create_entity( const res_id_t & res_id ) {
+		 auto ctor = dynamic_cast < entity_constructor * > (_resources [res_id]);
 
-	entity & game::create_entity ( const string & name ) {
-		return create_entity (hash < string > ()(name));
+		if (ctor) {
+			entity * ent = ctor->create ();
+			add_entity(ent);
+			return ent;
+		} else
+			return nullptr;
 	}
-
-	entity & game::create_entity ( id_t type ) {
-		entity * new_entity = entity_factory::create (type);
-
-		add_entity (new_entity);
-		return *new_entity;
+	
+	resources::iresource * game::get_resource(const ballistic::res_id_t &res_id)	{
+		return _resources [res_id];
 	}
+	
+	void game::push_resource_level() {
+		_resources.push();
+	}
+	
+	bool game::pop_resource_level() {
+		return _resources.pop ();
+	}
+	
+	resources::stack & game::get_resource_stack() { return _resources; }
+	
+	// -------------------------
 
 	entity & game::find_entity ( id_t id ) {
 		if (_entity_map.find (id) == _entity_map.end ())

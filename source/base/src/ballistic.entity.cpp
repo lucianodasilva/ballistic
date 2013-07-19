@@ -1,5 +1,4 @@
 #include "ballistic.entity.h"
-#include "ballistic.entity_factory.h"
 #include <functional>
 
 namespace ballistic {
@@ -32,17 +31,6 @@ namespace ballistic {
 		_components.push_back (component);
 	}
 
-	icomponent * entity::create_component ( const string & id ) {
-		return create_component (hash < string > ()(id));
-	}
-
-	icomponent * entity::create_component ( id_t id ) {
-		icomponent * new_component = component_factory::create (id);
-
-		add_component (new_component);
-		return new_component;
-	}
-
 	void entity::notify ( ballistic::message & message ) {
 		for ( icomponent * it : _components) {
 			it->notify (message);
@@ -55,10 +43,6 @@ namespace ballistic {
 		for ( icomponent * it : _components ) {
 			delete it;
 		}
-	}
-	
-	entity_definition & entity::define ( const string & entity_type_id ) {
-		return entity_factory::define (entity_type_id);
 	}
 		
 }

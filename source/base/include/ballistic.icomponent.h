@@ -3,11 +3,11 @@
 #define _ballistic_icomponent_h_
 
 #include "ballistic.message.h"
-#include "ballistic.component_factory.h"
 
 namespace ballistic {
 
 	class entity;
+	class game;
 	
 	class icomponent {
 	public:
@@ -37,19 +37,8 @@ namespace ballistic {
 		component ();
 		
 		virtual void setup ();
-		
-		template < class component_t >
-		static void define ( const string & name );
-		
-		template < component::notify_callback callback >
-		static void define ( const string & name );
-		
+				
 	};
-
-	template < class component_t >
-	void component::define ( const string & name ) {
-		component_factory::define < component_t > (name);
-	}
 
 	template < void (*message_handle)( entity & this_entity, ballistic::message & ) >
 	class _func_component : public component {
@@ -62,11 +51,6 @@ namespace ballistic {
 	template < void (*message_handle)( entity & this_entity, ballistic::message & ) >
 	void _func_component < message_handle >::notify ( ballistic::message & message ) {
 		message_handle (get_entity (), message);
-	}
-
-	template < component::notify_callback callback >
-	void component::define ( const string & name ) {
-		component_factory::define < _func_component <  callback > > (name);
 	}
 	
 }

@@ -7,6 +7,7 @@
 //
 
 #include "ballistic.resources.storage_filesystem.h"
+#include "ballistic.resources.iloader.h"
 
 #include <fstream>
 
@@ -20,9 +21,9 @@ namespace ballistic {
 			return !ifstream (path).fail();
 		}
 		
-		iresource * storage_filesystem::load ( iloader * loader, const string & path ) {
-			ifstream file_stream (path, ios::in);
-			return loader->load(file_stream);
+		iresource * storage_filesystem::load ( iloader * loader, const string & path, ballistic::resources::stack & stack  ) {
+			ifstream file_stream (path, ios::in | ios::binary | ios::ate );
+			return loader->load(file_stream, stack);
 		}
 		
 	}
