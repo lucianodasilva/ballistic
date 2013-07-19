@@ -26,7 +26,7 @@ namespace ballistic {
 			
 			virtual bool contains ( const string & path );
 			
-			virtual iresource * load ( iloader * loader, const string & path, ballistic::resources::stack & stack  );
+			virtual bool load ( iloader * loader, const string & path, ballistic::resources::stack & stack  );
 			
 		};
 		

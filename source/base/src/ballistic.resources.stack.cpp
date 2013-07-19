@@ -115,7 +115,13 @@ namespace ballistic {
 		// search for container
 		for (istorage * storage : _storage_handlers) {
 			if (storage->contains(res_id.get_source ())) {
-				return storage->load (loader, res_id.get_source(), *this);
+				if (storage->load (loader, res_id.get_source (), *this))     {
+					loaded_id = _resources.find (res_id);
+
+					if (loaded_id != _resources.end ())
+						return loaded_id->second;
+
+				}
 			}
 		}
 		

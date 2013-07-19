@@ -14,7 +14,6 @@
 
 #include <string>
 #include <vector>
-#include <tinyxml2.h>
 
 using namespace std;
 
@@ -25,18 +24,15 @@ namespace ballistic {
 	class entity_constructor : public resources::iresource {
 	private:
 		
-		string _name;
-		
 		vector < attribute > _attributes;
 		vector < icomponent_constructor * > _components;
 		
-		void read_attributes ( tinyxml2::XMLElement * attribute_element );
-		
 	public:
 
+		vector < attribute > & get_attributes ();
+		vector < icomponent_constructor * > & get_components ();
+
 		entity * create ();
-		
-		static entity_constructor * from_xml ( tinyxml2::XMLElement * );
 
 	};
 

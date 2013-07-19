@@ -52,6 +52,11 @@ namespace ballistic {
 		__convert_string < std::string, dst_t > ( src, dst );
 	}
 
+	template < class dst_t >
+	inline void convert ( const std::string & src, dst_t & dst ) {
+		__convert_string < std::string, dst_t > ( src, dst );
+	}
+
 	template < class src_t >
 	inline void convert ( src_t & src, std::string & dst ) {
 		// Compile time type conversion errors
@@ -61,6 +66,13 @@ namespace ballistic {
 
 	inline void convert ( std::string & src, std::string & dst ) {
 		dst = src;
+	}
+
+	template < class dst_t, class src_t >
+	inline dst_t convert_to ( src_t & src ) {
+		dst_t tmp_value;
+		convert (src, tmp_value);
+		return tmp_value;
 	}
 
 }

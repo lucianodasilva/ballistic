@@ -3,6 +3,8 @@
 #include "ballistic.game.h"
 #include "ballistic.common_id.h"
 
+#include <sstream>
+
 namespace ballistic {
 	attribute::attribute () : _id (0), _parent (nullptr) {}
 	
@@ -24,24 +26,6 @@ namespace ballistic {
 			
 			_parent->get_game ()->send_message (m);
 		}
-	}
-	
-	vector < attribute > attribute::from_xml ( tinyxml2::XMLElement * attribute_element ) {
-		vector <attribute> dest;
-		
-		tinyxml2::XMLElement * cursor = attribute_element->FirstChildElement();
-		while (cursor) {
-			
-			dest.push_back(attribute (string_to_id (cursor->Name())));
-			attribute & at = dest.back ();
-			
-			string type = cursor->Attribute("type");
-			
-			
-			cursor = cursor->NextSiblingElement();
-		}
-		
-		return dest;
 	}
 	
 }

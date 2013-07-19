@@ -45,13 +45,14 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-ballistic::res_id_t ref_rotating_square ("rotating_square", "/Users/luciano/Documents/ballistic_graphics/source/frontend/dev_frontend/resources/game.xml");
+//ballistic::res_id_t ref_rotating_square ("rotating_square", "/Users/luciano/Documents/ballistic_graphics/source/frontend/dev_frontend/resources/game.xml");
+ballistic::res_id_t ref_rotating_square ("rotating_square", "D:\\workspace\\ballistic_graphics.git\\source\\frontend\\dev_frontend\\resources\\game.xml");
 
 int main ( int argc, char ** argv) {
 	
 	_game = new ballistic::game ();
 	
-	_game->get_resource_stack().register_loader (new ballistic::resources::entity_loader ());
+	_game->get_resource_stack ().register_loader (new ballistic::resources::package_loader ());
 	
 	auto res = _game->get_resource(ref_rotating_square);
 	

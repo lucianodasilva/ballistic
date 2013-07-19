@@ -1639,7 +1639,7 @@ XMLError XMLDocument::LoadFile( std::istream & input )
 	Clear();
 	
 	//input.seekg(input.end);
-	size_t size = input.tellg();
+	std::streamoff size = input.tellg();
 	input.seekg(input.beg);
 	
 	if ( size == 0 ) {
@@ -1647,10 +1647,10 @@ XMLError XMLDocument::LoadFile( std::istream & input )
 		return _errorID;
 	}
 	
-	_charBuffer = new char[size+1];
+	_charBuffer = new char[(unsigned int)size + 1];
 	
 	input.read(_charBuffer, size);
-	size_t read = input.gcount();
+	std::streamoff read = input.gcount();
 	
 	if ( read != size ) {
 		SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );

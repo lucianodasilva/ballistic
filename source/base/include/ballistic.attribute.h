@@ -6,7 +6,6 @@
 
 #include <map>
 #include <vector>
-#include <tinyxml2.h>
 
 using namespace std;
 
@@ -44,8 +43,6 @@ namespace ballistic {
 		inline var & operator = ( const var & value );
 			
 		id_t get_id ();
-		
-		static vector < attribute > from_xml ( tinyxml2::XMLElement * attribute_element );
 
 	};
 	

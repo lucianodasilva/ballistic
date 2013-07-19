@@ -7,7 +7,7 @@
 
 		<attributes>
 			<position type="int" value="12"/>
-			<color	  type="color" value="255,255,123"/>
+			<color	  type="color" value="1.0, 1.0, 1.0, 1.0"/>
 		</attributes>
 
 		<components>

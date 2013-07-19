@@ -10,6 +10,7 @@
 #define _ballistic_resources_h_
 
 #include "ballistic.resources.entity_loader.h"
+#include "ballistic.resources.package_loader.h"
 #include "ballistic.resources.id.h"
 #include "ballistic.resources.stack.h"
 #include "ballistic.resources.iloader.h"

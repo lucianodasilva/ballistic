@@ -28,7 +28,7 @@ namespace ballistic {
 			virtual ~istorage (){};
 	
 			virtual bool contains ( const string & path ) = 0;
-			virtual iresource * load ( iloader * loader, const string & path, ballistic::resources::stack & stack ) = 0;
+			virtual bool load ( iloader * loader, const string & path, ballistic::resources::stack & stack ) = 0;
 	
 		};
 
