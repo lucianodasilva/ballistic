@@ -5,11 +5,9 @@
 
 #include "ballistic.attribute.h"
 #include "ballistic.common_id.h"
-#include "ballistic.component_constructor.h"
 #include "ballistic.config.h"
 #include "ballistic.convert.h"
 #include "ballistic.entity.h"
-#include "ballistic.entity_constructor.h"
 #include "ballistic.game.h"
 #include "ballistic.icomponent.h"
 #include "ballistic.id.h"

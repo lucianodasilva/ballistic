@@ -1,8 +1,7 @@
 #include "ballistic.game.h"
 
 #include "ballistic.common_id.h"
-#include "ballistic.component_constructor.h"
-#include "ballistic.entity_constructor.h"
+#include "ballistic.resources.entity_info.h"
 #include "ballistic.system.h"
 
 #include <functional>
@@ -16,7 +15,7 @@ namespace ballistic {
 	
 	// resource handling -------
 	icomponent * game::create_component( const res_id_t & res_id ) {
-		auto ctor = dynamic_cast < icomponent_constructor * > (_resources [res_id]);
+		auto ctor = dynamic_cast < resources::icomponent_constructor * > (_resources [res_id]);
 		
 		if (ctor)
 			return ctor->create ();
@@ -24,11 +23,15 @@ namespace ballistic {
 			return nullptr;
 	}
 	
-	entity * game::create_entity( const res_id_t & res_id ) {
-		 auto ctor = dynamic_cast < entity_constructor * > (_resources [res_id]);
+	entity * game::create_entity (const res_id_t & type ) {
+		return create_entity (hash < unsigned int > () (++_id_key), type);
+	}
+	
+	entity * game::create_entity( id_t id, const res_id_t & type ) {
+		auto ctor = dynamic_cast < resources::entity_info * > (_resources [type]);
 
 		if (ctor) {
-			entity * ent = ctor->create ();
+			entity * ent = ctor->create (id);
 			add_entity(ent);
 			return ent;
 		} else
@@ -115,7 +118,7 @@ namespace ballistic {
 		_running = false;
 	}
 
-	game::game () : entity (0), _m_update (this, id::message_update) {
+	game::game () : entity (0), _id_key(0), _m_update (this, id::message_update) {
 		set_game (this);
 		_entity_map [this->get_id ()] = this;
 	}

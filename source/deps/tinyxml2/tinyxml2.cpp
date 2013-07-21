@@ -1634,30 +1634,26 @@ XMLError XMLDocument::LoadFile( FILE* fp )
     return _errorID;
 }
 	
-XMLError XMLDocument::LoadFile( std::istream & input )
+XMLError XMLDocument::LoadStream( std::istream & input, unsigned int length )
 {
 	Clear();
 	
-	//input.seekg(input.end);
-	std::streamoff size = input.tellg();
-	input.seekg(input.beg);
-	
-	if ( size == 0 ) {
+	if ( length == 0 ) {
 		SetError( XML_ERROR_EMPTY_DOCUMENT, 0, 0 );
 		return _errorID;
 	}
 	
-	_charBuffer = new char[(unsigned int)size + 1];
+	_charBuffer = new char[(unsigned int)length + 1];
 	
-	input.read(_charBuffer, size);
+	input.read(_charBuffer, length);
 	std::streamoff read = input.gcount();
 	
-	if ( read != size ) {
+	if ( read != length ) {
 		SetError( XML_ERROR_FILE_READ_ERROR, 0, 0 );
 		return _errorID;
 	}
 	
-	_charBuffer[size] = 0;
+	_charBuffer[length] = 0;
 	
 	const char* p = _charBuffer;
 	p = XMLUtil::SkipWhiteSpace( p );

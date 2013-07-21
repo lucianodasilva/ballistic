@@ -1,5 +1,7 @@
 #include "ballistic.icomponent.h"
 
+using namespace std;
+
 namespace ballistic {
 	
 	icomponent::~icomponent () {}
@@ -14,7 +16,7 @@ namespace ballistic {
 
 	component::component () : _entity (nullptr) {}
 		
-	void component::setup () {}
+	void component::setup ( vector < attribute > & parameters ) {}
 
 
 }

@@ -25,6 +25,8 @@ namespace ballistic {
 		class iloader;
 		class istorage;
 		
+		class package_loader;
+		
 		class stack {
 		private:
 		
@@ -53,6 +55,8 @@ namespace ballistic {
 		
 			list < resource_id_vector_t >
 				_stacked_resources;
+			
+			package_loader * _package_loader;
 		
 		public:
 		
@@ -60,6 +64,10 @@ namespace ballistic {
 			virtual ~stack ();
 		
 			void register_storage ( istorage * storage );
+			
+			istorage * find_storage ( const string & source );
+			
+			package_loader * get_package_loader ();
 		
 			void register_loader ( iloader * loader );
 		
@@ -78,6 +86,11 @@ namespace ballistic {
 			
 			// -------------
 			
+			iresource * get_resource ( id_t id );
+			
+			template < class T >
+			inline T * get_resource ( id_t id );
+			
 			iresource * get_resource ( const res_id_t & res_id );
 		
 			template < class T >
@@ -89,6 +102,11 @@ namespace ballistic {
 			inline T * operator [] ( const res_id_t & res_id );
 			
 		};
+		
+		template < class T >
+		T * stack::get_resource ( id_t id ) {
+			return dynamic_cast <T *> ( get_resource(id) );
+		}
 		
 		template < class T >
 		T * stack::get_resource(const res_id_t &res_id) {

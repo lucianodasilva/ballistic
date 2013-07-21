@@ -1454,7 +1454,7 @@ public:
     */
     XMLError LoadFile( FILE* );
 	
-	XMLError LoadFile( std::istream & );
+	XMLError LoadStream( std::istream & , unsigned int);
 
     /**
     	Save the XML file to disk.

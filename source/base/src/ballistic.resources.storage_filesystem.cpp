@@ -23,7 +23,11 @@ namespace ballistic {
 		
 		bool storage_filesystem::load ( iloader * loader, const string & path, ballistic::resources::stack & stack  ) {
 			ifstream file_stream (path, ios::in | ios::binary | ios::ate );
-			return loader->load(file_stream, stack);
+			
+			uint32 length = file_stream.tellg();
+			file_stream.seekg(ios::beg);
+			
+			return loader->load(file_stream, length, stack);
 		}
 		
 	}

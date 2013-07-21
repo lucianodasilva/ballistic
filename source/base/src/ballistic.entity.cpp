@@ -26,7 +26,6 @@ namespace ballistic {
 		
 	void entity::add_component ( icomponent * component ) {
 		component->set_entity (this);
-		component->setup ();
 			
 		_components.push_back (component);
 	}

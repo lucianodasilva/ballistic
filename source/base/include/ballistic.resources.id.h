@@ -34,7 +34,7 @@ namespace ballistic {
 		: _id (origin._id), _source (origin._source) {}
 		
 		
-		inline operator id_t () const {
+		inline id_t get_id () const {
 			return _id;
 		}
 		

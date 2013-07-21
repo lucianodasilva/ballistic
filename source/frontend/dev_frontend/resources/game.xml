@@ -1,9 +1,11 @@
 
 <package>
 
+	<include source="resources/other.xml"/>
+
 	<texture name="little_doll.image" source="materials/textures/little_doll.png"/>
 
-	<entity_type name="rotating_square">
+	<entity name="rotating_square">
 
 		<attributes>
 			<position type="int" value="12"/>
@@ -20,6 +22,6 @@
 
 		</components>
 
-	</entity_type>
+	</entity>
 
 </package>

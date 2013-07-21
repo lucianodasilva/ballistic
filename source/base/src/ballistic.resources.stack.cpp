@@ -9,7 +9,10 @@
 #include "ballistic.resources.stack.h"
 #include "ballistic.resources.iloader.h"
 #include "ballistic.resources.istorage.h"
+
 #include "ballistic.resources.storage_filesystem.h"
+
+#include "ballistic.resources.package_loader.h"
 
 namespace ballistic {
 	namespace resources {
@@ -17,6 +20,9 @@ namespace ballistic {
 	stack::stack () {
 		// add default storage to list
 		_storage_handlers.push_back ( new resources::storage_filesystem ());
+		
+		_package_loader = new package_loader ();
+		register_loader(_package_loader);
 	}
 	
 	stack::~stack() {
@@ -38,6 +44,18 @@ namespace ballistic {
 	void stack::register_storage(istorage *storage) {
 		//TODO: validate nulls
 		_storage_handlers.push_back(storage);
+	}
+		
+	istorage * stack::find_storage(const string &source) {
+		for ( istorage * storage : _storage_handlers)
+			if (storage->contains(source))
+				return storage;
+		
+		return nullptr;
+	}
+		
+	package_loader * stack::get_package_loader() {
+		return _package_loader;
 	}
 	
 	void stack::push () {
@@ -88,15 +106,20 @@ namespace ballistic {
 		return *this;
 	}
 	
+	iresource * stack::get_resource(id_t id) {
+		resource_map_t::iterator res_it = _resources.find (id);
+		if (res_it == _resources.end ())
+			return nullptr;
+		
+		return res_it->second;
+	}
+	
 	iresource * stack::get_resource(const res_id_t & res_id) {
 		
-		resource_map_t::iterator res_it;
-	
-		// check for loaded resources first
-		resource_map_t::iterator loaded_id = _resources.find (res_id);
+		iresource * res = get_resource(res_id.get_id ());
 		
-		if (loaded_id != _resources.end ())
-			return loaded_id->second;
+		if (res)
+			return res;
 		
 		// check for a loader capable of handling the file
 		iloader * loader = nullptr;
@@ -116,11 +139,7 @@ namespace ballistic {
 		for (istorage * storage : _storage_handlers) {
 			if (storage->contains(res_id.get_source ())) {
 				if (storage->load (loader, res_id.get_source (), *this))     {
-					loaded_id = _resources.find (res_id);
-
-					if (loaded_id != _resources.end ())
-						return loaded_id->second;
-
+					return get_resource(res_id.get_id ());
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 #ifndef	_ballistic_game_h_
 #define _ballistic_game_h_
 
-#include "ballistic.component_constructor.h"
+#include "ballistic.resources.component_constructor.h"
 #include "ballistic.entity.h"
 #include "ballistic.ifrontend.h"
 #include "ballistic.message.h"
@@ -13,7 +13,7 @@
 #include <map>
 #include <queue>
 #include <string>
-
+#include <atomic>
 
 using namespace std;
 
@@ -23,13 +23,16 @@ namespace ballistic {
 
 	class game : public entity {
 	protected:
+		
+		// entity id
+		atomic<unsigned int> _id_key;
 
 		typedef map < id_t, entity * > entity_map_t;
 		entity_map_t _entity_map;
 
 		bool _running;
 
-		void		add_entity ( entity * ent );
+		void add_entity ( entity * ent );
 
 		// game state ---
 		system::ballistic_time_t
@@ -49,8 +52,10 @@ namespace ballistic {
 		template < class T >
 		inline void define_component ( const string & id );
 		
-		virtual icomponent * create_component ( const res_id_t & res_id );
-		virtual entity * create_entity ( const res_id_t & res_id );
+		virtual icomponent * create_component ( const res_id_t & type );
+		
+		virtual entity * create_entity ( const res_id_t & type );
+		virtual entity * create_entity ( id_t id, const res_id_t & type );
 		
 		virtual resources::iresource *	get_resource (const res_id_t & res_id);
 		
@@ -81,7 +86,7 @@ namespace ballistic {
 	
 	template < class T >
 	void game::define_component ( const string & id ) {
-		_resources.add_to_global ( id, new component_constructor < T > () );
+		_resources.add_to_global ( id, new resources::component_constructor < T > () );
 	}
 }
 
