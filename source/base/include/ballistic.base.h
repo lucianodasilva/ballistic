@@ -7,6 +7,7 @@
 #include "ballistic.common_id.h"
 #include "ballistic.config.h"
 #include "ballistic.convert.h"
+#include "ballistic.debug.h"
 #include "ballistic.entity.h"
 #include "ballistic.game.h"
 #include "ballistic.icomponent.h"

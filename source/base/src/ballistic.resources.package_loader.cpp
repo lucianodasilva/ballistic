@@ -10,6 +10,7 @@
 #include "ballistic.resources.entity_info.h"
 
 #include "ballistic.config.h"
+#include "ballistic.debug.h"
 #include "ballistic.attribute.h"
 
 #include "ballistic.math.h"
@@ -87,7 +88,6 @@ namespace ballistic {
 						
 						at = v;
 					} else {
-						//TODO: handle properly
 						at = value; //as string
 					}
 					
@@ -103,18 +103,18 @@ namespace ballistic {
 				tinyxml2::XMLElement * cursor = element->FirstChildElement();
 				
 				while (cursor) {
-					
-					component_vector.push_back(component_info ());
-					
+
+					component_vector.push_back (component_info ());
+
 					component_info & comp_info = component_vector.back ();
-					
-					auto ctor = stack.get_resource <icomponent_constructor > (string_to_id(cursor->Name()));
-					
-					comp_info.set_constructor(ctor);
-					
-					load_attributes(cursor, stack, comp_info.get_attributes());
-					
-					
+
+					auto ctor = stack.get_resource < icomponent_constructor > (string_to_id (cursor->Name ()));
+
+					if (ctor) 
+						comp_info.set_constructor (ctor);
+
+					load_attributes (cursor, stack, comp_info.get_attributes ());
+
 					cursor->NextSiblingElement();
 				}
 			}
@@ -182,15 +182,18 @@ namespace ballistic {
 		bool package_loader::load (istream & source, uint32 length, ballistic::resources::stack & stack) {
 			
 			XMLDocument document;
-			
-			//TODO: handle these errors properly
-			if (document.LoadStream(source, length))
+
+			if (document.LoadStream (source, length)) {
+				debug_error ("Failed to load xml package file from: " << source);
 				return false;
+			}
 			
 			auto root = document.FirstChildElement("package");
 			
-			if (!root)
+			if (!root) {
+				debug_error ("Failed to find \"package\" root node in package xml file: " << source);
 				return false;
+			}
 			
 			XMLElement * cursor = root->FirstChildElement();
 			while (cursor) {

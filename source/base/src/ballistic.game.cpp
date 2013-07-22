@@ -19,8 +19,10 @@ namespace ballistic {
 		
 		if (ctor)
 			return ctor->create ();
-		else
+		else {
+			debug_warn ("Unable to load component constructor with id: " << res_id.get_id ());
 			return nullptr;
+		}
 	}
 	
 	entity * game::create_entity (const res_id_t & type ) {
@@ -34,8 +36,10 @@ namespace ballistic {
 			entity * ent = ctor->create (id);
 			add_entity(ent);
 			return ent;
-		} else
+		} else {
+			debug_warn ("Unable to load entity with id: " << type.get_id ());
 			return nullptr;
+		}
 	}
 	
 	resources::iresource * game::get_resource(const ballistic::res_id_t &res_id)	{
@@ -54,11 +58,15 @@ namespace ballistic {
 	
 	// -------------------------
 
-	entity & game::find_entity ( id_t id ) {
-		if (_entity_map.find (id) == _entity_map.end ())
-			throw "Entity not found in entity map";
+	entity * game::find_entity ( id_t id ) {
+		entity_map_t::iterator it = _entity_map.find (id);
 
-		return *_entity_map [id];
+		if (it == _entity_map.end ()) {
+			debug_warn ("Entity with id: " << id << " not found in entity map");
+			return nullptr;
+		}
+
+		return it->second;
 	}
 
 	void game::send_message ( ballistic::message & message ) {
@@ -72,7 +80,6 @@ namespace ballistic {
 	}
 
 	void game::on_initialize () {
-
 		_frame_start = _game_start_time = system::get_time_now ();
 		_frame_id = 1;
 		_running = true;

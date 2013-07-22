@@ -1,4 +1,5 @@
 #include "ballistic.resources.component_info.h"
+#include "ballistic.debug.h"
 #include "ballistic.icomponent.h"
 #include "ballistic.resources.component_constructor.h"
 
@@ -18,15 +19,15 @@ namespace ballistic {
 		}
 		
 		icomponent * component_info::create () {
-			
-			if (!_constructor)
+			if (!_constructor) {
+				debug_error ("Component constructor not set. Cannot build contructor.");
 				return nullptr;
+			}
 			
 			icomponent * new_component = _constructor->create ();
 			new_component->setup (_attributes);
 			
 			return new_component;
-			
 		}
 		
 	}

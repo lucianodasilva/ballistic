@@ -44,7 +44,7 @@ namespace ballistic {
 			wc.lpszClassName	= "BallisticWndClass";
 
 			if (!RegisterClass (&wc)) {
-				// Failed. TODO: insert super logging here
+				debug_error ("Failed to register window class");
 				return false;
 			}
 
@@ -62,7 +62,7 @@ namespace ballistic {
 				0);
 
 			if ( _window_handle == 0 ) {
-				// Failed again. TODO: insert super logging here
+				debug_error ("Failed to create window instance");
 				return false;
 			}
 
@@ -91,21 +91,26 @@ namespace ballistic {
 
 				int pixel_format = ChoosePixelFormat (_window_dc, & pfd); 
 				if (pixel_format == 0) {
-					// Failed. TODO: insert super logging here
+					debug_error ("Failed to create pixel format");
 					return false;
 				}
 
 				if (SetPixelFormat (_window_dc, pixel_format, &pfd) == FALSE) {
-					// Failed. TODO: insert logging here
+					debug_error ("Failed to setS pixel format");
 					return false;
 				}
 
 				_window_gl_rc = wglCreateContext (_window_dc);
-				if (_window_gl_rc == NULL) 
+				if (_window_gl_rc == NULL) {
+					debug_error ("Failed to create open gl render context");
 					return false;
+				}
 
-				if (wglMakeCurrent (_window_dc, _window_gl_rc) == NULL)
+				if (wglMakeCurrent (_window_dc, _window_gl_rc) == NULL) 
+				{
+					debug_error ("Failed to select open gl render context");
 					return false;
+				}
 
 				glViewport(0, 0, 1024, 700);
 

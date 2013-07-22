@@ -49,12 +49,9 @@ ballistic::res_id_t res_rotating_square ("rotating_square", "resources/game.xml"
 
 int main ( int argc, char ** argv) {
 	
-	_game = new ballistic::game ();
-		
-	_game->create_entity (
-		  ballistic::string_to_id("mine"),
-		  res_rotating_square
-	);
+	debug_init ();
+
+	debug_warn ("this is a warning for: " << 12);
 	
 	return 0;
 	// --------

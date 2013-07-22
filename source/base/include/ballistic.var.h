@@ -4,6 +4,7 @@
 
 #include "ballistic.config.h"
 #include "ballistic.convert.h"
+#include "ballistic.debug.h"
 
 #include <string>
 #include <type_traits>
@@ -146,10 +147,10 @@ private:
 					}
 					break;
 				case (var_type_struct):
-					throw MSG_CANNOT_CONVERT_TO_STRUCT;
+					debug_error (MSG_CANNOT_CONVERT_TO_STRUCT);
 					break;
 				case (var_type_pointer):
-					throw MSG_CANNOT_CONVERT_TO_POINTER;
+					debug_error (MSG_CANNOT_CONVERT_TO_POINTER);
 					break;
 			}
 		}
@@ -164,7 +165,7 @@ private:
 			}
 
 			if ( var_ref._type != var_type_pointer )
-				throw MSG_CANNOT_CONVERT_FROM_POINTER;
+				debug_error (MSG_CANNOT_CONVERT_FROM_POINTER);
 
 			val = static_cast < t > ( var_ref._data._box_v->get_data () );
 		}
@@ -178,8 +179,8 @@ private:
 				return;
 			}
 
-			if ( var_ref._type != var_type_struct )
-				throw MSG_CANNOT_CONVERT_FROM_STRUCT;
+			if (var_ref._type != var_type_struct)
+				debug_error (MSG_CANNOT_CONVERT_FROM_STRUCT);
 
 			t * ptr = static_cast < t * > ( var_ref._data._box_v->get_data () );
 			val = *ptr;

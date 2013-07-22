@@ -2,6 +2,8 @@
 #ifndef _ballistic_convert_h_
 #define _ballistic_convert_h_
 
+#include "ballistic.debug.h"
+
 #include <string>
 #include <sstream>
 #include <type_traits>
@@ -38,7 +40,8 @@ namespace ballistic {
 		//extract whitespaces
 		stream >> std::ws >> dst;
 		if (stream.fail ()) {
-			throw MSG_STRING_CONV_FAILED;
+			debug_error (MSG_STRING_CONV_FAILED);
+			dst = dst_t ();
 		}
 	}
 

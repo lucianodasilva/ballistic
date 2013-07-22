@@ -65,7 +65,7 @@ namespace ballistic {
 		resources::stack & get_resource_stack ();
 		// -----------------
 
-		virtual entity & find_entity ( id_t id );
+		virtual entity * find_entity ( id_t id );
 
 		virtual void send_message ( ballistic::message & message );
 

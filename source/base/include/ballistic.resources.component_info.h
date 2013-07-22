@@ -6,8 +6,6 @@
 
 #include "ballistic.attribute.h"
 
-#define MSG_NOT_COMPONENT_TYPE "Constructor template parameter must be derived from icontructor!"
-
 using namespace std;
 
 namespace ballistic {

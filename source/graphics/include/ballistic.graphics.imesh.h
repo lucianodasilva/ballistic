@@ -11,7 +11,7 @@ namespace ballistic {
 			vec2 uv;
 		};
 
-		class imesh {
+		class imesh : public ballistic::resources::iresource {
 		public:
 			
 			virtual void set_data (
