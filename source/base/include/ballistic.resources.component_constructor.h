@@ -21,6 +21,7 @@ namespace resources {
 			virtual inline ~icomponent_constructor (){}
 
 			virtual icomponent * create () = 0;
+			virtual icomponent * create (vector < attribute > & parameters) = 0;
 
 		};
 
@@ -29,6 +30,12 @@ namespace resources {
 		private:
 			static_assert ( is_base_of < icomponent, component_t >::value, MSG_NOT_COMPONENT_TYPE);
 		public:
+
+			virtual icomponent * create () {
+				icomponent * new_comp = new component_t ();
+				new_comp->setup ();
+				return new_comp;
+			}
 
 			virtual icomponent * create ( vector < attribute > & parameters )
 			{
@@ -42,5 +49,7 @@ namespace resources {
 	}
 
 }
+
+#undef MSG_NOT_COMPONENT_TYPE
 
 #endif

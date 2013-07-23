@@ -14,13 +14,13 @@ namespace ballistic {
 	}
 	
 	// resource handling -------
-	icomponent * game::create_component( const res_id_t & res_id ) {
-		auto ctor = dynamic_cast < resources::icomponent_constructor * > (_resources [res_id]);
+	icomponent * game::create_component( id_t id ) {
+		auto ctor = dynamic_cast < resources::icomponent_constructor * > (_resources.get_resource (id));
 		
 		if (ctor)
 			return ctor->create ();
 		else {
-			debug_warn ("Unable to load component constructor with id: " << res_id.get_id ());
+			debug_warn ("Unable to load component constructor with id: " << id);
 			return nullptr;
 		}
 	}

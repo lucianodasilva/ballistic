@@ -17,6 +17,8 @@
 
 using namespace std;
 
+#define MSG_NOT_COMPONENT_TYPE "Constructor template parameter must be derived from icontructor!"
+
 namespace ballistic {
 	
 	class icomponent;
@@ -52,7 +54,19 @@ namespace ballistic {
 		template < class T >
 		inline void define_component ( const string & id );
 		
-		virtual icomponent * create_component ( const res_id_t & type );
+		template < class T >
+		inline void define_component (id_t id);
+		
+		template < class T >
+		inline T * create_component (const string & id);
+
+		template < class T >
+		inline T * create_component ( const res_id_t & id );
+
+		template < class T >
+		inline T * create_component (id_t type);
+
+		virtual icomponent * create_component ( id_t id );
 		
 		virtual entity * create_entity ( const res_id_t & type );
 		virtual entity * create_entity ( id_t id, const res_id_t & type );
@@ -86,8 +100,31 @@ namespace ballistic {
 	
 	template < class T >
 	void game::define_component ( const string & id ) {
-		_resources.add_to_global ( id, new resources::component_constructor < T > () );
+		define_component < T > (string_to_id (id));
+	}
+
+	template < class T >
+	void game::define_component (id_t id) {
+		_resources.add_to_global (id, new resources::component_constructor < T > ());
+	}
+
+	template < class T >
+	T * game::create_component (const string & id) {
+		return create_component <T>(string_to_id (id));
+	}
+
+	template < class T >
+	T * game::create_component (const res_id_t & id) {
+		return create_component <T>(id.get_id ());
+	}
+
+	template < class T >
+	T * game::create_component (id_t id) {
+		static_assert (is_base_of < icomponent, T >::value, MSG_NOT_COMPONENT_TYPE);
+		return static_cast <T *> (create_component (id));
 	}
 }
+
+#undef MSG_NOT_COMPONENT_TYPE
 
 #endif

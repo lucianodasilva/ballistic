@@ -48,13 +48,6 @@ ballistic::graphics::idevice * create_device () {
 ballistic::res_id_t res_rotating_square ("rotating_square", "resources/game.xml");
 
 int main ( int argc, char ** argv) {
-	
-	debug_init ();
-
-	debug_warn ("this is a warning for: " << 12);
-	
-	return 0;
-	// --------
 
 	_frontend = create_frontend (point ( 1024, 700));
 	_frontend->create ();
@@ -67,6 +60,14 @@ int main ( int argc, char ** argv) {
 	
 	_game->on_initialize ();
 
+	_game->define_component < ballistic::graphics::system_component > ("graphics_system");
+	
+	auto graphics_system
+		= _game->create_component < ballistic::graphics::system_component > ("graphics_system");
+
+	graphics_system->set_device (_device);
+
+	_game->add_component (graphics_system);
 	//ballistic::component::define < ballistic::graphics::system_component > ("graphics_system");
 	//((ballistic::graphics::system_component *)_game->create_component ("graphics_system"))->set_device (_device);
 	

@@ -162,6 +162,8 @@ namespace ballistic {
 	iresource * stack::operator [] ( const res_id_t & res_id ) {
 		return get_resource (res_id);
 	}
+
+
 		
 	}
 }

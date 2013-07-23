@@ -97,6 +97,8 @@ namespace ballistic {
 			inline T * get_resource ( const res_id_t & res_id );
 		
 			iresource * operator [] ( const res_id_t & res_id );
+
+			iresource * operator [] (id_t id);
 			
 			template < class T >
 			inline T * operator [] ( const res_id_t & res_id );
@@ -106,11 +108,6 @@ namespace ballistic {
 		template < class T >
 		T * stack::get_resource ( id_t id ) {
 			return dynamic_cast <T *> ( get_resource(id) );
-		}
-		
-		template < class T >
-		T * stack::get_resource(const res_id_t &res_id) {
-			return dynamic_cast<T *>(get_resource(res_id));
 		}
 		
 		template < class T >
