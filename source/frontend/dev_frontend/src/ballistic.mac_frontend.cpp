@@ -22,7 +22,7 @@ namespace ballistic {
 		frontend::~frontend () {}
 
 		bool frontend::create () {
-			int			dummy_c = 1;
+			int			dummy_c = 0;
 			char *		dummy_v;
 			
 			glutInit ( &dummy_c, &dummy_v );

@@ -122,19 +122,6 @@ struct render_bucket {
 
 int main ( int argc, char ** argv) {
 
-	render_bucket
-		r1,
-		r2;
-
-	r1.set_value (3, true, 12, 1);
-	r2.set_value (3, false, 12, 1);
-
-	bool lesser = r1.data < r2.data;
-
-	return 0;
-
-	// ------------------------------
-
 	_frontend = create_frontend (point ( 1024, 700));
 	_frontend->create ();
 	_frontend->show ();
