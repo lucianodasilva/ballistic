@@ -2,6 +2,7 @@
 #define	_ballistic_graphics_system_component_h_
 
 #include <ballistic.base.h>
+#include <vector>
 
 #include "ballistic.graphics.idevice.h"
 
@@ -13,9 +14,13 @@ namespace ballistic {
 
 			idevice * _device;
 
+
+
 		public:
 
-			virtual void set_device (idevice * device);
+			
+
+			void set_device (idevice * device);
 
 			virtual void notify ( ballistic::message & message );
 		};

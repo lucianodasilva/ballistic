@@ -47,7 +47,93 @@ ballistic::graphics::idevice * create_device () {
 
 ballistic::res_id_t res_rotating_square ("rotating_square", "resources/game.xml");
 
+// ------------------------------------------------------------------------------
+/*
+@ http://www.sjbaker.org/steve/omniv/love_your_z_buffer.html
+
+z_buffer_value = (1 << N) * (a + b / z)
+
+Where:
+
+N = number of bits of Z precision
+	a = zFar / (zFar - zNear)
+	b = zFar * zNear / (zNear - zFar)
+	z = distance from the eye to the object
+
+	...and z_buffer_value is an integer.
+  */
+
+struct render_bucket {
+
+	union {
+		uint32 data;
+
+		struct {
+			uint8	_b0;
+			uint8	_b1;
+			uint8	_b2;
+			uint8	_b3;
+		};
+	};
+
+	inline void set_value (int8 layer, bool translucent, uint16 depth, uint8 material) {
+		// set layer
+		_b0 = (layer << 1);
+		// set translucent
+		if (translucent) {
+			_b0 ^= 0x01;
+			_b1 = material;
+			*((uint16 *)&_b2) = depth;
+		} else {
+			_b0 |= 0x01;
+			*((uint16 *)&_b1) = depth;
+			_b3 = material;
+		}
+
+	}
+
+	inline bool get_translucent () { return _b0 & 0x01; }
+
+	inline int8 get_layer () { return (_b0 >> 1) & 0x7F; }
+
+
+	inline uint16 get_depth () {
+		return get_depth (get_translucent ());
+	}
+
+	inline uint16 get_depth (bool translucent) {
+		if (translucent)
+			return *(uint16 *)&_b2;
+		else
+			return *(uint16 *)&_b1;
+	}
+
+	inline uint8 get_material () {
+		return get_material (get_translucent ());
+	}
+
+	inline uint8 get_material (bool translucent) {
+		if (translucent)
+			return _b3;
+		else
+			return _b1;
+	}
+};
+
 int main ( int argc, char ** argv) {
+
+	render_bucket
+		r1,
+		r2;
+
+	r1.set_value (3, true, 12, 1);
+	r2.set_value (3, false, 12, 1);
+
+	bool lesser = r1.data < r2.data;
+
+	return 0;
+
+	// ------------------------------
 
 	_frontend = create_frontend (point ( 1024, 700));
 	_frontend->create ();
