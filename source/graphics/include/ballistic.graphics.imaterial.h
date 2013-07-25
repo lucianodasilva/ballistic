@@ -9,6 +9,8 @@ namespace ballistic {
 		class imaterial : public ballistic::resources::iresource {
 		public:
 
+
+
 		};
 
 	}

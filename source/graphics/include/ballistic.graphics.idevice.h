@@ -25,7 +25,6 @@ namespace ballistic {
 			virtual itexture *	load_texture ( const string & filename ) = 0;
 			
 			virtual void		set_transform ( const mat4 & matrix ) = 0;
-			
 			virtual void		set_projection ( const mat4 & matrix ) = 0;
 
 			virtual void		set_clear_color ( const color & cr ) = 0;
