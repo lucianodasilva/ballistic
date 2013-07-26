@@ -32,6 +32,9 @@ namespace ballistic {
 			uint16 get_depth (mat4 & transform);
 
 			mat4 get_view ();
+
+			// utilities
+			static mat4 make_projection (real left, real right, real bottom, real top, real near, real far);
 		};
 
 	}

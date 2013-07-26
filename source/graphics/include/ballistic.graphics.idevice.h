@@ -35,6 +35,8 @@ namespace ballistic {
 			virtual void		end_frame () = 0;
 
 			virtual void		set_current_mesh ( imesh * mesh ) = 0;
+			virtual imesh *		get_current_mesh () = 0;
+
 			virtual void		set_current_texture ( itexture * texture ) = 0;
 				
 			virtual void		present () = 0;

@@ -12,6 +12,8 @@ namespace ballistic {
 
 			color _clear_color;
 
+			imesh * _current_mesh;
+
 		public:
 			
 			opengl_device ();
@@ -35,6 +37,8 @@ namespace ballistic {
 			virtual void		end_frame ();
 			
 			virtual void		set_current_mesh ( imesh * mesh );
+			virtual imesh *		get_current_mesh ();
+
 			virtual void		set_current_texture ( itexture * texture );
 			
 			virtual void		present ();

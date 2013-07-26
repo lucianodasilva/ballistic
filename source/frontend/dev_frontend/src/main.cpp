@@ -122,7 +122,7 @@ struct render_bucket {
 
 int main ( int argc, char ** argv) {
 
-	_frontend = create_frontend (point ( 1024, 700));
+	_frontend = create_frontend (point ( 400, 320));
 	_frontend->create ();
 	_frontend->show ();
 
@@ -143,23 +143,7 @@ int main ( int argc, char ** argv) {
 	_game->add_component (graphics_system);
 	//ballistic::component::define < ballistic::graphics::system_component > ("graphics_system");
 	//((ballistic::graphics::system_component *)_game->create_component ("graphics_system"))->set_device (_device);
-	
-	_mesh = _device->create_mesh();
-	
-	ballistic::graphics::vertex vbuffer [4]
-	= {
-		{vec3 (-1, -1, 0), vec2 (0, 0)},
-		{vec3 (1, -1, 0), vec2 (1, 0)},
-		{vec3 (1, 1, 0), vec2 (1, 1)},
-		{vec3 (-1, 1, 0), vec2 (0, 1)}
-	};
-	
-	uint16 index [6] = {
-		0, 1, 3,
-		3, 1, 2
-	};
-	
-	_mesh->set_data(vbuffer, index);
+
 	_frontend->do_event_loop (_game);
 
 	return 0;

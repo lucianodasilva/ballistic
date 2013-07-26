@@ -15,6 +15,8 @@ namespace ballistic {
 
 			idevice *	_device;
 			camera		_camera;
+			
+			imesh *		_mesh;
 
 		public:
 

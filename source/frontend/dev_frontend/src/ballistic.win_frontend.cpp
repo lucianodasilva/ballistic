@@ -112,7 +112,9 @@ namespace ballistic {
 					return false;
 				}
 
-				glViewport(0, 0, 1024, 700);
+				glViewport (0, 0, 
+							_window_client_size.x,
+							_window_client_size.y);
 
 #			endif // --------------------------------------------------------------
 

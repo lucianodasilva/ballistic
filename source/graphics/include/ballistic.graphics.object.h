@@ -1,5 +1,5 @@
-#ifndef	_ballistic_graphics_renderable_h_
-#define _ballistic_graphics_renderable_h_
+#ifndef	_ballistic_graphics_object_h_
+#define _ballistic_graphics_object_h_
 
 #include <ballistic.base.h>
 
@@ -9,7 +9,7 @@ namespace ballistic {
 		class imesh;
 		class imaterial;
 
-		struct render_bucket {
+		struct object_bucket {
 
 			union {
 				uint32 data;
@@ -67,27 +67,31 @@ namespace ballistic {
 		};
 
 
-		struct renderable {
+		class object {
+		private:
 
-			inline renderable (const renderable & o);
-			inline renderable (imesh * mesh, imaterial * material, mat4 & transform );
+			imesh *			_mesh;
+			imaterial *		_material;
 
-			render_bucket	key;
+			mat4			_transform;
 
-			imesh *			mesh;
-			imaterial *		material;
-			mat4 &			transform;
+		public:
+
+			object ();
+
+			object_bucket	bucket;
+
+			void set_mesh (imesh * mesh);
+			imesh * get_mesh ();
+
+			void set_material (imaterial * material);
+			imaterial * get_material ();
+
+			void set_transform (mat4 transform);
+			const mat4 & get_transform ();
 
 		};
 
-		renderable::renderable (const renderable & o) 
-			: key (o.key), mesh (o.mesh), material (o.material), transform (o.transform) {}
-
-		renderable::renderable (imesh * mesh, imaterial * material, mat4 & transform) 
-			: mesh (mesh), material (material), transform (transform) 
-		{
-			key.set_value (0, false, 0, 0);
-		}
 
 	}
 }

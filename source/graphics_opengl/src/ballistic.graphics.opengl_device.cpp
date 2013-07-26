@@ -7,7 +7,7 @@
 namespace ballistic {
 	namespace graphics {
 		
-		opengl_device::opengl_device () {
+		opengl_device::opengl_device () : _current_mesh (nullptr) {
 			glewInit ();
 		}
 	
@@ -43,17 +43,13 @@ namespace ballistic {
 		
 		void opengl_device::set_transform(const mat4 & matrix)
 		{
-			mat4 rev = matrix.transpose();
 			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			glMultMatrixf (&rev.data [0]);
+			glLoadMatrixf (&matrix.data [0]);
 		}
 		
 		void opengl_device::set_projection ( const mat4 & matrix ) {
-			mat4 rev = matrix.transpose ();
 			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glMultMatrixf (&rev.data [0]);
+			glLoadTransposeMatrixf (&matrix.data [0]);
 		}
 
 		void opengl_device::set_clear_color ( const color & cr ) {
@@ -70,10 +66,19 @@ namespace ballistic {
 
 			glClear (GL_COLOR_BUFFER_BIT);
 		}
+
+		mat4 create_ortho (real left, real right, real bottom, real top, real near, real far) {
+			return mat4 ( 
+				2.0 / ( right - left ), .0, .0, -((right + left)/(right - left)),
+				.0, 2.0 / ( top - bottom ), .0, -((top + bottom) / ( top - bottom)),
+				.0, .0, -2 / ( far - near ), - ((far + near) / ( far - near)),
+				.0, .0, .0, 1.0
+			);
+		}
 		
 		void opengl_device::begin_frame ()
 		{
-			glClear(GL_DEPTH_BUFFER_BIT);
+			glClear(GL_DEPTH_BUFFER_BIT);			
 		}
 		
 		void opengl_device::end_frame ()
@@ -83,7 +88,18 @@ namespace ballistic {
 		
 		void opengl_device::set_current_mesh ( imesh * mesh )
 		{
-		
+			if (mesh == _current_mesh)
+				return;
+
+			if (_current_mesh)
+				_current_mesh->detach ();
+
+			_current_mesh = mesh;
+			_current_mesh->attach ();
+		}
+
+		imesh * opengl_device::get_current_mesh () {
+			return _current_mesh;
 		}
 		
 		void opengl_device::set_current_texture ( itexture * texture )
