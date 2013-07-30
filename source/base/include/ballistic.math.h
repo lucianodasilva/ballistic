@@ -10,7 +10,7 @@ namespace ballistic {
 
 		template < class T >
 		inline typename T::type dot ( const T & v1, const T & v2 ) {
-			typename T::type r = T::type ();
+			typename T::type r = typename T::type ();
 
 			for ( uint32 i = 0; i < T::count; ++i)
 				r += v1.data [i] * v2.data [i];
