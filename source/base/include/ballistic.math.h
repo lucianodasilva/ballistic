@@ -49,7 +49,7 @@ namespace ballistic {
 		}
 
 		inline real lerp ( real v1, real v2, real alpha ) {
-			return v2 - v1 * alpha;
+			return v1 + ((v2 - v1) * alpha);
 		}
 
 		template < class T >
