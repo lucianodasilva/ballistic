@@ -16,6 +16,7 @@
 #include "ballistic.math.h"
 #include "ballistic.math.aabox.h"
 #include "ballistic.math.matrixes.h"
+#include "ballistic.math.quat.h"
 #include "ballistic.math.rect.h"
 #include "ballistic.math.vectors.h"
 #include "ballistic.message.h"

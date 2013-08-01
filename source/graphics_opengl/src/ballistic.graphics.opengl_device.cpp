@@ -80,9 +80,63 @@ namespace ballistic {
 		{
 			glClear(GL_DEPTH_BUFFER_BIT);			
 		}
+
+		void draw_line (vec3 & v1, vec3 & v2) {
+			glBegin (GL_LINES);
+			glVertex3f (v1.x, v1.y, v1.z);
+			glVertex3f (v2.x, v2.y, v2.z);
+			glEnd ();
+		}
+
+		void draw_joint (vec3 & bone, vec3 & bone_child ) {
+			glColor3f (1., .0, .0);
+
+			draw_line (bone, bone_child);
+
+			glColor3f (.0, 1., .0);
+			
+			draw_line (bone + vec3 (-.01, .0, .0), bone + vec3 (.01, .0, .0));
+			draw_line (bone + vec3 (0, -.01, .0), bone + vec3 (.0, .01, .0));
+		}
+
+		struct joint {
+			vec3 position;
+			quat attitude;
+		};
 		
 		void opengl_device::end_frame ()
 		{
+			// ----------
+			joint p = {
+				vec3 (0.0, -.5, .0),
+				quat(vec3 (.0, 1.0, .0), .0)
+			};
+
+			joint j1 = {
+				vec3 (0.0, 0.25, .0),
+				quat (vec3 (1.0, .0, .0), .0)
+			};
+
+			joint j2 = {
+				vec3 (0.0, 0.25, .0),
+				quat (vec3 (.0, 1.0, .0), .0)
+			};
+
+			vec3 apt = p.position;
+			quat apq = p.attitude;
+
+			vec3 aj1t = apq * (apt + j1.position);
+			quat aj1q = math::normalize (apq * j1.attitude);
+
+			vec3 aj2t = aj1q * (aj1t + j2.position);
+			quat aj2q = math::normalize (aj1q * j2.attitude);
+
+			draw_joint (apt, aj1t);
+			draw_joint (aj1t, aj2t);
+
+			glFlush ();
+
+			// ----------
 			//glFlush ();
 		}
 		

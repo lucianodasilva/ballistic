@@ -2,6 +2,7 @@
 #define _ballistic_math_h_
 
 #include "ballistic.math.vectors.h"
+#include "ballistic.math.h"
 
 #include <math.h>
 

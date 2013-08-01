@@ -6,21 +6,22 @@ namespace math {
 	const uint32 quat_t < T >::count = 4;
 	
 	template < class T >
-	quat_t < T >::quat_t () : x (T()), y (T()), z (T()), w (T()) {}
+	quat_t < T >::quat_t () : w (T()) {}
 	
 	template < class T >
-	quat_t < T >::quat_t ( T vx, T vy, T vz, T vw ) : x (vx), y (vy), z (vz), w (vw) {}
+	quat_t < T >::quat_t ( T vx, T vy, T vz, T vw ) : v (vx, vy, vz ), w (vw) {}
 	
 	template < class T >
-	quat_t < T >::quat_t ( const quat_t < T > & v ) 
-	: x (v.x), y (v.y), z (v.z), w (v.w) {}
+	quat_t < T >::quat_t (const vec3_t < T > & vl, T vw) : v (vl), w (vw) {}
+
+	template < class T >
+	quat_t < T >::quat_t ( const quat_t < T > & vl ) 
+	: v (vl.v), w (vl.w) {}
 	
 	template < class T >
-	quat_t < T > & quat_t < T >::operator = ( const quat_t < T > & v ) {
-		x = v.x;
-		y = v.y;
-		z = v.z;
-		w = v.w;
+	quat_t < T > & quat_t < T >::operator = ( const quat_t < T > & vl ) {
+		v = vl.v;
+		w = vl.w;
 		
 		return *this;
 	}
@@ -31,40 +32,47 @@ namespace math {
 	}
 	
 		template < class T >
-	quat_t < T > quat_t < T >::operator + ( const quat_t < T > & v ) const {
-		return quat_t ( x + v.x, y + v.y, z + v.z, w + v.w );
+	quat_t < T > quat_t < T >::operator + ( const quat_t < T > & vl ) const {
+		return quat_t ( v + vl.v, w + vl.w );
 	}
 
 	template < class T >
-	quat_t < T > quat_t < T >::operator * ( T v ) const {
-		return quat_t ( x * v, y * v, z * v, w * v);
+	quat_t < T > quat_t < T >::operator * ( T vl ) const {
+		return quat_t ( v * vl, w * vl);
 	}
 	
-	template < class t >
-	quat_t < T > quat_t < T >::operator * ( const quat_t < T > & v ) const {
+	template < class T >
+	quat_t < T > quat_t < T >::operator * ( const quat_t < T > & vl ) const {
 		return quat_t < T >
 		(
-			v.w * x + v.x * w + v.y * z - v.z * y,
-			v.w * y + v.y * w + v.z * x - v.x * z,
-			v.w * z + v.z * w + v.x * y - v.y * x,
-			v.w * w - v.x * x - v.y * y - v.z * z
+			vl.w * v.x + vl.v.x * w + vl.v.y * v.z - vl.v.z * v.y,
+			vl.w * v.y + vl.v.y * w + vl.v.z * v.x - vl.v.x * v.z,
+			vl.w * v.z + vl.v.z * w + vl.v.x * v.y - vl.v.y * v.x,
+			vl.w * w - vl.v.x * v.x - vl.v.y * v.y - vl.v.z * v.z
 		);
+
+		//vec3_t < T > t = math::cross (v, vl.v) * w;
+		//T _w = w * math::dot (v, vl.v);
 	}
 	
 	template < class T >
-	vec3_t < T > quat_t < T >::operator * ( const vec3_t < T > & v ) const {
-		vec3_t < T > qvec(x, y, z);
-		vec3_t < T > uv = math::cross (qvec, v);
-		vec3_t < T > uuv = math::cross (qvec, uv);
-		
-		uv *= (2.0f * w);
-		uuv *= 2.0f;
+	vec3_t < T > quat_t < T >::operator * ( const vec3_t < T > & vl ) const {
+		//vec3_t < T > qvec(x, y, z);
+		//vec3_t < T > uv = math::cross (qvec, v);
+		//vec3_t < T > uuv = math::cross (qvec, uv);
+		//
+		//uv *= (2.0f * w);
+		//uuv *= 2.0f;
+		//
+		//return v + uv + uuv;
+		//
 
-		return v + uv + uuv;
+		vec3_t < T > t = math::cross (v, vl) * T (2.0);
+		return vl + (t * w + math::cross (v, t));
 	}
 
 	template < class T >
-	quat_t < T > & quat_t < T >::operator += ( const quat_t < T > & v ) {
+	quat_t < T > & quat_t < T >::operator += ( const quat_t < T > & vl ) {
 		x += v.x;
 		y += v.y;
 		z += v.z;
@@ -74,7 +82,7 @@ namespace math {
 	}
 
 	template < class T >
-	quat_t < T > & quat_t < T >::operator *= ( T v ) {
+	quat_t < T > & quat_t < T >::operator *= ( T vl ) {
 		x *= v;
 		y *= v;
 		z *= v;
@@ -84,11 +92,11 @@ namespace math {
 	}
 
 	template < class T >
-	quat_t < T > & quat_t < T >::operator *= ( const quat_t < T > & v ) {
-		x = v.w * x + v.x * w + v.y * z - v.z * y;
-		y = v.w * y + v.y * w + v.z * x - v.x * z;
-		z = v.w * z + v.z * w + v.x * y - v.y * x;
-		w = v.w * w - v.x * x - v.y * y - v.z * z;
+	quat_t < T > & quat_t < T >::operator *= ( const quat_t < T > & vl ) {
+		v.x = vl.w * v.x + vl.v.x * w + vl.v.y * v.z - vl.v.z * v.y,
+		v.y = vl.w * v.y + vl.v.y * w + vl.v.z * v.x - vl.v.x * v.z,
+		v.z = vl.w * v.z + vl.v.z * w + vl.v.x * v.y - vl.v.y * v.x,
+		w	= vl.w * w - vl.v.x * v.x - vl.v.y * v.y - vl.v.z * v.z
 		
 		return *this;
 	}
@@ -115,5 +123,9 @@ namespace math {
 		);
 	}
 
+	template < class T >
+	quat_t < T > quat_t < T >::uconj () {
+		return quat_t < T > (-v, -w);
+	}
 }
 }
