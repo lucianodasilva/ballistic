@@ -44,6 +44,7 @@ namespace math {
 		
 		inline mat4_t < T > to_matrix () const;
 		inline quat_t < T > uconj ();
+		
 	};
 	
 }
