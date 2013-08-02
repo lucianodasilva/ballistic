@@ -6,9 +6,31 @@
 
 namespace ballistic {
 	namespace graphics {
-		
+
+		GLenum
+			_shader_program,
+			_vs_shader;
+
 		opengl_device::opengl_device () : _current_mesh (nullptr) {
 			glewInit ();
+
+			// enable shader program
+			_shader_program = glCreateProgram ();
+			_vs_shader = glCreateShader (GL_VERTEX_SHADER);
+			
+			std::string shader_source =
+				"void main (void) {"
+				"gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;"
+				"}"
+			;
+
+			const char * source_char_ptr = shader_source.c_str ();
+			int length = shader_source.length ();
+			
+			glShaderSource (_vs_shader, 1, (const GLchar **)&source_char_ptr, &length);
+			glCompileShader (_vs_shader);
+			glAttachShader (_shader_program, _vs_shader);
+			glLinkProgram (_shader_program);
 		}
 	
 		imaterial * opengl_device::create_material ()
@@ -158,6 +180,12 @@ namespace ballistic {
 			draw_joint (aj1t, aj2t);
 			draw_joint (aj2t, aj3t);
 			draw_joint (aj3t, aj4t);
+
+			glUseProgram (_shader_program);
+
+
+
+			glUseProgram (0);
 
 			glFlush ();
 			
