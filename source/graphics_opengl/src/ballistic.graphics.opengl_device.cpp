@@ -110,40 +110,58 @@ namespace ballistic {
 		{
 			// ----------
 			joint p = {
-				vec3 (0.0, .5, .0),
-				quat(vec3 (1.0, 1.0, 0.0), .0)
+				vec3 (.0, .0, .0),
+				math::normalize (quat (vec3 (1.0, 1.0, 0.0), .0))
 			};
 
 			joint j1 = {
-				vec3 (0.0, -.25, .0),
-				quat (vec3 (0.0, 1.0, .0), .0)
+				vec3 (0.0, -.2, .0),
+				quat ()
 			};
 
 			joint j2 = {
-				vec3 (.0, -.25, .0),
-				quat (vec3 (.0, 1.0, .0), .0)
+				vec3 (.0, -.2, .0),
+				quat ()
 			};
 
-			vec3 apt = p.position;
-			quat apq = math::normalize (
-				quat (
-					vec3 (cos (angle), sin (angle), .0),
-					  0.0
-				)
+			joint j3 = {
+				vec3 (.0, -.2, .0),
+				quat ()
+			};
+
+			joint j4 = {
+				vec3 (.0, -.2, .0),
+				quat ()
+			};
+
+			quat rotation = quat::from_axis (
+				vec3 (.0, .0, 1.0),
+				angle
 			);
 
-			vec3 aj1t = apq * (apt + j1.position);
-			quat aj1q = apq * j1.attitude;
+			vec3 apt = p.position;
+			quat apq = rotation;
 
-			vec3 aj2t = aj1q * (aj1t + j2.position);
-			quat aj2q = aj1q * j2.attitude;
+			vec3 aj1t = apt + (apq * j1.position);
+			quat aj1q = apq * rotation;
+
+			vec3 aj2t = aj1t + (aj1q * j2.position);
+			quat aj2q = aj1q * rotation;
+
+			vec3 aj3t = aj2t + (aj2q * j3.position);
+			quat aj3q = aj2q * rotation;
+
+			vec3 aj4t = aj3t + (aj3q * j4.position);
+			quat aj4q = aj3q * rotation;
 
 			draw_joint (apt, aj1t);
 			draw_joint (aj1t, aj2t);
+			draw_joint (aj2t, aj3t);
+			draw_joint (aj3t, aj4t);
 
 			glFlush ();
 			
-			angle += 0.0005;
+			angle += 0.00025;
 
 			// ----------
 			//glFlush ();

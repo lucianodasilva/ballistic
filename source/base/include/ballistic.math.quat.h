@@ -44,6 +44,8 @@ namespace math {
 		
 		inline mat4_t < T > to_matrix () const;
 		inline quat_t < T > uconj ();
+
+		static inline quat_t < T > from_axis (const vec3_t < T > & axis, T angle);
 		
 	};
 	

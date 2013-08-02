@@ -122,7 +122,7 @@ struct render_bucket {
 
 int main ( int argc, char ** argv) {
 
-	_frontend = create_frontend (point ( 400, 320));
+	_frontend = create_frontend (point ( 300, 300));
 	_frontend->create ();
 	_frontend->show ();
 

@@ -31,7 +31,7 @@ namespace math {
 		return &data [0];
 	}
 	
-		template < class T >
+	template < class T >
 	quat_t < T > quat_t < T >::operator + ( const quat_t < T > & vl ) const {
 		return quat_t ( v + vl.v, w + vl.w );
 	}
@@ -43,7 +43,6 @@ namespace math {
 	
 	template < class T >
 	quat_t < T > quat_t < T >::operator * ( const quat_t < T > & vl ) const {
-		/*
 		return quat_t < T >
 		(
 			vl.w * v.x + vl.v.x * w + vl.v.y * v.z - vl.v.z * v.y,
@@ -51,17 +50,16 @@ namespace math {
 			vl.w * v.z + vl.v.z * w + vl.v.x * v.y - vl.v.y * v.x,
 			vl.w * w - vl.v.x * v.x - vl.v.y * v.y - vl.v.z * v.z
 		);
-		*/
 		
-		return quat_t < T > (
-			math::cross (v, vl.v) + (v * vl.w) + (vl.v * w),
-			w * vl.w - math::dot (v, vl.v)
-		);
+		//return quat_t < T > (
+		//	math::cross (v, vl.v) + (v * vl.w) + (vl.v * w),
+		//	w * vl.w - math::dot (v, vl.v)
+		//);
 	}
 	
 	template < class T >
 	vec3_t < T > quat_t < T >::operator * ( const vec3_t < T > & vl ) const {
-		vec3_t < T > t = math::cross (v, vl) * T (2.0);
+		vec3_t < T > t = math::cross (v, vl) * T (2);
 		return vl + (t * w + math::cross (v, t));
 		
 		//vec3_t < T > t = math::cross (v, vl) + (vl * w);
@@ -86,44 +84,59 @@ namespace math {
 
 	template < class T >
 	quat_t < T > & quat_t < T >::operator *= ( const quat_t < T > & vl ) {
-	/*
+	
 		v.x = vl.w * v.x + vl.v.x * w + vl.v.y * v.z - vl.v.z * v.y;
 		v.y = vl.w * v.y + vl.v.y * w + vl.v.z * v.x - vl.v.x * v.z;
 		v.z = vl.w * v.z + vl.v.z * w + vl.v.x * v.y - vl.v.y * v.x;
 		w	= vl.w * w - vl.v.x * v.x - vl.v.y * v.y - vl.v.z * v.z;
-	*/
+	
 
-		v = math::cross (v, vl.v) + (v * vl.w) + (vl.v * w);
-		w = w * vl.w - math::dot (v, vl.v);
+		//v = math::cross (v, vl.v) + (v * vl.w) + (vl.v * w);
+		//w = w * vl.w - math::dot (v, vl.v);
 			
 		return *this;
 	}
 	
 	template < class T >
 	mat4_t < T > quat_t < T >::to_matrix () const {
+
 		return mat4_t < T > (
-			(1.0F - (2.0F * ((v.y * v.y) + (v.z * v.z)))),
-			(2.0F * ((v.x * v.y) - (v.z * w))),
-			(2.0F * ((v.x * v.z) + (v.y * w))),
-			0.0F,
-			(2.0F * ((v.x * v.y) + (v.z * w))),
-			(1.0F - (2.0F * ((v.x * v.x) + (v.z * v.z)))),
-			(2.0F * ((v.y * v.z) - (v.x * w))),
-			0.0F,
-			(2.0F * ((v.x * v.z) - (v.y * w))),
-			(2.0F * ((v.y * v.z) + (v.x * w))),
-			(1.0F - (2.0F * ((v.x * v.x) + (v.y * v.y)))),
-			0.0F,
-			0.0F,
-			0.0F,
-			0.0F,
-			1.0F
+			(T (1) - (T(2) * ((v.y * v.y) + (v.z * v.z)))),
+			(T (2) * ((v.x * v.y) - (v.z * w))),
+			(T (2) * ((v.x * v.z) + (v.y * w))),
+			 T(0),
+			(T(2) * ((v.x * v.y) + (v.z * w))),
+			(T(1) - (T(2) * ((v.x * v.x) + (v.z * v.z)))),
+			(T(2) * ((v.y * v.z) - (v.x * w))),
+			 T(0),
+			(T(2) * ((v.x * v.z) - (v.y * w))),
+			(T(2) * ((v.y * v.z) + (v.x * w))),
+			(T(1) - (T(0) * ((v.x * v.x) + (v.y * v.y)))),
+			 T(0),
+			 T(0),
+			 T(0),
+			 T(0),
+			 T(1)
 		);
 	}
 
 	template < class T >
 	quat_t < T > quat_t < T >::uconj () {
-		return quat_t < T > (-v, -w);
+		return quat_t < T > (vec3_t < T > (-v.x, -v.y, -v.z), w);
 	}
+
+	template < class T >
+	quat_t < T > quat_t < T >::from_axis (const vec3_t < T > & axis, T angle) {
+		
+		T half_angle = T (0.5) * angle;
+		T sn = sin (half_angle);
+
+		return quat_t < T > (
+			axis * sn,
+			T(cos (half_angle))
+		);
+
+	}
+
 }
 }
