@@ -143,7 +143,7 @@ namespace ballistic {
 
 			glFlush ();
 			
-			angle += 0.0001;
+			angle += 0.0005;
 
 			// ----------
 			//glFlush ();

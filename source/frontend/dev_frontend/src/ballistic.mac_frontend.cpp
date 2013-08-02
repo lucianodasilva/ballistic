@@ -12,6 +12,7 @@ namespace ballistic {
 		void frontend::update_frame(){
 			_game->frame ();
 			glutSwapBuffers();
+			glutPostRedisplay ();
 		}
 
 		point frontend::get_client_size () { return _window_client_size; }
