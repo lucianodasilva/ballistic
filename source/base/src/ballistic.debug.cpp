@@ -21,11 +21,6 @@ namespace ballistic {
 		_frontends.push_back (frontend);
 	}
 
-	debug_service::message debug_service::print () {
-		//warning: works only with rvo
-		return message ();
-	}
-
 	void debug_service::print (const string & message) {
 		for (debug_service::idebug_frontend * frontend : _frontends)
 			frontend->print (message);

@@ -184,14 +184,14 @@ namespace ballistic {
 			XMLDocument document;
 
 			if (document.LoadStream (source, length)) {
-				debug_error ("Failed to load xml package file from: " << source);
+				debug_error ("Failed to load xml package file");
 				return false;
 			}
 			
 			auto root = document.FirstChildElement("package");
 			
 			if (!root) {
-				debug_error ("Failed to find \"package\" root node in package xml file: " << source);
+				debug_error ("Failed to find \"package\" root node in package xml file");
 				return false;
 			}
 			

@@ -27,7 +27,7 @@ namespace ballistic {
 			char *		dummy_v;
 			
 			glutInit ( &dummy_c, &dummy_v );
-			glutInitDisplayMode  (GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+			glutInitDisplayMode  (GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_3_2_CORE_PROFILE );
 			glutInitWindowSize(_window_client_size.x, _window_client_size.y);
 			return true;
 		}

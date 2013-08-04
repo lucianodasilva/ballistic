@@ -121,6 +121,8 @@ struct render_bucket {
 };
 
 int main ( int argc, char ** argv) {
+	
+	debug_init();
 
 	_frontend = create_frontend (point ( 300, 300));
 	_frontend->create ();

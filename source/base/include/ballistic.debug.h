@@ -49,8 +49,6 @@ namespace ballistic {
 
 		static void register_frontend (idebug_frontend * frontend);
 
-		static message print ();
-
 		static void print (const string & message);
 
 	};
@@ -69,8 +67,8 @@ namespace ballistic {
 }
 
 #	define debug_init() ballistic::debug_service::initialize ()
-#	define debug_warn(x) ballistic::debug_service::print () << "warning: "	<< x
-#	define debug_error(x) ballistic::debug_service::print () << "error: " << x
+#	define debug_warn(x) {ballistic::debug_service::message () << "warning: " << x;}
+#	define debug_error(x) {ballistic::debug_service::message () << "error: " << x;}
 #	define debug_add_frontend(x) ballistic::debug_service::register_frontend (x)
 
 #else

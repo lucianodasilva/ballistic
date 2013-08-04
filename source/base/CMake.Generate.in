@@ -44,4 +44,8 @@ const real real_one	= real (1);
 */
 #define ${CMAKE_DEFINED_ENDIANESS}
 
+#ifndef NDEBUG
+#	define BALLISTIC_DEBUG
+#endif
+
 #endif
