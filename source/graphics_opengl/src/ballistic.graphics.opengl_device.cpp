@@ -130,6 +130,7 @@ namespace ballistic {
 			_index_buffer_id;
 
 		opengl_device::opengl_device () : _current_mesh (nullptr) {
+			glewExperimental = true;
 			glewInit ();
 			glDisable(GL_CULL_FACE);
 			
@@ -341,7 +342,8 @@ namespace ballistic {
 			glUseProgram (_shader_program);
 			
 			mat4 t;
-			mat4 proj = camera::make_projection(-1., 1., 1., -1., .0, 1000.0);
+			//mat4 proj = camera::make_projection(-1., 1., 1., -1., .0, 1000.0);
+			mat4 proj = create_ortho(-1., 1., -1., 1., .0, 1000.);
 			
 			glUniformMatrix4fv (_model_location, 1, GL_FALSE, &t.data[0]);
 			glUniformMatrix4fv (_proj_location, 1, GL_FALSE, &proj.data[0]);
