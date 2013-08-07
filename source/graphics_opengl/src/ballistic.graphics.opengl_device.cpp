@@ -84,13 +84,35 @@ namespace ballistic {
 			{{.1, .8, .0},{.0,.0}, .0, 4, 0}
 		};
 		 */
+
+		string gl_error_to_string ( GLenum error ) {
+#			define auto_case(x) \
+				case x: \
+					return #x;
+
+
+			switch (error) {
+				auto_case (GL_INVALID_ENUM)
+				auto_case (GL_INVALID_VALUE)
+				auto_case (GL_INVALID_OPERATION)
+				auto_case (GL_INVALID_FRAMEBUFFER_OPERATION)
+				auto_case (GL_OUT_OF_MEMORY)
+				auto_case (GL_STACK_UNDERFLOW)
+				auto_case (GL_STACK_OVERFLOW)
+				auto_case (GL_NO_ERROR)
+			default:
+				return "Unknown error code!";
+			};
+
+#			undef auto_case
+		}
 		
 #		define gl_eval(x) \
 			x; \
 			{ \
 				GLenum error = glGetError (); \
 				if (error != GL_NO_ERROR) \
-					debug_warn ("GL Call [" << #x << "] Failed at line " << __LINE__ << " failed with code: " << error ); \
+					debug_warn ("GL Call [" << #x << "] Failed at line " << __LINE__ << " failed with " << gl_error_to_string (error) ); \
 			}
 		
 #		define gl_shader(x) \
@@ -102,13 +124,13 @@ namespace ballistic {
 			vec4 color;
 		};
 		
-		cvec vec_buffer [] {
-			{{-1., -1., .0}, {1., .0, .0, 1.}},
-			{{1., -1., .0}, {.0, 1., .0, 1.}},
-			{{.0, 1. ,.0}, {.0, .0, 1., 1.}}
+		cvec vec_buffer [] = {
+			{vec3 (-1., -1., .0),	vec4 (1., .0, .0, 1.)},
+			{vec3 (1., -1., .0),	vec4 (.0, 1., .0, 1.)},
+			{vec3 (.0, 1. ,.0),		vec4 (.0, .0, 1., 1.)}
 		};
 		
-		uint16 index_buffer [] {
+		uint16 index_buffer [] = {
 			0, 1, 2
 		};
 		
@@ -229,38 +251,30 @@ namespace ballistic {
 			_vertex_program = glCreateShader (GL_VERTEX_SHADER);
 			_pixel_program = glCreateShader (GL_FRAGMENT_SHADER);
 			
-			std::string vertex_source =
-			"#version 330 core \n"
-			"layout (location = 0) in vec3 in_position;"
-			"layout (location = 1) in vec4 in_color;"
-			""
-			"out vec4 out_color;"
-			""
-			"void main () {"
-			"	gl_Position.xyz = in_position;"
-			"	gl_Position.w = 1.0;"
-			"	out_color = in_color;"
-			"}"
-			"";
-			
-			vertex_source = gl_shader (
-				in vec4		in_color;
-				out vec4	out_color;
-			
+			std::string vertex_source = 
+			gl_shader (
+				layout (location = 0) in vec3 in_position;
+				layout (location = 1) in vec4 in_color;
+
+				out vec4 var_color;
+
 				void main () {
-					out_color = in_color;
+					gl_Position.xyz = in_position;
+					gl_Position.w = 1.0;
+
+					var_color = in_color;
 				}
 			);
 			
 			std::string frag_source =
-			"#version 330 core \n"
-			"in vec4 in_color;"
-			"out vec4 out_color;"
-			""
-			"void main () {"
-			"	out_color = in_color;"
-			"}"
-			"";
+			gl_shader (
+				in vec4		var_color;
+				out vec4	out_color;
+
+				void main () {
+					out_color = var_color;
+				}
+			);
 			
 			if (!load_shader (vertex_source, _vertex_program))
 				return;
@@ -272,14 +286,29 @@ namespace ballistic {
 			gl_eval (glAttachShader (_shader_program, _pixel_program));
 			
 			gl_eval (glLinkProgram (_shader_program));
+
+			GLint link_state;
+			glGetProgramiv (_shader_program, GL_LINK_STATUS, &link_state);
+			if (link_state == GL_FALSE) {
+				int32
+					info_length,
+					writen_chars;
+					
+				char * info_log;
 			
+				glGetProgramiv (_shader_program, GL_INFO_LOG_LENGTH, &info_length);
+				info_log = new char [info_length];
+				
+				glGetProgramInfoLog (_shader_program, info_length, &writen_chars, info_log);
+				
+				string error (info_log, writen_chars);
+				debug_error("shader link error: " << error);
+				
+				delete info_log;
+			}
+	
 			gl_eval (glDeleteShader (_vertex_program));
 			gl_eval (glDeleteShader (_pixel_program));
-			
-			GLenum error = glGetError ();
-			if (error != GL_NO_ERROR) {
-				debug_error ("GL Initialization Error: " << error);
-			}
 			
 //			glDisable(GL_CULL_FACE);
 //			
@@ -485,7 +514,7 @@ namespace ballistic {
 		void opengl_device::end_frame ()
 		{
 			gl_eval(glUseProgram (_shader_program));
-			
+
 			gl_eval(glBindVertexArray (_vertex_array_id));
 			
 			gl_eval(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0));
