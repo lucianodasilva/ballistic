@@ -93,6 +93,10 @@ namespace ballistic {
 					debug_warn ("GL Call [" << #x << "] Failed at line " << __LINE__ << " failed with code: " << error ); \
 			}
 		
+#		define gl_shader(x) \
+			"#version 330 core\n" \
+			#x;
+		
 		struct cvec {
 			vec3 position;
 			vec4 color;
@@ -238,6 +242,15 @@ namespace ballistic {
 			"	out_color = in_color;"
 			"}"
 			"";
+			
+			vertex_source = gl_shader (
+				in vec4		in_color;
+				out vec4	out_color;
+			
+				void main () {
+					out_color = in_color;
+				}
+			);
 			
 			std::string frag_source =
 			"#version 330 core \n"
