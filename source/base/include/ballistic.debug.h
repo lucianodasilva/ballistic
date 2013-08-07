@@ -67,12 +67,14 @@ namespace ballistic {
 }
 
 #	define debug_init() ballistic::debug_service::initialize ()
+#	define debug_print(x) {ballistic::debug_service::message () << x;}
 #	define debug_warn(x) {ballistic::debug_service::message () << "warning: " << x;}
 #	define debug_error(x) {ballistic::debug_service::message () << "error: " << x;}
 #	define debug_add_frontend(x) ballistic::debug_service::register_frontend (x)
 
 #else
 #	define debug_init()
+#	define debug_print(x)
 #	define debug_warn(x)
 #	define debug_error(x)
 #	define debug_add_frontend(x)

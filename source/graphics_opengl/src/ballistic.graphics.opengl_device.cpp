@@ -1,7 +1,7 @@
 #include "ballistic.graphics.opengl_device.h"
 
 #include <GL/glew.h>
-
+#include "ballistic.graphics.opengl_debug.h"
 #include "ballistic.graphics.opengl_mesh.h"
 
 namespace ballistic {
@@ -84,54 +84,26 @@ namespace ballistic {
 			{{.1, .8, .0},{.0,.0}, .0, 4, 0}
 		};
 		 */
-
-		string gl_error_to_string ( GLenum error ) {
-#			define auto_case(x) \
-				case x: \
-					return #x;
-
-
-			switch (error) {
-				auto_case (GL_INVALID_ENUM)
-				auto_case (GL_INVALID_VALUE)
-				auto_case (GL_INVALID_OPERATION)
-				auto_case (GL_INVALID_FRAMEBUFFER_OPERATION)
-				auto_case (GL_OUT_OF_MEMORY)
-				auto_case (GL_STACK_UNDERFLOW)
-				auto_case (GL_STACK_OVERFLOW)
-				auto_case (GL_NO_ERROR)
-			default:
-				return "Unknown error code!";
-			};
-
-#			undef auto_case
-		}
-		
-#		define gl_eval(x) \
-			x; \
-			{ \
-				GLenum error = glGetError (); \
-				if (error != GL_NO_ERROR) \
-					debug_warn ("GL Call [" << #x << "] Failed at line " << __LINE__ << " failed with " << gl_error_to_string (error) ); \
-			}
-		
-#		define gl_shader(x) \
-			"#version 330 core\n" \
-			#x;
 		
 		struct cvec {
-			vec3 position;
-			vec4 color;
+			vec3	position;
+			uint16	b1;
+			uint16	b2;
+			real	bias;
+			vec4	color;
 		};
 		
 		cvec vec_buffer [] = {
-			{vec3 (-1., -1., .0),	vec4 (1., .0, .0, 1.)},
-			{vec3 (1., -1., .0),	vec4 (.0, 1., .0, 1.)},
-			{vec3 (.0, 1. ,.0),		vec4 (.0, .0, 1., 1.)}
+			// position				| bone 1 | bone 2 |	bone bias | color
+			{vec3 (-.1, -.1, .0)	, 0		 , 1	  , .0		  , vec4 (1., .0, .0, 1.)},
+			{vec3 (.1, -.1, .0)	    , 0		 , 1	  , .0		  , vec4 (.0, 1., .0, 1.)},
+			{vec3 (-.1, .1, .0)	    , 0		 , 1	  , 1.0		  , vec4 (.0, .0, 1., 1.)},
+			{vec3 (.1, .1, .0)	    , 0		 , 1	  , 1.0		  , vec4 (1., 1., .0, 1.)}
 		};
 		
 		uint16 index_buffer [] = {
-			0, 1, 2
+			0, 1, 2,
+			3, 2, 1
 		};
 		
 		uint32
@@ -142,7 +114,7 @@ namespace ballistic {
 			_vertex_program,
 			_pixel_program;
 		
-		bool load_shader ( const std::string & source, uint32 id ) {
+		void load_shader ( const std::string & source, uint32 id ) {
 			const char * source_ptr = source.c_str ();
 			
 			int32 length = source.length ();
@@ -150,33 +122,12 @@ namespace ballistic {
 			
 			glCompileShader (id);
 			
-			GLint compiler_state;
-			glGetShaderiv (id, GL_COMPILE_STATUS, &compiler_state);
-			if (compiler_state == GL_FALSE) {
-				int32
-					info_length,
-					writen_chars;
-					
-				char * info_log;
-			
-				glGetShaderiv (id, GL_INFO_LOG_LENGTH, &info_length);
-				info_log = new char [info_length];
-				
-				glGetShaderInfoLog (id, info_length, &writen_chars, info_log);
-				
-				string error (info_log, writen_chars);
-				debug_error("shader compile error: " << error);
-				
-				delete info_log;
-				return false;
-			}
-			
-			return true;
+			gl_eval_shader_compile (id);
 		}
 
 		opengl_device::opengl_device () : _current_mesh (nullptr) {
+
 			glewExperimental = true;
-			
 			GLenum init_error = glewInit();
 			if (init_error != GLEW_OK) {
 				debug_error ("glew initialization error: " << glewGetErrorString(init_error));
@@ -185,8 +136,7 @@ namespace ballistic {
 			glGetError (); // reset errors
 			
 			string gl_str_version = (const char *) glGetString (GL_VERSION);
-			
-			debug_warn ("OpenGL version: " << gl_str_version);
+			debug_print ("OpenGL version: " << gl_str_version);
 			
 			_vertex_buffer_id = 0;
 			_index_buffer_id = 0;
@@ -194,12 +144,14 @@ namespace ballistic {
 			// Create vertex buffer
 			gl_eval (glGenBuffers (1, &_vertex_buffer_id));
 			gl_eval (glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id));
-			gl_eval (glBufferData( GL_ARRAY_BUFFER, 4 * 7 * 3, (GLvoid *)&vec_buffer [0], GL_STATIC_DRAW));
+
+			uint32 vertex_buffer_size = sizeof (vec_buffer);
+			gl_eval (glBufferData( GL_ARRAY_BUFFER, vertex_buffer_size, (GLvoid *)&vec_buffer [0], GL_STATIC_DRAW));
 			
 			// Create index buffer
 			gl_eval (glGenBuffers (1, &_index_buffer_id));
 			gl_eval (glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id));
-			gl_eval (glBufferData (GL_ELEMENT_ARRAY_BUFFER, 2 * 3, (GLvoid *)&index_buffer, GL_STATIC_DRAW));
+			gl_eval (glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof (index_buffer), (GLvoid *)&index_buffer, GL_STATIC_DRAW));
 			
 			// unbind buffers
 			gl_eval(glBindBuffer (GL_ARRAY_BUFFER, 0));
@@ -218,7 +170,7 @@ namespace ballistic {
 				   3,                  // size
 				   GL_FLOAT,           // type
 				   GL_FALSE,           // normalized?
-				   4 * 7,                  // stride
+				   sizeof (cvec),                  // stride
 				   (void*)0            // array buffer offset
 				);
 			);
@@ -231,8 +183,8 @@ namespace ballistic {
 					4,                  // size
 					GL_FLOAT,           // type
 					GL_FALSE,           // normalized?
-					4 * 7,              // stride
-					(void*)(4 * 3)      // array buffer offset
+					sizeof (cvec),              // stride
+					(void*)(offsetof (cvec, color))      // array buffer offset
 				);
 			);
 			gl_eval(glEnableVertexAttribArray (1));
@@ -252,7 +204,7 @@ namespace ballistic {
 			_pixel_program = glCreateShader (GL_FRAGMENT_SHADER);
 			
 			std::string vertex_source = 
-			gl_shader (
+			gl_shader_source (
 				layout (location = 0) in vec3 in_position;
 				layout (location = 1) in vec4 in_color;
 
@@ -267,7 +219,7 @@ namespace ballistic {
 			);
 			
 			std::string frag_source =
-			gl_shader (
+			gl_shader_source (
 				in vec4		var_color;
 				out vec4	out_color;
 
@@ -276,11 +228,9 @@ namespace ballistic {
 				}
 			);
 			
-			if (!load_shader (vertex_source, _vertex_program))
-				return;
+			load_shader (vertex_source, _vertex_program);
 			
-			if (!load_shader (frag_source, _pixel_program))
-				return;
+			load_shader (frag_source, _pixel_program);
 			
 			gl_eval (glAttachShader (_shader_program, _vertex_program));
 			gl_eval (glAttachShader (_shader_program, _pixel_program));
@@ -309,6 +259,9 @@ namespace ballistic {
 	
 			gl_eval (glDeleteShader (_vertex_program));
 			gl_eval (glDeleteShader (_pixel_program));
+
+			// debug initialize
+			opengl_debug::initialize ();
 			
 //			glDisable(GL_CULL_FACE);
 //			
@@ -493,12 +446,6 @@ namespace ballistic {
 			glClear(GL_DEPTH_BUFFER_BIT);			
 		}
 
-//		void draw_line (const vec3 & v1, const vec3 & v2) {
-//			glBegin (GL_LINES);
-//			glVertex3f (v1.x, v1.y, v1.z);
-//			glVertex3f (v2.x, v2.y, v2.z);
-//			glEnd ();
-//		}
 //
 //		void draw_joint (const joint & parent, const joint & child ) {
 //			glColor3f (1., .0, .0);
@@ -513,13 +460,15 @@ namespace ballistic {
 		
 		void opengl_device::end_frame ()
 		{
+			
 			gl_eval(glUseProgram (_shader_program));
 
 			gl_eval(glBindVertexArray (_vertex_array_id));
 			
-			gl_eval(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0));
+			gl_eval(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
 			
 			gl_eval(glBindVertexArray (0));
+			
 
 			//glBindBuffer (GL_ARRAY_BUFFER, 0);
 			//glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
