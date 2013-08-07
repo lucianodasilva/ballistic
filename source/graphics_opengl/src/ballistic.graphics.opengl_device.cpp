@@ -7,60 +7,60 @@
 namespace ballistic {
 	namespace graphics {
 
-		GLenum
-			_shader_program,
-			_vs_shader,
-			_ps_shader;
-		
-		struct joint {
-			vec3 p;
-			quat r;
-			
-			inline joint to_absolute ( const joint & parent ) {
-				return joint {
-					parent.p + (parent.r * p),
-					parent.r * r
-				};
-			}
-		};
-		
-		struct skinned_vector {
-			vec3 position;
-			vec2 uv;
-			real bias;
-			uint16 bone_a;
-			uint16 bone_b;
-		};
-		
-		real angle = 0.0;
-		real angle_inc = 0.0005;
-		
-		GLint
-			_proj_location,
-			_model_location;
-		
-		joint bones [] = {
-			{
-				vec3 (.0, .0, .0),
-				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
-				vec3 (.0, .2, .0),
-				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
-				vec3 (.0, .2, .0),
-				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
-				vec3 (.0, .2, .0),
-				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
-				vec3 (.0, .2, .0),
-				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-		};
+//		GLenum
+//			_shader_program,
+//			_vs_shader,
+//			_ps_shader;
+//		
+//		struct joint {
+//			vec3 p;
+//			quat r;
+//			
+//			inline joint to_absolute ( const joint & parent ) {
+//				return joint {
+//					parent.p + (parent.r * p),
+//					parent.r * r
+//				};
+//			}
+//		};
+//		
+//		struct skinned_vector {
+//			vec3 position;
+//			vec2 uv;
+//			real bias;
+//			uint16 bone_a;
+//			uint16 bone_b;
+//		};
+//		
+//		real angle = 0.0;
+//		real angle_inc = 0.0005;
+//		
+//		GLint
+//			_proj_location,
+//			_model_location;
+//		
+//		joint bones [] = {
+//			{
+//				vec3 (.0, .0, .0),
+//				quat::from_axis(vec3 (.0, .0, 1), .0)
+//			},
+//			{
+//				vec3 (.0, .2, .0),
+//				quat::from_axis(vec3 (.0, .0, 1), .0)
+//			},
+//			{
+//				vec3 (.0, .2, .0),
+//				quat::from_axis(vec3 (.0, .0, 1), .0)
+//			},
+//			{
+//				vec3 (.0, .2, .0),
+//				quat::from_axis(vec3 (.0, .0, 1), .0)
+//			},
+//			{
+//				vec3 (.0, .2, .0),
+//				quat::from_axis(vec3 (.0, .0, 1), .0)
+//			},
+//		};
 		
 		/*
 		skinned_vector skin_buffer [] {
@@ -85,161 +85,297 @@ namespace ballistic {
 		};
 		 */
 		
-		vec3 vec_buffer [] {
-			{-.1, .0, .0},
-			{.1, .0, .0},
-			{-.1, .19, .0},
-			{.1, .19, .0},
-			{-.1, .21, .0},
-			{.1, .21, .0},
-			{-.1, .39, .0},
-			{.1, .39, .0},
-			{-.1, .41, .0},
-			{.1, .41, .0},
-			{-.1, .59, .0},
-			{.1, .59, .0},
-			{-.1, .61, .0},
-			{.1, .61, .0},
-			{-.1, .79, .0},
-			{.1, .79, .0},
-			{-.1, .8, .0},
-			{.1, .8, .0}
+#		define gl_eval(x) \
+			x; \
+			{ \
+				GLenum error = glGetError (); \
+				if (error != GL_NO_ERROR) \
+					debug_warn ("GL Call [" << #x << "] Failed at line " << __LINE__ << " failed with code: " << error ); \
+			}
+		
+		struct cvec {
+			vec3 position;
+			vec4 color;
 		};
 		
-		uint16 skin_index_buffer [] {
-			0, 1, 3,
-			0, 3, 2,
-			2, 3, 5,
-			2, 5, 4,
-			4, 5, 7,
-			4, 7, 6,
-			6, 7, 9,
-			6, 9, 8,
-			8, 9, 11,
-			8, 11, 10,
-			10, 11, 13,
-			10, 13, 12,
-			12, 13, 15,
-			12, 15, 14,
-			14, 15, 17,
-			14, 17, 16
+		cvec vec_buffer [] {
+			{{-1., -1., .0}, {1., .0, .0, 1.}},
+			{{1., -1., .0}, {.0, 1., .0, 1.}},
+			{{.0, 1. ,.0}, {.0, .0, 1., 1.}}
+		};
+		
+		uint16 index_buffer [] {
+			0, 1, 2
 		};
 		
 		uint32
+			_vertex_array_id,
 			_vertex_buffer_id,
-			_index_buffer_id;
-
-		opengl_device::opengl_device () : _current_mesh (nullptr) {
-			glewExperimental = true;
-			glewInit ();
-			glDisable(GL_CULL_FACE);
+			_index_buffer_id,
+			_shader_program,
+			_vertex_program,
+			_pixel_program;
+		
+		bool load_shader ( const std::string & source, uint32 id ) {
+			const char * source_ptr = source.c_str ();
 			
-			// setup
-			glGenBuffers (1, &_vertex_buffer_id);
-			glGenBuffers (1, &_index_buffer_id);
+			int32 length = source.length ();
+			glShaderSource (id, 1, (const GLchar **)&source_ptr, &length);
 			
-			// Interleaved vertex buffer
-			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
-			glBufferData (GL_ARRAY_BUFFER, sizeof (vec_buffer), (GLvoid *)&vec_buffer[0], GL_STATIC_DRAW);
+			glCompileShader (id);
 			
-			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
-			glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof (skin_index_buffer), (GLvoid *)&skin_index_buffer[0], GL_STATIC_DRAW);
-
-			// enable shader program
-			_shader_program = glCreateProgram ();
-			_vs_shader = glCreateShader (GL_VERTEX_SHADER);
-			_ps_shader = glCreateShader (GL_FRAGMENT_SHADER);
-			
-			std::string vertex_source =
-				"#version 330 core\n"
-				"layout (location = 0) in vec3 in_vertex;"
-				""
-				"uniform mat4 in_projection_matrix;"
-				"uniform mat4 in_modelview_matrix;"
-				""
-				"void main (void) {"
-				"	vec4 v_pos = in_projection_matrix * in_modelview_matrix * vec4(in_vertex, 1.0);"
-				"	v_pos.x += 0.2;"
-				"	gl_Position = v_pos;"
-				"}"
-			;
-			
-			std::string pixel_source =
-			"#version 330 core\n"
-			"out vec4 out_color;"
-			""
-			"void main (void) {"
-			"	out_color = vec4 (0.0, 1.0, 0.0, 1.0);"
-			"}"
-			;
-
-			const char * source_char_ptr = vertex_source.c_str ();
-			int vertex_length = vertex_source.length ();
-			
-			glShaderSource (_vs_shader, 1, (const GLchar **)&source_char_ptr, &vertex_length);
-			
-			source_char_ptr = pixel_source.c_str ();
-			int pixel_length = pixel_source.length ();
-			
-			glShaderSource (_ps_shader, 1, (const GLchar **)&source_char_ptr, &pixel_length);
-			
-			glCompileShader (_vs_shader);
-			glCompileShader (_ps_shader);
 			GLint compiler_state;
-			
-			glGetShaderiv (_vs_shader, GL_COMPILE_STATUS, &compiler_state);
+			glGetShaderiv (id, GL_COMPILE_STATUS, &compiler_state);
 			if (compiler_state == GL_FALSE) {
-				
 				int32
 					info_length,
 					writen_chars;
-				
+					
 				char * info_log;
-				
-				glGetShaderiv (_vs_shader, GL_INFO_LOG_LENGTH, &info_length);
+			
+				glGetShaderiv (id, GL_INFO_LOG_LENGTH, &info_length);
 				info_log = new char [info_length];
 				
-				glGetShaderInfoLog (_vs_shader, info_length, &writen_chars, info_log);
+				glGetShaderInfoLog (id, info_length, &writen_chars, info_log);
 				
 				string error (info_log, writen_chars);
-				
-				debug_error("vertex shader compile error: " << error);
-				
-				delete info_log;
-			}
-			
-			glGetShaderiv (_ps_shader, GL_COMPILE_STATUS, &compiler_state);
-			if (compiler_state == GL_FALSE) {
-				
-				int32
-				info_length,
-				writen_chars;
-				
-				char * info_log;
-				
-				glGetShaderiv (_ps_shader, GL_INFO_LOG_LENGTH, &info_length);
-				info_log = new char [info_length];
-				
-				glGetShaderInfoLog (_ps_shader, info_length, &writen_chars, info_log);
-				
-				string error (info_log, writen_chars);
-				
-				debug_error("pixel shader compile error: " << error);
+				debug_error("shader compile error: " << error);
 				
 				delete info_log;
+				return false;
 			}
 			
-			glAttachShader (_shader_program, _vs_shader);
-			glAttachShader (_shader_program, _ps_shader);
+			return true;
+		}
+
+		opengl_device::opengl_device () : _current_mesh (nullptr) {
+			glewExperimental = true;
 			
-			glBindAttribLocation (_shader_program, 0, "in_vertex");
+			GLenum init_error = glewInit();
+			if (init_error != GLEW_OK) {
+				debug_error ("glew initialization error: " << glewGetErrorString(init_error));
+			}
 			
-			glLinkProgram (_shader_program);
+			glGetError (); // reset errors
 			
-			_proj_location = glGetUniformLocation (_shader_program, "in_projection_matrix");
-			_model_location = glGetUniformLocation (_shader_program, "in_modelview_matrix");
+			string gl_str_version = (const char *) glGetString (GL_VERSION);
 			
-			glUseProgram (_shader_program);
+			debug_warn ("OpenGL version: " << gl_str_version);
+			
+			_vertex_buffer_id = 0;
+			_index_buffer_id = 0;
+			
+			// Create vertex buffer
+			gl_eval (glGenBuffers (1, &_vertex_buffer_id));
+			gl_eval (glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id));
+			gl_eval (glBufferData( GL_ARRAY_BUFFER, 4 * 7 * 3, (GLvoid *)&vec_buffer [0], GL_STATIC_DRAW));
+			
+			// Create index buffer
+			gl_eval (glGenBuffers (1, &_index_buffer_id));
+			gl_eval (glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id));
+			gl_eval (glBufferData (GL_ELEMENT_ARRAY_BUFFER, 2 * 3, (GLvoid *)&index_buffer, GL_STATIC_DRAW));
+			
+			// unbind buffers
+			gl_eval(glBindBuffer (GL_ARRAY_BUFFER, 0));
+			gl_eval(glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0));
+			
+			// create and setup vao
+			gl_eval(glGenVertexArrays (1, &_vertex_array_id));
+			gl_eval(glBindVertexArray (_vertex_array_id));
+			
+			gl_eval(glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id));
+			
+			// position
+			gl_eval (
+				glVertexAttribPointer(
+				   0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+				   3,                  // size
+				   GL_FLOAT,           // type
+				   GL_FALSE,           // normalized?
+				   4 * 7,                  // stride
+				   (void*)0            // array buffer offset
+				);
+			);
+			gl_eval(glEnableVertexAttribArray (0));
+			
+			// color
+			gl_eval (
+				glVertexAttribPointer(
+					1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+					4,                  // size
+					GL_FLOAT,           // type
+					GL_FALSE,           // normalized?
+					4 * 7,              // stride
+					(void*)(4 * 3)      // array buffer offset
+				);
+			);
+			gl_eval(glEnableVertexAttribArray (1));
+			
+			gl_eval(glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id));
+			
+			// reset state machine
+			gl_eval (glBindVertexArray (0));
+			gl_eval (glDisableVertexAttribArray (0));
+			gl_eval (glDisableVertexAttribArray (1));
+			gl_eval (glBindBuffer (GL_ARRAY_BUFFER, 0));
+			gl_eval (glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0));
+			
+			// -------------------------
+			_shader_program = glCreateProgram ();
+			_vertex_program = glCreateShader (GL_VERTEX_SHADER);
+			_pixel_program = glCreateShader (GL_FRAGMENT_SHADER);
+			
+			std::string vertex_source =
+			"#version 330 core \n"
+			"layout (location = 0) in vec3 in_position;"
+			"layout (location = 1) in vec4 in_color;"
+			""
+			"out vec4 out_color;"
+			""
+			"void main () {"
+			"	gl_Position.xyz = in_position;"
+			"	gl_Position.w = 1.0;"
+			"	out_color = in_color;"
+			"}"
+			"";
+			
+			std::string frag_source =
+			"#version 330 core \n"
+			"in vec4 in_color;"
+			"out vec4 out_color;"
+			""
+			"void main () {"
+			"	out_color = in_color;"
+			"}"
+			"";
+			
+			if (!load_shader (vertex_source, _vertex_program))
+				return;
+			
+			if (!load_shader (frag_source, _pixel_program))
+				return;
+			
+			gl_eval (glAttachShader (_shader_program, _vertex_program));
+			gl_eval (glAttachShader (_shader_program, _pixel_program));
+			
+			gl_eval (glLinkProgram (_shader_program));
+			
+			gl_eval (glDeleteShader (_vertex_program));
+			gl_eval (glDeleteShader (_pixel_program));
+			
+			GLenum error = glGetError ();
+			if (error != GL_NO_ERROR) {
+				debug_error ("GL Initialization Error: " << error);
+			}
+			
+//			glDisable(GL_CULL_FACE);
+//			
+//			// setup
+//			glGenBuffers (1, &_vertex_buffer_id);
+//			glGenBuffers (1, &_index_buffer_id);
+//			
+//			// Interleaved vertex buffer
+//			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
+//			glBufferData (GL_ARRAY_BUFFER, sizeof (vec_buffer), (GLvoid *)&vec_buffer[0], GL_STATIC_DRAW);
+//			
+//			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
+//			glBufferData (GL_ELEMENT_ARRAY_BUFFER, sizeof (skin_index_buffer), (GLvoid *)&skin_index_buffer[0], GL_STATIC_DRAW);
+//
+//			// enable shader program
+//			_shader_program = glCreateProgram ();
+//			_vs_shader = glCreateShader (GL_VERTEX_SHADER);
+//			_ps_shader = glCreateShader (GL_FRAGMENT_SHADER);
+//			
+//			std::string vertex_source =
+//				"#version 330 core\n"
+//				"layout (location = 0) in vec3 in_vertex;"
+//				""
+//				"uniform mat4 in_projection_matrix;"
+//				"uniform mat4 in_modelview_matrix;"
+//				""
+//				"void main (void) {"
+//				"	vec4 v_pos = in_projection_matrix * in_modelview_matrix * vec4(in_vertex, 1.0);"
+//				"	v_pos.x += 0.2;"
+//				"	gl_Position = v_pos;"
+//				"}"
+//			;
+//			
+//			std::string pixel_source =
+//			"#version 330 core\n"
+//			"out vec4 out_color;"
+//			""
+//			"void main (void) {"
+//			"	out_color = vec4 (0.0, 1.0, 0.0, 1.0);"
+//			"}"
+//			;
+//
+//			const char * source_char_ptr = vertex_source.c_str ();
+//			int vertex_length = vertex_source.length ();
+//			
+//			glShaderSource (_vs_shader, 1, (const GLchar **)&source_char_ptr, &vertex_length);
+//			
+//			source_char_ptr = pixel_source.c_str ();
+//			int pixel_length = pixel_source.length ();
+//			
+//			glShaderSource (_ps_shader, 1, (const GLchar **)&source_char_ptr, &pixel_length);
+//			
+//			glCompileShader (_vs_shader);
+//			glCompileShader (_ps_shader);
+//			GLint compiler_state;
+//			
+//			glGetShaderiv (_vs_shader, GL_COMPILE_STATUS, &compiler_state);
+//			if (compiler_state == GL_FALSE) {
+//				
+//				int32
+//					info_length,
+//					writen_chars;
+//				
+//				char * info_log;
+//				
+//				glGetShaderiv (_vs_shader, GL_INFO_LOG_LENGTH, &info_length);
+//				info_log = new char [info_length];
+//				
+//				glGetShaderInfoLog (_vs_shader, info_length, &writen_chars, info_log);
+//				
+//				string error (info_log, writen_chars);
+//				
+//				debug_error("vertex shader compile error: " << error);
+//				
+//				delete info_log;
+//			}
+//			
+//			glGetShaderiv (_ps_shader, GL_COMPILE_STATUS, &compiler_state);
+//			if (compiler_state == GL_FALSE) {
+//				
+//				int32
+//				info_length,
+//				writen_chars;
+//				
+//				char * info_log;
+//				
+//				glGetShaderiv (_ps_shader, GL_INFO_LOG_LENGTH, &info_length);
+//				info_log = new char [info_length];
+//				
+//				glGetShaderInfoLog (_ps_shader, info_length, &writen_chars, info_log);
+//				
+//				string error (info_log, writen_chars);
+//				
+//				debug_error("pixel shader compile error: " << error);
+//				
+//				delete info_log;
+//			}
+//			
+//			glAttachShader (_shader_program, _vs_shader);
+//			glAttachShader (_shader_program, _ps_shader);
+//			
+//			glBindAttribLocation (_shader_program, 0, "in_vertex");
+//			
+//			glLinkProgram (_shader_program);
+//			
+//			_proj_location = glGetUniformLocation (_shader_program, "in_projection_matrix");
+//			_model_location = glGetUniformLocation (_shader_program, "in_modelview_matrix");
+//			
+//			glUseProgram (_shader_program);
 		}
 	
 		imaterial * opengl_device::create_material ()
@@ -274,14 +410,14 @@ namespace ballistic {
 		
 		void opengl_device::set_transform(const mat4 & matrix)
 		{
-			glUniformMatrix4fv (_model_location, 1, GL_FALSE, &matrix.data[0]);
+			//glUniformMatrix4fv (_model_location, 1, GL_FALSE, &matrix.data[0]);
 			
 			//glMatrixMode(GL_MODELVIEW);
 			//glLoadMatrixf (&matrix.data [0]);
 		}
 		
 		void opengl_device::set_projection ( const mat4 & matrix ) {
-			glUniformMatrix4fv (_proj_location, 1, GL_FALSE, &matrix.data [0]);
+			//glUniformMatrix4fv (_proj_location, 1, GL_FALSE, &matrix.data [0]);
 			//glMatrixMode(GL_PROJECTION);
 			//glLoadTransposeMatrixf (&matrix.data [0]);
 		}
@@ -315,63 +451,76 @@ namespace ballistic {
 			glClear(GL_DEPTH_BUFFER_BIT);			
 		}
 
-		void draw_line (const vec3 & v1, const vec3 & v2) {
-			glBegin (GL_LINES);
-			glVertex3f (v1.x, v1.y, v1.z);
-			glVertex3f (v2.x, v2.y, v2.z);
-			glEnd ();
-		}
-
-		void draw_joint (const joint & parent, const joint & child ) {
-			glColor3f (1., .0, .0);
-
-			draw_line (parent.p, child.p);
-
-			glColor3f (.0, 1., .0);
-			
-			draw_line (parent.p + vec3 (-.01, .0, .0), parent.p + vec3 (.01, .0, .0));
-			draw_line (parent.p + vec3 (0, -.01, .0), parent.p + vec3 (.0, .01, .0));
-		}
+//		void draw_line (const vec3 & v1, const vec3 & v2) {
+//			glBegin (GL_LINES);
+//			glVertex3f (v1.x, v1.y, v1.z);
+//			glVertex3f (v2.x, v2.y, v2.z);
+//			glEnd ();
+//		}
+//
+//		void draw_joint (const joint & parent, const joint & child ) {
+//			glColor3f (1., .0, .0);
+//
+//			draw_line (parent.p, child.p);
+//
+//			glColor3f (.0, 1., .0);
+//			
+//			draw_line (parent.p + vec3 (-.01, .0, .0), parent.p + vec3 (.01, .0, .0));
+//			draw_line (parent.p + vec3 (0, -.01, .0), parent.p + vec3 (.0, .01, .0));
+//		}
 		
 		void opengl_device::end_frame ()
 		{
+			gl_eval(glUseProgram (_shader_program));
+			
+			gl_eval(glBindVertexArray (_vertex_array_id));
+			
+			gl_eval(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0));
+			
+			gl_eval(glBindVertexArray (0));
+
+			//glBindBuffer (GL_ARRAY_BUFFER, 0);
+			//glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
+			
+			//glDisableVertexAttribArray (0);
+			
 			//glLoadIdentity();
 
 			// draw skin
 
-			glUseProgram (_shader_program);
-			
-			mat4 t;
-			//mat4 proj = camera::make_projection(-1., 1., 1., -1., .0, 1000.0);
-			mat4 proj = create_ortho(-1., 1., -1., 1., .0, 1000.);
-			
-			glUniformMatrix4fv (_model_location, 1, GL_FALSE, &t.data[0]);
-			glUniformMatrix4fv (_proj_location, 1, GL_FALSE, &proj.data[0]);
+//			glUseProgram (_shader_program);
+//			
+//			mat4 t;
+//			//mat4 proj = camera::make_projection(-1., 1., 1., -1., .0, 1000.0);
+//			mat4 proj = create_ortho(-1., 1., -1., 1., -1.0, 1000.);
+//			
+//			glUniformMatrix4fv (_model_location, 1, GL_FALSE, &t.data[0]);
+//			glUniformMatrix4fv (_proj_location, 1, GL_FALSE, &proj.data[0]);
+//
+//			
+//			
+//			//glEnableClientState(GL_VERTEX_ARRAY);
+//			//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//			
+//			//glVertexPointer (3, GL_FLOAT, sizeof (skinned_vector), 0);
+//			//glTexCoordPointer (2, GL_FLOAT, sizeof (skinned_vector), (GLvoid *)sizeof (vec3));
+//			
+//			glEnableVertexAttribArray(0);
+//			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
+//			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+//			
+//			
+//			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
+//			
+//			glColor3f(.0, .1, 1.);
+//			glDrawElements (GL_TRIANGLES, sizeof (skin_index_buffer), GL_UNSIGNED_SHORT, 0);
 
-			
-			
-			//glEnableClientState(GL_VERTEX_ARRAY);
-			//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			
-			//glVertexPointer (3, GL_FLOAT, sizeof (skinned_vector), 0);
-			//glTexCoordPointer (2, GL_FLOAT, sizeof (skinned_vector), (GLvoid *)sizeof (vec3));
-			
-			glEnableVertexAttribArray(0);
-			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-			
-			
-			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
-			
-			glColor3f(.0, .1, 1.);
-			glDrawElements (GL_TRIANGLES, sizeof (skin_index_buffer), GL_UNSIGNED_SHORT, 0);
-
-			glDisableVertexAttribArray (0);
+			//glDisableVertexAttribArray (0);
 			//glDisableClientState(GL_VERTEX_ARRAY);
 			//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			
-			glBindBuffer (GL_VERTEX_ARRAY, 0);
-			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
+			//glBindBuffer (GL_VERTEX_ARRAY, 0);
+			//glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
 
 			//glUseProgram (0);
 			
@@ -379,31 +528,31 @@ namespace ballistic {
 			
 			// handle bones
 			
-			joint abones [sizeof (bones) / sizeof (joint)];
+			//joint abones [sizeof (bones) / sizeof (joint)];
 			
-			quat rotation = quat::from_axis (
-											 vec3 (.0, .0, 1.0),
-											 angle
-											 );
+			//quat rotation = quat::from_axis (
+			//								 vec3 (.0, .0, 1.0),
+			//								 angle
+			//								 );
 			
-			abones [0].p = bones [0].p;
-			abones [0].r = rotation;
+			//abones [0].p = bones [0].p;
+			//abones [0].r = rotation;
 			
-			for ( int i = 1; i < sizeof (bones) / sizeof (joint); i++) {
-				bones [i].r = rotation;
-				abones [i] = bones [i].to_absolute(abones[i-1]);
+			//for ( int i = 1; i < sizeof (bones) / sizeof (joint); i++) {
+			//	bones [i].r = rotation;
+			//	abones [i] = bones [i].to_absolute(abones[i-1]);
 				
-				draw_joint (abones [i-1], abones[i]);
-			}
+			//	draw_joint (abones [i-1], abones[i]);
+			//}
 			
 			// ---------
 
-			glFlush ();
+			//glFlush ();
 			
-			angle += angle_inc;
+			//angle += angle_inc;
 			
-			if (angle > 1.2 || angle < -1.2)
-				angle_inc *= -1.0;
+			//if (angle > 1.2 || angle < -1.2)
+			//	angle_inc *= -1.0;
 				
 			// ----------
 			//glFlush ();

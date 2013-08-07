@@ -46,14 +46,14 @@ namespace ballistic {
 			if (message.get_id () != ballistic::id::message_update) return;
 
 			// notify visible items to render
-			mat4 model_view;
-			mat4 ortho_projection = camera::make_projection (-1., 1., -1., 1., -1, 100);
+			//mat4 model_view;
+			//mat4 ortho_projection = camera::make_projection (-1., 1., -1., 1., -1, 100);
 
 			_device->clear ();
 			_device->begin_frame ();
 
-			_device->set_transform (model_view);
-			_device->set_projection (ortho_projection);
+			//_device->set_transform (model_view);
+			//_device->set_projection (ortho_projection);
 
 			//_device->set_current_mesh (_mesh);
 			//_mesh->render ();
