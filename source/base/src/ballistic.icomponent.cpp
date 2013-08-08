@@ -18,7 +18,7 @@ namespace ballistic {
 
 	void component::setup () {}
 		
-	void component::setup ( vector < attribute > & parameters ) {}
+	void component::setup ( vector < property > & parameters ) {}
 
 
 }

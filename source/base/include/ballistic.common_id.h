@@ -21,7 +21,7 @@ namespace ballistic {
 		const id_t message_initialize			= string_to_id ("initialize");
 
 		// -------------------------------------- 
-		const id_t message_attribute_changed	= string_to_id ("message_attribute_changes");
+		const id_t message_property_changed	= string_to_id ("message_property_changes");
 
 		const id_t name							= string_to_id ("name");
 		const id_t id							= string_to_id ("id");

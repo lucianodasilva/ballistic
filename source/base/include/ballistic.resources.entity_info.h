@@ -7,7 +7,7 @@
 
 #include "ballistic.resources.component_info.h"
 #include "ballistic.resources.iresource.h"
-#include "ballistic.attribute.h"
+#include "ballistic.property.h"
 #include "ballistic.id.h"
 
 #include <string>
@@ -21,16 +21,24 @@ namespace ballistic {
 	
 	namespace resources {
 		
-		class entity_info : public resources::iresource {
+		class entity_info : public resources::iresource, public iproperty_container {
 		private:
 			
-			vector < attribute > _attributes;
+			vector < property > _properties;
 			vector < component_info > _components;
 			
 		public:
 
-			vector < attribute > & get_attributes ();
+			vector < property > & get_properties ();
 			vector < component_info > & get_components ();
+
+			// property container
+			virtual property & add_property (id_t id, const var & v);
+
+			virtual bool has_property (id_t id);
+
+			virtual property & get_property (id_t id);
+			// -------------------
 
 			entity * create (id_t id);
 

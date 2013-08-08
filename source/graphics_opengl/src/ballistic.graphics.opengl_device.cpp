@@ -16,10 +16,11 @@ namespace ballistic {
 			quat r;
 			
 			inline joint to_absolute ( const joint & parent ) {
-				return joint {
-					parent.p + (parent.r * p),
-					parent.r * r
-				};
+				//return joint {
+				//	parent.p + (parent.r * p),
+				//	parent.r * r
+				//};
+				return joint ();
 			}
 		};
 
@@ -361,8 +362,8 @@ namespace ballistic {
 			
 			gl_eval(glUseProgram (_shader_program));
 			
-			if (_bone_uniform >= 0)
-				glUniform1fv (_bone_uniform, sizeof (joint) * 2, (GLfloat *)&abones[0]);
+			//if (_bone_uniform >= 0)
+			//	glUniform1fv (_bone_uniform, sizeof (joint) * 2, (GLfloat *)&abones[0]);
 
 			gl_eval(glBindVertexArray (_vertex_array_id));
 			

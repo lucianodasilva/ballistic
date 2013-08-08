@@ -8,15 +8,12 @@
 
 #include "ballistic.resources.package_loader.h"
 #include "ballistic.resources.entity_info.h"
+#include "ballistic.resources.istorage.h"
+#include "ballistic.resources.component_constructor.h"
+#include "ballistic.resources.property_container_reader.h"
 
 #include "ballistic.config.h"
 #include "ballistic.debug.h"
-#include "ballistic.attribute.h"
-
-#include "ballistic.math.h"
-
-#include "ballistic.resources.istorage.h"
-#include "ballistic.resources.component_constructor.h"
 
 #include <tinyxml2.h>
 
@@ -32,67 +29,6 @@ namespace ballistic {
 			
 			virtual string get_name () {
 				return "entity";
-			}
-			
-			void load_attributes (
-								  tinyxml2::XMLElement * element,
-								  ballistic::resources::stack & stack,
-								  vector < attribute > & attribute_vector
-								  ){
-				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
-				
-				while (cursor) {
-					attribute_vector.push_back (attribute (string_to_id (cursor->Name ())));
-					attribute & at = attribute_vector.back ();
-					
-					string type = cursor->Attribute ("type");
-					string value = cursor->Attribute ("value");
-					
-					// Convert XML attribute types
-					if (type == "int") {
-						at = convert_to < int, string > (value);
-					} else if (type == "uint") {
-						at = convert_to < unsigned int, string > (value);
-					} else if (type == "real") {
-						at = convert_to < real, string > (value);
-					} else if (type == "res") {
-						at = stack.get_resource (value);
-					} else if (type == "vec3") {
-						vec3 v;
-						
-						stringstream ss (value);
-						string trim;
-						
-						getline (ss, trim, ',');
-						v.x = convert_to < real, string > (trim);
-						getline (ss, trim, ',');
-						v.y = convert_to < real, string > (trim);
-						getline (ss, trim, ',');
-						v.z = convert_to < real, string > (trim);
-						
-						at = v;
-					} else if (type == "color" || type == "vec4") {
-						vec4 v;
-						
-						stringstream ss (value);
-						string trim;
-						
-						getline (ss, trim, ',');
-						v.x = convert_to < real, string > (trim);
-						getline (ss, trim, ',');
-						v.y = convert_to < real, string > (trim);
-						getline (ss, trim, ',');
-						v.z = convert_to < real, string > (trim);
-						getline (ss, trim, ',');
-						v.w = convert_to < real, string > (trim);
-						
-						at = v;
-					} else {
-						at = value; //as string
-					}
-					
-					cursor = cursor->NextSiblingElement ();
-				}
 			}
 			
 			void load_components (
@@ -112,8 +48,8 @@ namespace ballistic {
 
 					if (ctor) 
 						comp_info.set_constructor (ctor);
-
-					load_attributes (cursor, stack, comp_info.get_attributes ());
+					
+					property_container_reader::read (cursor, stack, &comp_info);
 
 					cursor->NextSiblingElement();
 				}
@@ -127,8 +63,8 @@ namespace ballistic {
 				
 				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
 				while (cursor) {
-					if (strcmp (cursor->Name (), "attributes") == 0)
-						load_attributes (cursor, stack, ctor->get_attributes ());
+					if (strcmp (cursor->Name (), "properties") == 0)
+						property_container_reader::read (cursor, stack, ctor);
 					
 					if (strcmp (cursor->Name (), "components") == 0)
 						load_components (cursor, stack, ctor->get_components());

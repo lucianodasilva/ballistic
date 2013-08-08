@@ -119,7 +119,7 @@ namespace ballistic {
 
 	void game::terminate () {
 		message m (this, id::message_terminate);
-		// add message attributes here
+		// add message properties here
 
 		send_message (m);
 		_running = false;

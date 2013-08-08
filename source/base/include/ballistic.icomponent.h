@@ -2,8 +2,8 @@
 #ifndef _ballistic_icomponent_h_
 #define _ballistic_icomponent_h_
 
-#include "ballistic.attribute.h"
 #include "ballistic.message.h"
+#include "ballistic.property.h"
 
 #include <vector>
 
@@ -21,7 +21,7 @@ namespace ballistic {
 		virtual ~icomponent ();
 			
 		virtual void setup () = 0;
-		virtual void setup ( vector < attribute > & parameters ) = 0;
+		virtual void setup ( vector < property > & parameters ) = 0;
 			
 		virtual void notify ( ballistic::message & message ) = 0;
 			
@@ -41,7 +41,7 @@ namespace ballistic {
 		component ();
 		
 		virtual void setup ();
-		virtual void setup ( vector < attribute > & parameters );
+		virtual void setup ( vector < property > & parameters );
 				
 	};
 

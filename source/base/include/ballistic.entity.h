@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "ballistic.attribute.h"
 #include "ballistic.icomponent.h"
 #include "ballistic.id.h"
+#include "ballistic.property_container.h"
 #include "ballistic.var.h"
 
 using namespace std;
@@ -14,25 +14,19 @@ namespace ballistic {
 
 	class game;
 
-	class entity {
+	class entity : public property_container {
 	private:
 
 		game *					_game;
 		id_t					_id;
 		vector < icomponent * > _components;
-			
-		attribute_map_t	_attributes;
 
 		entity ( const entity & orig );
 		entity & operator = ( const entity & orig );
 
 	public:
-			
-		bool has_attribute ( const string & key );
-		bool has_attribute ( id_t id );
-			
-		attribute & operator [] ( const string & key );
-		attribute & operator [] ( id_t id );
+
+		virtual void property_changed_event (const property & p);
 			
 		game * get_game ();
 		void set_game (game * g);

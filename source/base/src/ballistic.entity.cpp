@@ -1,22 +1,17 @@
 #include "ballistic.entity.h"
+#include "ballistic.common_id.h"
+#include "ballistic.game.h"
 #include <functional>
 
 namespace ballistic {
 
-	bool entity::has_attribute(const string &key) {
-		return has_attribute(hash < string > () (key));
-	}
-		
-	bool entity::has_attribute(id_t id) {
-		return _attributes.find (id) != _attributes.end ();
-	}
-		
-	attribute & entity::operator [](const string &key) {
-		return operator [] (hash < string > () (key));
-	}
-		
-	attribute & entity::operator [] (id_t id ) {
-		return _attributes [id];
+	void entity::property_changed_event (const property & p) {
+		message m (this, id::message_property_changed);
+
+		m [id::id] = p.get_id();
+		m [id::value] = (var)p;
+
+		this->get_game ()->send_message (m);
 	}
 
 	game * entity::get_game () { return _game; }
@@ -26,7 +21,7 @@ namespace ballistic {
 		
 	void entity::add_component ( icomponent * component ) {
 		component->set_entity (this);
-			
+
 		_components.push_back (component);
 	}
 

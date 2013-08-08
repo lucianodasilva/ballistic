@@ -4,7 +4,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "ballistic.attribute.h"
+#include "ballistic.property.h"
 
 using namespace std;
 
@@ -16,10 +16,10 @@ namespace ballistic {
 		
 		class icomponent_constructor;
 		
-		class component_info {
+		class component_info : public iproperty_container {
 		private:
 			
-			vector < attribute > _attributes;
+			vector < property > _properties;
 			icomponent_constructor * _constructor;
 			
 		public:
@@ -27,7 +27,13 @@ namespace ballistic {
 			icomponent_constructor * get_constructor ();
 			void set_constructor ( icomponent_constructor * ctor );
 			
-			vector < attribute > & get_attributes ();
+			// property container
+			virtual property & add_property (id_t id, const var & v);
+
+			virtual bool has_property (id_t id);
+
+			virtual property & get_property (id_t id);
+			// -------------------
 			
 			icomponent * create ();
 			

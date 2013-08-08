@@ -2,9 +2,9 @@
 <package>
 
 	<entity name="other_cube">
-		<attributes>
+		<properties>
 			<counter type="int" value="12"/>
-		</attributes>
+		</properties>
 
 	</entity>
 

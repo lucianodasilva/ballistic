@@ -7,10 +7,10 @@
 
 	<entity name="rotating_square">
 
-		<attributes>
+		<properties>
 			<position type="int" value="12"/>
 			<color	  type="color" value="1.0, 1.0, 1.0, 1.0"/>
-		</attributes>
+		</properties>
 
 		<components>
 			<colidable/>

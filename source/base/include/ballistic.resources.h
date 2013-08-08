@@ -13,11 +13,14 @@
 #include "ballistic.resources.component_constructor.h"
 #include "ballistic.resources.entity_info.h"
 #include "ballistic.resources.package_loader.h"
+#include "ballistic.resources.property_container_reader.h"
 #include "ballistic.resources.id.h"
 #include "ballistic.resources.iloader.h"
 #include "ballistic.resources.iresource.h"
 #include "ballistic.resources.istorage.h"
 #include "ballistic.resources.stack.h"
 #include "ballistic.resources.storage_filesystem.h"
+
+
 
 #endif
