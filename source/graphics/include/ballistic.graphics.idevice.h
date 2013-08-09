@@ -4,7 +4,6 @@
 #include <ballistic.base.h>
 #include <string>
 
-#include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.imesh.h"
 #include "ballistic.graphics.itexture.h"
 
@@ -16,11 +15,9 @@ namespace ballistic {
 		class idevice {
 		public:
 
-			virtual imaterial * create_material () = 0;
 			virtual imesh *		create_mesh () = 0;
 			virtual itexture *	create_texture (const point & size) = 0;
 
-			virtual imaterial * load_material ( const string & filename ) = 0;
 			virtual imesh *		load_mesh ( const string & filename ) = 0;
 			virtual itexture *	load_texture ( const string & filename ) = 0;
 			

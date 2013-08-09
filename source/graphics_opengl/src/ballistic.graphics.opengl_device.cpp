@@ -259,11 +259,6 @@ namespace ballistic {
 			opengl_debug::initialize ();
 			
 		}
-	
-		imaterial * opengl_device::create_material ()
-		{
-			return nullptr;
-		}
 		
 		imesh *	opengl_device::create_mesh ()
 		{
@@ -271,11 +266,6 @@ namespace ballistic {
 		}
 		
 		itexture * opengl_device::create_texture (const point & size)
-		{
-			return nullptr;
-		}
-		
-		imaterial * opengl_device::load_material ( const string & filename )
 		{
 			return nullptr;
 		}

@@ -18,11 +18,9 @@ namespace ballistic {
 			
 			opengl_device ();
 			
-			virtual imaterial * create_material ();
 			virtual imesh *		create_mesh ();
 			virtual itexture *	create_texture (const point & size);
 			
-			virtual imaterial * load_material ( const string & filename );
 			virtual imesh *		load_mesh ( const string & filename );
 			virtual itexture *	load_texture ( const string & filename );
 			
