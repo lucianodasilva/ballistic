@@ -22,9 +22,9 @@ private:
 	
 	enum var_type : unsigned int{
 		var_type_none		= 0,
-		var_type_int64		= 1,
-		var_type_uint64		= 2,
-		var_type_double		= 4,
+		var_type_int		= 1,
+		var_type_uint		= 2,
+		var_type_real		= 4,
 		var_type_pointer	= 8,
 		var_type_struct		= 16,
 		var_type_string		= 48 // string specialization ( struct + string )
@@ -64,9 +64,9 @@ private:
 	};
 	
 	union {
-		int64	_int64_v;
-		uint64	_uint64_v;
-		double	_double_v;
+		int32	_int_v;
+		uint32	_uint_v;
+		real	_real_v;
 	
 		_i_var_box * _box_v;
 		
@@ -103,24 +103,24 @@ private:
 	template < class t >
 	struct _setter_int {
 		inline static void set ( var & var_ref, const t & val ) {
-			ballistic::convert ( val, var_ref._data._int64_v );
-			var_ref._type = var_type_int64;
+			ballistic::convert ( val, var_ref._data._int_v );
+			var_ref._type = var_type_int;
 		}
 	};
 	
 	template < class t >
 	struct _setter_uint {
 		inline static void set ( var & var_ref, const t & val ) {
-			ballistic::convert ( val, var_ref._data._uint64_v );
-			var_ref._type = var_type_uint64;
+			ballistic::convert ( val, var_ref._data._uint_v );
+			var_ref._type = var_type_uint;
 		}
 	};
 
 	template < class t >
 	struct _setter_double {
 		inline static void set ( var & var_ref, const t & val ) {
-			ballistic::convert ( val, var_ref._data._double_v );
-			var_ref._type = var_type_double;
+			ballistic::convert ( val, var_ref._data._real_v );
+			var_ref._type = var_type_real;
 		}
 	};
 
@@ -131,14 +131,14 @@ private:
 				case (var_type_none):
 					//val = 0;
 					break;
-				case (var_type_int64):
-					ballistic::convert ( var_ref._data._int64_v, val );
+				case (var_type_int):
+					ballistic::convert ( var_ref._data._int_v, val );
 					break;
-				case (var_type_uint64):
-					ballistic::convert ( var_ref._data._uint64_v, val);
+				case (var_type_uint):
+					ballistic::convert ( var_ref._data._uint_v, val);
 					break;
-				case (var_type_double):
-					ballistic::convert ( var_ref._data._double_v, val );
+				case (var_type_real):
+					ballistic::convert ( var_ref._data._real_v, val );
 					break;
 				case (var_type_string):
 					{

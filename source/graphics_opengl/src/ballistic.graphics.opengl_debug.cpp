@@ -1,4 +1,5 @@
 #include "ballistic.graphics.opengl_debug.h"
+#include "ballistic.graphics.opengl_effect.cpp"
 
 namespace ballistic {
 	namespace graphics {
@@ -106,6 +107,8 @@ namespace ballistic {
 		GLint opengl_debug::_color_uniform_id = -1;
 		GLuint opengl_debug::_vao_id = 0;
 		GLuint opengl_debug::_vbo_id = 0;
+		
+		graphics::ieffect * opengl_debug::_effect = nullptr;
 
 		void opengl_debug::load_shader ( const string & source, GLint id ) {
 			const char * source_ptr = source.c_str ();
@@ -119,6 +122,9 @@ namespace ballistic {
 
 		void opengl_debug::initialize () {
 			gl_eval_scope(opengl_debug::initialize);
+			
+			_effect = new opengl_effect ();
+			_effect->load (_vs_source, _fs_source);
 
 			_debug_program_id = glCreateProgram ();
 			_vs_shader_id = glCreateShader (GL_VERTEX_SHADER);

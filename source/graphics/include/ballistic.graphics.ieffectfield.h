@@ -1,32 +1,22 @@
 #ifndef _ballistic_graphics_ieffectfield_h_
 #define _ballistic_graphics_ieffectfield_h_
 
+#include <ballistic.base.h>
+
 namespace ballistic {
 	namespace graphics {
 
 		class ieffectfield {
-		private:
-
-
-
 		public:
+			
+			virtual id_t get_id () = 0;
 
+			virtual void set_value (const var & v ) = 0;
+			virtual var get_value () = 0;
+			
 			virtual void apply () = 0;
-
-		};
-
-		template < class T >
-		class effectfield {
-		private:
-
-		public:
-
-			virtual void apply () = 0;
-
-		};
-
-		template <>
-		class effectfield : public ieffectfield {
+			
+			virtual ieffectfield * clone () = 0;
 
 		};
 

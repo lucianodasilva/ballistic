@@ -13,7 +13,7 @@ namespace ballistic {
 	property::property (iproperty_container * container, id_t id) :
 		_id (id), _container (container) {}
 
-	property::property (const property & v) : _id (v._id), _container (v._container), _value (v._value) {}
+	property::property (const property & v) : _value (v._value), _id (v._id), _container (v._container) {}
 
 	property::operator var () const {
 		return _value;

@@ -2,6 +2,7 @@
 #define _ballistic_graphics_opengl_debug_h_
 
 #include <ballistic.base.h>
+#include <ballistic.graphics.h>
 #include <GL/glew.h>
 #include <string>
 
@@ -60,6 +61,8 @@ namespace ballistic {
 			};
 
 		private:
+			
+			static ballistic::graphics::ieffect * _effect;
 
 			static string _vs_source;
 			static string _fs_source;
