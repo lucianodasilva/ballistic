@@ -2,7 +2,7 @@
 #define _ballistic_graphics_opengl_effect_h_
 
 #include <ballistic.graphics.h>
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include <map>
 

@@ -11,6 +11,8 @@ namespace ballistic {
 		class ihardware_constant {
 		public:
 			
+			virtual ~ihardware_constant ();
+			
 			virtual id_t get_id () = 0;
 
 			virtual void set (const var & v) = 0;

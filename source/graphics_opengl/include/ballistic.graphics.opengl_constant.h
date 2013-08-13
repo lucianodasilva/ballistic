@@ -3,7 +3,6 @@
 #define _ballistic_graphics_opengl_constant_h_
 
 #include <ballistic.graphics.h>
-#include <GL/glew.h>
 
 #include "ballistic.graphics.opengl_debug.h"
 
@@ -14,7 +13,8 @@ namespace ballistic {
 
 			template < class T >
 			static inline void set_uniform (GLuint location, T & value) {
-				static_assert (false, "Constant type not supported!");
+				//static_assert (false, "Constant type not supported!");
+				debug_error ("GL Constant type not supported");
 			}
 
 			static inline void set_uniform (GLuint location, int32 & value) {
@@ -56,7 +56,7 @@ namespace ballistic {
 			}
 			
 			virtual inline void apply () {
-				opengl_uniform_setter::set_uniform (_location, _value);
+				opengl_uniform_setter::set_uniform (_location, ihardware_constant_base < T >::_value);
 			}
 
 		};

@@ -5,7 +5,7 @@
 
 #ifdef BALLISTIC_MACOSX
 
-#include <OpenGL/GL.h>
+#include <GL/glew.h>
 
 namespace ballistic {
 	namespace mac_desktop {

@@ -42,6 +42,7 @@ namespace ballistic {
 					position
 				);
 
+			// 16 = bitness
 			return uint16 ((1 << 16) * _depth_divisor / z);
 		}
 
