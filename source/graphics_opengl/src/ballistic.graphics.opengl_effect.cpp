@@ -1,4 +1,5 @@
 #include "ballistic.graphics.opengl_effect.h"
+#include "ballistic.graphics.opengl_constant.h"
 #include "ballistic.graphics.opengl_debug.h"
 
 namespace ballistic {
@@ -9,6 +10,10 @@ namespace ballistic {
 		opengl_effect::~opengl_effect () {
 			if (_shader_program_id != -1)
 				glDeleteProgram (_shader_program_id);
+
+			for (auto hard_const : _constants) {
+				delete hard_const.second;
+			}
 		}
 		
 		bool opengl_effect::is_shader_ok(GLint shader_id) {
@@ -33,6 +38,16 @@ namespace ballistic {
 			glCompileShader (shader_id);
 			
 			gl_eval_shader_compile (shader_id);
+		}
+
+		ihardware_constant * opengl_effect::get_constant (id_t id) const {
+			auto it = _constants.find (id);
+
+			if (it != _constants.end ())
+				return it->second;
+
+			debug_error ("GL Effect get constant with id:" << id << " not found.");
+			return nullptr;
 		}
 		
 		void opengl_effect::load (
@@ -82,15 +97,32 @@ namespace ballistic {
 				char name[100];
 				glGetActiveUniform( _shader_program_id, GLuint(i), sizeof(name)-1,
 								   &name_len, &num, &type, name );
-				
-				if (type == GL_FLOAT_VEC4) {
-					debug_print ("bingo");
-				}
-				
+
 				name[name_len] = 0;
 				GLuint location = glGetUniformLocation( _shader_program_id, name );
+
+				id_t id = string_to_id (name);
+
+				switch (type) {
+				case (GL_INT) :
+					_constants [id] = new opengl_constant < int32 > (id, location);
+					break;
+				case (GL_FLOAT):
+					_constants [id] = new opengl_constant < real > (id, location);
+					break;
+				case (GL_FLOAT_VEC3):
+					_constants [id] = new opengl_constant < vec3 > (id, location);
+					break;
+				case (GL_FLOAT_VEC4):
+					_constants [id] = new opengl_constant < vec4 > (id, location);
+					break;
+				case (GL_FLOAT_MAT4):
+					_constants [id] = new opengl_constant < mat4 > (id, location);
+					break;
+				default:
+					debug_error ("GL Shader type " << type << " not supported for constant " << name);
+				};
 			}
-			
 		}
 		
 		void opengl_effect::apply () {

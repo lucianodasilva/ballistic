@@ -11,6 +11,7 @@ file ( GLOB graphics_source
 	${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
 	${CMAKE_CURRENT_LIST_DIR}/include/*.h
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
+	${CMAKE_CURRENT_LIST_DIR}/include/*.inl
 )
 
 add_library ( graphics STATIC ${graphics_source} )

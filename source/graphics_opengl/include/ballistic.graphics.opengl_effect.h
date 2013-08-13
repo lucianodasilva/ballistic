@@ -4,6 +4,10 @@
 #include <ballistic.graphics.h>
 #include <gl/glew.h>
 
+#include <map>
+
+using namespace std;
+
 namespace ballistic {
 	namespace graphics {
 
@@ -11,6 +15,14 @@ namespace ballistic {
 		private:
 			
 			GLint _shader_program_id;
+
+			// -
+
+			typedef map < id_t, ihardware_constant * > constant_map_t;
+
+			constant_map_t _constants;
+
+			// -
 			
 			bool is_shader_ok (GLint shader_id);
 			bool is_link_ok (GLint program_id);
@@ -21,6 +33,8 @@ namespace ballistic {
 			
 			opengl_effect ();
 			~opengl_effect ();
+
+			virtual ihardware_constant * get_constant (id_t id) const;
 			
 			virtual void load (
 				const string & vs_shader_source,

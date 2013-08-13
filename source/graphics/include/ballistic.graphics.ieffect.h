@@ -5,7 +5,7 @@
 #include <string>
 
 #include "ballistic.graphics.material.h"
-#include "ballistic.graphics.ieffectfield.h"
+#include "ballistic.graphics.constant.h"
 
 using namespace std;
 
@@ -14,6 +14,8 @@ namespace ballistic {
 
 		class ieffect : public ballistic::resources::iresource {
 		public:
+
+			virtual ihardware_constant * get_constant (id_t id) const = 0;
 
 			virtual void load (
 				const string & vs_shader_source,

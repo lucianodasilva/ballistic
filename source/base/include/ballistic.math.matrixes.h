@@ -28,12 +28,12 @@ namespace math {
 
 		inline mat4_t ();
 
-		inline mat4_t ( const mat4_t & v );
+		inline mat4_t ( const mat4_t < T > & v );
 		inline mat4_t ( T _m00, T _m01, T _m02, T _m03, T _m04, T _m05, T _m06, T _m07, T _m08, T _m09, T _m10, T _m11, T _m12, T _m13, T _m14, T _m15 );
 
-		inline mat4_t & operator = ( const mat4_t & v );
+		inline mat4_t & operator = ( const mat4_t < T > & v );
 
-		inline mat4_t operator * ( const mat4_t & v ) const;
+		inline mat4_t operator * ( const mat4_t < T > & v ) const;
 
 		inline vec4_t < T > operator * ( const vec4_t < T > & v ) const;
 		inline vec3_t < T > operator * ( const vec3_t < T > & v ) const;

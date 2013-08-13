@@ -1,11 +1,3 @@
-//
-//  ballistic.resources.storage_filesystem.cpp
-//  ballistic_graphics
-//
-//  Created by Luciano da Silva on 7/14/13.
-//
-//
-
 #include "ballistic.resources.storage_filesystem.h"
 #include "ballistic.resources.iloader.h"
 

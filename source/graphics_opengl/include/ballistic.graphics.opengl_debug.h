@@ -13,7 +13,7 @@ namespace ballistic {
 
 #		define gl_shader_source(x) \
 			"#version 330 core\n" \
-			#x;
+			#x
 
 #ifdef BALLISTIC_DEBUG
 
@@ -32,16 +32,17 @@ namespace ballistic {
 		ballistic::graphics::opengl_debug::eval_program_link (program_id);
 
 #	define gl_eval_scope(scope_name) \
-		ballistic::graphics::opengl_debug::eval_scope __gl_evaluate_scope__ = {#scope_name}
+	ballistic::graphics::opengl_debug::eval_scope __gl_evaluate_scope__ = {#scope_name}
 
 
 #else
 
 #	define gl_eval(x) \
-		x
+	x
 
-#	define gl_eval_shader_compile(x)
-#	define gl_eval_program_link(x)
+#	define gl_eval_shader_compile(x) {}
+#	define gl_eval_program_link(x) {}
+#	define gl_eval_scope(x) {}
 
 #endif
 
@@ -63,16 +64,10 @@ namespace ballistic {
 		private:
 			
 			static ballistic::graphics::ieffect * _effect;
+			static ballistic::graphics::constant  _color_uniform;
 
 			static string _vs_source;
 			static string _fs_source;
-
-			static GLint
-				_debug_program_id,
-				_vs_shader_id,
-				_fs_shader_id,
-				_color_uniform_id
-				;
 
 			static GLuint
 				_vao_id,

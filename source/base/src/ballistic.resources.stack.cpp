@@ -1,11 +1,3 @@
-//
-//  ballistic.resourcestack.cpp
-//  ballistic_graphics
-//
-//  Created by Luciano da Silva on 7/14/13.
-//
-//
-
 #include "ballistic.resources.stack.h"
 
 #include "ballistic.debug.h"

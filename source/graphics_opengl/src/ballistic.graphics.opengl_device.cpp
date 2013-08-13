@@ -1,6 +1,7 @@
 #include "ballistic.graphics.opengl_device.h"
 
 #include <GL/glew.h>
+#include "ballistic.graphics.opengl_effect.h"
 #include "ballistic.graphics.opengl_debug.h"
 #include "ballistic.graphics.opengl_mesh.h"
 
@@ -14,37 +15,40 @@ namespace ballistic {
 		struct joint {
 			vec3 p;
 			quat r;
+
+			inline joint () {}
+			inline joint (const vec3 & vP, const quat & qR) : p (vP), r (qR) {}
 			
 			inline joint to_absolute ( const joint & parent ) {
-				//return joint {
-				//	parent.p + (parent.r * p),
-				//	parent.r * r
-				//};
-				return joint ();
+				return joint (
+					parent.p + (parent.r * p),
+					parent.r * r
+				);
+				//return joint ();
 			}
 		};
 
 		joint bones [] = {
-			{
+			joint (
 				vec3 (.0, .0, .0),
 				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
+			),
+			joint (
 				vec3 (.0, .2, .0),
 				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
+			),
+			joint (
 				vec3 (.0, .2, .0),
 				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
+			),
+			joint (
 				vec3 (.0, .2, .0),
 				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
-			{
+			),
+			joint (
 				vec3 (.0, .2, .0),
 				quat::from_axis(vec3 (.0, .0, 1), .0)
-			},
+			),
 		};
 		
 		struct cvec {
@@ -71,26 +75,15 @@ namespace ballistic {
 		uint32
 			_vertex_array_id,
 			_vertex_buffer_id,
-			_index_buffer_id,
-			_shader_program,
-			_vertex_program,
-			_pixel_program;
+			_index_buffer_id;
 		
 		int32
 			_in_bones_p_id,
 			_in_bones_r_id
 		;
-		
-		void load_shader ( const std::string & source, uint32 id ) {
-			const char * source_ptr = source.c_str ();
-			
-			int32 length = source.length ();
-			glShaderSource (id, 1, (const GLchar **)&source_ptr, &length);
-			
-			glCompileShader (id);
-			
-			gl_eval_shader_compile (id);
-		}
+
+		graphics::ieffect * _effect;
+
 
 		opengl_device::opengl_device () : _current_mesh (nullptr) {
 
@@ -202,11 +195,9 @@ namespace ballistic {
 			gl_eval (glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0));
 			
 			// -------------------------
-			_shader_program = glCreateProgram ();
-			_vertex_program = glCreateShader (GL_VERTEX_SHADER);
-			_pixel_program = glCreateShader (GL_FRAGMENT_SHADER);
+			_effect = new opengl_effect ();
 			
-			std::string vertex_source = 
+			_effect->load (
 			gl_shader_source (
 							  
 				layout (location = 0) in vec3	in_position;
@@ -226,9 +217,7 @@ namespace ballistic {
 
 					var_color = in_color;
 				}
-			);
-			
-			std::string frag_source =
+			),
 			gl_shader_source (
 				in vec4		var_color;
 				out vec4	out_color;
@@ -236,24 +225,8 @@ namespace ballistic {
 				void main () {
 					out_color = var_color;
 				}
+			)
 			);
-			
-			load_shader (vertex_source, _vertex_program);
-			
-			load_shader (frag_source, _pixel_program);
-			
-			gl_eval (glAttachShader (_shader_program, _vertex_program));
-			gl_eval (glAttachShader (_shader_program, _pixel_program));
-			
-			gl_eval (glLinkProgram (_shader_program));
-			
-			gl_eval_program_link(_shader_program);
-			
-			_in_bones_p_id = glGetUniformLocation (_shader_program, "in_bones_p");
-			_in_bones_r_id = glGetUniformLocation (_shader_program, "in_bones_r");
-			
-			gl_eval (glDeleteShader (_vertex_program));
-			gl_eval (glDeleteShader (_pixel_program));
 
 			// debug initialize
 			opengl_debug::initialize ();
@@ -349,8 +322,8 @@ namespace ballistic {
 				abones [i] = bones [i].to_absolute(abones[i-1]);
 			}
 			// ------
-			
-			gl_eval(glUseProgram (_shader_program));
+
+			_effect->apply ();
 			
 			//if (_bone_uniform >= 0)
 			//	glUniform1fv (_bone_uniform, sizeof (joint) * 2, (GLfloat *)&abones[0]);

@@ -13,6 +13,15 @@ namespace math {
 	{}
 
 	template < class T >
+	mat4_t < T >::mat4_t (const mat4_t < T > & v)
+		:
+		m00 (v.m00), m01 (v.m01), m02 (v.m02), m03 (v.m03),
+		m04 (v.m04), m05 (v.m05), m06 (v.m06), m07 (v.m07),
+		m08 (v.m08), m09 (v.m09), m10 (v.m10), m11 (v.m11),
+		m12 (v.m12), m13 (v.m13), m14 (v.m14), m15 (v.m15) 
+	{}
+
+	template < class T >
 	mat4_t < T >::mat4_t ( T _m00, T _m01, T _m02, T _m03, T _m04, T _m05, T _m06, T _m07, T _m08, T _m09, T _m10, T _m11, T _m12, T _m13, T _m14, T _m15 )
 		:
 		m00 (_m00), m01 (_m01), m02 (_m02), m03 (_m03),
@@ -22,7 +31,7 @@ namespace math {
 	{}
 
 	template < class T >
-	mat4_t < T > & mat4_t < T >::operator = ( const mat4_t & v ) {
+	mat4_t < T > & mat4_t < T >::operator = ( const mat4_t < T > & v ) {
 		for ( int i = 0; i < count; ++i )
 			data [i] = v.data [i];
 
@@ -30,7 +39,7 @@ namespace math {
 	}
 
 	template < class T >
-	mat4_t < T > mat4_t < T >::operator * ( const mat4_t & v ) const {
+	mat4_t < T > mat4_t < T >::operator * ( const mat4_t < T > & v ) const {
 		return mat4_t (
 			data[ 0]*v.data[ 0] +
 			data[ 1]*v.data[ 4] +

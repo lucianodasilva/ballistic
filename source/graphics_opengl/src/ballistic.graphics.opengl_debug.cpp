@@ -1,5 +1,5 @@
 #include "ballistic.graphics.opengl_debug.h"
-#include "ballistic.graphics.opengl_effect.cpp"
+#include "ballistic.graphics.opengl_effect.h"
 
 namespace ballistic {
 	namespace graphics {
@@ -101,14 +101,11 @@ namespace ballistic {
 			}
 		);
 
-		GLint opengl_debug::_debug_program_id = -1;
-		GLint opengl_debug::_vs_shader_id = -1;
-		GLint opengl_debug::_fs_shader_id = -1;
-		GLint opengl_debug::_color_uniform_id = -1;
 		GLuint opengl_debug::_vao_id = 0;
 		GLuint opengl_debug::_vbo_id = 0;
 		
 		graphics::ieffect * opengl_debug::_effect = nullptr;
+		graphics::constant opengl_debug::_color_uniform;
 
 		void opengl_debug::load_shader ( const string & source, GLint id ) {
 			const char * source_ptr = source.c_str ();
@@ -126,24 +123,7 @@ namespace ballistic {
 			_effect = new opengl_effect ();
 			_effect->load (_vs_source, _fs_source);
 
-			_debug_program_id = glCreateProgram ();
-			_vs_shader_id = glCreateShader (GL_VERTEX_SHADER);
-			_fs_shader_id = glCreateShader (GL_FRAGMENT_SHADER);
-
-			load_shader (_vs_source, _vs_shader_id);
-			load_shader (_fs_source, _fs_shader_id);
-
-			glAttachShader (_debug_program_id, _vs_shader_id);
-			glAttachShader (_debug_program_id, _fs_shader_id);
-
-			glLinkProgram (_debug_program_id);
-
-			gl_eval_program_link (_debug_program_id);
-
-			glDeleteShader (_vs_shader_id);
-			glDeleteShader (_fs_shader_id);
-
-			_color_uniform_id = glGetUniformLocation (_debug_program_id, "in_color");
+			_color_uniform.bind (_effect->get_constant (string_to_id ("in_color")));
 
 			// --- create vector array
 			glGenVertexArrays (1, &_vao_id);
@@ -161,10 +141,10 @@ namespace ballistic {
 		void opengl_debug::draw_line (const vec3 & p1, const vec3 & p2, const color & col ) {
 			gl_eval_scope (opengl_debug::draw_line);
 
-			glUseProgram (_debug_program_id);
+			_effect->apply ();
 
-			if (_color_uniform_id >= 0)
-				glUniform4fv (_color_uniform_id, 1, &col.data [0] );
+			_color_uniform = col;
+			_color_uniform.apply ();
 
 			vec3 buffer [2] = { p1, p2 };
 
@@ -194,10 +174,10 @@ namespace ballistic {
 		void opengl_debug::draw_rect (const vec3 & p1, const vec3 & p2, const color & col ) {
 			gl_eval_scope (opengl_debug::draw_line);
 
-			glUseProgram (_debug_program_id);
+			_effect->apply ();
 
-			if (_color_uniform_id >= 0)
-				glUniform4fv (_color_uniform_id, 1, &col.data [0] );
+			_color_uniform = col;
+			_color_uniform.apply ();
 
 			vec3 uc = vec3 (p2.x, p1.y, p1.z);
 			vec3 bc = vec3 (p1.x, p2.y, p2.z);

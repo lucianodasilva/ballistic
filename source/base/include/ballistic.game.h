@@ -123,8 +123,6 @@ namespace ballistic {
 
 #ifdef BALLISTIC_DEBUG
 
-#endif // BALLISTIC_DEBUG
-
 	template < class T >
 	void game::define_component (const string & id) {
 		define_component < T > (string_to_id (id));
@@ -134,6 +132,9 @@ namespace ballistic {
 	T * game::create_component (const string & id) {
 		return create_component <T>(string_to_id (id));
 	}
+
+#endif // BALLISTIC_DEBUG
+
 }
 
 #undef MSG_NOT_COMPONENT_TYPE

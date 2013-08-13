@@ -135,10 +135,10 @@ int main ( int argc, char ** argv) {
 	
 	_game->on_initialize ();
 
-	_game->define_component < ballistic::graphics::system_component > ("graphics_system");
+	_game->define_component < ballistic::graphics::system_component > (ballistic::string_to_id ("graphics_system"));
 	
 	auto graphics_system
-		= _game->create_component < ballistic::graphics::system_component > ("graphics_system");
+		= _game->create_component < ballistic::graphics::system_component > (ballistic::string_to_id ("graphics_system"));
 
 	graphics_system->set_device (_device);
 

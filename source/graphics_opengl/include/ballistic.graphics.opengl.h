@@ -3,6 +3,9 @@
 
 #define BALLISTIC_GRAPHICS_OPENGL_EXPORT
 
+#include "ballistic.graphics.opengl_debug.h"
 #include "ballistic.graphics.opengl_device.h"
+#include "ballistic.graphics.opengl_effect.h"
+#include "ballistic.graphics.opengl_mesh.h"
 
 #endif

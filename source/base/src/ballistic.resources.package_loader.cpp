@@ -1,11 +1,3 @@
-//
-//  ballistic.resources.entity_loader.cpp
-//  ballistic_graphics
-//
-//  Created by Luciano da Silva on 7/18/13.
-//
-//
-
 #include "ballistic.resources.package_loader.h"
 #include "ballistic.resources.entity_info.h"
 #include "ballistic.resources.istorage.h"
