@@ -34,7 +34,7 @@ namespace ballistic {
 			mat4 get_view ();
 
 			// utilities
-			static mat4 make_projection (real left, real right, real bottom, real top, real near, real far);
+			static mat4 make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
 		};
 
 	}

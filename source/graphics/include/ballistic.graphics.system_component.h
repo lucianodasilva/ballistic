@@ -15,10 +15,13 @@ namespace ballistic {
 
 			idevice *	_device;
 			camera		_camera;
-			
-			imesh *		_mesh;
+
+			message		_render_message;
+			game *		_game;
 
 		public:
+
+			system_component ();
 
 			void set_device (idevice * device);
 			idevice * get_device ();
@@ -29,7 +32,7 @@ namespace ballistic {
 			virtual void notify ( ballistic::message & message );
 
 			// methods
-			virtual void push_item ();
+			virtual void push_item ( imaterial * material, imesh * mesh, const mat4 & transform );
 
 		};
 				  

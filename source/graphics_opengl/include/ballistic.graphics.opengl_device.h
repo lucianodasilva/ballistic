@@ -4,6 +4,10 @@
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
 
+#include <atomic>
+
+using namespace std;
+
 namespace ballistic {
 	namespace graphics {
 		
@@ -12,33 +16,26 @@ namespace ballistic {
 
 			color _clear_color;
 
-			imesh * _current_mesh;
+			atomic <unsigned char> _effect_run_id;
+			atomic <unsigned char> _material_run_id;
+			atomic <unsigned char> _mesh_run_id;
 
 		public:
 			
 			opengl_device ();
 			
+			virtual ieffect *	create_effect ();
+			virtual imaterial * create_material ();
 			virtual imesh *		create_mesh ();
 			virtual itexture *	create_texture (const point & size);
 			
-			virtual imesh *		load_mesh ( const string & filename );
-			virtual itexture *	load_texture ( const string & filename );
-			
-			virtual void		set_transform ( const mat4 & matrix );
-			virtual void		set_projection ( const mat4 & matrix );
-
 			virtual void		set_clear_color ( const color & cr ) ;
 
 			virtual void		clear ();
 
 			virtual void		begin_frame ();
 			virtual void		end_frame ();
-			
-			virtual void		set_current_mesh ( imesh * mesh );
-			virtual imesh *		get_current_mesh ();
 
-			virtual void		set_current_texture ( itexture * texture );
-			
 			virtual void		present ();
 			
 			virtual void		destroy ();

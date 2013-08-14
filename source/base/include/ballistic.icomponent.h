@@ -15,7 +15,7 @@ namespace ballistic {
 	class icomponent {
 	public:
 
-		virtual entity & get_entity () const = 0;
+		virtual entity * get_entity () const = 0;
 		virtual void set_entity ( entity * ent ) = 0;
 
 		virtual ~icomponent ();
@@ -35,7 +35,7 @@ namespace ballistic {
 		
 		typedef void (*notify_callback)( entity & this_entity, ballistic::message & );
 		
-		entity & get_entity () const;
+		entity * get_entity () const;
 		virtual void set_entity ( entity * ent );
 		
 		component ();

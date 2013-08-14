@@ -6,6 +6,8 @@
 #include <GL/glew.h>
 #include <string>
 
+#include "ballistic.graphics.opengl_effect.h"
+
 using namespace std;
 
 namespace ballistic {
@@ -63,8 +65,8 @@ namespace ballistic {
 
 		private:
 			
-			static ballistic::graphics::ieffect * _effect;
-			static ballistic::graphics::constant  _color_uniform;
+			static ballistic::graphics::opengl_effect	_effect;
+			static ballistic::graphics::opengl_constant _color_uniform;
 
 			static string _vs_source;
 			static string _fs_source;
@@ -73,8 +75,6 @@ namespace ballistic {
 				_vao_id,
 				_vbo_id
 				;
-
-			static void load_shader ( const string & source, GLint id );
 
 		public:
 

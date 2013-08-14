@@ -23,11 +23,14 @@ namespace ballistic {
 
 	public:
 
+		inline message (id_t message_id);
 		inline message ( entity * sender, id_t message_id );
 		inline message ( const message & orig );
 
 		inline id_t get_id () const;
-		inline entity &		get_sender () const;
+
+		inline entity * get_sender () const;
+		inline void set_sender (entity * s);
 
 		inline bool has_property ( id_t property_key ) const;
 
@@ -41,13 +44,17 @@ namespace ballistic {
 
 	};
 
+	message::message (id_t message_id) : _id (message_id), _sender (nullptr) {}
+
 	message::message ( entity * sender, id_t message_id ) : _id (message_id), _sender (sender) {}
 
 	message::message ( const message & orig ) : _properties (orig._properties), _id ( orig._id ), _sender (orig._sender) {}
 
 	inline id_t message::get_id () const { return _id; }
 
-	inline entity & message::get_sender () const { return *_sender; }
+	inline entity * message::get_sender () const { return _sender; }
+
+	inline void message::set_sender (entity * s) { _sender = s; }
 
 	bool message::has_property ( id_t property_key ) const {
 		return _properties.find (property_key) != _properties.end ();

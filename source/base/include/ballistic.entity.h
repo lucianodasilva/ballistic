@@ -24,6 +24,8 @@ namespace ballistic {
 		entity ( const entity & orig );
 		entity & operator = ( const entity & orig );
 
+		message _property_changed_message;
+
 	public:
 
 		virtual void property_changed_event (const property & p);
