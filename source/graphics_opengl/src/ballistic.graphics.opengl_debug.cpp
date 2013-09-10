@@ -129,7 +129,7 @@ namespace ballistic {
 		void opengl_debug::draw_line (const vec3 & p1, const vec3 & p2, const color & col ) {
 			gl_eval_scope (opengl_debug::draw_line);
 
-			_effect.apply ();
+			_effect.apply (nullptr);
 			_effect.set_constant (_color_uniform, col);
 
 			vec3 buffer [2] = { p1, p2 };
@@ -160,7 +160,7 @@ namespace ballistic {
 		void opengl_debug::draw_rect (const vec3 & p1, const vec3 & p2, const color & col ) {
 			gl_eval_scope (opengl_debug::draw_line);
 
-			_effect.apply ();
+			_effect.apply (nullptr);
 			_effect.set_constant (_color_uniform, col);
 
 			vec3 uc = vec3 (p2.x, p1.y, p1.z);

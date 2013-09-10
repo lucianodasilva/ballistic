@@ -9,7 +9,9 @@ namespace ballistic {
 		class itexture;
 		class ieffect;
 
-		class imaterial : public resources::iresource {
+		class idevice;
+
+		class imaterial : public ballistic::resources::iresource {
 		public:
 
 			virtual uint8		get_run_id () = 0;
@@ -29,7 +31,7 @@ namespace ballistic {
 			virtual void		set_texture (itexture * v) = 0;
 			virtual itexture *	get_texture () = 0;
 
-			virtual void		apply () = 0;
+			virtual void		apply (idevice * device) = 0;
 
 		};
 

@@ -104,7 +104,7 @@ namespace ballistic {
 			}
 		}
 		
-		void opengl_effect::apply () {
+		void opengl_effect::apply (idevice * device) {
 			
 			if (_shader_program_id == -1) {
 				glUseProgram (0);

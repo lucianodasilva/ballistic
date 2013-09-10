@@ -23,6 +23,8 @@ namespace ballistic {
 			icomponent_constructor * _constructor;
 			
 		public:
+
+			component_info ();
 			
 			icomponent_constructor * get_constructor ();
 			void set_constructor ( icomponent_constructor * ctor );

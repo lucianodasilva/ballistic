@@ -20,8 +20,12 @@ namespace ballistic {
 	id_t entity::get_id () { return _id; }
 		
 	void entity::add_component ( icomponent * component ) {
-		component->set_entity (this);
+		if (!component) {
+			debug_error ("[ballistic::entity::add_component] instance of component not set.");
+			return;
+		}
 
+		component->set_entity (this);
 		_components.push_back (component);
 	}
 

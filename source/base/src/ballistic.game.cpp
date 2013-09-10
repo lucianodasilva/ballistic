@@ -20,7 +20,7 @@ namespace ballistic {
 		if (ctor)
 			return ctor->create ();
 		else {
-			debug_warn ("Unable to load component constructor with id: " << id);
+			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
 			return nullptr;
 		}
 	}
@@ -37,7 +37,7 @@ namespace ballistic {
 			add_entity(ent);
 			return ent;
 		} else {
-			debug_warn ("Unable to load entity with id: " << type.get_id ());
+			debug_warn ("[ballistic::game::create_entity] Unable to load entity with id: " << type.get_id ());
 			return nullptr;
 		}
 	}
@@ -62,7 +62,7 @@ namespace ballistic {
 		entity_map_t::iterator it = _entity_map.find (id);
 
 		if (it == _entity_map.end ()) {
-			debug_warn ("Entity with id: " << id << " not found in entity map");
+			debug_warn ("[ballistic::game::find_entity] Entity with id: " << id << " not found in entity map");
 			return nullptr;
 		}
 

@@ -6,6 +6,7 @@
 #include "ballistic.graphics.opengl_debug.h"
 #include "ballistic.graphics.opengl_device.h"
 #include "ballistic.graphics.opengl_effect.h"
+#include "ballistic.graphics.opengl_material.h"
 #include "ballistic.graphics.opengl_mesh.h"
 
 #endif

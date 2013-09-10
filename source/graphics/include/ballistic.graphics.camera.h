@@ -29,7 +29,7 @@ namespace ballistic {
 			const camera & operator = (const camera &v);
 
 			// methods
-			uint16 get_depth (mat4 & transform);
+			uint16 get_depth (mat4 & transform) const;
 
 			mat4 get_view ();
 

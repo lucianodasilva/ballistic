@@ -170,7 +170,7 @@ namespace ballistic {
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 		
-		void opengl_mesh::apply () {
+		void opengl_mesh::apply (idevice * device) {
 			glBindVertexArray (_vertex_array_id);
 		}
 		

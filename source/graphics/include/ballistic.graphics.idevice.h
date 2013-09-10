@@ -24,7 +24,16 @@ namespace ballistic {
 			virtual itexture *	create_texture (const point & size) = 0;
 			// ---------------------------
 
+			virtual void		activate (ieffect * effect) = 0;
+			virtual void		activate (imaterial * material) = 0;
+			virtual void		activate (imesh * mesh) = 0;
+
+			// ---------------------------
+
 			virtual void		set_clear_color ( const color & cr ) = 0;
+
+			virtual void 		set_view (const mat4 & view) = 0;
+			virtual const mat4 & get_view () = 0;
 
 			virtual void		clear () = 0;
 
@@ -34,6 +43,8 @@ namespace ballistic {
 			virtual void		present () = 0;
 
 			virtual void		destroy () = 0;
+
+			virtual void		draw_active_mesh (const mat4 transform) = 0;
 		};
 
 	}

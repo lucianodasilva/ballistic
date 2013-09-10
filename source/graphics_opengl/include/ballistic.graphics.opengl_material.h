@@ -46,7 +46,8 @@ namespace ballistic {
 			virtual void		set_texture (itexture * v);
 			virtual itexture *	get_texture ();
 
-			virtual void		apply ();
+			virtual void		apply (idevice * device);
+
 
 		};
 

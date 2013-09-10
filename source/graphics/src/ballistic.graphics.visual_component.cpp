@@ -5,6 +5,21 @@
 namespace ballistic {
 	namespace graphics {
 
+		void visual_component::setup (vector < ballistic::property > & parameters)
+		{
+
+			for (ballistic::property & prop : parameters) {
+
+				ballistic::id_t prop_id = prop.get_id ();
+
+				if (prop_id == ballistic::graphics::id::material)
+					_material = prop.as <imaterial *> ();
+				else if (prop_id == ballistic::graphics::id::mesh)
+					_mesh = prop.as < imesh * >();
+			}
+
+		}
+
 		visual_component::visual_component ()
 			:
 			_material (nullptr),
@@ -13,6 +28,12 @@ namespace ballistic {
 		{}
 
 		void visual_component::notify ( ballistic::message & message ) {
+
+			// if render... render :D 
+			if (message.get_id () == graphics::id::message_render) {
+				_system->push_item (_material, _mesh, _transform);
+				return;
+			}
 
 			// handle property changes
 			if (message.get_id () == ballistic::id::message_property_changed && 
@@ -32,19 +53,17 @@ namespace ballistic {
 				return;
 			}
 
-			if (message.get_id () != graphics::id::message_render)
-				return;
+			// if initialize load game and entity properties
+			if (message.get_id () == ballistic::id::message_initialize) {
 
-			// 1st probable run
-			if (!_system) {
 				_system = message [graphics::id::system_component];
 
-				_material = get_entity ()->get_property (graphics::id::material);
-				_mesh = get_entity ()->get_property (graphics::id::mesh);
-				_transform = get_entity ()->get_property (ballistic::id::transform);
-			}
+				entity * ent = get_entity ();
 
-			_system->push_item (_material, _mesh, _transform);
+				_material	= ent->get_property (ballistic::graphics::id::material);
+				_mesh		= ent->get_property (ballistic::graphics::id::mesh);
+				_transform	= ent->get_property (ballistic::id::transform);
+			}
 
 		}
 

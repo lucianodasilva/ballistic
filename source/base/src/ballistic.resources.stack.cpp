@@ -34,14 +34,14 @@ namespace ballistic {
 		if (loader)
 			_loaders.push_back (loader);
 		else
-			debug_warn ("Tried to register null instance resource loader");
+			debug_warn ("[ballistic::resource::stack::register_loader] Tried to register null instance resource loader");
 	}
 	
 	void stack::register_storage(istorage *storage) {
 		if (storage)
 			_storage_handlers.push_back(storage);
 		else
-			debug_warn ("Tried to register null instance resource storage handler");
+			debug_warn ("[ballistic::resource::stack::register_storage] Tried to register null instance resource storage handler");
 	}
 		
 	istorage * stack::find_storage(const string &source) {
@@ -49,7 +49,7 @@ namespace ballistic {
 			if (storage->contains(source))
 				return storage;
 		
-		debug_warn ("Storage type for source: " << source << " not found!");
+		debug_warn ("[ballistic::resource::stack::find_storage] Storage type for source: " << source << " not found!");
 		return nullptr;
 	}
 		
@@ -108,7 +108,7 @@ namespace ballistic {
 	iresource * stack::get_resource(id_t id) {
 		resource_map_t::iterator res_it = _resources.find (id);
 		if (res_it == _resources.end ()) {
-			debug_warn ("Resource with id: " << id << " not found");
+			debug_warn ("[ballistic::resource::stack::get_resource] Resource with id: " << id << " not found");
 			return nullptr;
 		}
 		
@@ -134,7 +134,7 @@ namespace ballistic {
 		
 		// unable to handle resource type
 		if (!loader) {
-			debug_error ("Unable to handle resource type: " << res_id.get_source ());
+			debug_error ("[ballistic::resource::stack::get_resource] Unable to handle resource type: " << res_id.get_source ());
 			return nullptr;
 		}
 		
@@ -147,7 +147,7 @@ namespace ballistic {
 			}
 		}
 		
-		debug_error ("No appropriate storage container found for " << res_id.get_source ());
+		debug_error ("[ballistic::resource::stack::get_resource] No appropriate storage container found for " << res_id.get_source ());
 		return nullptr;
 	}
 		

@@ -5,6 +5,8 @@
 
 namespace ballistic {
 	namespace resources {
+
+		component_info::component_info () : _constructor (nullptr) {}
 	
 		icomponent_constructor * component_info::get_constructor () {
 			return _constructor;
@@ -45,7 +47,7 @@ namespace ballistic {
 		
 		icomponent * component_info::create () {
 			if (!_constructor) {
-				debug_error ("Component constructor not set. Cannot build contructor.");
+				debug_error ("[ballistic::resources::component_info::create] Component constructor not set. Cannot create component instance.");
 				return nullptr;
 			}
 			

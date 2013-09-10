@@ -53,7 +53,7 @@ namespace ballistic {
 				uint32			index_buffer_size
 			);
 			
-			virtual void apply ();
+			virtual void apply (idevice * device);
 			virtual void render ();
 			
 		};

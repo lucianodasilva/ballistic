@@ -21,8 +21,8 @@ namespace ballistic {
 				return;
 			}
 
-			_diffuse_constant = _effect->get_constant (id::material_diffuse);
-			_specular_constant = _effect->get_constant (id::material_specular);
+			_diffuse_constant = _effect->get_constant (id::effect_diffuse);
+			_specular_constant = _effect->get_constant (id::effect_specular);
 		}
 
 		ieffect * opengl_material::get_effect () {
@@ -61,15 +61,11 @@ namespace ballistic {
 			return _texture;
 		}
 
-		void opengl_material::apply () {
+		void opengl_material::apply (idevice * device) {
 			if (!_effect) {
 				debug_error ("GL material has no bound effect");
 				return;
 			}
-
-			_effect->apply ();
-
-			// apply device constants
 
 			// apply material
 			_effect->set_constant (_diffuse_constant, _diffuse);

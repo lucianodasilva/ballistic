@@ -55,7 +55,7 @@ namespace ballistic {
 				const string & fs_shader_source
 			);
 			
-			virtual void apply ();
+			virtual void apply (idevice * device);
 
 			void set_constant (opengl_constant & u, int32 v);
 			void set_constant (opengl_constant & u, real v);

@@ -28,6 +28,8 @@ namespace ballistic {
 
 			virtual void notify ( ballistic::message & message );
 
+			virtual void setup (vector < ballistic::property > & parameters);
+
 		};
 				  
 	}

@@ -38,12 +38,16 @@ namespace ballistic {
 
 					auto ctor = stack.get_resource < icomponent_constructor > (string_to_id (cursor->Name ()));
 
-					if (ctor) 
+					if (ctor) {
 						comp_info.set_constructor (ctor);
-					
-					property_container_reader::read < property_container_reader::default_type_reader > (cursor, stack, &comp_info);
+						property_container_reader::read < property_container_reader::default_type_reader > (cursor, stack, &comp_info);
+					}
+					debug_run (
+					else
+					debug_error ("[ballistic::resources::entity_type::load_components] \"" << cursor->Name () << "\" component not defined.");
+					);
 
-					cursor->NextSiblingElement();
+					cursor = cursor->NextSiblingElement();
 				}
 			}
 			
@@ -112,14 +116,14 @@ namespace ballistic {
 			XMLDocument document;
 
 			if (document.LoadStream (source, length)) {
-				debug_error ("Failed to load xml package file");
+				debug_error ("[ballistic::resources::package_loader::load] Failed to load xml package file");
 				return false;
 			}
 			
 			auto root = document.FirstChildElement("package");
 			
 			if (!root) {
-				debug_error ("Failed to find \"package\" root node in package xml file");
+				debug_error ("[ballistic::resources::package_loader::load] Failed to find \"package\" root node in package xml file");
 				return false;
 			}
 			
@@ -128,7 +132,11 @@ namespace ballistic {
 				type_map_t::iterator it = _registered_types.find (cursor->Name());
 				
 				if (it != _registered_types.end ())
-					it->second->load_element(cursor, stack);
+					it->second->load_element (cursor, stack);
+				debug_run (
+					else
+						debug_warn ("[ballistic::resources::package_loader::load] unregistered element type " << cursor->Name () << " found in package.");
+				);
 				
 				cursor = cursor->NextSiblingElement();
 			}

@@ -6,6 +6,7 @@
 
 #include "ballistic.graphics.idevice.h"
 #include "ballistic.graphics.camera.h"
+#include "ballistic.graphics.render_list.h"
 
 namespace ballistic {
 	namespace graphics {
@@ -19,6 +20,8 @@ namespace ballistic {
 			message		_render_message;
 			game *		_game;
 
+			render_list _render_list;
+
 		public:
 
 			system_component ();
@@ -28,6 +31,8 @@ namespace ballistic {
 
 			void set_camera (camera cam);
 			const camera & get_camera ();
+
+			void render ();
 
 			virtual void notify ( ballistic::message & message );
 

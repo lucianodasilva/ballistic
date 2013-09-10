@@ -8,8 +8,10 @@ namespace ballistic {
 
 		enum mesh_attribute {
 			mesh_attribute_position = 1,
-			mesh_attribute_uv		= 2,
+			mesh_attribute_uv		= 2
 		};
+
+		class idevice;
 
 		class imesh : public ballistic::resources::iresource {
 		public:
@@ -36,7 +38,7 @@ namespace ballistic {
 				uint32			index_buffer_size
 			) = 0;
 
-			virtual void apply () = 0;
+			virtual void apply (idevice * device) = 0;
 			virtual void render () = 0;
 		};
 

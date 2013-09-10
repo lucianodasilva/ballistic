@@ -9,6 +9,8 @@ using namespace std;
 namespace ballistic {
 	namespace graphics {
 
+		class idevice;
+
 		class ieffect : public ballistic::resources::iresource {
 		public:
 
@@ -19,7 +21,7 @@ namespace ballistic {
 				const string & fs_shader_source
 			) = 0;
 
-			virtual void apply () = 0;
+			virtual void apply (idevice * device) = 0;
 
 		};
 

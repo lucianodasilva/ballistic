@@ -67,6 +67,9 @@ namespace ballistic {
 						v.w = convert_to < real, string > (trim);
 
 						out_value = v;
+					} else if (type == "bool") {
+						bool v = value == "true";
+						out_value = v;
 					} else {
 						out_value = value; //as string
 					}
