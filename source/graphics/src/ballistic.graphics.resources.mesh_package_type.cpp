@@ -130,6 +130,8 @@ namespace ballistic {
 
 				mesh->set_data (data_buffer, buffer_size, index.data (), index.size (), m_attribute, false);
 
+				delete [] data_buffer;
+
 				stack.add_to_level (string_to_id (name), mesh);
 
 			}
