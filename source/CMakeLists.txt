@@ -1,39 +1,63 @@
 cmake_minimum_required(VERSION 2.8)
 
-project ( ballistic )
+# -------- setup cmake additions ---------
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+# ----------------------------------------
+
+project ( ballistic_graphics )
 # ----------------------------------------------------------------
+set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Load engine library and main projects
 set ( proj_dir ${CMAKE_CURRENT_LIST_DIR} )
 
-set ( deps_dir      ${proj_dir}/deps )
-set ( engine_dir 	${proj_dir}/engine )
-set ( graphics_dir 	${proj_dir}/graphics )
-set ( game_dir 		${proj_dir}/game )
-set ( demo_dir	    ${proj_dir}/demo )
+set ( Ballistic_Base_Dir       		${proj_dir}/base )
+set ( Ballistic_Graphics_Dir   		${proj_dir}/graphics )
+set ( Ballistic_Graphics_DX_Dir		${proj_dir}/graphics_directx )
+set ( Ballistic_Graphics_OpenGL_Dir	${proj_dir}/graphics_opengl )
 
-set ( deps_dir      ${deps_dir}     CACHE STRING "Path to dependency containing folder" )
-set ( engine_dir 	${engine_dir} 	CACHE STRING "Path to Engine Library" )
-set ( graphics_dir 	${graphics_dir} CACHE STRING "Path to Graphics Library" )
-set ( game_dir 		${game_dir} 	CACHE STRING "Path to Game Implementation" )
-set ( demo_dir      ${demo_dir}     CACHE STRING "Path to Demo implementation" )
+set ( Ballistic_Demo_Dir			${proj_dir}/demo )
 
-# include dependencies
-set_property (GLOBAL PROPERTY USE_FOLDERS ON)
-# glew
-include ( ${deps_dir}/glew/CMakeLists.txt )
-set_property (TARGET glew PROPERTY FOLDER "dependencies")
-# glfw (opengl windowing framework)
-include ( ${deps_dir}/glfw/CMakeLists.txt )
-set_property (TARGET glfw PROPERTY FOLDER "dependencies")
-# glm (math lib)
-include ( ${deps_dir}/glm/CMakeLists.txt )
-set_property (TARGET glm PROPERTY FOLDER "dependencies")
+# Enable building for several graphics api's
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set ( Ballistic_DXGraphics TRUE CACHE BOOL "Build for DirectX 9.0")
+endif ()
 
-include ( ${engine_dir}/CMakeLists.txt )
-include ( ${graphics_dir}/CMakeLists.txt )
-include ( ${game_dir}/CMakeLists.txt )
-include ( ${demo_dir}/CMakeLists.txt )
+set ( Ballistic_OpenGLGraphics TRUE CACHE BOOL "Build for OpenGL 3")
+
+# library source code path settings
+set ( Ballistic_Base_Dir      ${Ballistic_Base_Dir}     CACHE PATH "Path to Base Library" )
+set ( Ballistic_Graphics_Dir  ${Ballistic_Graphics_Dir} CACHE PATH "Path to Graphics Library" )
+set ( Ballistic_Demo_Dir      ${Ballistic_Demo_Dir}     CACHE PATH "Path to Demo implementation" )
+
+set ( Ballistic_Graphics_DX_Dir ${Ballistic_Graphics_DX_Dir} CACHE PATH "Path to DirectX device implementation" )
+set ( Ballistic_Graphics_OpenGL_Dir ${Ballistic_Graphics_OpenGL_Dir} CACHE PATH "Path to OpenGL device implementation")
+
+# --------- dependencies ----------
+include (${proj_dir}/deps/tinyxml2/CMakeLists.txt )
+include (${proj_dir}/deps/glew/CMakeLists.txt)
+
+# --------- core projects ----------
+include ( ${Ballistic_Base_Dir}/CMakeLists.txt )
+
+include ( ${Ballistic_Graphics_Dir}/CMakeLists.txt )
+
+if ( Ballistic_DXGraphics )
+	include (${Ballistic_Graphics_DX_Dir}/CMakeLists.txt)
+endif()
+
+if ( Ballistic_OpenGLGraphics )
+	include (${Ballistic_Graphics_OpenGL_Dir}/CMakeLists.txt)
+endif()
+
+include ( ${Ballistic_Demo_Dir}/CMakeLists.txt )
+
+# --------- frontends ---------
+
+# development frontend
+include ( ${proj_dir}/frontend/dev_frontend/CMakeLists.txt )
+
+# -----------------------------
 
 # enable c++11
 if (NOT CMAKE_DEFINED_COMPILER MATCHES BALLISTIC_MSVC)
@@ -45,4 +69,4 @@ if (NOT CMAKE_DEFINED_COMPILER MATCHES BALLISTIC_MSVC)
 	endif ()
 endif ()
 
-project ( ballistic )
+project ( ballistic_graphics )

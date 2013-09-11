@@ -3,7 +3,7 @@
 ##
 
 build/
-source/engine/include/ballistic.config.h
+source/base/include/ballistic.config.h
 
 #################
 ## Eclipse

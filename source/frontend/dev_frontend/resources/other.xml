@@ -1,0 +1,11 @@
+
+<package>
+
+	<entity name="other_cube">
+		<properties>
+			<counter type="int" value="12"/>
+		</properties>
+
+	</entity>
+
+</package>

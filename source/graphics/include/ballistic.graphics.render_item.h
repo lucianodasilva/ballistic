@@ -1,28 +1,30 @@
-#ifndef	_ballistic_graphics_render_item_h_
-#define _ballistic_graphics_render_item_h_
+#ifndef	_ballistic_graphics_object_h_
+#define _ballistic_graphics_object_h_
 
-#include "ballistic.graphics.irenderable.h"
-#include "ballistic.graphics.material.h"
+#include <ballistic.base.h>
 
-#include <glm.hpp>
-
-using namespace glm;
+#include "ballistic.graphics.camera.h"
 
 namespace ballistic {
 	namespace graphics {
 
+		class imesh;
+		class imaterial;
+
+		typedef uint32 render_bucket;
+
 		struct render_item {
-			
-			irenderable * render_object;
-			mat4 transform;
-			material * material;
 
-			inline render_item () : render_object (nullptr), material (nullptr) {}
+			imesh *			mesh;
+			imaterial *		material;
+			mat4			transform;
 
-			inline render_item ( irenderable * renderable, const mat4 & transf_matrix, graphics::material * mat )
-				: render_object (renderable), transform (transf_matrix), material (mat) {}
+			render_bucket	bucket;
+
+			static void set_render_bucket (render_item & item, const camera & camera);
 
 		};
+
 
 	}
 }

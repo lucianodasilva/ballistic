@@ -14,4 +14,5 @@ file ( GLOB demo_source
 )
 
 add_executable ( demo ${demo_source} )
-target_link_libraries ( demo game engine graphics glfw glew ${glfw_LIBRARIES})
+
+target_link_libraries ( demo base graphics tinyxml2)

@@ -1,0 +1,61 @@
+# set operating system preprocessor definitions
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    # linux
+    set (CMAKE_DEFINED_OS BALLISTIC_LINUX)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    # windows
+    set (CMAKE_DEFINED_OS BALLISTIC_WIN)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # darwin ( macosx )
+    set (CMAKE_DEFINED_OS BALLISTIC_MACOSX)
+endif ()
+
+# set compiler id preprocessor definitions
+if (CMAKE_COMPILER_IS_GNUXX)
+    # gnu C++
+    set ( CMAKE_DEFINED_COMPILER BALLISTIC_GNUXX )
+elseif (CMAKE_COMPILER_IS_GNUCC)
+    # gnu c
+    set ( CMAKE_DEFINED_COMPILER BALLISTIC_GNUCC )
+elseif (MSVC)
+    # msvc++
+    set ( CMAKE_DEFINED_COMPILER BALLISTIC_MSVC )
+endif ()
+
+# set graphics library of choice
+if (Ballistic_DXGraphics)
+    set ( CMAKE_DEFINED_DX "#   define BALLISTIC_DIRECTX" )
+endif ()
+
+if (Ballistic_OpenGLGraphics)
+    set ( CMAKE_DEFINED_OPENGL "#   define BALLISTIC_OPENGL"  )
+endif ()
+
+# setting basic numeric types
+
+# set integer types to cstdint
+set (CMAKE_DEFINED_INTTYPES
+		"#include <cstdint>
+
+typedef int8_t      int8;
+typedef uint8_t     uint8;
+typedef int16_t     int16;
+typedef uint16_t    uint16;
+typedef int32_t     int32;
+typedef uint32_t    uint32;
+typedef int64_t     int64;
+typedef uint64_t    uint64;"
+	)
+
+# test endianess
+include (TestBigEndian)
+test_big_endian (TEST_ENDIAN)
+
+if (TEST_ENDIAN)
+    set (CMAKE_DEFINED_ENDIANESS BALLISTIC_BIG_ENDIAN)
+else ()
+    set (CMAKE_DEFINED_ENDIANESS BALLISTIC_LITTLE_ENDIAN)
+endif ()
+
+# configure
+configure_file ( ${CMAKE_CURRENT_LIST_DIR}/CMake.Generate.in ${CMAKE_CURRENT_LIST_DIR}/include/ballistic.config.h)

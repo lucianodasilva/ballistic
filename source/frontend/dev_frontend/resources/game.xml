@@ -1,0 +1,50 @@
+
+<package>
+
+	<include source="resources/other.xml"/>
+
+	<texture name="little_doll.image" source="materials/textures/little_doll.png"/>
+
+  <material name="square.material" diffuse="1.0, 1.0, 1.0, 1.0" opaque="true"/>
+  
+  <mesh name="square.mesh">
+    <position>
+      -1.0, -1.0, 0.0,
+      1.0, -1.0, 0.0,
+      1.0, 1.0, 0.0,
+      -1.0, 1.0, 0.0
+    </position>
+    <uv>
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
+      0.0, 1.0
+    </uv>
+    <index>
+      0, 1, 3,
+      3, 1, 2
+    </index>
+  </mesh>
+
+	<entity name="rotating_square">
+
+		<properties>
+			<position type="int" value="12"/>
+			<color	  type="color" value="1.0, 1.0, 1.0, 1.0"/>
+      <material type="res" value="square.material"/>
+      <mesh     type="res" value="square.mesh"/>
+		</properties>
+
+		<components>
+			<colidable/>
+
+			<visual_component>
+				<mesh type="res" value="little_doll.mesh"/>
+				<material type="res" value="little_doll.material"/>
+			</visual_component>
+
+		</components>
+
+	</entity>
+
+</package>

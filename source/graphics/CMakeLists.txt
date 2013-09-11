@@ -11,18 +11,9 @@ file ( GLOB graphics_source
 	${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
 	${CMAKE_CURRENT_LIST_DIR}/include/*.h
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
+	${CMAKE_CURRENT_LIST_DIR}/include/*.inl
 )
 
 add_library ( graphics STATIC ${graphics_source} )
 
-if (APPLE)
-	include_directories (/System/Library/Frameworks)
-	find_library ( OpenGL_LIBRARY OpenGL )
-	mark_as_advanced ( 
-			OpenGL_LIBRARY
-	)
-else ()
-	find_package(OpenGL REQUIRED)
-endif ()
-
-target_link_libraries ( graphics engine glfw glew ${glfw_LIBRARIES} ${OpenGL_LIBRARY} )
+target_link_libraries ( graphics base )
