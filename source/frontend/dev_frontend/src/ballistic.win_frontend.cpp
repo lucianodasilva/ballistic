@@ -44,7 +44,7 @@ namespace ballistic {
 			wc.lpszClassName	= "BallisticWndClass";
 
 			if (!RegisterClass (&wc)) {
-				debug_error ("Failed to register window class");
+				debug_error ("[ballistic::win_desktop::frontend::create] Failed to register window class");
 				return false;
 			}
 
@@ -62,7 +62,7 @@ namespace ballistic {
 				0);
 
 			if ( _window_handle == 0 ) {
-				debug_error ("Failed to create window instance");
+				debug_error ("[ballistic::win_desktop::frontend::create] Failed to create window instance");
 				return false;
 			}
 
@@ -91,24 +91,24 @@ namespace ballistic {
 
 				int pixel_format = ChoosePixelFormat (_window_dc, & pfd); 
 				if (pixel_format == 0) {
-					debug_error ("Failed to create pixel format");
+					debug_error ("[ballistic::win_desktop::frontend::create] Failed to create pixel format");
 					return false;
 				}
 
 				if (SetPixelFormat (_window_dc, pixel_format, &pfd) == FALSE) {
-					debug_error ("Failed to setS pixel format");
+					debug_error ("[ballistic::win_desktop::frontend::create] Failed to setS pixel format");
 					return false;
 				}
 
 				_window_gl_rc = wglCreateContext (_window_dc);
 				if (_window_gl_rc == NULL) {
-					debug_error ("Failed to create open gl render context");
+					debug_error ("[ballistic::win_desktop::frontend::create] Failed to create open gl render context");
 					return false;
 				}
 
 				if (wglMakeCurrent (_window_dc, _window_gl_rc) == NULL) 
 				{
-					debug_error ("Failed to select open gl render context");
+					debug_error ("[ballistic::win_desktop::frontend::create] Failed to select open gl render context");
 					return false;
 				}
 

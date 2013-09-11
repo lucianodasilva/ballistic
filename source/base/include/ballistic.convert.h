@@ -8,6 +8,8 @@
 #include <sstream>
 #include <type_traits>
 
+#pragma warning (disable : 4800 )
+
 namespace ballistic {
 
 #	define MSG_NOT_FUNDAMENTAL_SRC	"Non fundamental source type for conversion."

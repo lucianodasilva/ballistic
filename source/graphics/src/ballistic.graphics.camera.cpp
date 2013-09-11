@@ -36,7 +36,7 @@ namespace ballistic {
 			return *this;
 		}
 
-		uint16 camera::get_depth (mat4 & transform) {
+		uint16 camera::get_depth (mat4 & transform) const {
 			real z = math::length (
 					vec3 (transform.m12, transform.m13, transform.m14),
 					position
@@ -60,7 +60,7 @@ namespace ballistic {
 			);
 		}
 
-		mat4 camera::make_projection (real left, real right, real bottom, real top, real near, real far) {
+		mat4 camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
 			return mat4 (
 				2.0 / (right - left), .0, .0, -((right + left) / (right - left)),
 				.0, 2.0 / (top - bottom), .0, -((top + bottom) / (top - bottom)),

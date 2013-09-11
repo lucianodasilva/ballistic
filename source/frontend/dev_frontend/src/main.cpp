@@ -1,8 +1,11 @@
 
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
+#include <ballistic.graphics.render_list.h>
 
 #include <map>
+#include <chrono>
+#include <limits>
 
 ballistic::game *				_game;
 ballistic::ifrontend *			_frontend;
@@ -47,79 +50,6 @@ ballistic::graphics::idevice * create_device () {
 
 ballistic::res_id_t res_rotating_square ("rotating_square", "resources/game.xml");
 
-// ------------------------------------------------------------------------------
-/*
-@ http://www.sjbaker.org/steve/omniv/love_your_z_buffer.html
-
-z_buffer_value = (1 << N) * (a + b / z)
-
-Where:
-
-N = number of bits of Z precision
-	a = zFar / (zFar - zNear)
-	b = zFar * zNear / (zNear - zFar)
-	z = distance from the eye to the object
-
-	...and z_buffer_value is an integer.
-  */
-
-struct render_bucket {
-
-	union {
-		uint32 data;
-
-		struct {
-			uint8	_b0;
-			uint8	_b1;
-			uint8	_b2;
-			uint8	_b3;
-		};
-	};
-
-	inline void set_value (int8 layer, bool translucent, uint16 depth, uint8 material) {
-		// set layer
-		_b0 = (layer << 1);
-		// set translucent
-		if (translucent) {
-			_b0 ^= 0x01;
-			_b1 = material;
-			*((uint16 *)&_b2) = depth;
-		} else {
-			_b0 |= 0x01;
-			*((uint16 *)&_b1) = depth;
-			_b3 = material;
-		}
-
-	}
-
-	inline bool get_translucent () { return _b0 & 0x01; }
-
-	inline int8 get_layer () { return (_b0 >> 1) & 0x7F; }
-
-
-	inline uint16 get_depth () {
-		return get_depth (get_translucent ());
-	}
-
-	inline uint16 get_depth (bool translucent) {
-		if (translucent)
-			return *(uint16 *)&_b2;
-		else
-			return *(uint16 *)&_b1;
-	}
-
-	inline uint8 get_material () {
-		return get_material (get_translucent ());
-	}
-
-	inline uint8 get_material (bool translucent) {
-		if (translucent)
-			return _b3;
-		else
-			return _b1;
-	}
-};
-
 int main ( int argc, char ** argv) {
 	
 	debug_init();
@@ -129,22 +59,23 @@ int main ( int argc, char ** argv) {
 	_frontend->show ();
 
 	_device = create_device ();
-	_device->set_clear_color(color (.0, .6, 1., 1.));
+	_device->set_clear_color(color (.0F, .6F, 1.F, 1.F));
 	
 	_game = new ballistic::game ();
+
+	// setup game stuffs
+	ballistic::graphics::define_resources (_game, _device);
 	
+	_game->get_property (ballistic::graphics::id::graphics_device) = _device;
+
+	_game->add_component (
+		_game->create_component (ballistic::graphics::id::system_component));
+
+	// create entities
+	ballistic::entity * rot_square = _game->create_entity (res_rotating_square);
+
+	// initialize
 	_game->on_initialize ();
-
-	_game->define_component < ballistic::graphics::system_component > (ballistic::string_to_id ("graphics_system"));
-	
-	auto graphics_system
-		= _game->create_component < ballistic::graphics::system_component > (ballistic::string_to_id ("graphics_system"));
-
-	graphics_system->set_device (_device);
-
-	_game->add_component (graphics_system);
-	//ballistic::component::define < ballistic::graphics::system_component > ("graphics_system");
-	//((ballistic::graphics::system_component *)_game->create_component ("graphics_system"))->set_device (_device);
 
 	_frontend->do_event_loop (_game);
 

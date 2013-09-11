@@ -1,29 +1,21 @@
 #include "ballistic.graphics.system_component.h"
+#include "ballistic.graphics.common_id.h"
+
+#include "ballistic.graphics.ieffect.h"
+#include "ballistic.graphics.imaterial.h"
+#include "ballistic.graphics.imesh.h"
 
 namespace ballistic {
 	namespace graphics {
 
-		void system_component::push_item () {}
+		system_component::system_component () :
+			_device (nullptr),
+			_game (nullptr),
+			_render_message (id::message_render) 
+		{}
 
 		void system_component::set_device ( idevice * device ) {
 			_device = device;
-
-			_mesh = _device->create_mesh ();
-
-			ballistic::graphics::vertex vbuffer [4]
-				= {
-					{vec3 (-0.1, 0.1, 0.0), vec2 (0.0, 0.0)},
-					{vec3 (0.1, 0.1, 0.0), vec2 (1.0, 0.0)},
-					{vec3 (0.1, -0.1, 0.0), vec2 (1.0, 1.0)},
-					{vec3 (-0.1, -0.1, 0.0), vec2 (0.0, 1.0)}
-			};
-
-			uint16 index [6] = {
-				0, 1, 2,
-				0, 2, 3
-			};
-
-			_mesh->set_data (vbuffer, 4, index, 6);
 		}
 
 		idevice * system_component::get_device () {
@@ -38,31 +30,85 @@ namespace ballistic {
 			return _camera;
 		}
 
-		void system_component::notify ( ballistic::message & message ) {
+		void system_component::render () {
 
-			if (!_device)
+			if (!_device) {
+				debug_error ("[ballistic::graphics::system_component::render] Graphics device not set!");
 				return;
+			}
 
-			if (message.get_id () != ballistic::id::message_update) return;
+			_render_list.clear ();
 
-			// notify visible items to render
-			//mat4 model_view;
-			//mat4 ortho_projection = camera::make_projection (-1., 1., -1., 1., -1, 100);
+			// notify entities with visuals
+			_game->send_message (_render_message);
+
+			_device->set_view (_camera.get_view ());
+
+			// sort
+			_render_list.sort ();
 
 			_device->clear ();
 			_device->begin_frame ();
 
-			//_device->set_transform (model_view);
-			//_device->set_projection (ortho_projection);
+			// render loop ---------------------------
+			uint32 render_count = _render_list.size ();
+			imaterial * material = nullptr;
+			ieffect * effect = nullptr;
+			imesh * mesh = nullptr;
 
-			//_device->set_current_mesh (_mesh);
-			//_mesh->render ();
+			for (uint32 i = 0; i < render_count; ++i) {
+				render_item & item = _render_list [i];
 
-			// for each item
-			// _device->set_transform (view * item->transform);
+				if (item.material->get_effect () != effect) {
+					effect = item.material->get_effect ();
+					_device->activate (effect);
+				}
+
+				if (item.material != material) {
+					material = item.material;
+					_device->activate (material);
+				}
+
+				if (item.mesh != mesh) {
+					mesh = item.mesh;
+					_device->activate (mesh);
+				}
+
+				// render the stuffs
+				_device->draw_active_mesh (item.transform);
+
+			}
 
 			_device->end_frame ();
 			_device->present ();
+		}
+
+		void system_component::notify ( ballistic::message & message ) {
+
+			if (message.get_id () != ballistic::id::message_update) return;
+
+			// 1st frame - setup stuff
+			if (!_game) {
+				_game = get_entity ()->get_game ();
+				_render_message.set_sender (get_entity ());
+				_render_message [graphics::id::system_component] = this;
+
+				if (!_device)
+					_device = _game->get_property (graphics::id::graphics_device);
+			}
+
+			render ();
+
+		}
+
+		void system_component::push_item (imaterial * material, imesh * mesh, const mat4 & transform) {
+			render_item & item = _render_list.reserve_item ();
+
+			item.material = material;
+			item.mesh = mesh;
+			item.transform = transform;
+
+			render_item::set_render_bucket (item, _camera);
 		}
 
 	}

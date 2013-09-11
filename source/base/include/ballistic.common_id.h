@@ -1,5 +1,5 @@
-#ifndef	_ballistic_engine_common_id_h_
-#define _ballistic_engine_common_id_h_
+#ifndef	_ballistic_common_id_h_
+#define _ballistic_common_id_h_
 
 #include "ballistic.id.h"
 

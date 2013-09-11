@@ -1,19 +1,14 @@
 #include "ballistic.graphics.opengl_effect.h"
-#include "ballistic.graphics.opengl_constant.h"
 #include "ballistic.graphics.opengl_debug.h"
 
 namespace ballistic {
 	namespace graphics {
 
-		opengl_effect::opengl_effect () : _shader_program_id(-1) {}
+		opengl_effect::opengl_effect (uint8 run_id) : _run_id (run_id), _shader_program_id(-1) {}
 
 		opengl_effect::~opengl_effect () {
 			if (_shader_program_id != -1)
 				glDeleteProgram (_shader_program_id);
-
-			for (auto hard_const : _constants) {
-				delete hard_const.second;
-			}
 		}
 		
 		bool opengl_effect::is_shader_ok(GLint shader_id) {
@@ -40,14 +35,16 @@ namespace ballistic {
 			gl_eval_shader_compile (shader_id);
 		}
 
-		ihardware_constant * opengl_effect::get_constant (id_t id) const {
+		uint8 opengl_effect::get_run_id () { return _run_id; }
+
+		opengl_constant opengl_effect::get_constant (id_t id) const {
 			auto it = _constants.find (id);
 
 			if (it != _constants.end ())
 				return it->second;
 
 			debug_error ("GL Effect get constant with id:" << id << " not found.");
-			return nullptr;
+			return opengl_constant ();
 		}
 		
 		void opengl_effect::load (
@@ -103,29 +100,11 @@ namespace ballistic {
 
 				id_t id = string_to_id (name);
 
-				switch (type) {
-				case (GL_INT) :
-					_constants [id] = new opengl_constant < int32 > (id, location);
-					break;
-				case (GL_FLOAT):
-					_constants [id] = new opengl_constant < real > (id, location);
-					break;
-				case (GL_FLOAT_VEC3):
-					_constants [id] = new opengl_constant < vec3 > (id, location);
-					break;
-				case (GL_FLOAT_VEC4):
-					_constants [id] = new opengl_constant < vec4 > (id, location);
-					break;
-				case (GL_FLOAT_MAT4):
-					_constants [id] = new opengl_constant < mat4 > (id, location);
-					break;
-				default:
-					debug_error ("GL Shader type " << type << " not supported for constant " << name);
-				};
+				_constants [id] = opengl_constant (location, id);
 			}
 		}
 		
-		void opengl_effect::apply () {
+		void opengl_effect::apply (idevice * device) {
 			
 			if (_shader_program_id == -1) {
 				glUseProgram (0);
@@ -133,6 +112,66 @@ namespace ballistic {
 			}
 			
 			glUseProgram (_shader_program_id);
+		}
+
+		void opengl_effect::set_constant (opengl_constant & u, int32 v) {
+			if (!u.location) {
+				debug_error ("GL constant " << u.id << " location not defined");
+				return;
+			}
+
+			gl_eval_scope (opengl_effect::set_constant (int32));
+			glUniform1i (u.location, v);
+		}
+
+		void opengl_effect::set_constant (opengl_constant & u, real v) {
+			if (!u.location) {
+				debug_error ("GL constant " << u.id << " location not defined");
+				return;
+			}
+
+			gl_eval_scope (opengl_effect::set_constant (real));
+			glUniform1f (u.location, v);
+		}
+
+		void opengl_effect::set_constant (opengl_constant & u, const vec2 & v) {
+			if (!u.location) {
+				debug_error ("GL constant " << u.id << " location not defined");
+				return;
+			}
+
+			gl_eval_scope (opengl_effect::set_constant (vec2));
+			glUniform2f (u.location, v.x, v.y);
+		}
+
+		void opengl_effect::set_constant (opengl_constant & u, const vec3 & v) {
+			if (!u.location) {
+				debug_error ("GL constant " << u.id << " location not defined");
+				return;
+			}
+
+			gl_eval_scope (opengl_effect::set_constant (vec3));
+			glUniform3f (u.location, v.x, v.y, v.z);
+		}
+
+		void opengl_effect::set_constant (opengl_constant & u, const vec4 & v) {
+			if (!u.location) {
+				debug_error ("GL constant " << u.id << " location not defined");
+				return;
+			}
+
+			gl_eval_scope (opengl_effect::set_constant (vec4));
+			glUniform4f (u.location, v.x, v.y, v.z, v.w);
+		}
+
+		void opengl_effect::set_constant (opengl_constant & u, const mat4 & v) {
+			if (!u.location) {
+				debug_error ("GL constant " << u.id << " location not defined");
+				return;
+			}
+
+			gl_eval_scope (opengl_effect::set_constant (mat4));
+			glUniformMatrix4fv (u.location, 1, false, (GLfloat *)&v);
 		}
 
 	}

@@ -4,41 +4,47 @@
 #include <ballistic.base.h>
 #include <string>
 
-#include "ballistic.graphics.imesh.h"
-#include "ballistic.graphics.itexture.h"
-
 using namespace std;
 
 namespace ballistic {
 	namespace graphics {
 
+		class ieffect;
+		class imaterial;
+		class imesh;
+		class itexture;
+
 		class idevice {
 		public:
 
+			// Resources ----------------
+			virtual ieffect *	create_effect () = 0;
+			virtual imaterial * create_material () = 0;
 			virtual imesh *		create_mesh () = 0;
 			virtual itexture *	create_texture (const point & size) = 0;
+			// ---------------------------
 
-			virtual imesh *		load_mesh ( const string & filename ) = 0;
-			virtual itexture *	load_texture ( const string & filename ) = 0;
-			
-			virtual void		set_transform ( const mat4 & matrix ) = 0;
-			virtual void		set_projection ( const mat4 & matrix ) = 0;
+			virtual void		activate (ieffect * effect) = 0;
+			virtual void		activate (imaterial * material) = 0;
+			virtual void		activate (imesh * mesh) = 0;
+
+			// ---------------------------
 
 			virtual void		set_clear_color ( const color & cr ) = 0;
+
+			virtual void 		set_view (const mat4 & view) = 0;
+			virtual const mat4 & get_view () = 0;
 
 			virtual void		clear () = 0;
 
 			virtual void		begin_frame () = 0;
 			virtual void		end_frame () = 0;
-
-			virtual void		set_current_mesh ( imesh * mesh ) = 0;
-			virtual imesh *		get_current_mesh () = 0;
-
-			virtual void		set_current_texture ( itexture * texture ) = 0;
-				
+	
 			virtual void		present () = 0;
 
 			virtual void		destroy () = 0;
+
+			virtual void		draw_active_mesh (const mat4 transform) = 0;
 		};
 
 	}

@@ -6,8 +6,8 @@ namespace ballistic {
 	
 	icomponent::~icomponent () {}
 
-	entity & component::get_entity () const {
-		return *_entity;
+	entity * component::get_entity () const {
+		return _entity;
 	}
 
 	void component::set_entity ( entity * ent ) {

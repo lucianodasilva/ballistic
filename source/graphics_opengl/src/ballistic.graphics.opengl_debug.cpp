@@ -104,26 +104,14 @@ namespace ballistic {
 		GLuint opengl_debug::_vao_id = 0;
 		GLuint opengl_debug::_vbo_id = 0;
 		
-		graphics::ieffect * opengl_debug::_effect = nullptr;
-		graphics::constant opengl_debug::_color_uniform;
-
-		void opengl_debug::load_shader ( const string & source, GLint id ) {
-			const char * source_ptr = source.c_str ();
-			int32 source_length = source.length ();
-
-			glShaderSource (id, 1, (const GLchar **)&source_ptr, &source_length);
-			glCompileShader (id);
-
-			gl_eval_shader_compile (id);
-		}
+		graphics::opengl_effect		opengl_debug::_effect (0);
+		graphics::opengl_constant	opengl_debug::_color_uniform;
 
 		void opengl_debug::initialize () {
 			gl_eval_scope(opengl_debug::initialize);
 			
-			_effect = new opengl_effect ();
-			_effect->load (_vs_source, _fs_source);
-
-			_color_uniform.bind (_effect->get_constant (string_to_id ("in_color")));
+			_effect.load (_vs_source, _fs_source);
+			_color_uniform = _effect.get_constant (string_to_id ("in_color"));
 
 			// --- create vector array
 			glGenVertexArrays (1, &_vao_id);
@@ -141,10 +129,8 @@ namespace ballistic {
 		void opengl_debug::draw_line (const vec3 & p1, const vec3 & p2, const color & col ) {
 			gl_eval_scope (opengl_debug::draw_line);
 
-			_effect->apply ();
-
-			_color_uniform = col;
-			_color_uniform.apply ();
+			_effect.apply (nullptr);
+			_effect.set_constant (_color_uniform, col);
 
 			vec3 buffer [2] = { p1, p2 };
 
@@ -174,10 +160,8 @@ namespace ballistic {
 		void opengl_debug::draw_rect (const vec3 & p1, const vec3 & p2, const color & col ) {
 			gl_eval_scope (opengl_debug::draw_line);
 
-			_effect->apply ();
-
-			_color_uniform = col;
-			_color_uniform.apply ();
+			_effect.apply (nullptr);
+			_effect.set_constant (_color_uniform, col);
 
 			vec3 uc = vec3 (p2.x, p1.y, p1.z);
 			vec3 bc = vec3 (p1.x, p2.y, p2.z);

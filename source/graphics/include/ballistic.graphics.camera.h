@@ -29,12 +29,12 @@ namespace ballistic {
 			const camera & operator = (const camera &v);
 
 			// methods
-			uint16 get_depth (mat4 & transform);
+			uint16 get_depth (mat4 & transform) const;
 
 			mat4 get_view ();
 
 			// utilities
-			static mat4 make_projection (real left, real right, real bottom, real top, real near, real far);
+			static mat4 make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
 		};
 
 	}

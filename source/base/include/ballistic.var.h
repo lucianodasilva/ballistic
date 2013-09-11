@@ -25,9 +25,10 @@ private:
 		var_type_int		= 1,
 		var_type_uint		= 2,
 		var_type_real		= 4,
-		var_type_pointer	= 8,
-		var_type_struct		= 16,
-		var_type_string		= 48 // string specialization ( struct + string )
+		var_type_bool		= 8,
+		var_type_pointer	= 16,
+		var_type_struct		= 32,
+		var_type_string		= 64 + 32 // string specialization ( struct + string )
 	};
 	
 	struct _i_var_box {
@@ -67,6 +68,7 @@ private:
 		int32	_int_v;
 		uint32	_uint_v;
 		real	_real_v;
+		bool	_bool_v;
 	
 		_i_var_box * _box_v;
 		
@@ -124,6 +126,14 @@ private:
 		}
 	};
 
+	template < class t >
+	struct _setter_bool {
+		inline static void set (var & var_ref, const t & val) {
+			ballistic::convert (val, var_ref._data._bool_v);
+			var_ref._type = var_type_bool;
+		}
+	};
+
 	template  < class t >
 	struct _getter_fundamental {
 		inline static void get ( const var & var_ref, t & val ) {
@@ -140,6 +150,9 @@ private:
 				case (var_type_real):
 					ballistic::convert ( var_ref._data._real_v, val );
 					break;
+				case (var_type_bool) :
+					ballistic::convert (var_ref._data._bool_v, val);
+					break;
 				case (var_type_string):
 					{
 						std::string * ptr = static_cast < std::string * > ( var_ref._data._box_v->get_data () );
@@ -147,10 +160,10 @@ private:
 					}
 					break;
 				case (var_type_struct):
-					debug_error (MSG_CANNOT_CONVERT_TO_STRUCT);
+					debug_error ("[ballistic::var::get] " << MSG_CANNOT_CONVERT_TO_STRUCT);
 					break;
 				case (var_type_pointer):
-					debug_error (MSG_CANNOT_CONVERT_TO_POINTER);
+					debug_error ("[ballistic::var::get] " << MSG_CANNOT_CONVERT_TO_POINTER);
 					break;
 			}
 		}
@@ -165,7 +178,7 @@ private:
 			}
 
 			if ( var_ref._type != var_type_pointer )
-				debug_error (MSG_CANNOT_CONVERT_FROM_POINTER);
+				debug_error ("[ballistic::var::get] " << MSG_CANNOT_CONVERT_FROM_POINTER);
 
 			val = static_cast < t > ( var_ref._data._box_v->get_data () );
 		}
@@ -180,7 +193,7 @@ private:
 			}
 
 			if (var_ref._type != var_type_struct)
-				debug_error (MSG_CANNOT_CONVERT_FROM_STRUCT);
+				debug_error ("[ballistic::var::get] " << MSG_CANNOT_CONVERT_FROM_STRUCT);
 
 			t * ptr = static_cast < t * > ( var_ref._data._box_v->get_data () );
 			val = *ptr;
@@ -192,20 +205,24 @@ private:
 		
 		typedef typename std::conditional <
 			std::is_fundamental < t >::value,
+			typename std::conditional <
+				std::is_integral < t >::value,
 				typename std::conditional <
-					std::is_integral < t >::value,
-						typename std::conditional <
-							std::is_signed< t >::value,
-								_setter_int < t >,
-								_setter_uint < t >
-						>::type,
-						_setter_double < t >
+					std::is_signed< t >::value,
+					typename std::conditional < 
+						std::is_same < t, bool >::value,
+						_setter_bool < t >,
+						_setter_int < t >
+					>::type,
+					_setter_uint < t >
 				>::type,
-				typename std::conditional <
-					std::is_pointer < t >::value,
-						_setter_pointer < t >,
-						_setter_struct < t >
-				>::type
+				_setter_double < t >
+			>::type,
+			typename std::conditional <
+				std::is_pointer < t >::value,
+				_setter_pointer < t >,
+				_setter_struct < t >
+			>::type
 		>::type _setter_t;
 
 		typedef typename std::conditional <
