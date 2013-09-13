@@ -15,15 +15,6 @@ namespace ballistic {
 
 	property::property (const property & v) : _value (v._value), _id (v._id), _container (v._container) {}
 
-	property::operator var () const {
-		return _value;
-	}
-
-	template < class T >
-	property::operator T () const {
-		return _value.operator T ();
-	}
-
 	template < class T >
 	T property::as () const {
 		return _value.as < T > ();
@@ -31,7 +22,8 @@ namespace ballistic {
 
 	template < class T >
 	property & property::operator = (const T & v) {
-		_value.operator = < T > (v);
+		//_value.operator = < T > (v);
+		_value = v;
 		raise_property_changed_event ();
 		return *this;
 	}
@@ -43,6 +35,9 @@ namespace ballistic {
 	}
 
 	id_t property::get_id () const { return _id; }
+
+	var property::get_value () const { return _value; }
+	void property::set_value (const var & v) { _value = v; }
 
 	iproperty_container * property::get_container () const { return _container; }
 	void property::set_container (iproperty_container * container) {_container = container;}

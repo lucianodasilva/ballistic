@@ -31,7 +31,6 @@ namespace ballistic {
 
 			return add_property (id, var ());
 		}
-		//
 
 		vector < component_info > & entity_info::get_components () {
 			return _components;
@@ -44,6 +43,9 @@ namespace ballistic {
 			for (component_info & comp_info : _components ) {
 				ent->add_component(comp_info.create ());
 			}
+
+			for (property & p : _properties)
+				ent->get_property (p.get_id ()) = p.get_value ();
 			
 			return ent;
 		}

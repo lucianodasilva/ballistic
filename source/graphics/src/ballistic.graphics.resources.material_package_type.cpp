@@ -1,6 +1,7 @@
 #include "ballistic.graphics.resources.material_package_type.h"
 
 #include "ballistic.graphics.imaterial.h"
+#include "ballistic.graphics.ieffect.h"
 
 namespace ballistic {
 	namespace graphics {
@@ -19,7 +20,7 @@ namespace ballistic {
 				imaterial * material = _device->create_material ();
 
 				var value;
-
+		
 				const tinyxml2::XMLAttribute * cursor = element->FirstAttribute ();
 				while (cursor) {
 
@@ -50,6 +51,9 @@ namespace ballistic {
 							);
 
 						material->set_opaque (value.as <bool>());
+					} else if (strcmp (cursor->Name (), "effect") == 0) {
+						ieffect * effect = dynamic_cast < ieffect *> (stack.get_resource (string_to_id (cursor->Value ())));
+						material->set_effect (effect);
 					}
 
 					cursor = cursor->Next ();

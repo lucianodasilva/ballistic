@@ -3,9 +3,38 @@
 
 	<include source="resources/other.xml"/>
 
-	<texture name="little_doll.image" source="materials/textures/little_doll.png"/>
+  <effect name="square.effect">
+    <vertex> 
+      <![CDATA[
+      
+			layout (location = 0) in vec3	in_position;
+			uniform vec4					in_color;
 
-  <material name="square.material" diffuse="1.0, 1.0, 1.0, 1.0" opaque="true"/>
+			out vec4						var_color;
+
+			void main () {
+				gl_Position.xyz = in_position;
+				gl_Position.w = 1.0;
+				var_color = in_color;
+			}
+      
+      ]]> 
+    </vertex>
+    <fragment> 
+      <![CDATA[
+    
+      in vec4 var_color;
+      out vec4 out_color;
+			
+      void main () {
+        out_color = var_color;
+      }
+      
+      ]]> 
+    </fragment>
+  </effect>
+  
+  <material name="square.material" diffuse="1.0, 1.0, 1.0, 1.0" opaque="true" effect="square.effect" />
   
   <mesh name="square.mesh">
     <position>
@@ -27,24 +56,14 @@
   </mesh>
 
 	<entity name="rotating_square">
-
 		<properties>
 			<position type="int" value="12"/>
-			<color	  type="color" value="1.0, 1.0, 1.0, 1.0"/>
       <material type="res" value="square.material"/>
       <mesh     type="res" value="square.mesh"/>
 		</properties>
-
 		<components>
-			<colidable/>
-
-			<visual_component>
-				<mesh type="res" value="little_doll.mesh"/>
-				<material type="res" value="little_doll.material"/>
-			</visual_component>
-
+      <visual_component/>
 		</components>
-
 	</entity>
 
 </package>

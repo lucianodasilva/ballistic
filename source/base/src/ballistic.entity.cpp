@@ -1,6 +1,7 @@
 #include "ballistic.entity.h"
 #include "ballistic.common_id.h"
 #include "ballistic.game.h"
+#include "ballistic.resources.entity_info.h"
 #include <functional>
 
 namespace ballistic {
@@ -9,7 +10,7 @@ namespace ballistic {
 		_property_changed_message.set_sender (this);
 
 		_property_changed_message [id::id] = p.get_id ();
-		_property_changed_message [id::value] = (var)p;
+		_property_changed_message [id::value] = p.get_value ();
 
 		this->get_game ()->send_message (_property_changed_message);
 	}
@@ -42,5 +43,22 @@ namespace ballistic {
 			delete it;
 		}
 	}
-		
+
+	entity * entity::create (ballistic::game * game, const res_id_t & type) {
+		return create (game, game->create_id_key (), type);
+	}
+
+	entity * entity::create (ballistic::game * game, id_t id, const res_id_t & type) {
+		auto ctor = dynamic_cast <resources::entity_info *> (game->get_resource (type));
+
+		if (ctor) {
+			entity * ent = ctor->create (id);
+			game->add_entity (ent);
+			return ent;
+		} else {
+			debug_warn ("[ballistic::entity::create] Unable to load entity with id: " << type.get_id ());
+			return nullptr;
+		}
+	}
+
 }

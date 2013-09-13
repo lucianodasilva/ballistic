@@ -1,5 +1,5 @@
-#ifndef _ballistic_graphics_system_component_h_
-#define	_ballistic_graphics_system_component_h_
+#ifndef _ballistic_graphics_graphics_system_h_
+#define	_ballistic_graphics_graphics_system_h_
 
 #include <ballistic.base.h>
 #include <vector>
@@ -11,20 +11,21 @@
 namespace ballistic {
 	namespace graphics {
 
-		class system_component : public ballistic::component {
+		class graphics_system : public ballistic::isystem {
 		private:
 
 			idevice *	_device;
 			camera		_camera;
 
 			message		_render_message;
-			game *		_game;
 
 			render_list _render_list;
 
 		public:
 
-			system_component ();
+			graphics_system ();
+
+			virtual id_t get_id ();
 
 			void set_device (idevice * device);
 			idevice * get_device ();

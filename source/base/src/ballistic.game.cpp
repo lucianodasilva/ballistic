@@ -8,42 +8,23 @@
 
 namespace ballistic {
 
+	id_t game::create_id_key () {
+		return hash < unsigned int > ()(++_id_key);
+	}
+
 	void game::add_entity ( entity * ent ) {
 		_entity_map [ent->get_id ()] = ent;
 		ent->set_game (this);
 	}
 	
 	// resource handling -------
-	icomponent * game::create_component( id_t id ) {
-		auto ctor = dynamic_cast < resources::icomponent_constructor * > (_resources.get_resource (id));
-		
-		if (ctor)
-			return ctor->create ();
-		else {
-			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
-			return nullptr;
-		}
-	}
-	
-	entity * game::create_entity (const res_id_t & type ) {
-		return create_entity (hash < unsigned int > () (++_id_key), type);
-	}
-	
-	entity * game::create_entity( id_t id, const res_id_t & type ) {
-		auto ctor = dynamic_cast < resources::entity_info * > (_resources [type]);
-
-		if (ctor) {
-			entity * ent = ctor->create (id);
-			add_entity(ent);
-			return ent;
-		} else {
-			debug_warn ("[ballistic::game::create_entity] Unable to load entity with id: " << type.get_id ());
-			return nullptr;
-		}
-	}
 	
 	resources::iresource * game::get_resource(const ballistic::res_id_t &res_id)	{
 		return _resources [res_id];
+	}
+
+	resources::iresource * game::get_resource (id_t id) {
+		return _resources.get_resource (id);
 	}
 	
 	void game::push_resource_level() {
@@ -69,17 +50,47 @@ namespace ballistic {
 		return it->second;
 	}
 
-	void game::send_message ( ballistic::message & message ) {
-		entity_map_t::iterator
-			it = _entity_map.begin (),
-			end = _entity_map.end ();
+	// ------------------------------------
 
-		for (; it != end; ++it) {
-			it->second->notify (message);
+	void game::add_system (isystem * system) {
+
+		if (!system) {
+			debug_error ("[ballistic::game::add_system] System instance not set to an instance of an object. No system added.");
+			return;
 		}
+
+		for (auto s : _systems) {
+			if (s->get_id () == system->get_id ()) {
+				debug_error ("[ballistic::game::add_system] Duplicate system id found. System not added.");
+				return;
+			}
+		}
+
+		_systems.push_back (system);
+		system->set_game (this);
 	}
 
-	void game::on_initialize () {
+	isystem * game::find_system (id_t id) {
+		for (auto s : _systems) {
+			if (s->get_id () == id)
+				return s;
+		}
+
+		return nullptr;
+	}
+
+	// ------------------------------------
+
+	void game::send_message ( ballistic::message & message ) {
+
+		for (auto it : _entity_map)
+			it.second->notify (message);
+
+		for (auto * sys : _systems)
+			sys->notify (message);
+	}
+
+	void game::initialize () {
 		_frame_start = _game_start_time = system::get_time_now ();
 		_frame_id = 1;
 		_running = true;
@@ -91,8 +102,6 @@ namespace ballistic {
 	bool game::is_running () { return _running; }
 
 	void game::do_loop (ifrontend * frontend, function < void ( game * ) > system_callback) {
-		on_initialize ();
-
 		while (frame ()){
 			if (system_callback)
 				system_callback (this);
@@ -131,13 +140,13 @@ namespace ballistic {
 	}
 
 	game::~game () {
-		entity_map_t::iterator
-			it = _entity_map.begin (),
-			end = _entity_map.end ();
-			
-		for (; it != end; ++it) {
-			if (it->second->get_id () != 0)
-				delete it->second;
+
+		for (auto it : _entity_map)  {
+			if (it.second->get_id () != 0)
+				delete it.second;
 		}
+
+		for (auto sys : _systems)
+			delete sys;
 	}
 }

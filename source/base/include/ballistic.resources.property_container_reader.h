@@ -36,7 +36,7 @@ namespace ballistic {
 					} else if (type == "real") {
 						out_value = convert_to < real, const string > (value);
 					} else if (type == "res") {
-						out_value = stack.get_resource (value);
+						out_value = string_to_id (value);
 					} else if (type == "vec3") {
 						vec3 v;
 

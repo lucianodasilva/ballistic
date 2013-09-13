@@ -108,7 +108,6 @@ namespace ballistic {
 	iresource * stack::get_resource(id_t id) {
 		resource_map_t::iterator res_it = _resources.find (id);
 		if (res_it == _resources.end ()) {
-			debug_warn ("[ballistic::resource::stack::get_resource] Resource with id: " << id << " not found");
 			return nullptr;
 		}
 		

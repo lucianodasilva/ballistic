@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 # ----------------------------------------
 
-project ( ballistic_graphics )
+project ( ballistic )
 # ----------------------------------------------------------------
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -69,4 +69,4 @@ if (NOT CMAKE_DEFINED_COMPILER MATCHES BALLISTIC_MSVC)
 	endif ()
 endif ()
 
-project ( ballistic_graphics )
+project ( ballistic )

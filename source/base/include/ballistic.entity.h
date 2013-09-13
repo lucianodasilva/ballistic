@@ -41,6 +41,9 @@ namespace ballistic {
 
 		entity ( id_t id );
 		virtual ~entity ();
+
+		static entity * create (ballistic::game * game, const res_id_t & type);
+		static entity * create (ballistic::game * game, id_t id, const res_id_t & type);
 		
 	};
 	

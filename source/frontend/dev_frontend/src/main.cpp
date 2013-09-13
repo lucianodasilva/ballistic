@@ -65,17 +65,17 @@ int main ( int argc, char ** argv) {
 
 	// setup game stuffs
 	ballistic::graphics::define_resources (_game, _device);
-	
-	_game->get_property (ballistic::graphics::id::graphics_device) = _device;
 
-	_game->add_component (
-		_game->create_component (ballistic::graphics::id::system_component));
+	auto graphics = new ballistic::graphics::graphics_system ();
+	graphics->set_device (_device);
+
+	_game->add_system (graphics);
 
 	// create entities
-	ballistic::entity * rot_square = _game->create_entity (res_rotating_square);
+	ballistic::entity * rot_square = ballistic::entity::create (_game, res_rotating_square);
 
 	// initialize
-	_game->on_initialize ();
+	_game->initialize ();
 
 	_frontend->do_event_loop (_game);
 

@@ -4,8 +4,10 @@
 #include "ballistic.resources.component_constructor.h"
 #include "ballistic.entity.h"
 #include "ballistic.ifrontend.h"
+#include "ballistic.isystem.h"
 #include "ballistic.message.h"
 #include "ballistic.system.h"
+
 
 #include "ballistic.resources.stack.h"
 
@@ -17,12 +19,8 @@
 
 using namespace std;
 
-#define MSG_NOT_COMPONENT_TYPE "Constructor template parameter must be derived from icontructor!"
-
 namespace ballistic {
 	
-	class icomponent;
-
 	class game : public entity {
 	protected:
 		
@@ -32,9 +30,10 @@ namespace ballistic {
 		typedef map < id_t, entity * > entity_map_t;
 		entity_map_t _entity_map;
 
-		bool _running;
+		typedef vector < isystem * > system_list_t;
+		system_list_t _systems;
 
-		void add_entity ( entity * ent );
+		bool _running;
 
 		// game state ---
 		system::ballistic_time_t
@@ -48,49 +47,42 @@ namespace ballistic {
 		resources::stack _resources;
 
 	public:
+
+		virtual id_t create_id_key ();
 		
 		// resource handling
-		
+	
+		virtual resources::iresource * get_resource (const res_id_t & res_id);
+		virtual resources::iresource * get_resource (id_t res_id);
 
 		template < class T >
-		inline void define_component (id_t id);
+		inline T * get_resource (const res_id_t & res_id);
 
 		template < class T >
-		inline T * create_component ( const res_id_t & id );
-
-		template < class T >
-		inline T * create_component (id_t type);
-
-		virtual icomponent * create_component ( id_t id );
-		
-		virtual entity * create_entity ( const res_id_t & type );
-		virtual entity * create_entity ( id_t id, const res_id_t & type );
-		
-		virtual resources::iresource *	get_resource (const res_id_t & res_id);
+		inline T * get_resource (id_t res_id);
 		
 		virtual void push_resource_level ();
 		virtual bool pop_resource_level ();
 		
-		resources::stack & get_resource_stack ();
-
-#ifdef BALLISTIC_DEBUG
-
-		template < class T >
-		inline void define_component (const string & id);
-
-		template < class T >
-		inline T * create_component (const string & id);
-
-#endif // BALLISTIC_DEBUG
-
+		virtual resources::stack & get_resource_stack ();
 
 		// -----------------
 
+		virtual void add_entity (entity * ent);
+
 		virtual entity * find_entity ( id_t id );
+
+		// -----------------
+
+		virtual void add_system (isystem * system);
+
+		virtual isystem * find_system (id_t id);
+
+		// -----------------
 
 		virtual void send_message ( ballistic::message & message );
 
-		virtual void on_initialize ();
+		virtual void initialize ();
 
 		virtual bool is_running ();
 
@@ -106,34 +98,14 @@ namespace ballistic {
 	};
 
 	template < class T >
-	void game::define_component (id_t id) {
-		_resources.add_to_global (id, new resources::component_constructor < T > ());
+	T * game::get_resource (const res_id_t & id) {
+		return dynamic_cast <T *> (get_resource (id));
 	}
 
 	template < class T >
-	T * game::create_component (const res_id_t & id) {
-		return create_component <T>(id.get_id ());
+	T * game::get_resource (id_t id) {
+		return dynamic_cast <T *> (get_resource (id));
 	}
-
-	template < class T >
-	T * game::create_component (id_t id) {
-		static_assert (is_base_of < icomponent, T >::value, MSG_NOT_COMPONENT_TYPE);
-		return static_cast <T *> (create_component (id));
-	}
-
-#ifdef BALLISTIC_DEBUG
-
-	template < class T >
-	void game::define_component (const string & id) {
-		define_component < T > (string_to_id (id));
-	}
-
-	template < class T >
-	T * game::create_component (const string & id) {
-		return create_component <T>(string_to_id (id));
-	}
-
-#endif // BALLISTIC_DEBUG
 
 }
 

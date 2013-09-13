@@ -110,19 +110,19 @@ namespace ballistic {
 
 				uint8 * data_buffer = new uint8 [buffer_size];
 				real * data_cursor = (real *)data_buffer;
-				for (int i = 0; i < position.size () / 3; ++i) {
+				for (uint32 i = 0; i < position.size () / 3; ++i) {
 
 					if (m_attribute & mesh_attribute_position) {
-						int offset = i * 3;
+						uint32 offset = i * 3;
 
-						for (int j = 0; j < 3; ++j)
+						for (uint32 j = 0; j < 3; ++j)
 							*data_cursor++ = position [offset++];
 					}
 					
 					if (m_attribute & mesh_attribute_uv) {
-						int offset = i * 2;
+						uint32 offset = i * 2;
 
-						for (int j = 0; j < 2; ++j)
+						for (uint32 j = 0; j < 2; ++j)
 							*data_cursor++ = uv [offset++];
 					}
 

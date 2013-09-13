@@ -28,11 +28,6 @@ namespace ballistic {
 		inline property (iproperty_container * container, id_t id);
 		inline property (const property & v);
 
-		inline operator var () const;
-
-		template < class T >
-		inline operator T () const;
-
 		template < class T >
 		inline T as () const;
 
@@ -42,6 +37,9 @@ namespace ballistic {
 		inline property & operator = (const property & v);
 
 		inline id_t get_id () const;
+
+		inline var get_value () const;
+		inline void set_value (const var & v);
 
 		inline iproperty_container * get_container () const;
 		inline void set_container (iproperty_container * container);

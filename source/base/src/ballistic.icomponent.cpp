@@ -1,4 +1,6 @@
 #include "ballistic.icomponent.h"
+#include "ballistic.game.h"
+#include "ballistic.resources.component_constructor.h"
 
 using namespace std;
 
@@ -19,6 +21,32 @@ namespace ballistic {
 	void component::setup () {}
 		
 	void component::setup ( vector < property > & parameters ) {}
+
+	icomponent * component::create (ballistic::game * game, const res_id_t & id) {
+		return create (game, id.get_id ());
+	}
+
+	icomponent * component::create (ballistic::game * game, id_t id) {
+		auto ctor = dynamic_cast <resources::icomponent_constructor *> (game->get_resource (id));
+
+		if (ctor)
+			return ctor->create ();
+		else {
+			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
+			return nullptr;
+		}
+	}
+
+	icomponent * component::create (ballistic::game * game, id_t id, vector < property > & parameters) {
+		auto ctor = dynamic_cast <resources::icomponent_constructor *> (game->get_resource (id));
+
+		if (ctor)
+			return ctor->create (parameters);
+		else {
+			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
+			return nullptr;
+		}
+	}
 
 
 }

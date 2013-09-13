@@ -10,7 +10,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		class system_component;
+		class graphics_system;
 
 		class visual_component : public ballistic::component {
 		private:
@@ -20,9 +20,12 @@ namespace ballistic {
 			imaterial *			_material;
 			imesh *				_mesh;
 
-			system_component *	_system;
+			graphics_system *	_system;
+			game *				_game;
 
 		public:
+
+			static const id_t component_id;
 
 			visual_component ();
 

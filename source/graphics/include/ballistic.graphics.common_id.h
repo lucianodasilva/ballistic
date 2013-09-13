@@ -8,8 +8,7 @@ namespace ballistic {
 		namespace id {
 
 			const id_t graphics_device					= string_to_id ("graphics_device");
-
-			const id_t system_component					= string_to_id ("system_component");
+			const id_t graphics_system					= string_to_id ("graphics_system");
 			const id_t visual_component					= string_to_id ("visual_component");
 
 			const id_t material							= string_to_id ("material");

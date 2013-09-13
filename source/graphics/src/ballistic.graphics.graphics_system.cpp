@@ -1,4 +1,4 @@
-#include "ballistic.graphics.system_component.h"
+#include "ballistic.graphics.graphics_system.h"
 #include "ballistic.graphics.common_id.h"
 
 #include "ballistic.graphics.ieffect.h"
@@ -8,39 +8,47 @@
 namespace ballistic {
 	namespace graphics {
 
-		system_component::system_component () :
+		id_t graphics_system::get_id () {
+			return ballistic::graphics::id::graphics_system;
+		}
+
+		graphics_system::graphics_system () :
 			_device (nullptr),
-			_game (nullptr),
 			_render_message (id::message_render) 
 		{}
 
-		void system_component::set_device ( idevice * device ) {
+		void graphics_system::set_device ( idevice * device ) {
 			_device = device;
 		}
 
-		idevice * system_component::get_device () {
+		idevice * graphics_system::get_device () {
 			return _device;
 		}
 
-		void system_component::set_camera (camera cam) {
+		void graphics_system::set_camera (camera cam) {
 			_camera = cam;
 		}
 
-		const camera & system_component::get_camera () {
+		const camera & graphics_system::get_camera () {
 			return _camera;
 		}
 
-		void system_component::render () {
+		void graphics_system::render () {
 
 			if (!_device) {
-				debug_error ("[ballistic::graphics::system_component::render] Graphics device not set!");
+				debug_error ("[ballistic::graphics::graphics_system::render] Graphics device not set!");
+				return;
+			}
+
+			if (!get_game ()) {
+				debug_error ("[ballistic::graphics::graphics_system::render] Graphics game not set!");
 				return;
 			}
 
 			_render_list.clear ();
 
 			// notify entities with visuals
-			_game->send_message (_render_message);
+			get_game ()->send_message (_render_message);
 
 			_device->set_view (_camera.get_view ());
 
@@ -83,25 +91,15 @@ namespace ballistic {
 			_device->present ();
 		}
 
-		void system_component::notify ( ballistic::message & message ) {
+		void graphics_system::notify ( ballistic::message & message ) {
 
 			if (message.get_id () != ballistic::id::message_update) return;
-
-			// 1st frame - setup stuff
-			if (!_game) {
-				_game = get_entity ()->get_game ();
-				_render_message.set_sender (get_entity ());
-				_render_message [graphics::id::system_component] = this;
-
-				if (!_device)
-					_device = _game->get_property (graphics::id::graphics_device);
-			}
 
 			render ();
 
 		}
 
-		void system_component::push_item (imaterial * material, imesh * mesh, const mat4 & transform) {
+		void graphics_system::push_item (imaterial * material, imesh * mesh, const mat4 & transform) {
 			render_item & item = _render_list.reserve_item ();
 
 			item.material = material;

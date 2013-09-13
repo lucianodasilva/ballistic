@@ -4,6 +4,7 @@
 
 #include "ballistic.message.h"
 #include "ballistic.property.h"
+#include "ballistic.resources.id.h"
 
 #include <vector>
 
@@ -42,8 +43,66 @@ namespace ballistic {
 		
 		virtual void setup ();
 		virtual void setup ( vector < property > & parameters );
-				
+
+		template < class T >
+		static inline void define (ballistic::game * game, id_t id);
+
+		template < class T >
+		static inline void define (ballistic::game * game);
+
+		static icomponent * create (ballistic::game * game, const res_id_t & id);
+		static icomponent * create (ballistic::game * game, id_t id);
+		static icomponent * create (ballistic::game * game, id_t id, vector < property > & parameters);
+
+		template < class T >
+		static inline T * create (ballistic::game * game, const res_id_t & id);
+
+		template < class T >
+		static inline T * create (ballistic::game * game, id_t id);
+
+		template < class T >
+		static inline T * create (ballistic::game * game, id_t id, vector < property > & parameters);
+
+		template < class T >
+		static inline T * create (ballistic::game * game);
+
 	};
+
+	// define and create functions
+
+	template < class T >
+	void component::define (ballistic::game * game, id_t id) {
+		game->get_resource_stack ().add_to_global (id, new ballistic::resources::component_constructor < T > ());
+	}
+
+	template < class T >
+	void component::define (ballistic::game * game) {
+		define < T > (game, T::component_id);
+	}
+
+	template < class T >
+	T * component::create (ballistic::game * game, const res_id_t & id) {
+		return create_component <T> (game, id.get_id ());
+	}
+
+	template < class T >
+	T * component::create (ballistic::game * game, id_t id) {
+		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
+		return dynamic_cast <T *> (create (game, id));
+	}
+
+	template < class T >
+	T * component::create (ballistic::game * game, id_t id, vector < property > & parameters) {
+		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
+		return dynamic_cast <T *> (create (game, id, parameters));
+	}
+
+	template < class T >
+	T * component::create (ballistic::game * game) {
+		return create < T > (game, T::component_id);
+	}
+
+	// extra tools
 
 	template < void (*message_handle)( entity & this_entity, ballistic::message & ) >
 	class _func_component : public component {
