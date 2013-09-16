@@ -6,6 +6,8 @@
 #include "ballistic.convert.h"
 #include "ballistic.debug.h"
 
+#include "ballistic.id.h"
+
 #include "ballistic.math.h"
 #include "ballistic.math.matrixes.h"
 
@@ -15,7 +17,7 @@ using namespace std;
 #define declare_set(type) \
 	inline void set (const type & v) { \
 		clean_mem (); \
-		_data.##type##_v = v; _type = var_type_##type; \
+		_data.type##_v = v; _type = var_type_##type; \
 	}
 
 #define declare_set_struct(type) \
@@ -31,7 +33,7 @@ using namespace std;
 
 #define convert_switch(type) \
 	case (var_type_##type): \
-	ballistic::convert (_data.##type##_v, v); \
+	ballistic::convert (_data.type##_v, v); \
 		break;
 
 #define declare_get(type) \
@@ -80,6 +82,7 @@ public:
 		var_type_int32	= 2,
 		var_type_uint32 = 4,
 		var_type_double	= 8,
+		var_type_id		= 16,
 		var_type_struct = 128,
 		var_type_string = var_type_struct + 1,
 		var_type_vec2	= var_type_struct + 2,
@@ -94,6 +97,7 @@ private:
 	
 	union {
 		bool	bool_v;
+		id_t	id_t_v;
 		int32	int32_v;
 		uint32	uint32_v;
 		double	double_v;
@@ -149,6 +153,7 @@ public:
 	declare_set (uint32)
 	declare_set (double)
 	declare_set (bool)
+	declare_set (id_t)
 	
 	declare_set_struct (string)
 	declare_set_struct (vec2)
@@ -160,6 +165,7 @@ public:
 	declare_get (uint32)
 	declare_get (double)
 	declare_get (bool)
+	declare_get (id_t)
 
 	declare_get_struct (vec2)
 	declare_get_struct (vec3)

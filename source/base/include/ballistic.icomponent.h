@@ -82,13 +82,13 @@ namespace ballistic {
 
 	template < class T >
 	T * component::create (ballistic::game * game, const res_id_t & id) {
-		return create_component <T> (game, id.get_id ());
+		return create < T > (game, id.get_id ());
 	}
 
 	template < class T >
 	T * component::create (ballistic::game * game, id_t id) {
 		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
-		return dynamic_cast <T *> (create (game, id));
+		return dynamic_cast < T * > (create (game, id));
 	}
 
 	template < class T >
