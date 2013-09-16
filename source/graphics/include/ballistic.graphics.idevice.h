@@ -33,7 +33,13 @@ namespace ballistic {
 			virtual void		set_clear_color ( const color & cr ) = 0;
 
 			virtual void 		set_view (const mat4 & view) = 0;
-			virtual const mat4 & get_view () = 0;
+			virtual const mat4 & get_view () const = 0;
+
+			virtual void		set_world (const mat4 & world) = 0;
+			virtual const mat4 & get_world () const = 0;
+
+			virtual void		set_proj (const mat4 & proj) = 0;
+			virtual const mat4 & get_proj () const = 0;
 
 			virtual void		clear () = 0;
 

@@ -7,7 +7,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		void render_item::set_render_bucket (render_item & item, const camera & camera) {
+		void render_item::set_render_bucket (render_item & item, camera * camera) {
 
 			//// set layer
 			//_b0 = (layer << 1);
@@ -47,7 +47,7 @@ namespace ballistic {
 
 					byte_handler.b0 = 1;
 
-					uint16 depth = camera.get_depth (item.transform);
+					uint16 depth = camera->get_depth (item.transform);
 					*((uint16 *)&byte_handler.b1) = depth;
 
 					byte_handler.b3 =

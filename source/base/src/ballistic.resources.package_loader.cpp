@@ -40,7 +40,7 @@ namespace ballistic {
 
 					if (ctor) {
 						comp_info.set_constructor (ctor);
-						property_container_reader::read < property_container_reader::default_type_reader > (cursor, stack, &comp_info);
+						property_container_reader::read (cursor, stack, &comp_info);
 					}
 					debug_run (
 					else
@@ -60,7 +60,7 @@ namespace ballistic {
 				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
 				while (cursor) {
 					if (strcmp (cursor->Name (), "properties") == 0)
-						property_container_reader::read < property_container_reader::default_type_reader >(cursor, stack, ctor);
+						property_container_reader::read (cursor, stack, ctor);
 					
 					if (strcmp (cursor->Name (), "components") == 0)
 						load_components (cursor, stack, ctor->get_components());
@@ -142,6 +142,24 @@ namespace ballistic {
 			}
 			
 			return true;
+		}
+
+		istream & package_loader::get_line (istream & stream, string & trim, char delimiter) {
+			char c;
+
+			trim.clear ();
+
+			while (stream.get (c).good ()) {
+				if (c == '\n' || c == '\r')
+					continue;
+
+				if (c == delimiter || stream.peek () == std::char_traits<char>::eof ())
+					return stream;
+
+				trim.append (1, c);
+			}
+
+			return stream;
 		}
 		
 	}

@@ -25,7 +25,11 @@ namespace ballistic {
 			atomic <unsigned char> _material_run_id;
 			atomic <unsigned char> _mesh_run_id;
 
-			mat4	_view;
+			mat4
+				_view,
+				_world,
+				_proj;
+
 
 			opengl_effect *		_effect;
 			opengl_material *	_material;
@@ -34,6 +38,10 @@ namespace ballistic {
 			// constants
 			opengl_constant		_gl_const_world;
 			opengl_constant		_gl_const_view;
+			opengl_constant		_gl_const_proj;
+
+			opengl_constant		_gl_const_diffuse;
+			opengl_constant		_gl_const_specular;
 
 		public:
 			
@@ -51,7 +59,13 @@ namespace ballistic {
 			virtual void		set_clear_color ( const color & cr );
 
 			virtual void 		set_view (const mat4 & view);
-			virtual const mat4 & get_view ();
+			virtual const mat4 & get_view () const;
+
+			virtual void		set_world (const mat4 & world);
+			virtual const mat4 & get_world () const;
+
+			virtual void		set_proj (const mat4 & proj);
+			virtual const mat4 & get_proj () const;
 
 			virtual void		clear ();
 

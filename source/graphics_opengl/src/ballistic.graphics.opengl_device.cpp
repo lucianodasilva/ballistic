@@ -63,11 +63,17 @@ namespace ballistic {
 			_effect->apply (this);
 
 			// get constants
-			_gl_const_world = _effect->get_constant (id::effect_t_world);
-			_gl_const_view = _effect->get_constant (id::effect_t_view);
+			_gl_const_world = _effect->get_constant (id::graphics::effect::t_world);
+			_gl_const_view = _effect->get_constant (id::graphics::effect::t_view);
+			_gl_const_proj = _effect->get_constant (id::graphics::effect::t_proj);
+			
+			_gl_const_diffuse = _effect->get_constant (id::graphics::effect::diffuse);
+			_gl_const_specular = _effect->get_constant (id::graphics::effect::specular);
 
 			// set least changing constants
 			_effect->set_constant (_gl_const_view, _view);
+			_effect->set_constant (_gl_const_world, _world);
+			_effect->set_constant (_gl_const_proj, _proj);
 		}
 
 		void opengl_device::activate (imaterial * material) {
@@ -86,10 +92,33 @@ namespace ballistic {
 
 		void opengl_device::set_view (const mat4 & view) {
 			_view = view;
+			if (_effect)
+				_effect->set_constant (_gl_const_view, _view);
 		}
 
-		const mat4 & opengl_device::get_view () {
+		const mat4 & opengl_device::get_view () const {
 			return _view;
+		}
+
+		void opengl_device::set_world (const mat4 & world) {
+			_world = world;
+			if (_effect)
+				_effect->set_constant (_gl_const_world, _world);
+		}
+
+		const mat4 & opengl_device::get_world () const {
+			return _world;
+		}
+
+		void opengl_device::set_proj (const mat4 & proj) {
+			_proj = proj;
+
+			if (_effect)
+				_effect->set_constant (_gl_const_proj, _proj);
+		}
+
+		const mat4 & opengl_device::get_proj () const {
+			return _proj;
 		}
 
 		void opengl_device::clear () {

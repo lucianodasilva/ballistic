@@ -9,7 +9,7 @@ namespace ballistic {
 	namespace graphics {
 
 		id_t graphics_system::get_id () {
-			return ballistic::graphics::id::graphics_system;
+			return ballistic::id::graphics::system;
 		}
 
 		graphics_system::graphics_system () :
@@ -25,11 +25,11 @@ namespace ballistic {
 			return _device;
 		}
 
-		void graphics_system::set_camera (camera cam) {
+		void graphics_system::set_camera (camera * cam) {
 			_camera = cam;
 		}
 
-		const camera & graphics_system::get_camera () {
+		const camera * graphics_system::get_camera () {
 			return _camera;
 		}
 
@@ -45,12 +45,18 @@ namespace ballistic {
 				return;
 			}
 
+			if (!_camera) {
+				debug_error ("[ballistic::graphics::graphics_system::render] Active camera not set!");
+				return;
+			}
+
 			_render_list.clear ();
+
+			_device->set_view (_camera->get_view ());
+			_device->set_proj (_camera->get_proj ());
 
 			// notify entities with visuals
 			get_game ()->send_message (_render_message);
-
-			_device->set_view (_camera.get_view ());
 
 			// sort
 			_render_list.sort ();

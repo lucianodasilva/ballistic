@@ -57,6 +57,12 @@ inline void get (type & v) const { \
 
 #define declare_get_struct(type) \
 	inline void get (type & v) const { \
+		if (_type == var_type_string) { \
+		\
+			ballistic::convert_vectors (*(string *)_data.ptr_v, v); \
+			return; \
+		} \
+		\
 		if (_type != var_type_##type) { \
 			debug_warn ("[ballistic::var::get(" #type ")] Unknown data type. Value converted as empty."); \
 			v = type (); \
@@ -179,6 +185,15 @@ public:
 			break;
 		case (var_type_bool) :
 			ballistic::convert (_data.bool_v, v);
+			break;
+		case (var_type_vec2) :
+			ballistic::convert_vectors (*(vec2 *)_data.ptr_v, v);
+			break;
+		case (var_type_vec3) :
+			ballistic::convert_vectors (*(vec3 *)_data.ptr_v, v);
+			break;
+		case (var_type_vec4) :
+			ballistic::convert_vectors (*(vec4 *)_data.ptr_v, v);
 			break;
 		default:
 			debug_error ("[ballistic::var::get(string)] Cannot convert type to string. Value converted as empty.");

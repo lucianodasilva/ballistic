@@ -13,7 +13,7 @@
 #include "ballistic.graphics.itexture.h"
 #include "ballistic.graphics.render_item.h"
 #include "ballistic.graphics.render_list.h"
-#include "ballistic.graphics.visual_component.h"
+#include "ballistic.graphics.visual.h"
 #include "ballistic.graphics.resources.effect_package_type.h"
 #include "ballistic.graphics.resources.material_package_type.h"
 #include "ballistic.graphics.resources.mesh_package_type.h"

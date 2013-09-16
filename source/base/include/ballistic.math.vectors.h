@@ -1,7 +1,11 @@
-#ifndef _ballistic_math_vec3_t_h_
-#define _ballistic_math_vec3_t_h_
+#ifndef _ballistic_math_vectors_h_
+#define _ballistic_math_vectors_h_
 
 #include "ballistic.config.h"
+
+#include <string>
+
+using namespace std;
 
 namespace ballistic {
 namespace math {

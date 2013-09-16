@@ -1,6 +1,18 @@
 #ifndef _ballistic_graphics_ieffect_h_
 #define	_ballistic_graphics_ieffect_h_
 
+/*
+	Supported shader keywords
+
+	effect_diffuse
+	effect_specular
+	effect_t_world
+	effect_t_view
+	effect_t_proj
+
+
+*/
+
 #include <ballistic.base.h>
 #include <string>
 

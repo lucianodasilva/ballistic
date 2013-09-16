@@ -1,21 +1,19 @@
 
 <package>
-
-	<include source="resources/other.xml"/>
-
+  
   <effect name="square.effect">
     <vertex> 
       <![CDATA[
       
 			layout (location = 0) in vec3	in_position;
-			uniform vec4					in_color;
+			uniform vec4					effect_diffuse;
 
 			out vec4						var_color;
 
 			void main () {
 				gl_Position.xyz = in_position;
 				gl_Position.w = 1.0;
-				var_color = in_color;
+				var_color = effect_diffuse;
 			}
       
       ]]> 
@@ -55,6 +53,25 @@
     </index>
   </mesh>
 
+  <entity name="camera.entity">
+    <properties>
+      <position type="vec3" value="0,0,-1"/>
+      <target   type="vec3" value="0,0,0"/>
+      <up       type="vec3" value="0, 1, 0"/>
+    </properties>
+    <components>
+      <camera>
+        <projection type="text" value="ortho"/>
+        <left   type="real" value="-1"/>
+        <right  type="real" value="1"/>
+        <top    type="real" value="1"/>
+        <bototm type="real" value="-1"/>
+        <near   type="real" value="-1"/>
+        <far    type="real" value="10"/>
+      </camera>
+    </components>
+  </entity>
+
 	<entity name="rotating_square">
 		<properties>
 			<position type="int" value="12"/>
@@ -62,7 +79,7 @@
       <mesh     type="res" value="square.mesh"/>
 		</properties>
 		<components>
-      <visual_component/>
+      <visual/>
 		</components>
 	</entity>
 

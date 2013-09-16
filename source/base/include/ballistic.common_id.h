@@ -29,6 +29,7 @@ namespace ballistic {
 
 		// --------------------------------------
 		const id_t transform					= string_to_id ("transform");
+		const id_t position						= string_to_id ("position");
 	}
 }
 

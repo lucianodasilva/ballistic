@@ -21,8 +21,8 @@ namespace ballistic {
 				return;
 			}
 
-			_diffuse_constant = _effect->get_constant (id::effect_diffuse);
-			_specular_constant = _effect->get_constant (id::effect_specular);
+			_diffuse_constant = _effect->get_constant (id::graphics::effect::diffuse);
+			_specular_constant = _effect->get_constant (id::graphics::effect::specular);
 		}
 
 		ieffect * opengl_material::get_effect () {

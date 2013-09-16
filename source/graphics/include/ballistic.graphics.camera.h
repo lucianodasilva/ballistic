@@ -6,7 +6,9 @@
 namespace ballistic {
 	namespace graphics {
 
-		class camera {
+		class graphics_system;
+
+		class camera : public ballistic::component {
 		private:
 
 			real _near;
@@ -14,7 +16,14 @@ namespace ballistic {
 
 			real _depth_divisor;
 
+			game *				_game;
+			graphics_system *	_system;
+
+			mat4 _proj;
+
 		public:
+
+			static const id_t component_id;
 
 			vec3 target;
 			vec3 position;
@@ -31,10 +40,17 @@ namespace ballistic {
 			// methods
 			uint16 get_depth (mat4 & transform) const;
 
-			mat4 get_view ();
+			mat4 get_view () const;
+			const mat4 & get_proj () const;
 
 			// utilities
-			static mat4 make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
+			void make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
+
+			// component
+			virtual void notify (ballistic::message & message);
+
+			virtual void setup (vector < ballistic::property > & parameters);
+
 		};
 
 	}

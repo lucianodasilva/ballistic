@@ -15,7 +15,7 @@ namespace ballistic {
 		private:
 
 			idevice *	_device;
-			camera		_camera;
+			camera	*	_camera;
 
 			message		_render_message;
 
@@ -30,8 +30,8 @@ namespace ballistic {
 			void set_device (idevice * device);
 			idevice * get_device ();
 
-			void set_camera (camera cam);
-			const camera & get_camera ();
+			void set_camera (camera * cam);
+			const camera * get_camera ();
 
 			void render ();
 
