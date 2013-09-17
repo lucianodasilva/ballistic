@@ -4,23 +4,33 @@
   <effect name="square.effect">
     <vertex> 
       <![CDATA[
+      #version 330 core
       
 			layout (location = 0) in vec3	in_position;
-			uniform vec4					effect_diffuse;
+			
+      uniform vec4				effect_diffuse;
+      uniform vec4        effect_specular;
+      uniform mat4        effect_t_world;
+      uniform mat4        effect_t_view;
+      uniform mat4        effect_t_proj;
 
 			out vec4						var_color;
 
 			void main () {
-				gl_Position.xyz = in_position;
-				gl_Position.w = 1.0;
-				var_color = effect_diffuse;
+        
+        //mat4 mvp = effect_t_proj;
+        
+        var_color = effect_diffuse;
+				//gl_Position = mvp * vec4 (in_position.xyz, 1.0);
+        gl_Position = vec4 (in_position.xyz, 1.0);
 			}
       
       ]]> 
     </vertex>
     <fragment> 
       <![CDATA[
-    
+      #version 330 core
+
       in vec4 var_color;
       out vec4 out_color;
 			
@@ -36,50 +46,47 @@
   
   <mesh name="square.mesh">
     <position>
-      -1.0, -1.0, 0.0,
-      1.0, -1.0, 0.0,
-      1.0, 1.0, 0.0,
-      -1.0, 1.0, 0.0
+      -0.5, -0.5, 0.0,
+      0.5, -0.5, 0.0,
+      0.5, 0.5, 0.0
     </position>
-    <uv>
+    <!--<uv>
       0.0, 0.0,
       1.0, 0.0,
-      1.0, 1.0,
-      0.0, 1.0
-    </uv>
+      1.0, 1.0
+    </uv>-->
     <index>
-      0, 1, 3,
-      3, 1, 2
+      0, 1, 2
     </index>
   </mesh>
 
   <entity name="camera.entity">
     <properties>
-      <position type="vec3" value="0,0,-1"/>
+      <position type="vec3" value="0, 0, 0"/>
       <target   type="vec3" value="0,0,0"/>
       <up       type="vec3" value="0, 1, 0"/>
     </properties>
     <components>
-      <camera>
-        <projection type="text" value="ortho"/>
-        <left   type="real" value="-1"/>
-        <right  type="real" value="1"/>
-        <top    type="real" value="1"/>
-        <bototm type="real" value="-1"/>
-        <near   type="real" value="-1"/>
-        <far    type="real" value="10"/>
-      </camera>
+      <graphics_camera>
+        <projection value="ortho"/>
+        <left   value="-1"/>
+        <right  value="1"/>
+        <top    value="1"/>
+        <bottom value="-1"/>
+        <near   value="-10"/>
+        <far    value="100"/>
+      </graphics_camera>
     </components>
   </entity>
 
-	<entity name="rotating_square">
+	<entity name="rotating_square.entity">
 		<properties>
-			<position type="int" value="12"/>
-      <material type="res" value="square.material"/>
-      <mesh     type="res" value="square.mesh"/>
+			<position type="vec3" value="0, 0, 0"/>
+      <material type="res"  value="square.material"/>
+      <mesh     type="res"  value="square.mesh"/>
 		</properties>
 		<components>
-      <visual/>
+      <graphics_visual/>
 		</components>
 	</entity>
 

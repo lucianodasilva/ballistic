@@ -22,7 +22,7 @@ namespace ballistic {
 			_properties.push_back (property (this, id));
 
 			property & p = _properties.back ();
-			p = v;
+			p.set_value (v);
 
 			return p;
 		}

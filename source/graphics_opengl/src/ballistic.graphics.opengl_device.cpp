@@ -27,11 +27,15 @@ namespace ballistic {
 			
 			glGetError (); // reset errors
 			
-			string gl_str_version = (const char *) glGetString (GL_VERSION);
-			debug_print ("OpenGL version: " << gl_str_version);
+			debug_run ({
+				string gl_str_version = (const char *)glGetString (GL_VERSION);
+				debug_print ("OpenGL version: " << gl_str_version);
+			});
 
 			// debug initialize
-			opengl_debug::initialize ();
+			debug_run (
+				opengl_debug::initialize ();
+			);
 			
 		}
 
@@ -71,8 +75,14 @@ namespace ballistic {
 			_gl_const_specular = _effect->get_constant (id::graphics::effect::specular);
 
 			// set least changing constants
-			_effect->set_constant (_gl_const_view, _view);
-			_effect->set_constant (_gl_const_world, _world);
+			// TODO: replace by uniform block
+			if (_gl_const_view.location)
+				_effect->set_constant (_gl_const_view, _view);
+
+			if (_gl_const_world.location)
+				_effect->set_constant (_gl_const_world, _world);
+			
+			if (_gl_const_proj.location)
 			_effect->set_constant (_gl_const_proj, _proj);
 		}
 
@@ -92,7 +102,7 @@ namespace ballistic {
 
 		void opengl_device::set_view (const mat4 & view) {
 			_view = view;
-			if (_effect)
+			if (_effect && _gl_const_view.location)
 				_effect->set_constant (_gl_const_view, _view);
 		}
 
@@ -102,7 +112,7 @@ namespace ballistic {
 
 		void opengl_device::set_world (const mat4 & world) {
 			_world = world;
-			if (_effect)
+			if (_effect && _gl_const_world.location)
 				_effect->set_constant (_gl_const_world, _world);
 		}
 
@@ -113,7 +123,7 @@ namespace ballistic {
 		void opengl_device::set_proj (const mat4 & proj) {
 			_proj = proj;
 
-			if (_effect)
+			if (_effect && _gl_const_proj.location)
 				_effect->set_constant (_gl_const_proj, _proj);
 		}
 
@@ -168,7 +178,8 @@ namespace ballistic {
 				return;
 			}
 
-			_effect->set_constant (_gl_const_world, transform);
+			if (_gl_const_world.location)
+				_effect->set_constant (_gl_const_world, transform);
 
 			_mesh->render ();
 		}

@@ -9,7 +9,7 @@
 namespace ballistic {
 
 	id_t game::create_id_key () {
-		return hash < unsigned int > ()(++_id_key);
+		return std::hash < unsigned int > ()(++_id_key);
 	}
 
 	void game::add_entity ( entity * ent ) {

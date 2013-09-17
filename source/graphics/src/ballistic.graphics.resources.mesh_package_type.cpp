@@ -87,8 +87,6 @@ namespace ballistic {
 							return;
 						}
 					} else if (strcmp (cursor->Name (), "index") == 0) {
-						m_attribute = (mesh_attribute)(m_attribute | mesh_attribute_uv);
-
 						stringstream ss (cursor->GetText ());
 						string value;
 
@@ -128,7 +126,7 @@ namespace ballistic {
 
 				}
 
-				mesh->set_data (data_buffer, buffer_size, index.data (), index.size (), m_attribute, false);
+				mesh->set_data (data_buffer, buffer_size, index.data (), index.size () * sizeof (uint16), m_attribute, false);
 
 				delete [] data_buffer;
 

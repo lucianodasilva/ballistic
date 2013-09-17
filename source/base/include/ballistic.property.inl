@@ -6,6 +6,18 @@ namespace ballistic {
 			_container->property_changed_event (*this);
 	}
 
+	void property::swap (property & v1, property & v2) {
+		id_t t_id						  = v1._id;
+		iproperty_container * t_container = v1._container;
+
+		v1._id = v2._id;
+		v1._container = v2._container;
+		v2._id = t_id;
+		v2._container = t_container;
+
+		var::swap (v1._value, v2._value);
+	}
+
 	property::property () : _id (0), _container (nullptr) {}
 
 	property::property (id_t id) : _id (id), _container (nullptr) {}
@@ -14,6 +26,10 @@ namespace ballistic {
 		_id (id), _container (container) {}
 
 	property::property (const property & v) : _value (v._value), _id (v._id), _container (v._container) {}
+
+	property::property (property && v) {
+		swap (*this, v);
+	}
 
 	template < class T >
 	T property::as () const {
@@ -28,8 +44,8 @@ namespace ballistic {
 		return *this;
 	}
 
-	property & property::operator = (const property & v) {
-		_value = v._value;
+	property & property::operator = (property v) {
+		swap (*this, v);
 		raise_property_changed_event ();
 		return *this;
 	}
@@ -37,7 +53,7 @@ namespace ballistic {
 	id_t property::get_id () const { return _id; }
 
 	var property::get_value () const { return _value; }
-	void property::set_value (const var & v) { _value = v; }
+	void property::set_value (var v) { var::swap (_value, v); }
 
 	iproperty_container * property::get_container () const { return _container; }
 	void property::set_container (iproperty_container * container) {_container = container;}

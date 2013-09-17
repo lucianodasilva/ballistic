@@ -48,7 +48,8 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-ballistic::res_id_t res_rotating_square ("rotating_square", "resources/game.xml");
+ballistic::res_id_t res_rotating_square ("rotating_square.entity", "resources/game.xml");
+ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
 
 int main ( int argc, char ** argv) {
 	
@@ -72,6 +73,7 @@ int main ( int argc, char ** argv) {
 	_game->add_system (graphics);
 
 	// create entities
+	ballistic::entity * camera = ballistic::entity::create (_game, res_camera);
 	ballistic::entity * rot_square = ballistic::entity::create (_game, res_rotating_square);
 
 	// initialize

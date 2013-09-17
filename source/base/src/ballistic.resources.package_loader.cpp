@@ -143,24 +143,6 @@ namespace ballistic {
 			
 			return true;
 		}
-
-		istream & package_loader::get_line (istream & stream, string & trim, char delimiter) {
-			char c;
-
-			trim.clear ();
-
-			while (stream.get (c).good ()) {
-				if (c == '\n' || c == '\r')
-					continue;
-
-				if (c == delimiter || stream.peek () == std::char_traits<char>::eof ())
-					return stream;
-
-				trim.append (1, c);
-			}
-
-			return stream;
-		}
 		
 	}
 }

@@ -28,7 +28,7 @@ namespace ballistic {
 			if (message.get_id () == id::message_render) {
 
 				if (_system && _material && _material->get_effect () && _mesh)
-					_system->push_item (_material, _mesh, _transform);
+					_system->push_item (_material, _mesh, mat4 ()); //TODO: think about transforms for rendering
 				debug_run ( else
 					debug_warn ("[ballistic::graphics::visual] Incomplete visual component. Will not render!");
 				);
@@ -40,10 +40,10 @@ namespace ballistic {
 			if (message.get_id () == ballistic::id::message_property_changed && 
 				message.get_sender () == get_entity ()
 			){
-				id_t property_id = message [ballistic::id::id].as <id_t> ();
+				id_t property_id = message [ballistic::id::id].as < id_t > ();
 
 				if (property_id == id::transform)
-					_transform = message [ballistic::id::value].as <mat4> ();
+					_transform = message [ballistic::id::value].as < mat4 > ();
 
 				if (property_id == id::material) {
 					id_t material_res_id = message [ballistic::id::value].as < id_t > ();

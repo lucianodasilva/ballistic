@@ -14,7 +14,8 @@ namespace ballistic {
 
 		graphics_system::graphics_system () :
 			_device (nullptr),
-			_render_message (id::message_render) 
+			_camera (nullptr),
+			_render_message (id::message_render)
 		{}
 
 		void graphics_system::set_device ( idevice * device ) {

@@ -4,9 +4,9 @@
 
 #include "ballistic.config.h"
 #include "ballistic.convert.h"
-#include "ballistic.debug.h"
+#include "ballistic.common_id.h"
 
-#include "ballistic.id.h"
+#include "ballistic.debug.h"
 
 #include "ballistic.math.h"
 #include "ballistic.math.matrixes.h"
@@ -76,13 +76,12 @@ inline void get (type & v) const { \
 class var {
 public:
 
-	enum type {
+	enum var_type {
 		var_type_none	= 0,
 		var_type_bool	= 1,
 		var_type_int32	= 2,
 		var_type_uint32 = 4,
 		var_type_double	= 8,
-		var_type_id		= 16,
 		var_type_struct = 128,
 		var_type_string = var_type_struct + 1,
 		var_type_vec2	= var_type_struct + 2,
@@ -93,11 +92,10 @@ public:
 
 private:
 
-	type _type;
+	var_type _type;
 	
-	union {
+	union var_data {
 		bool	bool_v;
-		id_t	id_t_v;
 		int32	int32_v;
 		uint32	uint32_v;
 		double	double_v;
@@ -125,16 +123,19 @@ private:
 		if (_type & var_type_struct) {
 			switch (_type) {
 			case (var_type_vec2) :
-				_data.ptr_v = new vec2 (*(vec2 *)_data.ptr_v);
+				_data.ptr_v = new vec2 (*(vec2 *)v._data.ptr_v);
 				break;
 			case (var_type_vec3) :
-				_data.ptr_v = new vec3 (*(vec3 *)_data.ptr_v);
+				_data.ptr_v = new vec3 (*(vec3 *)v._data.ptr_v);
 				break;
 			case (var_type_vec4) :
-				_data.ptr_v = new vec4 (*(vec4 *)_data.ptr_v);
+				_data.ptr_v = new vec4 (*(vec4 *)v._data.ptr_v);
 				break;
 			case (var_type_mat4) :
-				_data.ptr_v = new mat4 (*(mat4 *)_data.ptr_v);
+				_data.ptr_v = new mat4 (*(mat4 *)v._data.ptr_v);
+				break;
+			case (var_type_string) :
+				_data.ptr_v = new string (*(string *)v._data.ptr_v);
 				break;
 			default:
 				debug_error ("[ballistic::var::copy_mem] Unknown type found. No var set to null.");
@@ -147,13 +148,23 @@ private:
 
 public:
 
+	inline static void swap (var & v1, var & v2) {
+		var_type t_type = v1._type;
+		var_data t_data = v1._data;
+
+		v1._type = v2._type;
+		v1._data = v2._data;
+
+		v2._type = t_type;
+		v2._data = t_data;
+	}
+
 	// details
 
 	declare_set (int32)
 	declare_set (uint32)
 	declare_set (double)
 	declare_set (bool)
-	declare_set (id_t)
 	
 	declare_set_struct (string)
 	declare_set_struct (vec2)
@@ -165,12 +176,23 @@ public:
 	declare_get (uint32)
 	declare_get (double)
 	declare_get (bool)
-	declare_get (id_t)
 
 	declare_get_struct (vec2)
 	declare_get_struct (vec3)
 	declare_get_struct (vec4)
 	declare_get_struct (mat4)
+
+#ifdef BALLISTIC_DEBUG
+
+	inline void get (ballistic::id_t & v) const {
+		get (v.key);
+	}
+
+	inline void set (const ballistic::id_t & v) {
+		set (v.key);
+	}
+
+#endif
 
 	inline void get (string & v) const {
 
@@ -210,12 +232,16 @@ public:
 
 	inline var () : _type (var_type_none) {}
 
-	inline var (const var & v) {
+	inline var (const var & v) : var () {
 		copy_mem (v);
 	}
 
+	inline var (var && v) : var () {
+		swap (*this, v);
+	}
+
 	template < class T >
-	inline var (const T & v) { 
+	inline var (const T & v) : var () { 
 		static_assert (!std::is_pointer <T>::value, "[ballistic::var::ctor] Variant does not support pointers");
 		set (v);	
 	}
@@ -231,16 +257,16 @@ public:
 		return *this;
 	}
 
-	inline var & operator = (const var & v) {
-		copy_mem (v);
+	inline var & operator = (var v) {
+		swap (*this, v);
 		return *this;
 	}
 
 	template < class T >
-	T && as () const {
+	T as () const {
 		T v;
 		get (v);
-		return std::move (v);
+		return v;
 	}
 
 };

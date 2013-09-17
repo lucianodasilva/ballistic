@@ -78,6 +78,14 @@ namespace ballistic {
 				.0, .0, -2 / (far - near), -((far + near) / (far - near)),
 				.0, .0, .0, 1.0
 				);
+
+			_far = far;
+			_near = near;
+
+			_depth_divisor =
+				far / (far - near)
+				+
+				far * near / (near - far);
 		}
 
 		void camera::notify (ballistic::message & message) {
@@ -131,7 +139,7 @@ namespace ballistic {
 			enum {
 				proj_type_ortho,
 				proj_type_persp
-			} type;
+			} type = proj_type_ortho;
 
 			for (property & prop : parameters) {
 				id_t prop_id = prop.get_id ();

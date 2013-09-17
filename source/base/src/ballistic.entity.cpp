@@ -12,7 +12,8 @@ namespace ballistic {
 		_property_changed_message [id::id] = p.get_id ();
 		_property_changed_message [id::value] = p.get_value ();
 
-		this->get_game ()->send_message (_property_changed_message);
+		if (_game)
+			_game->send_message (_property_changed_message);
 	}
 
 	game * entity::get_game () { return _game; }

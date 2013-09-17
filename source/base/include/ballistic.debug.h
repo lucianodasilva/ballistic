@@ -2,6 +2,7 @@
 #define _ballistic_debug_h_
 
 #include "ballistic.config.h"
+#include "ballistic.common_id.h"
 
 #ifdef BALLISTIC_DEBUG
 
@@ -37,6 +38,8 @@ namespace ballistic {
 
 			template < class T >
 			inline message & operator << (const T & v);
+
+			inline message & operator << (const id_t & id);
 		};
 
 	private:
@@ -61,6 +64,11 @@ namespace ballistic {
 	template < class T >
 	debug_service::message & debug_service::message::operator << (const T & v) {
 		message_stream << v;
+		return *this;
+	}
+
+	debug_service::message & debug_service::message::operator << (const id_t & v) {
+		message_stream << "[" << v.text << "|" << v.key << "]";
 		return *this;
 	}
 	

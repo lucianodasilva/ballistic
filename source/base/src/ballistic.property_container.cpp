@@ -9,7 +9,7 @@ namespace ballistic {
 
 	property & property_container::add_property (id_t id, const var & value) {
 		property & p = _property_map [id] = property (this, id);
-		p = value;
+		p.set_value ( value );
 		return p;
 	}
 

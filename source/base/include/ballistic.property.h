@@ -21,6 +21,8 @@ namespace ballistic {
 
 		inline void raise_property_changed_event ();
 
+		inline static void swap (property & v1, property & v2);
+
 	public:
 
 		inline property ();
@@ -28,18 +30,20 @@ namespace ballistic {
 		inline property (iproperty_container * container, id_t id);
 		inline property (const property & v);
 
+		inline property (property && v);
+
 		template < class T >
 		inline T as () const;
 
 		template < class T >
 		inline property & operator = (const T & v);
 
-		inline property & operator = (const property & v);
+		inline property & operator = (property v);
 
 		inline id_t get_id () const;
 
 		inline var get_value () const;
-		inline void set_value (const var & v);
+		inline void set_value (var v);
 
 		inline iproperty_container * get_container () const;
 		inline void set_container (iproperty_container * container);

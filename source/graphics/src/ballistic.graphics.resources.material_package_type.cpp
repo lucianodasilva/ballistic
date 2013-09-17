@@ -22,37 +22,19 @@ namespace ballistic {
 				var value;
 		
 				const tinyxml2::XMLAttribute * cursor = element->FirstAttribute ();
+
 				while (cursor) {
 
-					if (strcmp (cursor->Name (), "diffuse") == 0) {
-						ballistic::resources::property_container_reader::default_type_reader (
-							"color",
-							cursor->Value (),
-							stack,
-							value
-						);
+					value = string (cursor->Value ());
 
+					if (strcmp (cursor->Name (), "diffuse") == 0) {
 						material->set_diffuse (value.as <color>());
 					} else if (strcmp (cursor->Name (), "specular") == 0) {
-						ballistic::resources::property_container_reader::default_type_reader (
-							"color",
-							cursor->Value (),
-							stack,
-							value
-							);
-
 						material->set_specular (value.as <color>());
 					} else if (strcmp (cursor->Name (), "opaque") == 0) {
-						ballistic::resources::property_container_reader::default_type_reader (
-							"bool",
-							cursor->Value (),
-							stack,
-							value
-							);
-
 						material->set_opaque (value.as <bool>());
 					} else if (strcmp (cursor->Name (), "effect") == 0) {
-						ieffect * effect = dynamic_cast < ieffect *> (stack.get_resource (string_to_id (cursor->Value ())));
+						ieffect * effect = dynamic_cast < ieffect *> (stack.get_resource (string_to_id (value.as <string> ())));
 						material->set_effect (effect);
 					}
 

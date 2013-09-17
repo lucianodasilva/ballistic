@@ -26,10 +26,13 @@ namespace ballistic {
 			if (c == '\n' || c == '\r')
 				continue;
 
-			if (c == delimiter || stream.peek () == std::char_traits<char>::eof ())
+			if (c == delimiter)
 				return stream;
 
 			trim.append (1, c);
+
+			if (stream.peek () == std::char_traits < char>::eof ())
+				return stream;
 		}
 
 		return stream;
@@ -38,8 +41,8 @@ namespace ballistic {
 	template < class src_t, class dst_t > 
 	inline void convert ( src_t & src, dst_t & dst ){
 		// Compile time type conversion errors
-		static_assert ( std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC );
-		static_assert ( std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST );
+		static_assert (std::is_fundamental < src_t >::value, "[ballistic::convert::convert] "MSG_NOT_FUNDAMENTAL_SRC);
+		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::convert] "MSG_NOT_FUNDAMENTAL_DST);
 
 		dst = (dst_t)src;
 	}
@@ -54,16 +57,25 @@ namespace ballistic {
 	template < class string_t, class dst_t > 
 	inline void __convert_string ( const string_t & src, dst_t & dst ) {
 		// Compile time type conversion errors
-		static_assert ( std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST );
+		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::__convert_string] " MSG_NOT_FUNDAMENTAL_DST);
 
 		std::stringstream stream (src);
 
 		//extract whitespaces
 		stream >> std::ws >> dst;
 		if (stream.fail ()) {
-			debug_error (MSG_STRING_CONV_FAILED);
+			debug_error ("[ballistic::convert::__convert_string] " MSG_STRING_CONV_FAILED);
 			dst = dst_t ();
 		}
+	}
+
+	inline void convert (string & src, bool & dst) {
+		if (src == "true")
+			dst = true;
+		else if (src == "false")
+			dst = false;
+		else
+			debug_error ("[ballistic::convert::__convert_string] Cannot convert " << src << " to boolean.");
 	}
 
 	template < class dst_t > 
@@ -84,7 +96,7 @@ namespace ballistic {
 	template < class src_t >
 	inline void convert ( src_t & src, std::string & dst ) {
 		// Compile time type conversion errors
-		static_assert ( std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC );
+		static_assert ( std::is_fundamental < src_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_SRC );
 		dst = std::to_string (src);
 	}
 
