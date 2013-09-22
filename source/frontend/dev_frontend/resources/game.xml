@@ -1,54 +1,57 @@
-
 <package>
-  
+
   <effect name="square.effect">
-    <vertex> 
+    <vertex>
       <![CDATA[
       #version 330 core
       
-			layout (location = 0) in vec3	in_position;
-			
-      uniform vec4				effect_diffuse;
+      layout (location = 0) in vec3 in_position;
+      
+      uniform vec4        effect_diffuse;
       uniform vec4        effect_specular;
-      uniform mat4        effect_t_world;
+      uniform mat4        effect_t_model;
       uniform mat4        effect_t_view;
       uniform mat4        effect_t_proj;
 
-			out vec4						var_color;
+      out vec4            var_color;
 
-			void main () {
-        
-        //mat4 mvp = effect_t_proj;
-        
+      void main () {
+
         var_color = effect_diffuse;
-				//gl_Position = mvp * vec4 (in_position.xyz, 1.0);
-        gl_Position = vec4 (in_position.xyz, 1.0);
-			}
+
+        mat4 mvp = effect_t_proj;
+        gl_Position = mvp * vec4 (in_position, 1.0);
+      }
       
-      ]]> 
+      ]]>
     </vertex>
-    <fragment> 
+    <fragment>
       <![CDATA[
       #version 330 core
 
       in vec4 var_color;
       out vec4 out_color;
-			
+      
       void main () {
         out_color = var_color;
       }
       
-      ]]> 
+      ]]>
     </fragment>
   </effect>
-  
-  <material name="square.material" diffuse="1.0, 1.0, 1.0, 1.0" opaque="true" effect="square.effect" />
-  
+
+  <material name="square.material" diffuse="0.0, 1.0, 1.0, 1.0" opaque="true" effect="square.effect" />
+
   <mesh name="square.mesh">
+    <!--     <position>
+      0, -0.5, 0.0,
+      0.5, 0.5, 0.0,
+      -0.5, 0.5, 0.0
+    </position> -->
     <position>
-      -0.5, -0.5, 0.0,
-      0.5, -0.5, 0.0,
-      0.5, 0.5, 0.0
+      0, 0.5, 0,
+      0.5, -0.5, 0,
+      -0.5, -0.5, 0
     </position>
     <!--<uv>
       0.0, 0.0,
@@ -69,25 +72,25 @@
     <components>
       <graphics_camera>
         <projection value="ortho"/>
-        <left   value="-1"/>
-        <right  value="1"/>
-        <top    value="1"/>
-        <bottom value="-1"/>
+        <left   value="-10"/>
+        <right  value="10"/>
+        <top    value="10"/>
+        <bottom value="-10"/>
         <near   value="-10"/>
         <far    value="100"/>
       </graphics_camera>
     </components>
   </entity>
 
-	<entity name="rotating_square.entity">
-		<properties>
-			<position type="vec3" value="0, 0, 0"/>
+  <entity name="rotating_square.entity">
+    <properties>
+      <position type="vec3" value="0, 0, 0"/>
       <material type="res"  value="square.material"/>
       <mesh     type="res"  value="square.mesh"/>
-		</properties>
-		<components>
+    </properties>
+    <components>
       <graphics_visual/>
-		</components>
-	</entity>
+    </components>
+  </entity>
 
 </package>

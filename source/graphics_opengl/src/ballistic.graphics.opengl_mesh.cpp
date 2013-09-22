@@ -11,9 +11,9 @@ namespace ballistic {
 			GLint stride = 0;
 
 			if (attributes & mesh_attribute_position)
-				stride += 3;
+				stride += sizeof (vec3);
 			if (attributes & mesh_attribute_uv)
-				stride += 2;
+				stride += sizeof (vec2);
 
 			return stride;
 		}

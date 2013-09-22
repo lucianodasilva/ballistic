@@ -29,7 +29,7 @@ namespace ballistic {
 			namespace effect {
 				const id_t diffuse	= string_to_id ("effect_diffuse");
 				const id_t specular = string_to_id ("effect_specular");
-				const id_t t_world	= string_to_id ("effect_t_world");
+				const id_t t_model	= string_to_id ("effect_t_model");
 				const id_t t_view	= string_to_id ("effect_t_view");
 				const id_t t_proj	= string_to_id ("effect_t_proj");
 			}

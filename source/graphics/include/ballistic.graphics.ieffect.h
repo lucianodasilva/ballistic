@@ -6,7 +6,7 @@
 
 	effect_diffuse
 	effect_specular
-	effect_t_world
+	effect_t_model
 	effect_t_view
 	effect_t_proj
 

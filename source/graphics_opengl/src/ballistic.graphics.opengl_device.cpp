@@ -67,7 +67,7 @@ namespace ballistic {
 			_effect->apply (this);
 
 			// get constants
-			_gl_const_world = _effect->get_constant (id::graphics::effect::t_world);
+			_gl_const_model = _effect->get_constant (id::graphics::effect::t_model);
 			_gl_const_view = _effect->get_constant (id::graphics::effect::t_view);
 			_gl_const_proj = _effect->get_constant (id::graphics::effect::t_proj);
 			
@@ -76,14 +76,14 @@ namespace ballistic {
 
 			// set least changing constants
 			// TODO: replace by uniform block
-			if (_gl_const_view.location)
+			if (_gl_const_view.is_defined ())
 				_effect->set_constant (_gl_const_view, _view);
-
-			if (_gl_const_world.location)
-				_effect->set_constant (_gl_const_world, _world);
 			
-			if (_gl_const_proj.location)
-			_effect->set_constant (_gl_const_proj, _proj);
+			if (_gl_const_model.is_defined ())
+				_effect->set_constant (_gl_const_model, _model);
+			
+			if (_gl_const_proj.is_defined ())
+				_effect->set_constant (_gl_const_proj, _proj);
 		}
 
 		void opengl_device::activate (imaterial * material) {
@@ -102,7 +102,7 @@ namespace ballistic {
 
 		void opengl_device::set_view (const mat4 & view) {
 			_view = view;
-			if (_effect && _gl_const_view.location)
+			if (_effect)
 				_effect->set_constant (_gl_const_view, _view);
 		}
 
@@ -110,20 +110,20 @@ namespace ballistic {
 			return _view;
 		}
 
-		void opengl_device::set_world (const mat4 & world) {
-			_world = world;
-			if (_effect && _gl_const_world.location)
-				_effect->set_constant (_gl_const_world, _world);
+		void opengl_device::set_model (const mat4 & model) {
+			_model = model;
+			if (_effect)
+				_effect->set_constant (_gl_const_model, _model);
 		}
 
-		const mat4 & opengl_device::get_world () const {
-			return _world;
+		const mat4 & opengl_device::get_model () const {
+			return _model;
 		}
 
 		void opengl_device::set_proj (const mat4 & proj) {
 			_proj = proj;
 
-			if (_effect && _gl_const_proj.location)
+			if (_effect)
 				_effect->set_constant (_gl_const_proj, _proj);
 		}
 
@@ -178,8 +178,8 @@ namespace ballistic {
 				return;
 			}
 
-			if (_gl_const_world.location)
-				_effect->set_constant (_gl_const_world, transform);
+			if (_gl_const_model.is_defined ())
+				_effect->set_constant (_gl_const_model, transform);
 
 			_mesh->render ();
 		}

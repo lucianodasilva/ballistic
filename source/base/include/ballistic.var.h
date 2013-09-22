@@ -232,16 +232,16 @@ public:
 
 	inline var () : _type (var_type_none) {}
 
-	inline var (const var & v) : var () {
+	inline var (const var & v) : _type (var_type_none) {
 		copy_mem (v);
 	}
 
-	inline var (var && v) : var () {
+	inline var (var && v) : _type (var_type_none) {
 		swap (*this, v);
 	}
 
 	template < class T >
-	inline var (const T & v) : var () { 
+	inline var (const T & v) : _type (var_type_none) { 
 		static_assert (!std::is_pointer <T>::value, "[ballistic::var::ctor] Variant does not support pointers");
 		set (v);	
 	}

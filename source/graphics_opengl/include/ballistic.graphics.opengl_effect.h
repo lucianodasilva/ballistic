@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 
 #include <map>
+#include <limits>
 
 using namespace std;
 
@@ -15,9 +16,13 @@ namespace ballistic {
 			GLuint	location;
 			id_t	id;
 
-			inline opengl_constant () : location (0), id (0) {}
+			inline opengl_constant () : location (std::numeric_limits < GLuint >::max ()), id (0) {}
 			inline opengl_constant (const opengl_constant & c) : location (c.location), id (c.id) {}
 			inline opengl_constant (GLuint location_v, id_t id_v) : location (location_v), id (id_v) {}
+
+			inline bool is_defined () const {
+				return location != std::numeric_limits < GLuint >::max ();
+			}
 
 		};
 
