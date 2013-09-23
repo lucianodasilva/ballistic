@@ -76,14 +76,9 @@ namespace ballistic {
 
 			// set least changing constants
 			// TODO: replace by uniform block
-			if (_gl_const_view.is_defined ())
-				_effect->set_constant (_gl_const_view, _view);
-			
-			if (_gl_const_model.is_defined ())
-				_effect->set_constant (_gl_const_model, _model);
-			
-			if (_gl_const_proj.is_defined ())
-				_effect->set_constant (_gl_const_proj, _proj);
+			_effect->set_constant (_gl_const_view, _view);
+			_effect->set_constant (_gl_const_model, _model);
+			_effect->set_constant (_gl_const_proj, _proj);
 		}
 
 		void opengl_device::activate (imaterial * material) {
@@ -178,8 +173,7 @@ namespace ballistic {
 				return;
 			}
 
-			if (_gl_const_model.is_defined ())
-				_effect->set_constant (_gl_const_model, transform);
+			_effect->set_constant (_gl_const_model, transform);
 
 			_mesh->render ();
 		}

@@ -115,7 +115,7 @@ namespace ballistic {
 		}
 
 		void opengl_effect::set_constant (opengl_constant & u, int32 v) {
-			if (u.is_defined ()) {
+			if (!u.is_defined ()) {
 				debug_error ("GL constant " << u.id << " location not defined");
 				return;
 			}
@@ -125,7 +125,7 @@ namespace ballistic {
 		}
 
 		void opengl_effect::set_constant (opengl_constant & u, real v) {
-			if (u.is_defined ()) {
+			if (!u.is_defined ()) {
 				debug_error ("[ballistic::graphics::opengl_effect::set_constant] GL constant " << u.id << " location not defined");
 				return;
 			}
@@ -135,7 +135,7 @@ namespace ballistic {
 		}
 
 		void opengl_effect::set_constant (opengl_constant & u, const vec2 & v) {
-			if (u.is_defined ()) {
+			if (!u.is_defined ()) {
 				debug_error ("[ballistic::graphics::opengl_effect::set_constant] GL constant " << u.id << " location not defined");
 				return;
 			}
@@ -145,7 +145,7 @@ namespace ballistic {
 		}
 
 		void opengl_effect::set_constant (opengl_constant & u, const vec3 & v) {
-			if (u.is_defined ()) {
+			if (!u.is_defined ()) {
 				debug_error ("[ballistic::graphics::opengl_effect::set_constant] GL constant " << u.id << " location not defined");
 				return;
 			}
@@ -155,7 +155,7 @@ namespace ballistic {
 		}
 
 		void opengl_effect::set_constant (opengl_constant & u, const vec4 & v) {
-			if (u.is_defined ()) {
+			if (!u.is_defined ()) {
 				debug_error ("[ballistic::graphics::opengl_effect::set_constant] GL constant " << u.id << " location not defined");
 				return;
 			}
@@ -165,7 +165,7 @@ namespace ballistic {
 		}
 
 		void opengl_effect::set_constant (opengl_constant & u, const mat4 & v) {
-			if (u.is_defined ()) {
+			if (!u.is_defined ()) {
 				debug_error ("[ballistic::graphics::opengl_effect::set_constant] GL constant " << u.id << " location not defined");
 				return;
 			}

@@ -19,7 +19,7 @@
 
         var_color = effect_diffuse;
 
-        mat4 mvp = effect_t_proj;
+        mat4 mvp = effect_t_proj * effect_t_view;
         gl_Position = mvp * vec4 (in_position, 1.0);
       }
       

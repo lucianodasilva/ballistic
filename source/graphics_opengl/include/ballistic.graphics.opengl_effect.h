@@ -24,6 +24,13 @@ namespace ballistic {
 				return location != std::numeric_limits < GLuint >::max ();
 			}
 
+			inline opengl_constant & operator = ( opengl_constant v ) {
+				location = v.location;
+				id = v.id;
+
+				return *this;
+			}
+
 		};
 
 		class opengl_effect : public ballistic::graphics::ieffect {

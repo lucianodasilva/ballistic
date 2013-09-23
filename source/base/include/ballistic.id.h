@@ -28,7 +28,7 @@ namespace ballistic {
 			v1.key = v2.key;
 			v2.key = t_key;
 
-			v1.text.swap (v1.text);
+			v1.text.swap (v2.text);
 		}
 
 		inline id_t () : key (0) {}

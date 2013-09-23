@@ -68,11 +68,8 @@ namespace ballistic {
 			}
 
 			// apply material
-			if (_diffuse_constant.is_defined ())
-				_effect->set_constant (_diffuse_constant, _diffuse);
-
-			if (_specular_constant.is_defined ())
-				_effect->set_constant (_specular_constant, _specular);
+			_effect->set_constant (_diffuse_constant, _diffuse);
+			_effect->set_constant (_specular_constant, _specular);
 		}
 
 	}
