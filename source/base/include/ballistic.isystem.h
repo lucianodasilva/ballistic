@@ -6,12 +6,12 @@
 
 namespace ballistic {
 
-	class game;
+	class igame;
 
 	class isystem {
 	private:
 
-		ballistic::game * _game;
+		ballistic::igame * _game;
 
 	public:
 
@@ -19,8 +19,8 @@ namespace ballistic {
 
 		virtual id_t get_id () = 0;
 
-		virtual ballistic::game * get_game ();
-		virtual void set_game (ballistic::game * value);
+		virtual ballistic::igame * get_game ();
+		virtual void set_game (ballistic::igame * value);
 
 		virtual void notify ( ballistic::message & message ) = 0;
 

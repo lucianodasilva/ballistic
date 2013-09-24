@@ -1,15 +1,9 @@
 #ifndef	_ballistic_game_h_
 #define _ballistic_game_h_
 
-#include "ballistic.resources.component_constructor.h"
-#include "ballistic.entity.h"
-#include "ballistic.ifrontend.h"
+#include "ballistic.igame.h"
 #include "ballistic.isystem.h"
-#include "ballistic.message.h"
 #include "ballistic.system.h"
-
-
-#include "ballistic.resources.stack.h"
 
 #include <functional>
 #include <map>
@@ -21,7 +15,7 @@ using namespace std;
 
 namespace ballistic {
 	
-	class game : public entity {
+	class game : public igame {
 	protected:
 		
 		// entity id
@@ -54,12 +48,6 @@ namespace ballistic {
 	
 		virtual resources::iresource * get_resource (const res_id_t & res_id);
 		virtual resources::iresource * get_resource (id_t res_id);
-
-		template < class T >
-		inline T * get_resource (const res_id_t & res_id);
-
-		template < class T >
-		inline T * get_resource (id_t res_id);
 		
 		virtual void push_resource_level ();
 		virtual bool pop_resource_level ();
@@ -86,7 +74,7 @@ namespace ballistic {
 
 		virtual bool is_running ();
 
-		virtual void do_loop (ifrontend * frontend = nullptr, function < void ( game * )> system_callback = nullptr);
+		virtual void do_loop (ifrontend * frontend = nullptr, function < void ( igame * )> system_callback = nullptr);
 
 		virtual bool frame ();
 
@@ -96,16 +84,6 @@ namespace ballistic {
 		virtual ~game ();
 
 	};
-
-	template < class T >
-	T * game::get_resource (const res_id_t & id) {
-		return dynamic_cast <T *> (get_resource (id));
-	}
-
-	template < class T >
-	T * game::get_resource (id_t id) {
-		return dynamic_cast <T *> (get_resource (id));
-	}
 
 }
 

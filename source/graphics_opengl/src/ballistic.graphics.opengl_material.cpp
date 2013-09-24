@@ -5,10 +5,10 @@ namespace ballistic {
 	namespace graphics {
 
 		opengl_material::opengl_material (uint8 run_id) :
-			_run_id (run_id),
+			_opaque (false),
 			_texture (nullptr),
 			_effect (nullptr),
-			_opaque (false)
+			_run_id (run_id)
 		{}
 
 		uint8 opengl_material::get_run_id () { return _run_id; }

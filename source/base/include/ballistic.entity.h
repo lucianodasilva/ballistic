@@ -3,21 +3,23 @@
 
 #include <vector>
 
-#include "ballistic.icomponent.h"
 #include "ballistic.id.h"
+#include "ballistic.message.h"
 #include "ballistic.property_container.h"
+#include "ballistic.resources.id.h"
 #include "ballistic.var.h"
 
 using namespace std;
 
 namespace ballistic {
 
-	class game;
+	class igame;
+	class icomponent;
 
 	class entity : public property_container {
 	private:
 
-		game *					_game;
+		igame *					_game;
 		id_t					_id;
 		vector < icomponent * > _components;
 
@@ -30,8 +32,8 @@ namespace ballistic {
 
 		virtual void property_changed_event (const property & p);
 			
-		game * get_game ();
-		void set_game (game * g);
+		igame * get_game ();
+		void set_game (igame * g);
 
 		id_t get_id ();
 			
@@ -42,8 +44,8 @@ namespace ballistic {
 		entity ( id_t id );
 		virtual ~entity ();
 
-		static entity * create (ballistic::game * game, const res_id_t & type);
-		static entity * create (ballistic::game * game, id_t id, const res_id_t & type);
+		static entity * create (ballistic::igame * game, const res_id_t & type);
+		static entity * create (ballistic::igame * game, id_t id, const res_id_t & type);
 		
 	};
 	

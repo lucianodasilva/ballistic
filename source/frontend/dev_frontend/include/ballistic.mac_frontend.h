@@ -14,7 +14,7 @@ namespace ballistic {
 		private:
 			point _window_client_size;
 			
-			static ballistic::game * _game;
+			static ballistic::igame * _game;
 			
 			static void update_frame ();
 			
@@ -30,9 +30,9 @@ namespace ballistic {
 			virtual void show ();
 			virtual void destroy ();
 			
-			virtual void update ( ballistic::game * game );
+			virtual void update ( ballistic::igame * game );
 
-			virtual void do_event_loop ( ballistic::game * game );
+			virtual void do_event_loop ( ballistic::igame * game );
 			
 		};
 

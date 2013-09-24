@@ -16,7 +16,7 @@ namespace ballistic {
 
 			real _depth_divisor;
 
-			game *				_game;
+			igame *				_game;
 			graphics_system *	_system;
 
 			mat4 _proj;

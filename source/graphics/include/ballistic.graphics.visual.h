@@ -21,7 +21,7 @@ namespace ballistic {
 			imesh *				_mesh;
 
 			graphics_system *	_system;
-			game *				_game;
+			igame *				_game;
 
 		public:
 

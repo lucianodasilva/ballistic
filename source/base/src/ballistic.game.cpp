@@ -101,7 +101,7 @@ namespace ballistic {
 
 	bool game::is_running () { return _running; }
 
-	void game::do_loop (ifrontend * frontend, function < void ( game * ) > system_callback) {
+	void game::do_loop (ifrontend * frontend, function < void ( igame * ) > system_callback) {
 		while (frame ()){
 			if (system_callback)
 				system_callback (this);
@@ -134,7 +134,7 @@ namespace ballistic {
 		_running = false;
 	}
 
-	game::game () : entity (0), _id_key(0), _m_update (this, id::message_update) {
+	game::game () : igame (), _id_key(0), _m_update (this, id::message_update) {
 		set_game (this);
 		_entity_map [this->get_id ()] = this;
 	}

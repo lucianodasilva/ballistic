@@ -12,7 +12,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		void define_resources (ballistic::game * game, ballistic::graphics::idevice * device) {
+		void define_resources (ballistic::igame * game, ballistic::graphics::idevice * device) {
 
 			component::define < visual > (game);
 			component::define < camera > (game);

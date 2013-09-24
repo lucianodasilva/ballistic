@@ -4,7 +4,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		opengl_effect::opengl_effect (uint8 run_id) : _run_id (run_id), _shader_program_id(-1) {}
+		opengl_effect::opengl_effect (uint8 run_id) : _shader_program_id(-1), _run_id (run_id) {}
 
 		opengl_effect::~opengl_effect () {
 			if (_shader_program_id != -1)

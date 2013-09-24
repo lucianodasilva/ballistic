@@ -41,8 +41,8 @@ namespace ballistic {
 	template < class src_t, class dst_t > 
 	inline void convert ( src_t & src, dst_t & dst ){
 		// Compile time type conversion errors
-		static_assert (std::is_fundamental < src_t >::value, "[ballistic::convert::convert] "MSG_NOT_FUNDAMENTAL_SRC);
-		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::convert] "MSG_NOT_FUNDAMENTAL_DST);
+		static_assert (std::is_fundamental < src_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_SRC);
+		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_DST);
 
 		dst = (dst_t)src;
 	}

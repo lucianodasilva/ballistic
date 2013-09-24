@@ -13,7 +13,7 @@ namespace ballistic {
 		inline typename T::type dot ( const T & v1, const T & v2 ) {
 			// avoid branching by avoiding zero ( floating point precision exploit )
 			// returns minimum positive number for min
-			typename T::type r = numeric_limits < typedef T::type >::min ();
+			typename T::type r = numeric_limits < typename T::type >::min ();
 
 			for ( uint32 i = 0; i < T::count; ++i)
 				r += v1.data [i] * v2.data [i];

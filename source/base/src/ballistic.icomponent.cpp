@@ -1,5 +1,5 @@
 #include "ballistic.icomponent.h"
-#include "ballistic.game.h"
+#include "ballistic.igame.h"
 #include "ballistic.resources.component_constructor.h"
 
 using namespace std;
@@ -22,11 +22,11 @@ namespace ballistic {
 		
 	void component::setup ( vector < property > & parameters ) {}
 
-	icomponent * component::create (ballistic::game * game, const res_id_t & id) {
+	icomponent * component::create (ballistic::igame * game, const res_id_t & id) {
 		return create (game, id.get_id ());
 	}
 
-	icomponent * component::create (ballistic::game * game, id_t id) {
+	icomponent * component::create (ballistic::igame * game, id_t id) {
 		auto ctor = dynamic_cast <resources::icomponent_constructor *> (game->get_resource (id));
 
 		if (ctor)
@@ -37,7 +37,7 @@ namespace ballistic {
 		}
 	}
 
-	icomponent * component::create (ballistic::game * game, id_t id, vector < property > & parameters) {
+	icomponent * component::create (ballistic::igame * game, id_t id, vector < property > & parameters) {
 		auto ctor = dynamic_cast <resources::icomponent_constructor *> (game->get_resource (id));
 
 		if (ctor)

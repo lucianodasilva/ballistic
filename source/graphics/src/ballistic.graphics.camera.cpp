@@ -1,5 +1,4 @@
 #include "ballistic.graphics.camera.h"
-
 #include "ballistic.graphics.common_id.h"
 #include "ballistic.graphics.graphics_system.h"
 
@@ -24,8 +23,8 @@ namespace ballistic {
 			: 
 			_near (near),
 			_far (far),
-			_system (nullptr),
-			_game (nullptr)
+			_game (nullptr),
+			_system (nullptr)
 		{
 			_depth_divisor =
 				far / (far - near)

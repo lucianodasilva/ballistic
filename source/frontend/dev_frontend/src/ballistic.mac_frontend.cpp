@@ -7,7 +7,7 @@
 namespace ballistic {
 	namespace mac_desktop {
 		
-		ballistic::game * frontend::_game;
+		ballistic::igame * frontend::_game;
 		
 		void frontend::update_frame(){
 			_game->frame ();
@@ -39,11 +39,11 @@ namespace ballistic {
 		void frontend::destroy () {
 		}
 		
-		void frontend::update ( ballistic::game * game ) {
+		void frontend::update ( ballistic::igame * game ) {
 			
 		}
 
-		void frontend::do_event_loop ( ballistic::game * game ) {
+		void frontend::do_event_loop ( ballistic::igame * game ) {
 			_game = game;
 			
 			glutDisplayFunc(update_frame);

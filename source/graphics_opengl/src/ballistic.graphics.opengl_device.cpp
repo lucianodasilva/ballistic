@@ -12,8 +12,8 @@ namespace ballistic {
 		opengl_device::opengl_device ()
 			:
 			_effect_run_id (0),
-			_mesh_run_id (0),
 			_material_run_id (0),
+			_mesh_run_id (0),
 			_effect (nullptr),
 			_material (nullptr),
 			_mesh (nullptr)

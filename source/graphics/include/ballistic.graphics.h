@@ -20,11 +20,9 @@
 
 namespace ballistic {
 
-	class game;
-
 	namespace graphics {
 
-		extern void define_resources (ballistic::game * game, ballistic::graphics::idevice * device);
+		void define_resources (ballistic::igame * game, ballistic::graphics::idevice * device);
 
 	}
 }

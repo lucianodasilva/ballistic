@@ -2,6 +2,7 @@
 #ifndef _ballistic_icomponent_h_
 #define _ballistic_icomponent_h_
 
+#include "ballistic.igame.h"
 #include "ballistic.message.h"
 #include "ballistic.property.h"
 #include "ballistic.resources.id.h"
@@ -9,9 +10,15 @@
 #include <vector>
 
 namespace ballistic {
-
-	class entity;
-	class game;
+	
+	namespace resources {
+		
+		template < class T >
+		class component_constructor;
+		
+	}
+	
+	// --------------------
 	
 	class icomponent {
 	public:
@@ -45,60 +52,60 @@ namespace ballistic {
 		virtual void setup ( vector < property > & parameters );
 
 		template < class T >
-		static inline void define (ballistic::game * game, id_t id);
+		static inline void define (ballistic::igame * game, id_t id);
 
 		template < class T >
-		static inline void define (ballistic::game * game);
+		static inline void define (ballistic::igame * game);
 
-		static icomponent * create (ballistic::game * game, const res_id_t & id);
-		static icomponent * create (ballistic::game * game, id_t id);
-		static icomponent * create (ballistic::game * game, id_t id, vector < property > & parameters);
-
-		template < class T >
-		static inline T * create (ballistic::game * game, const res_id_t & id);
+		static icomponent * create (ballistic::igame * game, const res_id_t & id);
+		static icomponent * create (ballistic::igame * game, id_t id);
+		static icomponent * create (ballistic::igame * game, id_t id, vector < property > & parameters);
 
 		template < class T >
-		static inline T * create (ballistic::game * game, id_t id);
+		static inline T * create (ballistic::igame * game, const res_id_t & id);
 
 		template < class T >
-		static inline T * create (ballistic::game * game, id_t id, vector < property > & parameters);
+		static inline T * create (ballistic::igame * game, id_t id);
 
 		template < class T >
-		static inline T * create (ballistic::game * game);
+		static inline T * create (ballistic::igame * game, id_t id, vector < property > & parameters);
+
+		template < class T >
+		static inline T * create (ballistic::igame * game);
 
 	};
 
 	// define and create functions
 
 	template < class T >
-	void component::define (ballistic::game * game, id_t id) {
+	void component::define (ballistic::igame * game, id_t id) {
 		game->get_resource_stack ().add_to_global (id, new ballistic::resources::component_constructor < T > ());
 	}
 
 	template < class T >
-	void component::define (ballistic::game * game) {
+	void component::define (ballistic::igame * game) {
 		define < T > (game, T::component_id);
 	}
 
 	template < class T >
-	T * component::create (ballistic::game * game, const res_id_t & id) {
+	T * component::create (ballistic::igame * game, const res_id_t & id) {
 		return create < T > (game, id.get_id ());
 	}
 
 	template < class T >
-	T * component::create (ballistic::game * game, id_t id) {
+	T * component::create (ballistic::igame * game, id_t id) {
 		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
 		return dynamic_cast < T * > (create (game, id));
 	}
 
 	template < class T >
-	T * component::create (ballistic::game * game, id_t id, vector < property > & parameters) {
+	T * component::create (ballistic::igame * game, id_t id, vector < property > & parameters) {
 		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
 		return dynamic_cast <T *> (create (game, id, parameters));
 	}
 
 	template < class T >
-	T * component::create (ballistic::game * game) {
+	T * component::create (ballistic::igame * game) {
 		return create < T > (game, T::component_id);
 	}
 
