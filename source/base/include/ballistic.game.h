@@ -40,6 +40,8 @@ namespace ballistic {
 		// internal systems
 		resources::stack _resources;
 
+		ifrontend * _frontend;
+
 	public:
 
 		virtual id_t create_id_key ();
@@ -74,7 +76,7 @@ namespace ballistic {
 
 		virtual bool is_running ();
 
-		virtual void do_loop (ifrontend * frontend = nullptr, function < void ( igame * )> system_callback = nullptr);
+		virtual void do_loop (function < void ( igame * )> system_callback = nullptr);
 
 		virtual bool frame ();
 
@@ -82,6 +84,10 @@ namespace ballistic {
 
 		game ();
 		virtual ~game ();
+
+		// ---------------------
+		virtual ifrontend * get_frontend ();
+		virtual void set_frontend (ifrontend * frontend);
 
 	};
 

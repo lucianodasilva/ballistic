@@ -12,6 +12,7 @@
       uniform mat4        effect_t_model;
       uniform mat4        effect_t_view;
       uniform mat4        effect_t_proj;
+      uniform mat4        effect_t_mvp;
 
       out vec4            var_color;
 
@@ -65,8 +66,8 @@
 
   <entity name="camera.entity">
     <properties>
-      <position type="vec3" value="0, 0, 0"/>
-      <target   type="vec3" value="0,0,0"/>
+      <position type="vec3" value="5, 5, -1"/>
+      <target   type="vec3" value="5,5,0"/>
       <up       type="vec3" value="0, 1, 0"/>
     </properties>
     <components>

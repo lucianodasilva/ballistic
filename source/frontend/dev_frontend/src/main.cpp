@@ -63,6 +63,7 @@ int main ( int argc, char ** argv) {
 	_device->set_clear_color(color (.0F, .6F, 1.F, 1.F));
 	
 	_game = new ballistic::game ();
+	_game->set_frontend (_frontend);
 
 	// setup game stuffs
 	ballistic::graphics::define_resources (_game, _device);

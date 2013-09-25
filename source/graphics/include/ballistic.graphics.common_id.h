@@ -18,6 +18,7 @@ namespace ballistic {
 			const id_t bottom = string_to_id ("bottom");
 			const id_t near = string_to_id ("near");
 			const id_t far = string_to_id ("far");
+			const id_t fovy = string_to_id ("fovy");
 			const id_t projection = string_to_id ("projection");
 
 			const id_t device = string_to_id ("graphics_device");

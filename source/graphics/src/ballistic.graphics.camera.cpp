@@ -58,12 +58,12 @@ namespace ballistic {
 			vec3 xaxis = math::normalize (math::cross (up, zaxis));
 			vec3 yaxis = math::cross (zaxis, xaxis);
 
-			return std::move ( mat4 (
+			return mat4 (
 				xaxis.x, yaxis.x, zaxis.x, .0,
 				xaxis.y, yaxis.y, zaxis.y, .0,
 				xaxis.z, yaxis.z, zaxis.z, .0,
-				-math::dot (xaxis, position), -math::dot (yaxis, position), -math::dot (zaxis, position), 1
-			));
+				math::dot (xaxis, position), math::dot (yaxis, position), math::dot (zaxis, position), 1
+			);
 		}
 
 		const mat4 & camera::get_proj () const {
@@ -75,7 +75,7 @@ namespace ballistic {
 				2.0 / (right - left), .0, .0, -((right + left) / (right - left)),
 				.0, 2.0 / (top - bottom), .0, -((top + bottom) / (top - bottom)),
 				.0, .0, -2 / (far - near), -((far + near) / (far - near)),
-				.0, .0, .0, 1.0
+				.0, .0, .0, 1.
 				);
 
 			_far = far;
@@ -85,6 +85,28 @@ namespace ballistic {
 				far / (far - near)
 				+
 				far * near / (near - far);
+		}
+
+		void camera::make_perspective_proj (real fovy, real aspect, real near, real far ) {
+			real 
+				ys = 1 / std::tan (fovy / 2),
+				xs = ys / aspect;
+
+			_proj =  mat4 (
+				xs, .0, .0, .0,
+				.0, ys, .0, .0,
+				.0, .0, far / (far - near), .1,
+				.0, .0, -near * far / (far - near), .0
+				);
+
+			_far = far;
+			_near = near;
+
+			_depth_divisor =
+				far / (far - near)
+				+
+				far * near / (near - far);
+
 		}
 
 		void camera::notify (ballistic::message & message) {
@@ -133,7 +155,9 @@ namespace ballistic {
 				top,
 				bottom,
 				near,
-				far;
+				far,
+				fovy;
+
 
 			enum {
 				proj_type_ortho,
@@ -144,9 +168,11 @@ namespace ballistic {
 				id_t prop_id = prop.get_id ();
 
 				if (prop_id == id::graphics::projection) {
-					if (prop.as < string > () == "ortho") {
+					if (prop.as < string > () == "ortho")
 						type = proj_type_ortho;
-					}
+					else if (prop.as < string > () == "proj")
+						type = proj_type_persp;
+					
 				} else if (prop_id == id::graphics::left)
 					left = (real) prop.as < double > ();
 				else if (prop_id == id::graphics::right)
@@ -159,11 +185,17 @@ namespace ballistic {
 					near = (real)prop.as < double > ();
 				else if (prop_id == id::graphics::far)
 					far = (real)prop.as < double > ();
+				else if (prop_id == id::graphics::fovy)
+					fovy = (real)prop.as < double > ();
+
 			}
+
+			
 
 			if (type == proj_type_ortho)
 				make_ortho_projection (left, right, bottom, top, near, far);
-
+			else if (type == proj_type_persp) 
+				make_perspective_proj (fovy
 		}
 
 

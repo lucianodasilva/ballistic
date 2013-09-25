@@ -45,6 +45,7 @@ namespace ballistic {
 
 			// utilities
 			void make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
+			void make_perspective_proj (real fovy, real aspect, real near, real far );
 
 			// component
 			virtual void notify (ballistic::message & message);

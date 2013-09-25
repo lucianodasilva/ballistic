@@ -37,9 +37,9 @@ namespace ballistic {
 			virtual void show ();
 			virtual void destroy ();
 
-			virtual void update (ballistic::game * game);
+			virtual void update (ballistic::igame * game);
 
-			virtual void do_event_loop (ballistic::game * game);
+			virtual void do_event_loop (ballistic::igame * game);
 
 			HWND get_window_handle ();
 		};
