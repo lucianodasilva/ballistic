@@ -66,12 +66,13 @@
 
   <entity name="camera.entity">
     <properties>
-      <position type="vec3" value="5, 5, -1"/>
-      <target   type="vec3" value="5,5,0"/>
+      <position type="vec3" value="0, 0, -1"/>
+      <target   type="vec3" value="0,0,0"/>
       <up       type="vec3" value="0, 1, 0"/>
     </properties>
     <components>
       <graphics_camera>
+        <!--
         <projection value="ortho"/>
         <left   value="-10"/>
         <right  value="10"/>
@@ -79,7 +80,13 @@
         <bottom value="-10"/>
         <near   value="-10"/>
         <far    value="100"/>
+        -->
+        <projection value="perspective"/>
+        <fovy   value="0.78539816339744830961566084581988"/>
+        <near   value="1"/>
+        <far    value="100"/>
       </graphics_camera>
+      <orbit_cam/>
     </components>
   </entity>
 

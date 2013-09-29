@@ -10,16 +10,16 @@ namespace ballistic {
 
 		const id_t visual::component_id = ballistic::id::graphics::visual;
 
-		void visual::setup (vector < ballistic::property > & parameters)
+		void visual::setup (entity * parent, vector < ballistic::property > & parameters)
 		{
+			component::setup (parent, parameters);
 		}
 
 		visual::visual ()
 			:
 			_material (nullptr),
 			_mesh (nullptr),
-			_system (nullptr),
-			_game (nullptr)
+			_system (nullptr)
 		{}
 
 		void visual::notify ( ballistic::message & message ) {
@@ -48,12 +48,12 @@ namespace ballistic {
 				if (property_id == id::material) {
 					id_t material_res_id = message [ballistic::id::value].as < id_t > ();
 
-					_material = _game->get_resource < imaterial > (material_res_id);
+					_material = get_game ()->get_resource < imaterial > (material_res_id);
 				}
 
 				if (property_id == id::mesh) {
 					id_t mesh_res_id = message [ballistic::id::value].as < id_t > ();
-					_mesh = _game->get_resource < imesh > (mesh_res_id);
+					_mesh = get_game ()->get_resource < imesh > (mesh_res_id);
 				}
 
 				return;
@@ -64,12 +64,10 @@ namespace ballistic {
 
 				entity * ent = get_entity ();
 
-				_game = ent->get_game ();
+				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
 
-				_system = dynamic_cast <graphics_system *> (_game->find_system (ballistic::id::graphics::system));
-
-				_material	= _game->get_resource < imaterial > (ent->get_property (ballistic::id::material).as < id_t > ());
-				_mesh		= _game->get_resource < imesh > (ent->get_property (ballistic::id::mesh).as < id_t > ());
+				_material = get_game ()->get_resource < imaterial > (ent->get_property (ballistic::id::material).as < id_t > ());
+				_mesh = get_game ()->get_resource < imesh > (ent->get_property (ballistic::id::mesh).as < id_t > ());
 				_transform	= ent->get_property (ballistic::id::transform).as < mat4 > ();
 			}
 

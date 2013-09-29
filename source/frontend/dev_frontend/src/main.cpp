@@ -48,6 +48,26 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
+float angle = 0.0F;
+
+void circle_camera ( ballistic::entity * parent, ballistic::message & message ) {
+
+	if (message.get_id () != ballistic::id::message_update)
+		return;
+
+	vec3 pos = parent->get_property (ballistic::id::position).as < vec3 > ();
+
+	pos.x = cos (angle) * 2.0;
+	pos.y = 0;
+	pos.z = sin (angle) * 2.0;
+
+	angle += 0.05;
+	if (angle > 3.1415926)
+		angle = 0.0;
+
+	parent->get_property (ballistic::id::position) = pos;
+}
+
 ballistic::res_id_t res_rotating_square ("rotating_square.entity", "resources/game.xml");
 ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
 
@@ -67,6 +87,7 @@ int main ( int argc, char ** argv) {
 
 	// setup game stuffs
 	ballistic::graphics::define_resources (_game, _device);
+	ballistic::component::define < ballistic::_func_component < &circle_camera > > (_game, ballistic::string_to_id ("orbit_cam"));
 
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->set_device (_device);

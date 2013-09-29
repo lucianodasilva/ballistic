@@ -12,36 +12,42 @@ namespace ballistic {
 		return _entity;
 	}
 
-	void component::set_entity ( entity * ent ) {
-		_entity = ent;
+	igame * component::get_game () const {
+		return _game;
 	}
 
-	component::component () : _entity (nullptr) {}
+	component::component () : _entity (nullptr), _game (nullptr) {}
 
-	void component::setup () {}
+	void component::setup ( entity * parent ) {
+		_game = parent->get_game ();
+		_entity = parent;
+	}
 		
-	void component::setup ( vector < property > & parameters ) {}
-
-	icomponent * component::create (ballistic::igame * game, const res_id_t & id) {
-		return create (game, id.get_id ());
+	void component::setup ( entity * parent, vector < property > & parameters ) {
+		component::setup (parent);
 	}
 
-	icomponent * component::create (ballistic::igame * game, id_t id) {
-		auto ctor = dynamic_cast <resources::icomponent_constructor *> (game->get_resource (id));
+	icomponent * component::create (entity * parent, const res_id_t & id) {
+		return create (parent, id.get_id ());
+	}
+
+	icomponent * component::create (entity * parent, id_t id) {
+
+		auto ctor = dynamic_cast <resources::icomponent_constructor *> (parent->get_game()->get_resource (id));
 
 		if (ctor)
-			return ctor->create ();
+			return ctor->create (parent);
 		else {
 			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
 			return nullptr;
 		}
 	}
 
-	icomponent * component::create (ballistic::igame * game, id_t id, vector < property > & parameters) {
-		auto ctor = dynamic_cast <resources::icomponent_constructor *> (game->get_resource (id));
+	icomponent * component::create (entity * parent, id_t id, vector < property > & parameters) {
+		auto ctor = dynamic_cast <resources::icomponent_constructor *> (parent->get_game ()->get_resource (id));
 
 		if (ctor)
-			return ctor->create (parameters);
+			return ctor->create (parent, parameters);
 		else {
 			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
 			return nullptr;

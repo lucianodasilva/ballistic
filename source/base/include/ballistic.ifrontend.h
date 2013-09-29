@@ -28,8 +28,6 @@ namespace ballistic {
 
 		virtual void do_event_loop (ballistic::igame * game) = 0;
 
-		virtual const vec2 & size () const;
-
 	};
 
 }

@@ -171,7 +171,7 @@ namespace ballistic {
 			}
 
 			gl_eval_scope (opengl_effect::set_constant (mat4));
-			glUniformMatrix4fv (u.location, 1, false, (GLfloat *)&v);
+			glUniformMatrix4fv (u.location, 1, true, (GLfloat *)&v);
 		}
 
 	}

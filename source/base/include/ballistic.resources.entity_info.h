@@ -18,6 +18,7 @@ using namespace std;
 namespace ballistic {
 	
 	class entity;
+	class igame;
 	
 	namespace resources {
 		
@@ -40,7 +41,7 @@ namespace ballistic {
 			virtual property & get_property (id_t id);
 			// -------------------
 
-			entity * create (id_t id);
+			entity * create (igame * game, id_t id);
 
 		};
 		

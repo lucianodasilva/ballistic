@@ -23,7 +23,6 @@ namespace ballistic {
 			: 
 			_near (near),
 			_far (far),
-			_game (nullptr),
 			_system (nullptr)
 		{
 			_depth_divisor =
@@ -54,15 +53,26 @@ namespace ballistic {
 
 		mat4 camera::get_view () const {
 
-			vec3 zaxis = math::normalize (target - position);
-			vec3 xaxis = math::normalize (math::cross (up, zaxis));
-			vec3 yaxis = math::cross (zaxis, xaxis);
+			//vec3 zaxis = math::normalize (target - position);
+			//vec3 xaxis = math::normalize (math::cross (up, zaxis));
+			//vec3 yaxis = math::cross (zaxis, xaxis);
+			//
+			//return mat4 (
+			//	xaxis.x, yaxis.x, zaxis.x, .0,
+			//	xaxis.y, yaxis.y, zaxis.y, .0,
+			//	xaxis.z, yaxis.z, zaxis.z, .0,
+			//	math::dot (xaxis, position), math::dot (yaxis, position), math::dot (zaxis, position), 1
+			//);
 
+			vec3 zaxis = normalize (target - position);
+			vec3 xaxis = normalize (cross (up, zaxis));
+			vec3 yaxis = cross (zaxis, xaxis);
+			
 			return mat4 (
 				xaxis.x, yaxis.x, zaxis.x, .0,
 				xaxis.y, yaxis.y, zaxis.y, .0,
 				xaxis.z, yaxis.z, zaxis.z, .0,
-				math::dot (xaxis, position), math::dot (yaxis, position), math::dot (zaxis, position), 1
+				-dot (xaxis, position), -dot (yaxis, position), -dot (zaxis, position), 1
 			);
 		}
 
@@ -71,12 +81,26 @@ namespace ballistic {
 		}
 
 		void camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
+			//_proj =  mat4 (
+			//	2.0 / (right - left), .0, .0, -((right + left) / (right - left)),
+			//	.0, 2.0 / (top - bottom), .0, -((top + bottom) / (top - bottom)),
+			//	.0, .0, -2.0 / (far - near), -((far + near) / (far - near)),
+			//	.0, .0, .0, 1.
+			//	);
+
+			//_proj =  mat4 (
+			//	2.0 / (right - left), .0, .0, .0,
+			//	.0, 2.0 / (top - bottom), .0, .0,
+			//	.0, .0, 1.0 / (far - near), .0,
+			//	.0, .0, near / (near - far), 1.
+			//	);
+
 			_proj =  mat4 (
-				2.0 / (right - left), .0, .0, -((right + left) / (right - left)),
-				.0, 2.0 / (top - bottom), .0, -((top + bottom) / (top - bottom)),
-				.0, .0, -2 / (far - near), -((far + near) / (far - near)),
-				.0, .0, .0, 1.
-				);
+				2.0 / (right - left), .0, .0, .0,
+				.0, 2.0 / (top - bottom), .0, .0,
+				.0, .0, 1.0 / (far - near), .0,
+				.0, .0, near / (near - far), 1.
+			);
 
 			_far = far;
 			_near = near;
@@ -89,14 +113,21 @@ namespace ballistic {
 
 		void camera::make_perspective_proj (real fovy, real aspect, real near, real far ) {
 			real 
-				ys = 1 / std::tan (fovy / 2),
+				ys = 1.0 / std::tan (fovy / 2.0),
 				xs = ys / aspect;
+
+			//_proj =  mat4 (
+			//	xs, .0, .0, .0,
+			//	.0, ys, .0, .0,
+			//	.0, .0, (far + near) / (near - far), (2 * far * near) / (near - far),
+			//	.0, .0, -1, .0
+			//	);
 
 			_proj =  mat4 (
 				xs, .0, .0, .0,
 				.0, ys, .0, .0,
-				.0, .0, far / (far - near), .1,
-				.0, .0, -near * far / (far - near), .0
+				.0, .0, far / (far - near), 1.0,
+				.0, .0, -((near * far) / (far - near)), .0
 				);
 
 			_far = far;
@@ -138,8 +169,7 @@ namespace ballistic {
 
 				entity * ent = get_entity ();
 
-				_game = ent->get_game ();
-				_system = dynamic_cast <graphics_system *> (_game->find_system (ballistic::id::graphics::system));
+				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
 
 				position = ent->get_property (ballistic::id::position).as < vec3 > ();
 				target = ent->get_property (ballistic::id::target).as < vec3 > ();
@@ -147,7 +177,8 @@ namespace ballistic {
 			}
 		}
 
-		void camera::setup (vector < ballistic::property > & parameters) {
+		void camera::setup (entity * parent, vector < ballistic::property > & parameters) {
+			component::setup (parent, parameters);
 			
 			real
 				left,
@@ -170,7 +201,7 @@ namespace ballistic {
 				if (prop_id == id::graphics::projection) {
 					if (prop.as < string > () == "ortho")
 						type = proj_type_ortho;
-					else if (prop.as < string > () == "proj")
+					else if (prop.as < string > () == "perspective")
 						type = proj_type_persp;
 					
 				} else if (prop_id == id::graphics::left)
@@ -194,8 +225,10 @@ namespace ballistic {
 
 			if (type == proj_type_ortho)
 				make_ortho_projection (left, right, bottom, top, near, far);
-			else if (type == proj_type_persp) 
-				make_perspective_proj (fovy
+			else if (type == proj_type_persp) {
+				point size = get_game ()->get_frontend ()->get_client_size ();
+				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
+			}
 		}
 
 

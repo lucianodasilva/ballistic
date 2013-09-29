@@ -21,7 +21,6 @@ namespace ballistic {
 			imesh *				_mesh;
 
 			graphics_system *	_system;
-			igame *				_game;
 
 		public:
 
@@ -29,9 +28,9 @@ namespace ballistic {
 
 			visual ();
 
-			virtual void notify ( ballistic::message & message );
+			virtual void notify ( ballistic::message & message ) override;
 
-			virtual void setup (vector < ballistic::property > & parameters);
+			virtual void setup (entity * parent, vector < ballistic::property > & parameters) override;
 
 		};
 				  

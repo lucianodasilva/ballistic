@@ -16,7 +16,6 @@ namespace ballistic {
 
 			real _depth_divisor;
 
-			igame *				_game;
 			graphics_system *	_system;
 
 			mat4 _proj;
@@ -48,9 +47,9 @@ namespace ballistic {
 			void make_perspective_proj (real fovy, real aspect, real near, real far );
 
 			// component
-			virtual void notify (ballistic::message & message);
+			virtual void notify (ballistic::message & message) override;
 
-			virtual void setup (vector < ballistic::property > & parameters);
+			virtual void setup (entity * parent, vector < ballistic::property > & parameters) override;
 
 		};
 

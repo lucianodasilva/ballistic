@@ -45,14 +45,13 @@ namespace ballistic {
 		}
 		//
 		
-		icomponent * component_info::create () {
+		icomponent * component_info::create (entity * parent) {
 			if (!_constructor) {
 				debug_error ("[ballistic::resources::component_info::create] Component constructor not set. Cannot create component instance.");
 				return nullptr;
 			}
 			
-			icomponent * new_component = _constructor->create ();
-			new_component->setup (_properties);
+			icomponent * new_component = _constructor->create (parent, _properties);
 			
 			return new_component;
 		}

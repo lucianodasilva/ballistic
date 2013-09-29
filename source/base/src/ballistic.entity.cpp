@@ -28,7 +28,6 @@ namespace ballistic {
 			return;
 		}
 
-		component->set_entity (this);
 		_components.push_back (component);
 	}
 
@@ -54,8 +53,7 @@ namespace ballistic {
 		auto ctor = dynamic_cast <resources::entity_info *> (game->get_resource (type));
 
 		if (ctor) {
-			entity * ent = ctor->create (id);
-			game->add_entity (ent);
+			entity * ent = ctor->create (game, id);
 			return ent;
 		} else {
 			debug_warn ("[ballistic::entity::create] Unable to load entity with id: " << type.get_id ());
