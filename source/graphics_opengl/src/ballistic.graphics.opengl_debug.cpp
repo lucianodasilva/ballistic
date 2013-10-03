@@ -45,7 +45,7 @@ namespace ballistic {
 				string error (info_log, writen_chars);
 				debug_error("GL Shader " << shader_id << " compile failed with error: " << error);
 				
-				delete info_log;
+				delete [] info_log;
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace ballistic {
 				string error (info_log, writen_chars);
 				debug_error("GL Program " << program_id << " link failed with error: " << error);
 				
-				delete info_log;
+				delete [] info_log;
 			}
 		}
 

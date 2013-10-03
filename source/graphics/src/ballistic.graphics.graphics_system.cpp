@@ -55,6 +55,17 @@ namespace ballistic {
 
 			_device->set_view (_camera->get_view ());
 			_device->set_proj (_camera->get_proj ());
+			
+			//_camera->make_perspective_proj(0.78539, 1.0, .0, 100.);
+			
+			mat4
+				debug_proj = _camera->get_proj (),
+				debug_view = _camera->get_view ();
+			
+			mat4 debug_t = debug_proj * debug_view;
+			vec3 debug_pos (.5, .0, .0);
+			
+			debug_pos = debug_t * debug_pos;
 
 			// notify entities with visuals
 			get_game ()->send_message (_render_message);

@@ -122,14 +122,31 @@ namespace ballistic {
 			//	.0, .0, (far + near) / (near - far), (2 * far * near) / (near - far),
 			//	.0, .0, -1, .0
 			//	);
+			
+			real q = far / (far - near);
 
 			_proj =  mat4 (
 				xs, .0, .0, .0,
 				.0, ys, .0, .0,
-				.0, .0, far / (far - near), 1.0,
-				.0, .0, -((near * far) / (far - near)), .0
-				);
+				.0, .0, q, -q * near,
+				.0, .0, 1., .0
+			);
+			
+//			_proj =  mat4 (
+//						   xs, .0, .0, .0,
+//						   .0, ys, .0, .0,
+//						   .0, .0, -(far + near) / (far - near), 2 * far * near / (far - near),
+//						   .0, .0, 1.0, .0
+//						   );
 
+//			_proj =  mat4 (
+//				xs, .0, .0, .0,
+//				.0, ys, .0, .0,
+//				.0, .0, far / (far - near), 1.0,
+//				.0, .0, -((near * far) / (far - near)), .0
+//			);
+
+			
 			_far = far;
 			_near = near;
 

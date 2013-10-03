@@ -91,24 +91,24 @@ namespace ballistic {
 
 	template < class T >
 	T * component::create (entity * parent, const res_id_t & id) {
-		return create < T > (game, id.get_id ());
+		return create < T > (parent, id.get_id ());
 	}
 
 	template < class T >
 	T * component::create (entity * parent, id_t id) {
 		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
-		return dynamic_cast < T * > (create (game, id));
+		return dynamic_cast < T * > (create (parent, id));
 	}
 
 	template < class T >
 	T * component::create (entity * parent, id_t id, vector < property > & parameters) {
 		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
-		return dynamic_cast <T *> (create (game, id, parameters));
+		return dynamic_cast <T *> (create (parent, id, parameters));
 	}
 
 	template < class T >
 	T * component::create (entity * parent) {
-		return create < T > (game, T::component_id);
+		return create < T > (parent, T::component_id);
 	}
 
 	// extra tools
