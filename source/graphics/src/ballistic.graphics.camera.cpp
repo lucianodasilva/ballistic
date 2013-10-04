@@ -53,24 +53,13 @@ namespace ballistic {
 
 		mat4 camera::get_view () const {
 
-			//vec3 zaxis = math::normalize (target - position);
-			//vec3 xaxis = math::normalize (math::cross (up, zaxis));
-			//vec3 yaxis = math::cross (zaxis, xaxis);
-			//
-			//return mat4 (
-			//	xaxis.x, yaxis.x, zaxis.x, .0,
-			//	xaxis.y, yaxis.y, zaxis.y, .0,
-			//	xaxis.z, yaxis.z, zaxis.z, .0,
-			//	math::dot (xaxis, position), math::dot (yaxis, position), math::dot (zaxis, position), 1
-			//);
-
 			vec3 zaxis = normalize (target - position);
 			vec3 xaxis = normalize (cross (up, zaxis));
 			vec3 yaxis = cross (zaxis, xaxis);
 			
 			return mat4 (
 				xaxis.x, yaxis.x, zaxis.x, .0,
-				xaxis.y, yaxis.y, zaxis.y, .0,
+				xaxis.y, yaxis.y, zaxis.y, .0,		 
 				xaxis.z, yaxis.z, zaxis.z, .0,
 				-dot (xaxis, position), -dot (yaxis, position), -dot (zaxis, position), 1
 			);
@@ -81,19 +70,6 @@ namespace ballistic {
 		}
 
 		void camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
-			//_proj =  mat4 (
-			//	2.0 / (right - left), .0, .0, -((right + left) / (right - left)),
-			//	.0, 2.0 / (top - bottom), .0, -((top + bottom) / (top - bottom)),
-			//	.0, .0, -2.0 / (far - near), -((far + near) / (far - near)),
-			//	.0, .0, .0, 1.
-			//	);
-
-			//_proj =  mat4 (
-			//	2.0 / (right - left), .0, .0, .0,
-			//	.0, 2.0 / (top - bottom), .0, .0,
-			//	.0, .0, 1.0 / (far - near), .0,
-			//	.0, .0, near / (near - far), 1.
-			//	);
 
 			_proj =  mat4 (
 				2.0 / (right - left), .0, .0, .0,
@@ -109,43 +85,25 @@ namespace ballistic {
 				far / (far - near)
 				+
 				far * near / (near - far);
+
 		}
 
 		void camera::make_perspective_proj (real fovy, real aspect, real near, real far ) {
-			real 
-				ys = 1.0 / std::tan (fovy / 2.0),
-				xs = ys / aspect;
 
-			//_proj =  mat4 (
-			//	xs, .0, .0, .0,
-			//	.0, ys, .0, .0,
-			//	.0, .0, (far + near) / (near - far), (2 * far * near) / (near - far),
-			//	.0, .0, -1, .0
-			//	);
+			fovy = 45.0 / 180.0 * 3.12;
+
+			real
+				ys = 1.0 / std::tan (fovy * .5),
+				xs = ys / aspect;
 			
 			real q = far / (far - near);
-
+			
 			_proj =  mat4 (
 				xs, .0, .0, .0,
 				.0, ys, .0, .0,
-				.0, .0, q, -q * near,
-				.0, .0, 1., .0
+				.0, .0, q, 1.0,
+				.0, .0, -q * near, 1.0
 			);
-			
-//			_proj =  mat4 (
-//						   xs, .0, .0, .0,
-//						   .0, ys, .0, .0,
-//						   .0, .0, -(far + near) / (far - near), 2 * far * near / (far - near),
-//						   .0, .0, 1.0, .0
-//						   );
-
-//			_proj =  mat4 (
-//				xs, .0, .0, .0,
-//				.0, ys, .0, .0,
-//				.0, .0, far / (far - near), 1.0,
-//				.0, .0, -((near * far) / (far - near)), .0
-//			);
-
 			
 			_far = far;
 			_near = near;
@@ -198,13 +156,13 @@ namespace ballistic {
 			component::setup (parent, parameters);
 			
 			real
-				left,
-				right,
-				top,
-				bottom,
-				near,
-				far,
-				fovy;
+				left = 0,
+				right = 0,
+				top = 0,
+				bottom = 0,
+				near = 0,
+				far = 0,
+				fovy = 0;
 
 
 			enum {

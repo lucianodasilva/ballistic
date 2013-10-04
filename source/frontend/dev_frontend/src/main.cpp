@@ -56,16 +56,18 @@ void circle_camera ( ballistic::entity * parent, ballistic::message & message ) 
 	if (message.get_id () != ballistic::id::message_update)
 		return;
 
-	vec3 pos = parent->get_property (ballistic::id::position).as < vec3 > ();
+	//pos.x = cos (angle) * radius;
+	//pos.y = 0;
+	//pos.z = sin (angle) * radius;
 
-	pos.x = cos (angle) * 2.0;
-	pos.y = 0;
-	pos.z = sin (angle) * 2.0;
+	vec3 pos (
+		radius, radius, radius	
+	);
 
 	angle += 0.05;
-	radius += 0.05;
+	radius += 0.025;
 	
-	if (angle > 3.1415926 * 2.0) {
+	if (angle > 3.1415926) {
 		angle = 0.0;
 		radius = 0.0;
 	}
@@ -80,7 +82,7 @@ int main ( int argc, char ** argv) {
 	
 	debug_init();
 
-	_frontend = create_frontend (point ( 1024, 1024));
+	_frontend = create_frontend (point ( 400, 400));
 	_frontend->create ();
 	_frontend->show ();
 
