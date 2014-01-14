@@ -49,27 +49,25 @@ ballistic::graphics::idevice * create_device () {
 #endif
 
 float angle = 0.0F;
-float radius = .0F;
+float radius = 1.0F;
 
 void circle_camera ( ballistic::entity * parent, ballistic::message & message ) {
 
 	if (message.get_id () != ballistic::id::message_update)
 		return;
 
-	//pos.x = cos (angle) * radius;
-	//pos.y = 0;
-	//pos.z = sin (angle) * radius;
+	vec3 pos;
 
-	vec3 pos (
-		radius, radius, radius	
-	);
+	pos.x = cos (angle) * radius;
+	pos.y = 0;
+	pos.z = sin (angle) * radius;
 
 	angle += 0.05;
 	radius += 0.025;
 	
-	if (angle > 3.1415926) {
+	if (angle > (3.1415926 * 2.)) {
 		angle = 0.0;
-		radius = 0.0;
+		radius = 1.0;
 	}
 
 	parent->get_property (ballistic::id::position) = pos;

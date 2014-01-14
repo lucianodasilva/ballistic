@@ -20,7 +20,8 @@
 
         var_color = effect_diffuse;
 
-        mat4 mvp = effect_t_proj * inverse (effect_t_view);
+        //mat4 mvp = effect_t_proj * inverse (effect_t_view);
+        mat4 mvp = effect_t_proj * effect_t_view;
         vec4 pos = mvp * vec4 (in_position, 1.0);
 
         gl_Position = pos;
@@ -75,21 +76,19 @@
     <components>
       <graphics_camera>
 
-        <!--
-        <projection value="ortho"/>
+        <!--<projection value="ortho"/>
         <left   value="-5"/>
         <right  value="5"/>
         <top    value="5"/>
         <bottom value="-5"/>
         <near   value="-5"/>
-        <far    value="10"/>
-      -->
+        <far    value="10"/>-->
 
+        
         <projection value="perspective"/>
         <fovy   value="1.78539"/>
         <near   value="1"/>
         <far    value="10"/>
-
 
       </graphics_camera>
       <orbit_cam/>

@@ -63,7 +63,7 @@ namespace ballistic {
 				debug_view = _camera->get_view ();
 			
 			mat4 debug_t = debug_proj * debug_view;
-			vec4 debug_pos (.5, .0, .0, 1.0);
+			vec4 debug_pos (.5, .0, .0, 0.0);
 			
 			debug_pos = debug_t * debug_pos;
 
