@@ -11,9 +11,9 @@
 
 static const GLfloat vertex_data [] =
 {
-	-1.0F, -1.0F, 0.0F,
-	1.0F, -1.0F, 0.0F,
-	0.0F, 1.0F, 0.0F
+	-1.0F, -1.0F, -1.0F,
+	1.0F, -1.0F, -1.0F,
+	0.0F, 1.0F, -1.0F
 };
 
 GLuint	vertex_buffer_obj_id,
@@ -28,13 +28,14 @@ const char vshader_src [] = {
 	layout (location = 0) in vec3 vertexPosition_modelspace;
 	
 	uniform mat4 model;
+	uniform mat4 view;
 	uniform mat4 proj;
 
 	void main () {
 		gl_Position.xyz = vertexPosition_modelspace;
 		gl_Position.w = 1.0;
 		
-		mat4 mvp = proj * model;
+		mat4 mvp = proj * view * model;
 		
 		gl_Position *= mvp;
 	}
@@ -123,19 +124,28 @@ float _inc = .01F;
 void frame () {
 	
 	float
-		n = 10.0F,
-		f = 0.0F,
-		w = 10.0F,
-		h = 10.0F;
+		n = 0.9F,
+		f = 10.0F,
+		l = -2.0F,
+		r = 2.0F,
+		t = 2.0F,
+		b = -2.0F;
 	
 	// animate stuffs
 	matrix model = matrix::make_translation(_x, .0F, .0F);
 	matrix proj (
-		2 * n / w, .0, .0, .0,
-		.0, 2 * n / h, .0, .0,
-		.0, .0, f / ( f -n ), 1.,
-		.0, .0, n * f / ( n - f ), .0
+		(2. * n) / (r - l), .0, (r + l) / (r - l), .0,
+		.0, (2. * n) / (t - b), (t + b) / (t - b), .0,
+		.0, .0, -(f + n) / (f - n), -(2. * f * n) / (f - n),
+		.0, .0, -1., .0
 	);
+	
+	matrix view (
+				 (2. * n) / (r - l), .0, (r + l) / (r - l), .0,
+				 .0, (2. * n) / (t - b), (t + b) / (t - b), .0,
+				 .0, .0, -(f + n) / (f - n), -(2. * f * n) / (f - n),
+				 .0, .0, -1., .0
+				 );
 	
 	_x += _inc;
 	
@@ -156,10 +166,13 @@ void frame () {
 		glUseProgram (program_id);
 		
 		GLuint u_model_m_id = glGetUniformLocation (program_id, "model");
-		glUniformMatrix4fv (u_model_m_id, 1, GL_TRUE, (const float *)&model);
+		glUniformMatrix4fv (u_model_m_id, 1, GL_FALSE, (const float *)&model);
 		
 		GLuint u_proj_m_id = glGetUniformLocation (program_id, "proj");
-		glUniformMatrix4fv (u_proj_m_id, 1, GL_TRUE, (const float *)&proj);
+		glUniformMatrix4fv (u_proj_m_id, 1, GL_FALSE, (const float *)&proj);
+		
+		GLuint u_view_m_id = glGetUniformLocation (program_id, "view");
+		glUniformMatrix4fv (u_view_m_id, 1, GL_FALSE, (const float *)&view);
 	}
 
 	{

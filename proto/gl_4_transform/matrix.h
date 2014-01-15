@@ -31,7 +31,11 @@ struct matrix {
 		m12 (v.m12), m13 (v.m13), m14 (v.m14), m15 (v.m15) 
 	{}
 
-	inline matrix ( float _m00, float _m01, float _m02, float _m03, float _m04, float _m05, float _m06, float _m07, float _m08, float _m09, float _m10, float _m11, float _m12, float _m13, float _m14, float _m15 )
+	inline matrix (
+				   float _m00, float _m01, float _m02, float _m03,
+				   float _m04, float _m05, float _m06, float _m07,
+				   float _m08, float _m09, float _m10, float _m11,
+				   float _m12, float _m13, float _m14, float _m15 )
 		:
 		m00 (_m00), m01 (_m01), m02 (_m02), m03 (_m03),
 		m04 (_m04), m05 (_m05), m06 (_m06), m07 (_m07),
@@ -154,10 +158,10 @@ struct matrix {
 	// Create matrix
 	inline static matrix make_translation ( float x, float y, float z ) {
 		return matrix (
-			float (1), float (0), float (0), float (0),
-			float (0), float (1), float (0), float (0),
-			float (0), float (0), float (1), float (0),
-			x,	  y,	z,	  float (1)
+			float (1), float (0), float (0), x,
+			float (0), float (1), float (0), y,
+			float (0), float (0), float (1), z,
+			float (0), float (0), float (0), float (1)
 		);
 	}
 
@@ -168,8 +172,8 @@ struct matrix {
 
 		return matrix (
 			float (1), float (0), float (0), float (0),
-			float (0), r_cos, r_sin, float (0),
-			float (0), -r_sin, r_cos, float (0),
+			float (0), r_cos, -r_sin, float (0),
+			float (0), r_sin, r_cos, float (0),
 			float (0), float (0),	float (0), float (1)
 		);
 	}
@@ -180,9 +184,9 @@ struct matrix {
 			r_cos = cos (r);
 
 		return matrix (
-			r_cos, float (0), -r_sin, float (0),
+			r_cos, float (0), r_sin, float (0),
 			float (0), float (1), float (0), float (0),
-			r_sin, float (0), r_cos, float (0),
+			-r_sin, float (0), r_cos, float (0),
 			float (0), float (0),	float (0), float (1)
 		);
 	}
@@ -193,8 +197,8 @@ struct matrix {
 			r_cos = cos (r);
 
 		return matrix (
-			r_cos, r_sin, float (0), float (0),
-			-r_sin, r_cos, float (0), float (0),
+			r_cos, -r_sin, float (0), float (0),
+			r_sin, r_cos, float (0), float (0),
 			float (0), float (0), float (1), float (0),
 			float (0), float (0),	float (0), float (1)
 		);
