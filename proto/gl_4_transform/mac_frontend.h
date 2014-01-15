@@ -4,12 +4,14 @@
 #ifndef _WIN32
 
 #include <GL/glew.h>
+#include "ifrontend.h"
 
-class frontend : public ballistic::ifrontend {
+class frontend : public ifrontend {
 private:
 
 	int _window_width, _window_height;
-	update_callback _callback;
+	
+	static update_callback _callback;
 		
 	static void update_frame ();
 			

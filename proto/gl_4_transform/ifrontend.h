@@ -1,7 +1,7 @@
 #ifndef	_ifrontend_h_
 #define _ifrontend_h_
 
-typedef void update_callback ();
+typedef void (*update_callback) ();
 
 class ifrontend {
 	public:

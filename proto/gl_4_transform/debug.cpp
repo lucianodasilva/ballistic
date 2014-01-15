@@ -40,7 +40,7 @@ void debug::eval_shader_compile (GLint shader_id) {
 		glGetShaderInfoLog (shader_id, info_length, &writen_chars, info_log);
 				
 		string error (info_log, writen_chars);
-		std::cerr << "GL Shader " << shader_id << " compile failed with error: " << error;
+		std::cerr << "GL Shader " << shader_id << " compile failed with error: " << error << std::endl;
 				
 		delete [] info_log;
 	}
@@ -62,7 +62,7 @@ void debug::eval_program_link (GLint program_id) {
 		glGetProgramInfoLog (program_id, info_length, &writen_chars, info_log);
 				
 		string error (info_log, writen_chars);
-		std::cerr << "GL Program " << program_id << " link failed with error: " << error;
+		std::cerr << "GL Program " << program_id << " link failed with error: " << error << std::endl;
 				
 		delete [] info_log;
 	}
@@ -71,5 +71,5 @@ void debug::eval_program_link (GLint program_id) {
 debug::eval_scope::~eval_scope () {
 	GLenum error = glGetError ();
 	if (error != GL_NO_ERROR)
-		std::cerr << "GL Scope [" << method_name << "] Failed in file " << __FILE__ << " with " << debug::error_to_string (error) ;
+		std::cerr << "GL Scope [" << method_name << "] failed with error: " << debug::error_to_string (error) << std::endl;
 }

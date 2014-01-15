@@ -5,9 +5,10 @@
 #include <GLUT/GLUT.h>
 
 void frontend::update_frame(){
+	
+	_callback ();
 	glutSwapBuffers();
 	glutPostRedisplay ();
-	_callback ();
 }
 
 frontend::frontend ( int width, int height ) : _window_width (width), _window_height (height)
@@ -41,5 +42,7 @@ void frontend::do_event_loop (update_callback callback) {
 	glutDisplayFunc(update_frame);
 	glutMainLoop ();
 }
+
+update_callback frontend::_callback;
 
 #endif

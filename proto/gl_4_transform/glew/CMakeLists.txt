@@ -15,17 +15,21 @@ file ( GLOB glew_source
 add_library(glew STATIC ${glew_source})
 
 if (APPLE)
-	include_directories (/System/Library/Frameworks)
-	find_library ( OpenGL_LIBRARY OpenGL )
-	mark_as_advanced ( 
-			OpenGL_LIBRARY
+	find_library(COCOA_LIBRARY Cocoa)
+	find_library(GLUT_LIBRARY GLUT )
+	find_library(OpenGL_LIBRARY OpenGL )
+
+	mark_as_advanced (
+		COCOA_LIBRARY
+	    GLUT_LIBRARY
+		OpenGL_LIBRARY
 	)
 
-	set (BALLISTIC_GL_LIBRARIES ${OpenGL_LIBRARY})
+	set (OGL_LIBRARIES ${COCOA_LIBRARY} ${GLUT_LIBRARY} ${OpenGL_LIBRARY})
 	
 else ()
 	find_package (OpenGL REQUIRED)
-	set ( BALLISTIC_GL_LIBRARIES ${OPENGL_LIBRARY})
+	set ( OGL_LIBRARIES ${OPENGL_LIBRARY})
 endif ()
 
 target_link_libraries ( glew ${BALLISTIC_GL_LIBRARIES})

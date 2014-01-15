@@ -17,7 +17,7 @@ using namespace std;
 		{ \
 			GLenum error = glGetError (); \
 			if (error != GL_NO_ERROR) \
-				std::_Cou ("GL Call [" << #x << "] Failed in file " << __FILE__ << " at line " << __LINE__ << " with " << debug::error_to_string (error) ); \
+				std::cerr << "GL Call [" << #x << "] Failed in file " << __FILE__ << " at line " << __LINE__ << " with " << debug::error_to_string (error)  << std::endl; \
 		}
 
 #	define gl_eval_shader_compile(shader_id) \

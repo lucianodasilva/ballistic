@@ -7,6 +7,8 @@
 #include "win_frontend.h"
 #include "mac_frontend.h"
 
+#include "matrix.h"
+
 static const GLfloat vertex_data [] =
 {
 	-1.0F, -1.0F, 0.0F,
@@ -14,7 +16,8 @@ static const GLfloat vertex_data [] =
 	0.0F, 1.0F, 0.0F
 };
 
-GLuint	vertex_buffer_id,
+GLuint	vertex_buffer_obj_id,
+		vertex_buffer_id,
 		vshader_id,
 		pshader_id,
 		program_id;
@@ -23,10 +26,17 @@ const char vshader_src [] = {
 	gl_shader_source (	// ----------------------------
 
 	layout (location = 0) in vec3 vertexPosition_modelspace;
+	
+	uniform mat4 model;
+	uniform mat4 proj;
 
 	void main () {
 		gl_Position.xyz = vertexPosition_modelspace;
 		gl_Position.w = 1.0;
+		
+		mat4 mvp = proj * model;
+		
+		gl_Position *= mvp;
 	}
 
 	)}; //----------------------------------------------
@@ -97,6 +107,9 @@ void load () {
 	{
 		gl_eval_scope ("load geometry");
 		
+		glGenVertexArrays (1, &vertex_buffer_obj_id);
+		glBindVertexArray (vertex_buffer_obj_id);
+		
 		glGenBuffers (1, &vertex_buffer_id);
 		glBindBuffer (GL_ARRAY_BUFFER, vertex_buffer_id);
 
@@ -104,7 +117,30 @@ void load () {
 	}
 }
 
+float _x = .0F;
+float _inc = .01F;
+
 void frame () {
+	
+	float
+		n = 10.0F,
+		f = 0.0F,
+		w = 10.0F,
+		h = 10.0F;
+	
+	// animate stuffs
+	matrix model = matrix::make_translation(_x, .0F, .0F);
+	matrix proj (
+		2 * n / w, .0, .0, .0,
+		.0, 2 * n / h, .0, .0,
+		.0, .0, f / ( f -n ), 1.,
+		.0, .0, n * f / ( n - f ), .0
+	);
+	
+	_x += _inc;
+	
+	if (_x < -1. || _x > 1)
+		_inc *= -1;
 
 	// clear frame
 	{
@@ -118,6 +154,12 @@ void frame () {
 		gl_eval_scope ("enable shader");
 
 		glUseProgram (program_id);
+		
+		GLuint u_model_m_id = glGetUniformLocation (program_id, "model");
+		glUniformMatrix4fv (u_model_m_id, 1, GL_TRUE, (const float *)&model);
+		
+		GLuint u_proj_m_id = glGetUniformLocation (program_id, "proj");
+		glUniformMatrix4fv (u_proj_m_id, 1, GL_TRUE, (const float *)&proj);
 	}
 
 	{
@@ -146,7 +188,7 @@ void frame () {
 
 }
 
-void main () {
+int main () {
 
 	ifrontend * window = new frontend (400, 400);
 	window->create ();
@@ -155,7 +197,7 @@ void main () {
 	glewExperimental = true;
 	if (glewInit () != GLEW_OK) {
 		std::cerr << "failed to initialize glew";
-		return;
+		return 0;
 	}
 
 	glGetError (); //reset errors
@@ -165,4 +207,6 @@ void main () {
 	load ();
 
 	window->do_event_loop (frame);
+	
+	return 0;
 }

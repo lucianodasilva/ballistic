@@ -25,7 +25,7 @@ file ( GLOB gl_source
 
 add_executable ( gl_4_transform  ${gl_source} )
 
-target_link_libraries ( gl_4_transform ${BALLISTIC_GL_LIBRARIES} glew )
+target_link_libraries ( gl_4_transform ${OGL_LIBRARIES} glew )
 
 # enable c++11
 if (NOT ${CMAKE_CXX_COMPILER_ID} EQUAL "MSVC")
