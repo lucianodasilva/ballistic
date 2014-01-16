@@ -134,6 +134,14 @@ struct matrix {
 		);
 	}
 
+	inline vec3 operator * (const vec3 & v) const {
+		return vec3 (
+			v.x * data [0] + v.y * data [4] + v.z * data [8] + 1.0 * data [12],
+			v.x * data [1] + v.y * data [5] + v.z * data [9] + 1.0 * data [13],
+			v.x * data [2] + v.y * data [6] + v.z * data [10] + 1.0 * data [14]
+			);
+	}
+
 	inline matrix transpose () const {
 		return matrix (
 			data[ 0],
