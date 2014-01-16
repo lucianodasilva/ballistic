@@ -166,10 +166,10 @@ struct matrix {
 	// Create matrix
 	inline static matrix make_translation ( float x, float y, float z ) {
 		return matrix (
-			float (1), float (0), float (0), x,
-			float (0), float (1), float (0), y,
-			float (0), float (0), float (1), z,
-			float (0), float (0), float (0), float (1)
+			float (1), float (0), float (0),.0f,
+			float (0), float (1), float (0), .0f,
+			float (0), float (0), float (1), .0f,
+			x, y, z, float (1)
 		);
 	}
 

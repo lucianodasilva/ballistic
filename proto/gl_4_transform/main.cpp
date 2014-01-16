@@ -1,5 +1,8 @@
 
 #include <GL/glew.h>
+#include <glm.hpp>
+#include <ext.hpp>
+
 #include <iostream>
 
 #include "debug.h"
@@ -33,12 +36,10 @@ const char vshader_src [] = {
 	uniform mat4 proj;
 
 	void main () {
-		gl_Position.xyz = vertexPosition_modelspace;
-		gl_Position.w = 1.0;
-		
+	
 		mat4 mvp = proj * view * model;
 		
-		gl_Position *= mvp;
+		gl_Position = mvp * vec4 (vertexPosition_modelspace, 1.);
 	}
 
 	)}; //----------------------------------------------
@@ -127,60 +128,45 @@ float _inc = .0001F;
 float angle = 0.0;
 float radius = 5.0;
 
-float v_fov = 0.0001;
-
 vec3 camPos;
 
 void frame () {
 
 	// animations
 
-	//_x += _inc;
+	_x += _inc;
 
 	if (_x < -1. || _x > 1)
 		_inc *= -1;
 
-	matrix model = matrix::make_translation (.0F, .0F, .0F);
+	matrix model = matrix::make_translation (_x, .0F, .0F);
 
 	camPos.x = cos (angle) * radius;
 	camPos.y = 0.;
 	camPos.z = sin (angle) * radius;
-
-	angle += 0.001;
-	//radius += 0.0001;
-
+	
+	angle += 0.001F;
+	radius += 0.001;
+	
 	if (angle > (3.1415 * 2.0)) {
 		angle = 0.0;
 		radius = 5.0;
 	}
 
-	camPos = vec3 (4, 4, 3);
+	//camPos = vec3 (4, 4, 3);
 
 	// camera projections and stuffs
-	
-	//float
-	//	n = 0.9F,
-	//	f = 10.0F,
-	//	l = -2.0F,
-	//	r = 2.0F,
-	//	t = 2.0F,
-	//	b = -2.0F;
 
-	//matrix proj (
-	//	(2. * n) / (r - l), .0, (r + l) / (r - l), .0,
-	//	.0, (2. * n) / (t - b), (t + b) / (t - b), .0,
-	//	.0, .0, -(f + n) / (f - n), -(2. * f * n) / (f - n),
-	//	.0, .0, -1., .0
-	//);
+	float const pi = float (3.1415926535897932384626433832795);
 
 	float
-		fov = 0.785398163,
+		fov = 45. * (pi / 180.0),
 		a = 1.,
 		n = 0.1,
 		f = 100.0;
 
 	float
-		range = (fov / 2.) * n,
+		range = tan (fov / 2.) * n,
 		l = -range * a,
 		r = -l,
 		b = -range,
@@ -189,29 +175,23 @@ void frame () {
 	matrix proj (
 		(2. * n) / (r - l), .0, .0, .0,
 		.0, (2. * n) / (t - b), .0, .0,
-		.0, .0, -(f + n) / (f - n), -(2. * f * n) / (f - n),
-		.0, .0, -1., .0
+		.0, .0, -(f + n) / (f - n), -1.,
+		.0, .0, -(2. * f * n) / (f - n), .0
 		);
-	
+
 	// calculate view
 
-	vec3 zaxis = normalize (vec3 () - camPos);
-	vec3 xaxis = normalize (cross (vec3 (0, 1., 0), zaxis));
-	vec3 yaxis = cross (xaxis, zaxis);
+	vec3 zaxis = normalize (vec3() - camPos);
+	vec3 yaxis = normalize (vec3 (0, 1., 0));
+	vec3 xaxis = normalize (cross (zaxis, yaxis));
+	yaxis = cross (xaxis, zaxis);
 
 	matrix view (
-					xaxis.x, xaxis.y, xaxis.z, -dot (xaxis, camPos),
-					yaxis.x, yaxis.y, yaxis.z, -dot (yaxis, camPos),
-					-zaxis.x, -zaxis.y, -zaxis.z, dot (zaxis, camPos),
-					.0, .0, .0, 1.
+					xaxis.x, yaxis.x, -zaxis.x, .0,
+					xaxis.y, yaxis.y, -zaxis.y, .0,
+					xaxis.z, yaxis.z, -zaxis.z, .0,
+					-dot (xaxis, camPos), -dot (yaxis, camPos), dot (zaxis, camPos), 1.
 				 );
-
-	//vec3 test_v (0.1, .0, .0);
-	//matrix vp = proj * view;
-	//
-	//test_v = vp * test_v;
-	//
-	//std::cout << test_v.x << " " << test_v.y << " " << test_v.z << std::endl;
 
 	// clear frame
 	{

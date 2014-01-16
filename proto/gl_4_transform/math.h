@@ -1,6 +1,7 @@
 #ifndef _math_h_
 #define _math_h_
 
+#include <cmath>
 #include <limits>
 
 struct vec3 {

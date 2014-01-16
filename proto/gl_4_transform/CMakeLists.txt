@@ -9,6 +9,7 @@ set ( proj_dir ${CMAKE_CURRENT_LIST_DIR} )
 
 # --------- dependencies ----------
 include (${proj_dir}/glew/CMakeLists.txt)
+include (${proj_dir}/glm/CMakeLists.txt)
 
 project ( gl_4_transform )
 # ----------------------------------------------------------------
@@ -25,7 +26,7 @@ file ( GLOB gl_source
 
 add_executable ( gl_4_transform  ${gl_source} )
 
-target_link_libraries ( gl_4_transform ${OGL_LIBRARIES} glew )
+target_link_libraries ( gl_4_transform ${OGL_LIBRARIES} glew)
 
 # enable c++11
 if (NOT ${CMAKE_CXX_COMPILER_ID} EQUAL "MSVC")
