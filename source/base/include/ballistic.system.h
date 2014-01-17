@@ -2,6 +2,7 @@
 #define _ballistic_system_h_
 
 #include <chrono>
+#include "ballistic.config.h"
 
 namespace ballistic {
 	namespace system {
@@ -10,7 +11,7 @@ namespace ballistic {
 
 		ballistic_time_t get_time_now ();
 
-		double get_elapsed_seconds ( ballistic_time_t & t );
+		real get_elapsed_seconds ( ballistic_time_t & t );
 
 	}
 }

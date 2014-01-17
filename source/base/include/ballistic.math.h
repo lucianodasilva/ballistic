@@ -1,6 +1,7 @@
 #ifndef	_ballistic_math_h_
 #define _ballistic_math_h_
 
+#include "ballistic.config.h"
 #include "ballistic.math.vectors.h"
 #include "ballistic.math.h"
 
@@ -8,6 +9,13 @@
 
 namespace ballistic {
 	namespace math {
+
+		real const pi = float (3.1415926535897932384626433832795);
+
+		template < class T >
+		inline T radians (const T & degrees) {
+			return degrees * (pi / real (180));
+		}
 
 		template < class T >
 		inline typename T::type dot ( const T & v1, const T & v2 ) {

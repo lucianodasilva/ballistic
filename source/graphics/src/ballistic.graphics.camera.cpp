@@ -54,14 +54,15 @@ namespace ballistic {
 		mat4 camera::get_view () const {
 
 			vec3 zaxis = normalize (target - position);
-			vec3 xaxis = normalize (cross (up, zaxis));
-			vec3 yaxis = cross (zaxis, xaxis);
+			vec3 yaxis = normalize (up);
+			vec3 xaxis = normalize (cross (zaxis, yaxis));
+			yaxis = cross (xaxis, zaxis);
 			
 			return mat4 (
-				xaxis.x, xaxis.y, xaxis.z, .0,
-				yaxis.x, yaxis.y, yaxis.z, .0,		 
-				zaxis.x, zaxis.y, zaxis.z, .0,
-				position.x, position.y, position.z, 1.
+				xaxis.x, yaxis.x, -zaxis.x, .0,
+				xaxis.y, yaxis.y, -zaxis.y, .0,
+				xaxis.z, yaxis.z, -zaxis.z, .0,
+				-dot (xaxis, position), -dot (yaxis, position), dot (zaxis, position), 1.
 			);
 		}
 
@@ -72,10 +73,10 @@ namespace ballistic {
 		void camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
 
 			_proj =  mat4 (
-				2.0 / (right - left), .0, .0, .0,
-				.0, 2.0 / (top - bottom), .0, .0,
-				.0, .0, 1.0 / (far - near), .0,
-				.0, .0, near / (near - far), 1.
+				real (2) / (right - left), real (0), real (0), real(0),
+				real (0), real(2) / (top - bottom), real (0), real (0),
+				real (0), real (0), real (1) / (far - near), real (0),
+				real (0), real (0), near / (near - far), real (1)
 			);
 
 			_far = far;
@@ -88,40 +89,26 @@ namespace ballistic {
 
 		}
 
-		void camera::make_perspective_proj (real fovy, real aspect, real near, real far ) {
-
-			//fovy = 45.0 / 180.0 * 3.12;
-			//
-			//real
-			//	ys = 1.0 / std::tan (fovy * .5),
-			//	xs = ys / aspect;
-			//
-			//real q = far / (far - near);
-			//
-			//_proj =  mat4 (
-			//	xs, .0, .0, .0,
-			//	.0, ys, .0, .0,
-			//	.0, .0, q, 1.0,
-			//	.0, .0, -q * near, 0.0
-			//);
+		void camera::make_perspective_proj (real fov, real aspect, real near, real far ) {
 
 			real
-				n = 1.0,
-				f = 5.0,
-				r = -5.0,
-				l = 5.0,
-				t = -5.0,
-				b = 5.0;
+				fov_r = math::radians (fov),
+				range = tan (fov_r / real (2)) * near,
+				l = -range * aspect,
+				r = range * aspect,
+				b = -range,
+				t = range;
+
 
 			_proj = mat4 (
-				(2 * n) / (r - l), .0, .0, .0,
-				.0, (2 * n) / ( t - b ), .0, .0,
-				(r + l) / (r - l),  (t + b) / (t-b), (-(f+n)) / (f - n), -1.,
-				.0, .0, (-2 * f * n) / ( f - n), .0
+				(real(2) * near) / (r - l), .0, .0, .0,
+				.0, (real(2) * near) / (t - b), .0, .0,
+				.0, .0, -(far + near) / (far - near), real (-1),
+				.0, .0, -(real (2) * far * near) / (far - near), .0
 				);
 			
-			_far = f;
-			_near = n;
+			_far = far;
+			_near = near;
 
 			_depth_divisor =
 				far / (far - near)
@@ -195,19 +182,19 @@ namespace ballistic {
 						type = proj_type_persp;
 					
 				} else if (prop_id == id::graphics::left)
-					left = (real) prop.as < double > ();
+					left = (real) prop.as < real > ();
 				else if (prop_id == id::graphics::right)
-					right = (real)prop.as < double > ();
+					right = (real)prop.as < real > ();
 				else if (prop_id == id::graphics::top)
-					top = (real)prop.as < double > ();
+					top = (real)prop.as < real > ();
 				else if (prop_id == id::graphics::bottom)
-					bottom = (real)prop.as < double > ();
+					bottom = (real)prop.as < real > ();
 				else if (prop_id == id::graphics::near)
-					near = (real)prop.as < double > ();
+					near = (real)prop.as < real > ();
 				else if (prop_id == id::graphics::far)
-					far = (real)prop.as < double > ();
-				else if (prop_id == id::graphics::fovy)
-					fovy = (real)prop.as < double > ();
+					far = (real)prop.as < real > ();
+				else if (prop_id == id::graphics::fov)
+					fovy = (real)prop.as < real > ();
 
 			}
 

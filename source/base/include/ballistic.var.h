@@ -49,7 +49,7 @@ inline void get (type & v) const { \
 	switch (_type) { \
 		convert_switch (int32);	\
 		convert_switch (uint32); \
-		convert_switch (double); \
+		convert_switch (real); \
 		convert_switch (bool); \
 	default: \
 		debug_warn ("[ballistic::var::get(" #type ")] Unknown data type. Value converted as empty."); \
@@ -81,7 +81,7 @@ public:
 		var_type_bool	= 1,
 		var_type_int32	= 2,
 		var_type_uint32 = 4,
-		var_type_double	= 8,
+		var_type_real	= 8,
 		var_type_struct = 128,
 		var_type_string = var_type_struct + 1,
 		var_type_vec2	= var_type_struct + 2,
@@ -98,7 +98,7 @@ private:
 		bool	bool_v;
 		int32	int32_v;
 		uint32	uint32_v;
-		double	double_v;
+		real	real_v;
 		void *	ptr_v;
 	} _data;
 
@@ -163,7 +163,7 @@ public:
 
 	declare_set (int32)
 	declare_set (uint32)
-	declare_set (double)
+	declare_set (real)
 	declare_set (bool)
 	
 	declare_set_struct (string)
@@ -174,7 +174,7 @@ public:
 
 	declare_get (int32)
 	declare_get (uint32)
-	declare_get (double)
+	declare_get (real)
 	declare_get (bool)
 
 	declare_get_struct (vec2)
@@ -208,8 +208,8 @@ public:
 		case (var_type_uint32) :
 			ballistic::convert (_data.uint32_v, v);
 			break;
-		case (var_type_double) :
-			ballistic::convert (_data.double_v, v);
+		case (var_type_real) :
+			ballistic::convert (_data.real_v, v);
 			break;
 		case (var_type_bool) :
 			ballistic::convert (_data.bool_v, v);
@@ -302,7 +302,7 @@ public:
 //		var_type_none		= 0,
 //		var_type_int		= 1,
 //		var_type_uint		= 2,
-//		var_type_double		= 4,
+//		var_type_real		= 4,
 //		var_type_bool		= 8,
 //		var_type_pointer	= 16,
 //		var_type_struct		= 32,
@@ -345,7 +345,7 @@ public:
 //	union {
 //		int32	_int_v;
 //		uint32	_uint_v;
-//		double	_double_v;
+//		real	_real_v;
 //		bool	_bool_v;
 //	
 //		_i_var_box * _box_v;
@@ -397,10 +397,10 @@ public:
 //	};
 //
 //	template < class t >
-//	struct _setter_double {
+//	struct _setter_real {
 //		inline static void set ( var & var_ref, const t & val ) {
-//			ballistic::convert ( val, var_ref._data._double_v );
-//			var_ref._type = var_type_double;
+//			ballistic::convert ( val, var_ref._data._real_v );
+//			var_ref._type = var_type_real;
 //		}
 //	};
 //
@@ -425,8 +425,8 @@ public:
 //				case (var_type_uint):
 //					ballistic::convert ( var_ref._data._uint_v, val);
 //					break;
-//				case (var_type_double):
-//					ballistic::convert ( var_ref._data._double_v, val );
+//				case (var_type_real):
+//					ballistic::convert ( var_ref._data._real_v, val );
 //					break;
 //				case (var_type_bool) :
 //					ballistic::convert (var_ref._data._bool_v, val);
@@ -494,7 +494,7 @@ public:
 //					>::type,
 //					_setter_uint < t >
 //				>::type,
-//				_setter_double < t >
+//				_setter_real < t >
 //			>::type,
 //			typename std::conditional <
 //				std::is_pointer < t >::value,

@@ -35,7 +35,7 @@ namespace ballistic {
 								else if (prop_type == "uint")
 									p_val = convert_to < uint32 > (value);
 								else if (prop_type == "real")
-									p_val = convert_to < double > (value);
+									p_val = convert_to < real > (value);
 								else if (prop_type == "bool")
 									p_val = convert_to < bool > (value);
 								else if (prop_type == "vec2") {

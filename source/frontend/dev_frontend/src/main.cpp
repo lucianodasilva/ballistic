@@ -49,7 +49,7 @@ ballistic::graphics::idevice * create_device () {
 #endif
 
 float angle = 0.0F;
-float radius = 1.0F;
+float radius = 4.0F;
 
 void circle_camera ( ballistic::entity * parent, ballistic::message & message ) {
 
@@ -59,16 +59,16 @@ void circle_camera ( ballistic::entity * parent, ballistic::message & message ) 
 	vec3 pos;
 
 	pos.x = cos (angle) * radius;
-	pos.y = 0;
+	pos.y = 2.F;
 	pos.z = sin (angle) * radius;
 
-	angle += 0.05;
-	radius += 0.025;
+	angle = message [ballistic::id::game_time].as < real > () * real (1); // one radian per second
+	//radius += 0.025;
 	
-	if (angle > (3.1415926 * 2.)) {
-		angle = 0.0;
-		radius = 1.0;
-	}
+	//if (angle > (3.1415926 * 2.)) {
+	//	angle = 0.0;
+	//	//radius = 1.0;
+	//}
 
 	parent->get_property (ballistic::id::position) = pos;
 }
