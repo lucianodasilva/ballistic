@@ -111,7 +111,7 @@ namespace ballistic {
 			_registered_types [type_inst->get_name ()] = type_inst;
 		}
 		
-		bool package_loader::load (istream & source, uint32 length, ballistic::resources::stack & stack) {
+		bool package_loader::load (istream & source, uint32_t length, ballistic::resources::stack & stack) {
 			
 			XMLDocument document;
 

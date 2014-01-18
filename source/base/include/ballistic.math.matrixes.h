@@ -12,7 +12,7 @@ namespace math {
 
 		typedef T type;
 
-		static const uint32 count = 16;
+		static const uint32_t count = 16;
 
 		union {
 			T data [count];

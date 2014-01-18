@@ -10,25 +10,25 @@ namespace ballistic {
 		class render_list {
 		private:
 
-			static const uint32 radix_count = sizeof (render_bucket);
-			static const uint32 table_size = 256 * radix_count;
+			static const uint32_t radix_count = sizeof (render_bucket);
+			static const uint32_t table_size = 256 * radix_count;
 
-			uint32			_capacity;
-			uint32			_size;
+			uint32_t			_capacity;
+			uint32_t			_size;
 
 			render_item **	_data;
 			render_item **	_swap_buffer;
 
-			uint32			_histograms [table_size];
-			uint32			_offsets [table_size];
+			uint32_t			_histograms [table_size];
+			uint32_t			_offsets [table_size];
 			
-			uint32 *		_hr [radix_count];
-			uint32 *		_or [radix_count];
+			uint32_t *		_hr [radix_count];
+			uint32_t *		_or [radix_count];
 
 		public:
 
-			uint32 size ();
-			uint32 capacity ();
+			uint32_t size ();
+			uint32_t capacity ();
 
 			render_list ();
 			~render_list ();
@@ -38,15 +38,15 @@ namespace ballistic {
 			void clear ();
 			void reset ();
 
-			void reserve (uint32 new_capacity);
+			void reserve (uint32_t new_capacity);
 
 			void sort ();
 
-			inline render_item & operator [] (uint32 index);
+			inline render_item & operator [] (uint32_t index);
 
 		};
 
-		render_item & render_list::operator [] (uint32 index) {
+		render_item & render_list::operator [] (uint32_t index) {
 			return *_data [index];
 		}
 

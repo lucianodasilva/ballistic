@@ -1,6 +1,6 @@
 #include "ballistic.mac_frontend.h"
 
-#ifdef BALLISTIC_MACOSX
+#ifdef BALLISTIC_OS_MACOSX
 
 #include <GLUT/GLUT.h>
 

@@ -77,12 +77,12 @@ namespace ballistic {
 			_device->begin_frame ();
 
 			// render loop ---------------------------
-			uint32 render_count = _render_list.size ();
+			uint32_t render_count = _render_list.size ();
 			imaterial * material = nullptr;
 			ieffect * effect = nullptr;
 			imesh * mesh = nullptr;
 
-			for (uint32 i = 0; i < render_count; ++i) {
+			for (uint32_t i = 0; i < render_count; ++i) {
 				render_item & item = _render_list [i];
 
 				if (item.material->get_effect () != effect) {

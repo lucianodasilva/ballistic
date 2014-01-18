@@ -15,22 +15,22 @@ namespace ballistic {
 			//if (!opaque) {
 			//	_b0 ^= 0x01;
 			//	_b1 = material;
-			//	*((uint16 *)&_b2) = depth;
+			//	*((uint16_t *)&_b2) = depth;
 			//} else {
 			//	_b0 |= 0x01;
-			//	*((uint16 *)&_b1) = depth;
+			//	*((uint16_t *)&_b1) = depth;
 			//	_b3 = material;
 			//}
 
 			union {
 
-				uint32 uint_value;
+				uint32_t uint_value;
 
 				struct {
-					uint8 b0;
-					uint8 b1;
-					uint8 b2;
-					uint8 b3;
+					uint8_t b0;
+					uint8_t b1;
+					uint8_t b2;
+					uint8_t b3;
 				};
 
 			} byte_handler;
@@ -47,8 +47,8 @@ namespace ballistic {
 
 					byte_handler.b0 = 1;
 
-					uint16 depth = camera->get_depth (item.transform);
-					*((uint16 *)&byte_handler.b1) = depth;
+					uint16_t depth = camera->get_depth (item.transform);
+					*((uint16_t *)&byte_handler.b1) = depth;
 
 					byte_handler.b3 =
 						item.material->get_effect ()->get_run_id ();

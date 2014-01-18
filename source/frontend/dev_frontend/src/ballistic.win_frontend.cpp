@@ -1,10 +1,8 @@
 #include "ballistic.win_frontend.h"
 
-#ifdef BALLISTIC_WIN
+#ifdef BALLISTIC_OS_WINDOWS
 
-#ifdef BALLISTIC_DESKTOP_GL
-#	include <GL/glew.h>
-#endif
+#include <GL/glew.h>
 
 namespace ballistic {
 	namespace win_desktop {

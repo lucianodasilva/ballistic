@@ -23,13 +23,13 @@ namespace ballistic {
 
 			opengl_effect *		_effect;
 
-			uint8				_run_id;
+			uint8_t				_run_id;
 		
 		public:
 
-			opengl_material		(uint8 run_id);
+			opengl_material		(uint8_t run_id);
 
-			virtual uint8		get_run_id ();
+			virtual uint8_t		get_run_id ();
 
 			virtual void		set_effect (ieffect * effect);
 			virtual ieffect *	get_effect ();

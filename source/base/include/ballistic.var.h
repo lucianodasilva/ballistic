@@ -47,8 +47,8 @@ inline void get (type & v) const { \
 		return; \
 	} \
 	switch (_type) { \
-		convert_switch (int32);	\
-		convert_switch (uint32); \
+		convert_switch (int32_t);	\
+		convert_switch (uint32_t); \
 		convert_switch (real); \
 		convert_switch (bool); \
 	default: \
@@ -79,8 +79,8 @@ public:
 	enum var_type {
 		var_type_none	= 0,
 		var_type_bool	= 1,
-		var_type_int32	= 2,
-		var_type_uint32 = 4,
+		var_type_int32_t	= 2,
+		var_type_uint32_t = 4,
 		var_type_real	= 8,
 		var_type_struct = 128,
 		var_type_string = var_type_struct + 1,
@@ -96,8 +96,8 @@ private:
 	
 	union var_data {
 		bool	bool_v;
-		int32	int32_v;
-		uint32	uint32_v;
+		int32_t	int32_t_v;
+		uint32_t	uint32_t_v;
 		real	real_v;
 		void *	ptr_v;
 	} _data;
@@ -161,8 +161,8 @@ public:
 
 	// details
 
-	declare_set (int32)
-	declare_set (uint32)
+	declare_set (int32_t)
+	declare_set (uint32_t)
 	declare_set (real)
 	declare_set (bool)
 	
@@ -172,8 +172,8 @@ public:
 	declare_set_struct (vec4)
 	declare_set_struct (mat4)
 
-	declare_get (int32)
-	declare_get (uint32)
+	declare_get (int32_t)
+	declare_get (uint32_t)
 	declare_get (real)
 	declare_get (bool)
 
@@ -202,11 +202,11 @@ public:
 		}
 
 		switch (_type) {
-		case (var_type_int32) :
-			ballistic::convert (_data.int32_v, v);
+		case (var_type_int32_t) :
+			ballistic::convert (_data.int32_t_v, v);
 			break;
-		case (var_type_uint32) :
-			ballistic::convert (_data.uint32_v, v);
+		case (var_type_uint32_t) :
+			ballistic::convert (_data.uint32_t_v, v);
 			break;
 		case (var_type_real) :
 			ballistic::convert (_data.real_v, v);
@@ -343,8 +343,8 @@ public:
 //	};
 //	
 //	union {
-//		int32	_int_v;
-//		uint32	_uint_v;
+//		int32_t	_int_v;
+//		uint32_t	_uint_v;
 //		real	_real_v;
 //		bool	_bool_v;
 //	

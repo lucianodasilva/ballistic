@@ -34,7 +34,7 @@ namespace ballistic {
 				_game_start_time,
 				_frame_start;
 
-		uint32	_frame_id;
+		uint32_t	_frame_id;
 		message _m_update;
 		
 		// internal systems

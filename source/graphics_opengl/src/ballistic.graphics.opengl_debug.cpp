@@ -31,7 +31,7 @@ namespace ballistic {
 			glGetShaderiv (shader_id, GL_COMPILE_STATUS, &compiler_state);
 			
 			if (compiler_state == GL_FALSE) {
-				int32
+				int32_t
 					info_length,
 					writen_chars;
 					
@@ -53,7 +53,7 @@ namespace ballistic {
 			GLint link_state;
 			glGetProgramiv (program_id, GL_LINK_STATUS, &link_state);
 			if (link_state == GL_FALSE) {
-				int32
+				int32_t
 					info_length,
 					writen_chars;
 					

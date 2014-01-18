@@ -3,7 +3,7 @@ namespace ballistic {
 namespace math {
 
 	template < class T >
-	const uint32 quat_t < T >::count = 4;
+	const uint32_t quat_t < T >::count = 4;
 	
 	template < class T >
 	quat_t < T >::quat_t () : w (T()) {}

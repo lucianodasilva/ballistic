@@ -14,7 +14,7 @@ namespace ballistic {
 		class imaterial : public ballistic::resources::iresource {
 		public:
 
-			virtual uint8		get_run_id () = 0;
+			virtual uint8_t		get_run_id () = 0;
 
 			virtual void		set_effect (ieffect * effect) = 0;
 			virtual ieffect *	get_effect () = 0;

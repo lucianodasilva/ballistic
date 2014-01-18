@@ -13,7 +13,7 @@ namespace ballistic {
 		{
 		private:
 
-			uint8 _run_id;
+			uint8_t _run_id;
 			
 			GLuint
 				_vertex_array_id,
@@ -28,29 +28,29 @@ namespace ballistic {
 
 		public:
 			
-			opengl_mesh ( uint8 run_id );
+			opengl_mesh ( uint8_t run_id );
 			~opengl_mesh ();
 
-			virtual uint8 get_run_id ();
+			virtual uint8_t get_run_id ();
 			
 			virtual void set_data (
-				uint8 *			data_buffer,
-				int32			data_buffer_size,
-				uint16 *		index_buffer,
-				uint32			index_buffer_size,
+				uint8_t *			data_buffer,
+				int32_t			data_buffer_size,
+				uint16_t *		index_buffer,
+				uint32_t			index_buffer_size,
 				mesh_attribute	attributes,
 				bool			dynamic = false
 			);
 
 			virtual void update_data (
-				uint8 *			data_buffer,
-				int32			data_buffer_size,
+				uint8_t *			data_buffer,
+				int32_t			data_buffer_size,
 				mesh_attribute	attributes
 			);
 
 			virtual void update_index (
-				uint16 *		index_buffer,
-				uint32			index_buffer_size
+				uint16_t *		index_buffer,
+				uint32_t			index_buffer_size
 			);
 			
 			virtual void apply (idevice * device);

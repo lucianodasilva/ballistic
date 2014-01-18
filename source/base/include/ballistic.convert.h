@@ -109,7 +109,7 @@ namespace ballistic {
 		stringstream src_stream (src);
 		string trim;
 
-		for (uint32 i = 0; i < t::count; ++i) {
+		for (uint32_t i = 0; i < t::count; ++i) {
 			convert_split (src_stream, trim, ',');
 			convert (trim, dst.data [i]);
 		}
@@ -120,7 +120,7 @@ namespace ballistic {
 		stringstream stream;
 
 		stream << src.data [0];
-		for (uint32 i = 1; i < t::count; ++i) {
+		for (uint32_t i = 1; i < t::count; ++i) {
 			stream << ',' << src.data [i];
 		}
 	}

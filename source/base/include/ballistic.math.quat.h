@@ -13,7 +13,7 @@ namespace math {
 		
 		typedef T type;
 		
-		static const uint32 count;
+		static const uint32_t count;
 		
 		union {
 			T data [4];

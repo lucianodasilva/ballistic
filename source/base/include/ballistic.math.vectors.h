@@ -10,7 +10,7 @@ using namespace std;
 namespace ballistic {
 namespace math {
 
-	enum axis_index : uint32 {
+	enum axis_index : uint32_t {
 		axis_index_x = 0U,
 		axis_index_y = 1U,
 		axis_index_z = 2U
@@ -21,7 +21,7 @@ namespace math {
 
 		typedef T type;
 
-		static const uint32 count;
+		static const uint32_t count;
 
 		static const vec2_t < T > zero;
 		static const vec2_t < T > one;
@@ -58,7 +58,7 @@ namespace math {
 
 		typedef T type;
 
-		static const uint32 count;
+		static const uint32_t count;
 
 		static const vec3_t < T > zero;
 		static const vec3_t < T > one;
@@ -96,7 +96,7 @@ namespace math {
 
 		typedef T type;
 
-		static const uint32 count;
+		static const uint32_t count;
 
 		static const vec4_t < T > zero;
 		static const vec4_t < T > one;
@@ -134,7 +134,7 @@ namespace math {
 
 typedef ballistic::math::vec4_t < real > color;
 
-typedef ballistic::math::vec2_t < int32 > point;
+typedef ballistic::math::vec2_t < int32_t > point;
 
 typedef ballistic::math::vec2_t < real > vec2;
 typedef ballistic::math::vec3_t < real > vec3;

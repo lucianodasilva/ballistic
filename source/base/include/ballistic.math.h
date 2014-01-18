@@ -23,7 +23,7 @@ namespace ballistic {
 			// returns minimum positive number for min
 			typename T::type r = numeric_limits < typename T::type >::min ();
 
-			for ( uint32 i = 0; i < T::count; ++i)
+			for ( uint32_t i = 0; i < T::count; ++i)
 				r += v1.data [i] * v2.data [i];
 			
 			return r;
@@ -55,7 +55,7 @@ namespace ballistic {
 
 		template < class T >
 		inline T normalize ( const T & v ) {
-			typename T::type normal = real_one / length ( v );
+			typename T::type normal = real (1) / length ( v );
 			return v * normal;
 		}
 

@@ -38,7 +38,7 @@ namespace ballistic {
 	}
 
 	template < class T >
-	intersection_type aabox_t < T >::intersect_axis_aligned ( const aabox_t < T > & box, uint32 a_axis, uint32 b_axis ) const {
+	intersection_type aabox_t < T >::intersect_axis_aligned ( const aabox_t < T > & box, uint32_t a_axis, uint32_t b_axis ) const {
 
 		if ( v_max.data [a_axis] - box.v_min.data [a_axis] < 0.0F || box.v_max.data [a_axis] - v_min.data [a_axis] < 0 )
 			return intersection_none;

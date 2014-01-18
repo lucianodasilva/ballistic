@@ -41,14 +41,14 @@ namespace ballistic {
 			return *this;
 		}
 
-		uint16 camera::get_depth (mat4 & transform) const {
+		uint16_t camera::get_depth (mat4 & transform) const {
 			real z = math::length (
 					vec3 (transform.m12, transform.m13, transform.m14),
 					position
 				);
 
 			// 16 = bitness
-			return uint16 ((1 << 16) * _depth_divisor / z);
+			return uint16_t ((1 << 16) * _depth_divisor / z);
 		}
 
 		mat4 camera::get_view () const {

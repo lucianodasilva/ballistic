@@ -3,7 +3,7 @@
 
 #include <ballistic.base.h>
 
-#ifdef BALLISTIC_MACOSX
+#ifdef BALLISTIC_OS_MACOSX
 
 #include <GL/glew.h>
 

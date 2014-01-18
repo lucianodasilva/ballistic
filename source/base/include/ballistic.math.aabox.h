@@ -6,7 +6,7 @@
 namespace ballistic {
 namespace math {
 
-	enum intersection_type : uint32 {
+	enum intersection_type : uint32_t {
 		intersection_none,
 		intersection_contains,
 		intersection_intersects
@@ -24,7 +24,7 @@ namespace math {
 
 		inline intersection_type intersect ( const aabox_t < T > & box ) const;
 
-		inline intersection_type intersect_axis_aligned ( const aabox_t < T > & box, uint32 a_axis, uint32 b_axis ) const;
+		inline intersection_type intersect_axis_aligned ( const aabox_t < T > & box, uint32_t a_axis, uint32_t b_axis ) const;
 
 		inline intersection_type intersect_x_aligned ( const aabox_t < T > & box ) const;
 		inline intersection_type intersect_y_aligned ( const aabox_t < T > & box ) const;

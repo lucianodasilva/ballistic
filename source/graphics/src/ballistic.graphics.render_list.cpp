@@ -3,11 +3,11 @@
 namespace ballistic {
 	namespace graphics {
 
-		uint32 render_list::size () {
+		uint32_t render_list::size () {
 			return _size;
 		}
 
-		uint32 render_list::capacity () {
+		uint32_t render_list::capacity () {
 			return _capacity;
 		}
 
@@ -36,20 +36,20 @@ namespace ballistic {
 		}
 
 		void render_list::reset () {
-			for (uint32 i = 0; i < _capacity; ++i)
+			for (uint32_t i = 0; i < _capacity; ++i)
 				delete _data [i];
 
 			delete [] _data;
 			_data = nullptr;
 		}
 
-		void render_list::reserve (uint32 new_capacity) {
+		void render_list::reserve (uint32_t new_capacity) {
 
 			render_item ** new_data = new render_item * [new_capacity];
 
 			if (_data) {
 				// copy and clean up
-				for (uint32 i = 0; i < _capacity; ++i) {
+				for (uint32_t i = 0; i < _capacity; ++i) {
 					if (i < _size)
 						new_data [i] = _data [i];
 					else
@@ -65,15 +65,15 @@ namespace ballistic {
 
 			_capacity = new_capacity;
 
-			for (uint32 i = _size; i < _capacity; ++i) {
+			for (uint32_t i = _size; i < _capacity; ++i) {
 				_data [i] = new render_item ();
 			}
 		}
 
 		void render_list::sort () {
 
-			uint8 value;
-			uint8 * p_value;
+			uint8_t value;
+			uint8_t * p_value;
 
 			render_item * item;
 			render_item ** swap_tmp;
@@ -84,16 +84,16 @@ namespace ballistic {
 			}
 			
 			// calculate histograms
-			memset ((void *)&_histograms [0], 0, table_size * sizeof (uint32));
+			memset ((void *)&_histograms [0], 0, table_size * sizeof (uint32_t));
 
-			for (uint32 i = 0; i < _size; ++i) {
-				p_value = (uint8 *)&(_data [i]->bucket);
+			for (uint32_t i = 0; i < _size; ++i) {
+				p_value = (uint8_t *)&(_data [i]->bucket);
 			
-				for (uint32 j = 0; j < radix_count; ++j)
+				for (uint32_t j = 0; j < radix_count; ++j)
 					++_hr [j][p_value [j]];
 			}
 
-			for (uint32 i = 0; i < table_size; ++i) {
+			for (uint32_t i = 0; i < table_size; ++i) {
 				if (i % 256 == 0)
 					_offsets [i] = 0;
 				else
@@ -101,7 +101,7 @@ namespace ballistic {
 			}
 
 			// swap stuff around
-			for (uint32 radix = 0; radix < radix_count; ++radix) {
+			for (uint32_t radix = 0; radix < radix_count; ++radix) {
 
 				// check if empty byte pass
 				if (_hr [radix][0] == _size) {
@@ -109,10 +109,10 @@ namespace ballistic {
 				}
 
 				// copy to offseted positions
-				for (uint32 i = 0; i < _size; ++i) {
+				for (uint32_t i = 0; i < _size; ++i) {
 					item = _data [i];
 
-					value = ((uint8 *)&(item->bucket)) [radix];
+					value = ((uint8_t *)&(item->bucket)) [radix];
 					_swap_buffer [_or [radix][value]++] = item;
 				}
 

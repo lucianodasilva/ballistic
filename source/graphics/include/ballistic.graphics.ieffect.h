@@ -26,7 +26,7 @@ namespace ballistic {
 		class ieffect : public ballistic::resources::iresource {
 		public:
 
-			virtual uint8 get_run_id () = 0;
+			virtual uint8_t get_run_id () = 0;
 
 			virtual void load (
 				const string & vs_shader_source,

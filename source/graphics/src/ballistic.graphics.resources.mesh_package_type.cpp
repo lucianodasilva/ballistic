@@ -44,7 +44,7 @@ namespace ballistic {
 
 				vector < real >		position;
 				vector < real >		uv;
-				vector < uint16 >	index;
+				vector < uint16_t >	index;
 
 				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
 				while (cursor) {
@@ -91,7 +91,7 @@ namespace ballistic {
 						string value;
 
 						while (get_line (ss, value, ',')) {
-							index.push_back (convert_to < uint16 > (value));
+							index.push_back (convert_to < uint16_t > (value));
 						}
 
 					}
@@ -100,33 +100,33 @@ namespace ballistic {
 				}
 
 				// merge data
-				uint32 buffer_size =
+				uint32_t buffer_size =
 					(m_attribute & mesh_attribute_position ? position.size () * sizeof (real) : 0) +
 					(m_attribute & mesh_attribute_uv ? uv.size () * sizeof (real) : 0)
 				;
 
 
-				uint8 * data_buffer = new uint8 [buffer_size];
+				uint8_t * data_buffer = new uint8_t [buffer_size];
 				real * data_cursor = (real *)data_buffer;
-				for (uint32 i = 0; i < position.size () / 3; ++i) {
+				for (uint32_t i = 0; i < position.size () / 3; ++i) {
 
 					if (m_attribute & mesh_attribute_position) {
-						uint32 offset = i * 3;
+						uint32_t offset = i * 3;
 
-						for (uint32 j = 0; j < 3; ++j)
+						for (uint32_t j = 0; j < 3; ++j)
 							*data_cursor++ = position [offset++];
 					}
 					
 					if (m_attribute & mesh_attribute_uv) {
-						uint32 offset = i * 2;
+						uint32_t offset = i * 2;
 
-						for (uint32 j = 0; j < 2; ++j)
+						for (uint32_t j = 0; j < 2; ++j)
 							*data_cursor++ = uv [offset++];
 					}
 
 				}
 
-				mesh->set_data (data_buffer, buffer_size, index.data (), index.size () * sizeof (uint16), m_attribute, false);
+				mesh->set_data (data_buffer, buffer_size, index.data (), index.size () * sizeof (uint16_t), m_attribute, false);
 
 				delete [] data_buffer;
 

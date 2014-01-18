@@ -25,20 +25,7 @@ file ( GLOB win_desktop_source
 	${CMAKE_CURRENT_LIST_DIR}/include/*.hpp
 )
 
-if (Ballistic_DXGraphics )
-	project ( dev_dx )
-	add_executable ( dev_dx ${win_desktop_source} )
-	target_link_libraries ( dev_dx base graphics_directx)
-
-	set_property (TARGET dev_dx PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_DX )
-	set_property (TARGET dev_dx PROPERTY FOLDER "frontend")
-
-	add_custom_command(TARGET dev_dx PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       ${CMAKE_CURRENT_LIST_DIR}/resources $<TARGET_FILE_DIR:dev_dx>/resources)
-endif ()
-
-if (Ballistic_OpenGLGraphics)
+if (build_ballistic_opengl3)
 	project ( dev_gl )
 	add_executable ( dev_gl ${win_desktop_source} )
 

@@ -1,0 +1,50 @@
+
+macro (check_operating_system) 
+
+	if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+		set (
+			BALLISTIC_OS_DEFINES
+			"#define BALLISTIC_OS_WINDOWS 1"
+		)
+	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+		set (
+			BALLISTIC_OS_DEFINES
+			"#define BALLISTIC_OS_LINUX 1"
+		)
+	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+		set (
+			BALLISTIC_OS_DEFINES
+			"#define BALLISTIC_OS_DARWIN 1"
+		)
+	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Sun")
+		set (
+			BALLISTIC_OS_DEFINES
+			"#define BALLISTIC_OS_SUN 1"
+		)
+	elseif (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+		set (
+			BALLISTIC_OS_DEFINES
+			"#define BALLISTIC_OS_FREEBSD 1"
+		)
+	endif ()
+
+	if (UNIX)
+		set (
+			BALLISTIC_API_TYPE "#define BALLISTIC_API_UNIX 1"
+		)
+	elseif (WIN32)
+		set (
+			BALLISTIC_API_TYPE "#define BALLISTIC_API_WIN32 1"
+		)
+	endif ()
+
+	if (${CMAKE_CXX_COMPILER_ID} EQUAL "MSVC")
+		set (BALLISTIC_COMPILER_TYPE "#define BALLISTIC_COMPILER_MSVC 1")
+	elseif (${CMAKE_CXX_COMPILER_ID} EQUAL "Clang")
+		set (BALLISTIC_COMPILER_TYPE "#define BALLISTIC_COMPILER_CLANG 1")
+	elseif (${CMAKE_CXX_COMPILER_ID} EQUAL "GNU")
+		set (BALLISTIC_COMPILER_TYPE "#define BALLISTIC_COMPILER_GNU 1")
+	elseif (${CMAKE_CXX_COMPILER_ID} EQUAL "SunPro")
+		set (BALLISTIC_COMPILER_TYPE "#define BALLISTIC_COMPILER_SUNPRO 1")
+	endif ()
+endmacro ()

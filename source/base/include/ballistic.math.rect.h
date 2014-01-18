@@ -28,6 +28,6 @@ namespace ballistic {
 
 #include "ballistic.math.rect.inl"
 
-typedef ballistic::math::rect_t < int32 > rect;
+typedef ballistic::math::rect_t < int32_t > rect;
 
 #endif

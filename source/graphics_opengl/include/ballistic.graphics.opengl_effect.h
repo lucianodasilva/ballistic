@@ -38,7 +38,7 @@ namespace ballistic {
 			
 			GLint _shader_program_id;
 
-			uint8 _run_id;
+			uint8_t _run_id;
 
 			// -
 
@@ -55,10 +55,10 @@ namespace ballistic {
 
 		public:
 			
-			opengl_effect (uint8 run_id);
+			opengl_effect (uint8_t run_id);
 			~opengl_effect ();
 
-			virtual uint8 get_run_id ();
+			virtual uint8_t get_run_id ();
 
 			virtual opengl_constant get_constant (id_t id) const;
 			
@@ -69,7 +69,7 @@ namespace ballistic {
 			
 			virtual void apply (idevice * device);
 
-			void set_constant (opengl_constant & u, int32 v);
+			void set_constant (opengl_constant & u, int32_t v);
 			void set_constant (opengl_constant & u, real v);
 			void set_constant (opengl_constant & u, const vec2 & v);
 			void set_constant (opengl_constant & u, const vec3 & v);

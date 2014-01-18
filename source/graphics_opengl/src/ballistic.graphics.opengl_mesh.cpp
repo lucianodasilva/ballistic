@@ -61,7 +61,7 @@ namespace ballistic {
 			return offset + size;
 		}
 		
-		opengl_mesh::opengl_mesh ( uint8 run_id ) : 
+		opengl_mesh::opengl_mesh ( uint8_t run_id ) : 
 			_run_id (run_id), 
 			_vertex_array_id (0),
 			_vertex_buffer_id(0),
@@ -75,13 +75,13 @@ namespace ballistic {
 			}
 		}
 		
-		uint8 opengl_mesh::get_run_id () { return _run_id; }
+		uint8_t opengl_mesh::get_run_id () { return _run_id; }
 
 		void opengl_mesh::set_data (
-			uint8 *			data_buffer,
-			int32			data_buffer_size,
-			uint16 *		index_buffer,
-			uint32			index_buffer_size,
+			uint8_t *			data_buffer,
+			int32_t			data_buffer_size,
+			uint16_t *		index_buffer,
+			uint32_t			index_buffer_size,
 			mesh_attribute	attributes,
 			bool			dynamic
 		){
@@ -125,8 +125,8 @@ namespace ballistic {
 		}
 
 		void opengl_mesh::update_data (
-			uint8 *			data_buffer,
-			int32			data_buffer_size,
+			uint8_t *			data_buffer,
+			int32_t			data_buffer_size,
 			mesh_attribute	attributes
 		){
 			if (_vertex_array_id == 0) {
@@ -152,8 +152,8 @@ namespace ballistic {
 		}
 
 		void opengl_mesh::update_index (
-			uint16 *		index_buffer,
-			uint32			index_buffer_size
+			uint16_t *		index_buffer,
+			uint32_t			index_buffer_size
 		){
 			if (_vertex_array_id == 0) {
 				debug_error ("[ballistic::graphics::opengl_mesh::update_index] GL cannot update data from undefined mesh");
@@ -179,7 +179,7 @@ namespace ballistic {
 		
 		void opengl_mesh::render () {
 			gl_eval_scope (ballistic::graphics::opengl_mesh::render);
-			glDrawElements (GL_TRIANGLES, _index_buffer_size / sizeof (uint16), GL_UNSIGNED_SHORT, 0);
+			glDrawElements (GL_TRIANGLES, _index_buffer_size / sizeof (uint16_t), GL_UNSIGNED_SHORT, 0);
 		}
 
 	}

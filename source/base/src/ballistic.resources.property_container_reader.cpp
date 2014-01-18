@@ -31,9 +31,9 @@ namespace ballistic {
 
 							if (!prop_type.empty ()) {
 								if (prop_type == "int")
-									p_val = convert_to < int32 > (value);
+									p_val = convert_to < int32_t > (value);
 								else if (prop_type == "uint")
-									p_val = convert_to < uint32 > (value);
+									p_val = convert_to < uint32_t > (value);
 								else if (prop_type == "real")
 									p_val = convert_to < real > (value);
 								else if (prop_type == "bool")

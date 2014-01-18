@@ -16,26 +16,26 @@ namespace ballistic {
 		class imesh : public ballistic::resources::iresource {
 		public:
 
-			virtual uint8 get_run_id () = 0;
+			virtual uint8_t get_run_id () = 0;
 			
 			virtual void set_data (
-				uint8 *			data_buffer,
-				int32			data_buffer_size,
-				uint16 *		index_buffer,
-				uint32			index_buffer_size,
+				uint8_t *			data_buffer,
+				int32_t			data_buffer_size,
+				uint16_t *		index_buffer,
+				uint32_t			index_buffer_size,
 				mesh_attribute	attributes,
 				bool			dynamic = false
 			) = 0;
 
 			virtual void update_data (
-				uint8 *			data_buffer,
-				int32			data_buffer_size,
+				uint8_t *			data_buffer,
+				int32_t			data_buffer_size,
 				mesh_attribute	attributes
 			) = 0;
 
 			virtual void update_index (
-				uint16 *		index_buffer,
-				uint32			index_buffer_size
+				uint16_t *		index_buffer,
+				uint32_t			index_buffer_size
 			) = 0;
 
 			virtual void apply (idevice * device) = 0;

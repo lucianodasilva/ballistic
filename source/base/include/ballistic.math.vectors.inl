@@ -7,7 +7,7 @@ namespace ballistic {
 namespace math {
 
 	template < class T >
-	const uint32 vec2_t < T >::count (2);
+	const uint32_t vec2_t < T >::count (2);
 
 	template < class T >
 	const vec2_t < T > vec2_t < T >::zero ( T(0), T (0) );
@@ -92,7 +92,7 @@ namespace math {
 	// ----------------------------------------------------------------------------
 
 	template < class T >
-	const uint32 vec3_t < T >::count (3);
+	const uint32_t vec3_t < T >::count (3);
 
 	template < class T >
 	const vec3_t < T > vec3_t < T >::zero ( T (0), T (0), T (0) );
@@ -182,7 +182,7 @@ namespace math {
 	// ----------------------------------------------------------------------------
 
 	template < class T >
-	const uint32 vec4_t < T >::count (4);
+	const uint32_t vec4_t < T >::count (4);
 
 	template < class T >
 	const vec4_t < T > vec4_t < T >::zero ( T (0), T (0), T (0), T (0) );

@@ -11,7 +11,7 @@ namespace ballistic {
 		class imesh;
 		class imaterial;
 
-		typedef uint32 render_bucket;
+		typedef uint32_t render_bucket;
 
 		struct render_item {
 

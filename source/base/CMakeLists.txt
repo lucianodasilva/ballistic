@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project ( base )
 # ----------------------------------------------------------------
 
-include ( ${CMAKE_CURRENT_LIST_DIR}/CMake.Generate.txt )
+include ( ${CMAKE_CURRENT_LIST_DIR}/ballistic.config.cmake)
 
 include_directories (
 	${CMAKE_CURRENT_LIST_DIR}/include

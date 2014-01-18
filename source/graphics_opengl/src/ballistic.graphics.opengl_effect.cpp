@@ -4,7 +4,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		opengl_effect::opengl_effect (uint8 run_id) : _shader_program_id(-1), _run_id (run_id) {}
+		opengl_effect::opengl_effect (uint8_t run_id) : _shader_program_id(-1), _run_id (run_id) {}
 
 		opengl_effect::~opengl_effect () {
 			if (_shader_program_id != -1)
@@ -27,7 +27,7 @@ namespace ballistic {
 		
 		void opengl_effect::load_gl_shader (GLint shader_id, const string & source) {
 			const char * source_ptr = source.c_str ();
-			int32 source_length = source.length ();
+			int32_t source_length = source.length ();
 			
 			glShaderSource (shader_id, 1, (const GLchar **)&source_ptr, &source_length);
 			glCompileShader (shader_id);
@@ -35,7 +35,7 @@ namespace ballistic {
 			gl_eval_shader_compile (shader_id);
 		}
 
-		uint8 opengl_effect::get_run_id () { return _run_id; }
+		uint8_t opengl_effect::get_run_id () { return _run_id; }
 
 		opengl_constant opengl_effect::get_constant (id_t id) const {
 			auto it = _constants.find (id);
@@ -114,13 +114,13 @@ namespace ballistic {
 			glUseProgram (_shader_program_id);
 		}
 
-		void opengl_effect::set_constant (opengl_constant & u, int32 v) {
+		void opengl_effect::set_constant (opengl_constant & u, int32_t v) {
 			if (!u.is_defined ()) {
 				debug_error ("GL constant " << u.id << " location not defined");
 				return;
 			}
 
-			gl_eval_scope (opengl_effect::set_constant (int32));
+			gl_eval_scope (opengl_effect::set_constant (int32_t));
 			glUniform1i (u.location, v);
 		}
 
