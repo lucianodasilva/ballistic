@@ -14,6 +14,8 @@ namespace ballistic {
 				stride += sizeof (vec3);
 			if (attributes & mesh_attribute_uv)
 				stride += sizeof (vec2);
+			if (attributes & mesh_attribute_normal)
+				stride += sizeof (vec3);
 
 			return stride;
 		}
@@ -39,6 +41,17 @@ namespace ballistic {
 				attribute_offset = add_attribute (
 					attribute_id,
 					2,
+					GL_FLOAT,
+					attribute_stride,
+					attribute_offset
+					);
+			}
+
+			if (attributes & mesh_attribute_normal) {
+				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_normal);
+				attribute_offset = add_attribute (
+					attribute_id,
+					3,
 					GL_FLOAT,
 					attribute_stride,
 					attribute_offset

@@ -44,6 +44,7 @@ namespace ballistic {
 
 				vector < real >		position;
 				vector < real >		uv;
+				vector < real >		normal;
 				vector < uint16_t >	index;
 
 				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
@@ -86,6 +87,28 @@ namespace ballistic {
 							delete mesh;
 							return;
 						}
+					} else if (strcmp (cursor->Name (), "normal") == 0) {
+						m_attribute = (mesh_attribute)(m_attribute | mesh_attribute_normal);
+
+						stringstream ss (cursor->GetText ());
+						string value;
+
+						while (get_line (ss, value, ',')) {
+							normal.push_back (convert_to < real > (value));
+						}
+
+						if (normal.size () % 3 != 0) {
+							debug_error ("[ballistic::graphics::resources::mesh_package_type::load_element] mesh normal vector not multiple of 3!");
+							delete mesh;
+							return;
+						}
+
+						if (normal.size () / 3 != position.size () / 3) {
+							debug_error ("[ballistic::graphics::resources::mesh_package_type::load_element] mesh normal vector size does not match the size of the position vector!");
+							delete mesh;
+							return;
+						}
+					
 					} else if (strcmp (cursor->Name (), "index") == 0) {
 						stringstream ss (cursor->GetText ());
 						string value;
@@ -102,7 +125,8 @@ namespace ballistic {
 				// merge data
 				uint32_t buffer_size =
 					(m_attribute & mesh_attribute_position ? position.size () * sizeof (real) : 0) +
-					(m_attribute & mesh_attribute_uv ? uv.size () * sizeof (real) : 0)
+					(m_attribute & mesh_attribute_uv ? uv.size () * sizeof (real) : 0) +
+					(m_attribute & mesh_attribute_normal ? normal.size () * sizeof (real) : 0 )
 				;
 
 
@@ -122,6 +146,13 @@ namespace ballistic {
 
 						for (uint32_t j = 0; j < 2; ++j)
 							*data_cursor++ = uv [offset++];
+					}
+
+					if (m_attribute & mesh_attribute_normal) {
+						uint32_t offset = i * 3;
+
+						for (uint32_t j = 0; j < 3; ++j)
+							*data_cursor++ = normal [offset++];
 					}
 
 				}
