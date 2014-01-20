@@ -34,6 +34,8 @@ namespace ballistic {
 					attribute_stride,
 					attribute_offset
 					);
+
+				++attribute_id;
 			}
 
 			if (attributes & mesh_attribute_uv) {
@@ -45,6 +47,7 @@ namespace ballistic {
 					attribute_stride,
 					attribute_offset
 					);
+				++attribute_id;
 			}
 
 			if (attributes & mesh_attribute_normal) {
@@ -56,6 +59,7 @@ namespace ballistic {
 					attribute_stride,
 					attribute_offset
 					);
+				++attribute_id;
 			}
 		}
 

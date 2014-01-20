@@ -67,7 +67,7 @@ namespace ballistic {
 			_effect->apply (this);
 
 			// get constants
-			_gl_const_model = _effect->get_constant (id::graphics::effect::t_model);
+			//_gl_const_model = _effect->get_constant (id::graphics::effect::t_model);
 			_gl_const_view = _effect->get_constant (id::graphics::effect::t_view);
 			_gl_const_proj = _effect->get_constant (id::graphics::effect::t_proj);
 			
@@ -77,7 +77,7 @@ namespace ballistic {
 			// set least changing constants
 			// TODO: replace by uniform block
 			_effect->set_constant (_gl_const_view, _view);
-			_effect->set_constant (_gl_const_model, _model);
+			//_effect->set_constant (_gl_const_model, _model);
 			_effect->set_constant (_gl_const_proj, _proj);
 		}
 
@@ -173,7 +173,7 @@ namespace ballistic {
 				return;
 			}
 
-			_effect->set_constant (_gl_const_model, transform);
+			//_effect->set_constant (_gl_const_model, transform);
 
 			_mesh->render ();
 		}
