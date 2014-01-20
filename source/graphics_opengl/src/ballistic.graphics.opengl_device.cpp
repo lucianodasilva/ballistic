@@ -32,6 +32,22 @@ namespace ballistic {
 				debug_print ("OpenGL version: " << gl_str_version);
 			});
 
+			{
+				gl_eval_scope ("enable gl flags");
+
+				// enable depth testing
+				glEnable (GL_DEPTH_TEST);
+
+				// enable backface culling
+				glCullFace (GL_BACK);
+				glEnable (GL_CULL_FACE);
+
+				// enable anti-aliasing
+				//glEnable (GL_BLEND);
+				glEnable (GL_POLYGON_SMOOTH);
+
+			}
+
 			// debug initialize
 			debug_run (
 				opengl_debug::initialize ();
