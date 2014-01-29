@@ -15,7 +15,7 @@ from bpy_extras.io_utils import ExportHelper
 # export model
 # -------------------------------------------------------
 def write_vertices(mesh, output_file):
-    output_file.write ("       <position>");
+    output_file.write ("\t\t<position>");
     first = True;
     for vert in mesh.vertices:
         for v in vert.co:
@@ -28,7 +28,7 @@ def write_vertices(mesh, output_file):
     output_file.write ("</position>\n");
 
 def write_normal(mesh, output_file):
-    output_file.write ("        <normal>");
+    output_file.write ("\t\t<normal>");
     first = True;
     for vert in mesh.vertices:
         for v in vert.normal:
@@ -41,7 +41,10 @@ def write_normal(mesh, output_file):
     output_file.write ("</normal>\n");
 
 def write_uv(mesh, output_file):
-    output_file.write ("        <uv>");
+    if mesh.uv_layers.active is None:
+        return;
+
+    output_file.write ("\t\t<uv>");
 
     uv_layer = mesh.uv_layers.active.data;
 
@@ -58,7 +61,7 @@ def write_uv(mesh, output_file):
 
 
 def write_indexes(mesh, output_file):
-    output_file.write ("        <index>");
+    output_file.write ("\t\t<index>");
     first = True;
     for poly in mesh.polygons:
         for loop_index in range (poly.loop_start, poly.loop_start + poly.loop_total):
@@ -69,15 +72,15 @@ def write_indexes(mesh, output_file):
             output_file.write ("%i" % mesh.loops [loop_index].vertex_index);
     output_file.write ("</index>\n");
 
-def write_model (mesh, output_file):
-    output_file.write ("   <mesh name=\"%s\">\n" % obj.name);
+def write_model (obj, output_file):
+    output_file.write ("\t<mesh name=\"%s\">\n" % obj.name);
 
     write_indexes (obj.data, output_file);
     write_vertices (obj.data, output_file);
     write_normal (obj.data, output_file);
     write_uv (obj.data, output_file);
 
-    output_file.write ("   </mesh>\n");
+    output_file.write ("\t</mesh>\n");
 
 # -------------------------------------------------------
 
@@ -87,12 +90,6 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
     bl_options      = {'PRESET'};
     
     filename_ext    = ".xml";
-
-    # -------------------------------------------------------
-
-
-
-    # -------------------------------------------------------
 
     # -------------------------------------------------------
     
@@ -115,11 +112,28 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
         out_file = open (self.filepath, 'w');
         out_file.write ("<package>\n");
         
-        write_model (obj.data, out_file);
+        write_model (obj, out_file);
 
         out_file.write ("</package>\n");
         out_file.close ();
         return {'FINISHED'};
+
+    def draw (self, context):
+        layout = self.layout;
+
+        obj = context.object;
+        
+        row = layout.row ();
+        row.label (text = "Hello world!", icon='WORLD_DATA');
+
+        row = layout.row ();
+        row.label (text="Active object is: " + obj.name);
+
+        row = layout.row ();
+        row.prop (obj, "name");
+
+        row = layout.row ();
+        row.operator ("mesh.primitive_cube_add");
 
 def menu_func(self, context):
     self.layout.operator(ExportMyFormat.bl_idname, text="Ballistic Model Format(.xml)");
