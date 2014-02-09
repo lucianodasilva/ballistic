@@ -119,6 +119,26 @@ def unfold_vectors (mesh, poly, poly_uv):
 
     return vectors
 
+def unfold_vectors_no_uv (mesh, poly):
+    vectors = []
+
+    for vi in poly.vertices:
+        pos_co = mesh.vertices [vi].co
+        norm_co = []
+
+        if (poly.use_smooth):
+            norm_co = mesh.vertices [vi].normal
+        else:
+            norm_co = poly.normal
+
+        pos = vec3 (pos_co)
+        norm = vec3 (norm_co)
+
+        uv = vec2 ([.0,.0])
+        vectors.append (vector (pos, norm, uv))
+
+    return vectors
+
 def find_index (vectors, vec):
     index = 0
     for item in vectors:
@@ -130,6 +150,20 @@ def find_index (vectors, vec):
     vectors.append (vec)
     return index
 
+def handle_vectors (vectors, b_vectors, b_vector_indexes):
+    if len (vectors) == 3:
+        b_vector_indexes.append (find_index (b_vectors, vectors [0]))
+        b_vector_indexes.append (find_index (b_vectors, vectors [1]))
+        b_vector_indexes.append (find_index (b_vectors, vectors [2]))
+    else:
+        b_vector_indexes.append (find_index (b_vectors, vectors [0]))
+        b_vector_indexes.append (find_index (b_vectors, vectors [1]))
+        b_vector_indexes.append (find_index (b_vectors, vectors [2]))
+        b_vector_indexes.append (find_index (b_vectors, vectors [0]))
+        b_vector_indexes.append (find_index (b_vectors, vectors [2]))
+        b_vector_indexes.append (find_index (b_vectors, vectors [3]))
+
+
 def write_model (obj, output_file):
 
     mesh = obj.data
@@ -137,35 +171,31 @@ def write_model (obj, output_file):
     mesh.update (False, True)
 
     faces = mesh.tessfaces
-    # expect it to exist -- handle later
-    uv_face = mesh.tessface_uv_textures [0]
+    
+    has_uv = len (mesh.tessface_uv_textures) != 0
 
     b_vectors = []
     b_vector_indexes = []
 
-    for poly, uv in zip (mesh.tessfaces, uv_face.data):
+    if has_uv:
+        uv_face = mesh.tessface_uv_textures [0]
 
-        # create vectors
-        vectors = unfold_vectors (mesh, poly, uv)
-
-        if len (vectors) == 3:
-            b_vector_indexes.append (find_index (b_vectors, vectors [0]))
-            b_vector_indexes.append (find_index (b_vectors, vectors [1]))
-            b_vector_indexes.append (find_index (b_vectors, vectors [2]))
-        else:
-            b_vector_indexes.append (find_index (b_vectors, vectors [0]))
-            b_vector_indexes.append (find_index (b_vectors, vectors [1]))
-            b_vector_indexes.append (find_index (b_vectors, vectors [2]))
-            b_vector_indexes.append (find_index (b_vectors, vectors [0]))
-            b_vector_indexes.append (find_index (b_vectors, vectors [2]))
-            b_vector_indexes.append (find_index (b_vectors, vectors [3]))
+        for poly, uv in zip (mesh.tessfaces, uv_face.data):
+            vectors = unfold_vectors (mesh, poly, uv)
+            handle_vectors (vectors, b_vectors, b_vector_indexes)
+    else:
+        for poly in mesh.tessfaces:
+            vectors = unfold_vectors_no_uv (mesh, poly)
+            handle_vectors (vectors, b_vectors, b_vector_indexes)
 
     # write data
     output_file.write ("\t<mesh name=\"%s\">\n" % obj.name)
 
     write_elements (output_file, "position", b_vectors )
     write_elements (output_file, "normal", b_vectors )
-    write_elements (output_file, "uv", b_vectors )
+    
+    if has_uv:
+        write_elements (output_file, "uv", b_vectors )
 
     # write indexes
     output_file.write ("\t\t<index>")
@@ -244,7 +274,7 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
         out_file.close ()
         return {'FINISHED'}
 
-    def draw (self, context):
+    #def draw (self, context):
         # layout = self.layout
 
         # obj = context.object
