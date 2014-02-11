@@ -86,6 +86,7 @@ namespace ballistic {
 			//_gl_const_model = _effect->get_constant (id::graphics::effect::t_model);
 			_gl_const_view = _effect->get_constant (id::graphics::effect::t_view);
 			_gl_const_proj = _effect->get_constant (id::graphics::effect::t_proj);
+			_gl_const_normal = _effect->get_constant (id::graphics::effect::t_normal);
 			
 			_gl_const_diffuse = _effect->get_constant (id::graphics::effect::diffuse);
 			_gl_const_specular = _effect->get_constant (id::graphics::effect::specular);
@@ -141,6 +142,17 @@ namespace ballistic {
 		const mat4 & opengl_device::get_proj () const {
 			return _proj;
 		}
+		
+		void opengl_device::set_normal (const mat4 & norm) {
+			_normal = norm;
+			
+			if (_effect)
+				_effect->set_constant (_gl_const_normal, _normal);
+		}
+		
+		const mat4 & opengl_device::get_normal () const {
+			return _normal;
+		}
 
 		void opengl_device::clear () {
 			glClearColor (
@@ -173,7 +185,7 @@ namespace ballistic {
 		
 		}
 
-		void opengl_device::draw_active_mesh (const mat4 transform) {
+		void opengl_device::draw_active_mesh () {
 			if (!_material) {
 				debug_error ("draw_active_mesh: No active instance of material set.");
 				return;
@@ -188,9 +200,6 @@ namespace ballistic {
 				debug_error ("render_mesh: No active instance of mesh set.");
 				return;
 			}
-
-			//_effect->set_constant (_gl_const_model, transform);
-
 			_mesh->render ();
 		}
 

@@ -32,6 +32,7 @@ namespace ballistic {
 				const id_t specular = string_to_id ("effect_specular");
 				const id_t t_model	= string_to_id ("effect_t_model");
 				const id_t t_view	= string_to_id ("effect_t_view");
+				const id_t t_normal = string_to_id ("effect_t_normal");
 				const id_t t_proj	= string_to_id ("effect_t_proj");
 			}
 		}

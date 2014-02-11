@@ -20,7 +20,7 @@ ballistic::ifrontend * create_frontend ( const point & size ) {
 	return new ballistic::win_desktop::frontend (size);
 }
 
-#elif defined (BALLISTIC_OS_MACOSX)
+#elif defined (BALLISTIC_OS_DARWIN)
 #	include "ballistic.mac_frontend.h"
 #	include <GLUT/GLUT.h>
 ballistic::ifrontend * create_frontend (const point & size) {

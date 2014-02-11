@@ -40,6 +40,9 @@ namespace ballistic {
 
 			virtual void		set_proj (const mat4 & proj) = 0;
 			virtual const mat4 & get_proj () const = 0;
+			
+			virtual void		set_normal (const mat4 & norm) = 0;
+			virtual const mat4 & get_normal () const = 0;
 
 			virtual void		clear () = 0;
 
@@ -50,7 +53,7 @@ namespace ballistic {
 
 			virtual void		destroy () = 0;
 
-			virtual void		draw_active_mesh (const mat4 transform) = 0;
+			virtual void		draw_active_mesh () = 0;
 		};
 
 	}

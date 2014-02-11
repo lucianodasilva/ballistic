@@ -35,6 +35,10 @@ namespace ballistic {
 		}
 
 		void graphics_system::render () {
+			
+			mat4
+				current_view,
+				normal_matrix;
 
 			if (!_device) {
 				debug_error ("[ballistic::graphics::graphics_system::render] Graphics device not set!");
@@ -52,20 +56,11 @@ namespace ballistic {
 			}
 
 			_render_list.clear ();
+			
+			current_view = _camera->get_view ();
 
-			_device->set_view (_camera->get_view ());
+			_device->set_view (current_view);
 			_device->set_proj (_camera->get_proj ());
-			
-			//_camera->make_perspective_proj(0.78539, 1.0, .0, 100.);
-			
-			mat4
-				debug_proj = _camera->get_proj (),
-				debug_view = _camera->get_view ();
-			
-			mat4 debug_t = debug_proj * debug_view;
-			vec4 debug_pos (.5, .0, .0, 0.0);
-			
-			debug_pos = debug_t * debug_pos;
 
 			// notify entities with visuals
 			get_game ()->send_message (_render_message);
@@ -100,8 +95,14 @@ namespace ballistic {
 					_device->activate (mesh);
 				}
 
+				// update model matrices
+				mat4 mv = current_view * item.transform;
+				normal_matrix = mv.transpose ().invert ();
+				
+				_device->set_normal (normal_matrix);
+				
 				// render the stuffs
-				_device->draw_active_mesh (item.transform);
+				_device->draw_active_mesh ();
 
 			}
 

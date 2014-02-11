@@ -28,7 +28,8 @@ namespace ballistic {
 			mat4
 				_view,
 				_model,
-				_proj;
+				_proj,
+				_normal;
 
 
 			opengl_effect *		_effect;
@@ -39,6 +40,7 @@ namespace ballistic {
 			opengl_constant		_gl_const_model;
 			opengl_constant		_gl_const_view;
 			opengl_constant		_gl_const_proj;
+			opengl_constant		_gl_const_normal;
 
 			opengl_constant		_gl_const_diffuse;
 			opengl_constant		_gl_const_specular;
@@ -66,6 +68,9 @@ namespace ballistic {
 
 			virtual void		set_proj (const mat4 & proj);
 			virtual const mat4 & get_proj () const;
+			
+			virtual void		set_normal (const mat4 & norm);
+			virtual const mat4 & get_normal () const;
 
 			virtual void		clear ();
 
@@ -76,7 +81,7 @@ namespace ballistic {
 			
 			virtual void		destroy ();
 
-			virtual void		draw_active_mesh (const mat4 transform);
+			virtual void		draw_active_mesh ();
 		};
 		
 	}

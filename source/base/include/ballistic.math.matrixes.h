@@ -39,6 +39,7 @@ namespace math {
 		inline vec3_t < T > operator * ( const vec3_t < T > & v ) const;
 
 		inline mat4_t transpose () const;
+		inline mat4_t invert () const;
 
 		// Create matrixes
 		static mat4_t make_translation ( const vec3_t < T > & p );
