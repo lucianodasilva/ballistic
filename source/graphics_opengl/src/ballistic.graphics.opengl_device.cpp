@@ -162,12 +162,12 @@ namespace ballistic {
 				_clear_color.a
 			);
 
-			glClear (GL_COLOR_BUFFER_BIT);
+			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		}
 
 		void opengl_device::begin_frame ()
 		{
-			glClear(GL_DEPTH_BUFFER_BIT);			
+			glClear(GL_DEPTH_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );			
 		}
 
 		void opengl_device::end_frame ()

@@ -28,54 +28,50 @@ namespace ballistic {
 			if (attributes & mesh_attribute_position) {
 				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_position);
 				attribute_offset = add_attribute (
-					attribute_id,
+					1,
 					3,
 					GL_FLOAT,
 					attribute_stride,
 					attribute_offset
 					);
-
-				++attribute_id;
 			}
 
 			if (attributes & mesh_attribute_uv) {
 				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_uv);
 				attribute_offset = add_attribute (
-					attribute_id,
+					2,
 					2,
 					GL_FLOAT,
 					attribute_stride,
 					attribute_offset
 					);
-				++attribute_id;
 			}
 
 			if (attributes & mesh_attribute_normal) {
 				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_normal);
 				attribute_offset = add_attribute (
-					attribute_id,
+					3,
 					3,
 					GL_FLOAT,
 					attribute_stride,
 					attribute_offset
 					);
-				++attribute_id;
 			}
 		}
 
 		GLint opengl_mesh::add_attribute (GLint id, GLint size, GLenum type, GLint stride, GLint offset) {
 			glVertexAttribPointer (
 				id,
-				size,         // size
+				size,         // number of elements
 				type,         // type
 				GL_FALSE,     // normalized?
 				stride,
-				(void*)offset // array buffer offset
+				(void*)offset // array buffer offset in bytes
 				);
 
 			glEnableVertexAttribArray (id);
 
-			return offset + size;
+			return offset + size * sizeof (GL_FLOAT);
 		}
 		
 		opengl_mesh::opengl_mesh ( uint8_t run_id ) : 
