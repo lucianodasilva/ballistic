@@ -3,16 +3,22 @@ cmake_minimum_required(VERSION 2.8)
 project ( dev_frontend )
 # ----------------------------------------------------------------
 
-project (frontend_resources)
+project (dev_gl_resources)
 
 file ( GLOB resource_files 
 	${CMAKE_CURRENT_LIST_DIR}/resources/*
 ) 
 
 add_custom_target(
-    frontend_resources
+    dev_gl_resources ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    	${CMAKE_CURRENT_LIST_DIR}/resources $<TARGET_FILE_DIR:dev_gl>/resources
     SOURCES ${resource_files}
 )
+
+#add_custom_command(TARGET dev_gl_resources PRE_BUILD
+#               COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                   ${CMAKE_CURRENT_LIST_DIR}/resources $<TARGET_FILE_DIR:dev_gl>/resources)
 
 include_directories (
 	${CMAKE_CURRENT_LIST_DIR}/include
@@ -28,10 +34,6 @@ file ( GLOB win_desktop_source
 if (build_ballistic_opengl3)
 	project ( dev_gl )
 	add_executable ( dev_gl ${win_desktop_source} )
-
-	add_custom_command(TARGET dev_gl PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                       ${CMAKE_CURRENT_LIST_DIR}/resources $<TARGET_FILE_DIR:dev_gl>/resources)
 
 	if (APPLE)
 		find_library(COCOA_LIBRARY Cocoa)
@@ -51,5 +53,6 @@ if (build_ballistic_opengl3)
 
 	set_property (TARGET dev_gl PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_GL )
 	set_property (TARGET dev_gl PROPERTY FOLDER "frontend")
+	set_property (TARGET dev_gl_resources PROPERTY FOLDER "frontend")
 endif ()
 
