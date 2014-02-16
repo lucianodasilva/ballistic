@@ -25,6 +25,7 @@
 #include "ballistic.property_container.h"
 #include "ballistic.resources.h"
 #include "ballistic.system.h"
+#include "ballistic.text.h"
 #include "ballistic.var.h"
 
 #endif

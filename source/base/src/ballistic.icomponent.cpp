@@ -1,6 +1,9 @@
 #include "ballistic.icomponent.h"
+#include "ballistic.debug.h"
 #include "ballistic.igame.h"
 #include "ballistic.resources.component_constructor.h"
+
+#include <string>
 
 using namespace std;
 
@@ -38,7 +41,7 @@ namespace ballistic {
 		if (ctor)
 			return ctor->create (parent);
 		else {
-			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
+			debug_print ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
 			return nullptr;
 		}
 	}
@@ -49,7 +52,7 @@ namespace ballistic {
 		if (ctor)
 			return ctor->create (parent, parameters);
 		else {
-			debug_warn ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
+			debug_print ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
 			return nullptr;
 		}
 	}

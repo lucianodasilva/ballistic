@@ -1,5 +1,6 @@
 #include "ballistic.game.h"
 
+#include "ballistic.debug.h"
 #include "ballistic.common_id.h"
 #include "ballistic.resources.entity_info.h"
 #include "ballistic.system.h"
@@ -43,7 +44,7 @@ namespace ballistic {
 		entity_map_t::iterator it = _entity_map.find (id);
 
 		if (it == _entity_map.end ()) {
-			debug_warn ("[ballistic::game::find_entity] Entity with id: " << id << " not found in entity map");
+			debug_print ("[ballistic::game::find_entity] Entity with id: " << id << " not found in entity map");
 			return nullptr;
 		}
 
@@ -117,7 +118,7 @@ namespace ballistic {
 
 	bool game::frame () {
 		
-		_m_update [id::game_time] = system::get_elapsed_seconds (_game_start_time);
+		_m_update [id::game_time] =	system::get_elapsed_seconds (_game_start_time);
 		_m_update [id::frame_time] = system::get_elapsed_seconds (_frame_start);
 		_m_update [id::frame_count] = _frame_id;
 

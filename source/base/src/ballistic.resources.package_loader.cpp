@@ -135,7 +135,7 @@ namespace ballistic {
 					it->second->load_element (cursor, stack);
 				debug_run (
 					else
-						debug_warn ("[ballistic::resources::package_loader::load] unregistered element type " << cursor->Name () << " found in package.");
+						debug_print ("[ballistic::resources::package_loader::load] unregistered element type " << cursor->Name () << " found in package.");
 				);
 				
 				cursor = cursor->NextSiblingElement();

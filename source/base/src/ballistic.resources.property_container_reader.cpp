@@ -57,7 +57,7 @@ namespace ballistic {
 								} else if (prop_type == "res")
 									p_val = string_to_id (value);
 								else {
-									debug_warn ("[ballistic::resources::property_container_reader::read] Unknown property type \"" << prop_type << "\". No conversion.");
+									debug_print ("[ballistic::resources::property_container_reader::read] Unknown property type \"" << prop_type << "\". No conversion.");
 								}
 
 							}

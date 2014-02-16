@@ -1,4 +1,5 @@
 #include "ballistic.entity.h"
+#include "ballistic.debug.h"
 #include "ballistic.common_id.h"
 #include "ballistic.game.h"
 #include "ballistic.icomponent.h"
@@ -10,7 +11,7 @@ namespace ballistic {
 	void entity::property_changed_event (const property & p) {
 		_property_changed_message.set_sender (this);
 
-		_property_changed_message [id::id] = p.get_id ();
+		_property_changed_message [id::id] = var::from (p.get_id ());
 		_property_changed_message [id::value] = p.get_value ();
 
 		if (_game)
@@ -56,7 +57,7 @@ namespace ballistic {
 			entity * ent = ctor->create (game, id);
 			return ent;
 		} else {
-			debug_warn ("[ballistic::entity::create] Unable to load entity with id: " << type.get_id ());
+			debug_print ("[ballistic::entity::create] Unable to load entity with id: " << type.get_id ());
 			return nullptr;
 		}
 	}

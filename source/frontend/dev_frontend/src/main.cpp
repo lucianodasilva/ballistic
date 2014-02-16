@@ -52,12 +52,6 @@ void circle_camera ( ballistic::entity * parent, ballistic::message & message ) 
 	pos.z = sin (angle) * radius;
 
 	angle = message [ballistic::id::game_time].as < real > () * real (1); // one radian per second
-	//radius += 0.025;
-	
-	//if (angle > (3.1415926 * 2.)) {
-	//	angle = 0.0;
-	//	//radius = 1.0;
-	//}
 
 	parent->get_property (ballistic::id::position) = pos;
 }
@@ -65,8 +59,10 @@ void circle_camera ( ballistic::entity * parent, ballistic::message & message ) 
 ballistic::res_id_t res_rotating_square ("rotating_square.entity", "resources/game.xml");
 ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
 
+#include <chrono>
+
 int main ( int argc, char ** argv) {
-	
+
 	debug_init();
 
 	_frontend = create_frontend (point ( 800, 800));

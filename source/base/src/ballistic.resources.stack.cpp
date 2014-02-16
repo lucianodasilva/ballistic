@@ -34,14 +34,14 @@ namespace ballistic {
 		if (loader)
 			_loaders.push_back (loader);
 		else
-			debug_warn ("[ballistic::resource::stack::register_loader] Tried to register null instance resource loader");
+			debug_print ("[ballistic::resource::stack::register_loader] Tried to register null instance resource loader");
 	}
 	
 	void stack::register_storage(istorage *storage) {
 		if (storage)
 			_storage_handlers.push_back(storage);
 		else
-			debug_warn ("[ballistic::resource::stack::register_storage] Tried to register null instance resource storage handler");
+			debug_print ("[ballistic::resource::stack::register_storage] Tried to register null instance resource storage handler");
 	}
 		
 	istorage * stack::find_storage(const string &source) {
@@ -49,7 +49,7 @@ namespace ballistic {
 			if (storage->contains(source))
 				return storage;
 		
-		debug_warn ("[ballistic::resource::stack::find_storage] Storage type for source: " << source << " not found!");
+		debug_print ("[ballistic::resource::stack::find_storage] Storage type for source: " << source << " not found!");
 		return nullptr;
 	}
 		

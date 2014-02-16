@@ -63,7 +63,7 @@ namespace ballistic {
 			load_gl_shader (_fs_shader_id, fs_shader_source);
 			
 			if (!(is_shader_ok(_vs_shader_id) && is_shader_ok(_fs_shader_id))) {
-				debug_warn("[ballistic::graphics::opengl_effect::load] GL Shader compilation failed. Shader program not loaded.");
+				debug_print("[ballistic::graphics::opengl_effect::load] GL Shader compilation failed. Shader program not loaded.");
 				glDeleteProgram (_shader_program_id);
 				_shader_program_id = -1;
 				
@@ -79,7 +79,7 @@ namespace ballistic {
 			glDeleteShader (_fs_shader_id);
 			
 			if (!is_link_ok(_shader_program_id)) {
-				debug_warn ("[ballistic::graphics::opengl_effect::load] GL Shader linking failed. Shader program not loaded");
+				debug_print ("[ballistic::graphics::opengl_effect::load] GL Shader linking failed. Shader program not loaded");
 				glDeleteProgram (_shader_program_id);
 				
 				_shader_program_id = -1;

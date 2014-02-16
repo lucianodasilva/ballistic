@@ -21,9 +21,9 @@ namespace ballistic {
 
 		inline void raise_property_changed_event ();
 
-		inline static void swap (property & v1, property & v2);
-
 	public:
+
+		inline void swap (property & v);
 
 		inline property ();
 		inline property (id_t id);

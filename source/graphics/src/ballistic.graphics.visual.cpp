@@ -30,7 +30,7 @@ namespace ballistic {
 				if (_system && _material && _material->get_effect () && _mesh)
 					_system->push_item (_material, _mesh, mat4 ()); //TODO: think about transforms for rendering
 				debug_run ( else
-					debug_warn ("[ballistic::graphics::visual] Incomplete visual component. Will not render!");
+					debug_print ("[ballistic::graphics::visual] Incomplete visual component. Will not render!");
 				);
 
 				return;

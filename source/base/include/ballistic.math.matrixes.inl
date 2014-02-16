@@ -285,7 +285,7 @@ namespace math {
 		if (det == 0)
 			return mat4_t < T > ();
 		
-		det = 1.0 / det;
+		det = real(1) / det;
 		
 		return mat4_t < T > (
 			inv [0] * det,

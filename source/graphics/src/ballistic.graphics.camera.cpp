@@ -123,7 +123,7 @@ namespace ballistic {
 				if (_system)
 					_system->set_camera (this);
 				debug_run (else
-					debug_warn ("[ballistic::graphics::camera::notify] Graphics system not set!");
+					debug_print ("[ballistic::graphics::camera::notify] Graphics system not set!");
 				);
 
 				return;
