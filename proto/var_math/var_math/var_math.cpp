@@ -12,39 +12,24 @@
 
 namespace math {
 
-	template < class value_t, size_t length >
-	inline size_t array_size (value_t (&v) [length]) {
-		return length;
-	}
+	template < int index, int length >
+	struct for_op {
 
-	template < class value_t, size_t length, size_t index >
-	struct _unfold_vector_op {
-
-		template < class op_t >
-		inline static void calc (op_t op, value_t (&v1) [length], value_t (&v2) [length], value_t (&res) [length]) {
-			op (v1 [index], v2 [index], res [index]);
-			_unfold_vector_op < value_t, length, index - 1 >::calc (op, v1, v2, res);
+		template < class oper_t >
+		inline static void run (oper_t & op) {
+			op (index);
+			for_op < index + 1, length >::run (op);
 		}
 
 	};
 
-	template < class value_t, size_t length>
-	struct _unfold_vector_op < value_t, length, 0 > {
+	template < int length >
+	struct for_op < length, length > {
 
-		template < class op_t >
-		inline static void calc (op_t op, value_t (&v1) [length], value_t (&v2) [length], value_t (&res) [length]) {
-			op (v1 [0], v2 [0], res [0]);
-		}
+		template < class oper_t >
+		inline static void run (oper_t & op) {}
 
 	};
-
-	template < class value_t, size_t length, class op_t >
-	inline void unfold_vector_op (op_t op, value_t (&v1) [length], value_t (&v2) [length], value_t (&res) [length]) {
-		_unfold_vector_op < value_t, length, length - 1>::calc (
-			op,
-			v1, v2, res
-			);
-	}
 
 	template < class value_t, class data_t >
 	struct vecn_t : public data_t {
@@ -77,14 +62,9 @@ namespace math {
 		float vb) {
 		vecn_t r;
 
-		math::unfold_vector_op (
-			[](value_t & v1, value_t & v2, value_t & ret) { ret = v1 * v2; },
-			data,
-
+		for_op < 0, data_t::size >::run (
+			[&](int i) {r.data [i] = va.data [i] * vb; }
 		);
-
-		for (int i = 0; i < data_t::size; ++i)
-			r.data [i] = va.data [i] * vb;
 
 		return r;
 	}
@@ -96,8 +76,9 @@ namespace math {
 	{
 		vecn_t < value_t, data_t > r;
 
-		for (int i = 0; i < data_t::size; ++i)
-			r.data [i] = v1.data [i] * v2.data [i];
+		for_op < 0, data_t::size >::run (
+			[&](int i) { r.data [i] = v1.data [i] * v2.data [i]; }
+		);
 
 		return r;
 	}
@@ -108,8 +89,9 @@ namespace math {
 		const vecn_t < value_t, data_t > & v2) {
 		vecn_t < value_t, data_t > r;
 
-		for (int i = 0; i < data_t::size; ++i)
-			r.data [i] = v1.data [i] - v2.data [i];
+		for_op < 0, data_t::size >::run (
+			[&](int i) { r.data [i] = v1.data [i] - v2.data [i]; }
+		);
 
 		return r;
 	}
@@ -189,10 +171,13 @@ math::vec4_t < float > calculate_normal () {
 	x.x = 10;
 	y.x = 10;
 
-	for (int i = 0; i < MAX_TURNS; ++i)
-		math::unfold_vector_op ([](float & a, float & b, float & c) { c = a * b; },
-			x.data, y.data, z.data
+	for (int i = 0; i < MAX_TURNS; ++i) {
+		math::vec4_t < float > zr;
+		math::for_op < 0, 4 >::run (
+			[&](int j) {zr.data [j] = x.data [j] * y.data [j]; }
 		);
+		z = zr;
+	}
 
 	return z;
 
@@ -221,49 +206,8 @@ void test_unfold () {
 	std::cout << v.x;
 }
 
-template < class T1, size_t s, class ... param_v >
-size_t first_size (T1 (&v) [s], param_v...) {
-	return s;
-};
-
-template < size_t index >
-struct _unfold_operation {
-
-	template < class oper_t, class ... param_v >
-	inline static void exec (oper_t op, param_v ... params) {
-		op (params [index] ...);
-		_unfold_operation < index - 1 >::exec (op, params...);
-	}
-
-};
-
-template < >
-struct _unfold_operation < 0 > {
-
-	template < class oper_t, class ... param_v >
-	inline static void exec (oper_t op, param_v ... params) {
-		op (params [0] ...);
-	}
-
-};
-
-template < int iter, class oper_t, class ... param_v >
-void unfold_operation ( oper_t op, param_v ... params ) {
-
-	_unfold_operation < iter >::exec (op, params ...);
-}
-
 int _tmain(int argc, _TCHAR* argv[])
 {
-
-	float array_v [4] = {1, 2, 3, 4};
-	float v = 12;
-
-	unfold_operation < 12 > (
-		[&](float & a) { a *= v; },
-		array_v
-		);
-
 
 	double seconds = diag::timed_avg_call (100, test_normal) ();
 	std::cout << std::endl << "Normal execution average: " << seconds << std::endl;
