@@ -83,7 +83,7 @@ namespace ballistic {
 	}
 	
 	stack & stack::add_to_global(const string & name, ballistic::resources::iresource *resource) {
-		_resources [string_to_id (name)] = resource;
+		_resources [text_to_id (name.c_str ())] = resource;
 		return *this;
 	}
 	
@@ -96,7 +96,7 @@ namespace ballistic {
 	}
 		
 	stack & stack::add_to_level(const string & name, ballistic::resources::iresource *resource){
-		id_t res_id = string_to_id (name);
+		id_t res_id = text_to_id (name.c_str ());
 		
 		_resources [res_id] = resource;
 		if (_stacked_resources.size () > 0)

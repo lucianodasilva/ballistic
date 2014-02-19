@@ -28,20 +28,26 @@ namespace ballistic {
 					value = string (cursor->Value ());
 
 					if (strcmp (cursor->Name (), "diffuse") == 0) {
-						material->set_diffuse (value.as <color>());
+						material->set_diffuse (value);
 					} else if (strcmp (cursor->Name (), "specular") == 0) {
-						material->set_specular (value.as <color>());
+						material->set_specular (value);
 					} else if (strcmp (cursor->Name (), "opaque") == 0) {
-						material->set_opaque (value.as <bool>());
+						material->set_opaque (value);
 					} else if (strcmp (cursor->Name (), "effect") == 0) {
-						ieffect * effect = dynamic_cast < ieffect *> (stack.get_resource (string_to_id (value.as <string> ())));
+						ieffect * effect = dynamic_cast < ieffect *> (
+							stack.get_resource (
+								text_to_id ((text)value)
+							)
+						);
+						
+						
 						material->set_effect (effect);
 					}
 
 					cursor = cursor->Next ();
 				}
 
-				stack.add_to_level (string_to_id (name), material);
+				stack.add_to_level (text_to_id (name.c_str ()), material);
 			}
 
 		}

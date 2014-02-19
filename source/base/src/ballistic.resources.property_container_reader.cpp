@@ -55,7 +55,7 @@ namespace ballistic {
 									convert_vectors (value, tmp);
 									p_val = tmp;
 								} else if (prop_type == "res")
-									p_val = string_to_id (value);
+									p_val = text_to_id (value.c_str ());
 								else {
 									debug_print ("[ballistic::resources::property_container_reader::read] Unknown property type \"" << prop_type << "\". No conversion.");
 								}
@@ -67,7 +67,7 @@ namespace ballistic {
 
 						// add to container
 						container->add (
-							string_to_id (cursor->Name ()),
+							text_to_id (cursor->Name ()),
 							p_val
 							);
 					}

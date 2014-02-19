@@ -161,7 +161,7 @@ namespace ballistic {
 
 				delete [] data_buffer;
 
-				stack.add_to_level (string_to_id (name), mesh);
+				stack.add_to_level (text_to_id (name.c_str ()), mesh);
 
 			}
 

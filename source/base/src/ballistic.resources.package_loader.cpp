@@ -36,7 +36,7 @@ namespace ballistic {
 
 					component_info & comp_info = component_vector.back ();
 
-					auto ctor = stack.get_resource < icomponent_constructor > (string_to_id (cursor->Name ()));
+					auto ctor = stack.get_resource < icomponent_constructor > (text_to_id (cursor->Name ()));
 
 					if (ctor) {
 						comp_info.set_constructor (ctor);

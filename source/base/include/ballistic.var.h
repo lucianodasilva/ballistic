@@ -3,6 +3,7 @@
 #define _ballistic_var_h_
 
 #include "ballistic.config.h"
+#include "ballistic.id.h"
 #include "ballistic.math.vecn_t.h"
 #include "ballistic.math.matrixes.h"
 #include "ballistic.text.h"
@@ -10,6 +11,7 @@
 struct var {
 
 	union {
+		size_t		v_id;
 		int32_t		v_int32;
 		uint32_t	v_uint32;
 		real		v_real;
@@ -60,9 +62,8 @@ struct var {
 		data.v_real = v;
 	}
 
-	template < class T >
-	inline T copy () {
-		return as < T > ();
+	inline void set (ballistic::id_t v) {
+		data.v_id = v;
 	}
 
 	template < class T >
@@ -77,6 +78,40 @@ struct var {
 	inline var & operator = (var && v) {
 		data = v.data;
 		return *this;
+	}
+
+	inline operator int32_t () const {
+		return data.v_int32;
+	}
+
+	inline operator uint32_t () const {
+		return data.v_uint32;
+	}
+
+	inline operator real () const {
+		return data.v_real;
+	}
+
+	inline operator bool () const {
+		return data.v_bool;
+	}
+
+	inline operator ballistic::id_t () const {
+		return data.v_id;
+	}
+
+	inline operator ballistic::text () const {
+		return *reinterpret_cast <const ballistic::text *>(+data.text_data);
+	}
+
+	template < class T >
+	inline operator ballistic::math::mat4_t < T > () const {
+		return *reinterpret_cast <const ballistic::math::mat4_t < T > *>(+data.vector_data);
+	}
+
+	template < class T, class data_t >
+	inline operator ballistic::math::vecn_t < T, data_t > () const {
+		return *reinterpret_cast <const ballistic::math::vecn_t < T, data_t > *>(+data.vector_data);
 	}
 
 	// copy other stuffs

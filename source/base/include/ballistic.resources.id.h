@@ -25,10 +25,10 @@ namespace ballistic {
 	public:
 		
 		inline res_id_t ( const string & name )
-		: _id (string_to_id (name)) {}
+		: _id (text_to_id (name.c_str ())) {}
 		
 		inline res_id_t ( const string & name, const string & source )
-		: _id (string_to_id (name)), _source (source) {}
+		: _id (text_to_id (name.c_str ())), _source (source) {}
 		
 		inline res_id_t ( const res_id_t & origin )
 		: _id (origin._id), _source (origin._source) {}

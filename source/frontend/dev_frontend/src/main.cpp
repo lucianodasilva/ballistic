@@ -53,7 +53,7 @@ void circle_camera ( ballistic::entity * parent, ballistic::message & message ) 
 	pos.y = 2.F;
 	pos.z = sin (angle) * radius;
 
-	angle = message [ballistic::id::game_time].as < real > () * real (1); // one radian per second
+	angle = (real)message [ballistic::id::game_time] * real (1); // one radian per second
 
 	parent->properties [ballistic::id::position] = pos;
 }
@@ -63,76 +63,14 @@ ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
 
 #include <chrono>
 
-struct iprop_container;
-
-struct var_write_checker {
-
-	iprop_container * cont;
-	var & var_ref;
-
-	inline var_write_checker (iprop_container * c, var & v) : cont (c), var_ref (v) {};
-
-	inline var_write_checker & operator = (const var_write_checker & v) = delete;
-
-	template < class T >
-	inline var_write_checker & operator = (const T & v) {
-		var_ref.operator = (v);
-		cont->update ();
-		return *this;
-	}
-
-	inline operator var const & () {
-		return var_ref;
-	}
-
-	template < class T >
-	inline T & as () {
-		return var_ref.as < T > ();
-	}
-
-	template < class T >
-	inline operator T () {
-		return var_ref.copy < T > ();
-	}
-
-};
-
-struct prop_controler {
-
-	iprop_container * container;
-
-	inline prop_controler (iprop_container * parent) : container (parent) {}
-
-	std::map < uint32_t, var > props;
-
-	inline var_write_checker operator [] (uint32_t k) {
-		return var_write_checker (container, props [k]);
-	}
-};
-
-struct iprop_container {
-
-	prop_controler properties;
-
-	inline void update () {
-		std::cout << "writen";
-	}
-
-	inline iprop_container () : properties (this) {}
-
-};
-
-struct stuffs : virtual iprop_container {};
 
 int main ( int argc, char ** argv) {
 
-	stuffs * s = new stuffs ();
-	uint32_t position = 2;
+	var v;
 
-	s->properties [position] = 3;
-	uint32_t v = s->properties [position];
+	v = 3;
+	int32_t p = v;
 
-	return 0;
 	// --------------
 	debug_init();
 
@@ -148,7 +86,7 @@ int main ( int argc, char ** argv) {
 
 	// setup game stuffs
 	ballistic::graphics::define_resources (_game, _device);
-	ballistic::component::define < ballistic::_func_component < &circle_camera > > (_game, ballistic::string_to_id ("orbit_cam"));
+	ballistic::component::define < ballistic::_func_component < &circle_camera > > (_game, ballistic::text_to_id ("orbit_cam"));
 
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->set_device (_device);

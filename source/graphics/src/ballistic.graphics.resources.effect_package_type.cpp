@@ -35,7 +35,7 @@ namespace ballistic {
 				}
 
 				effect->load (vs_source, fs_source);
-				stack.add_to_level (string_to_id (name), effect);
+				stack.add_to_level (text_to_id (name.c_str ()), effect);
 			}
 
 		}

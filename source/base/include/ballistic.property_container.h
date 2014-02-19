@@ -42,7 +42,7 @@ namespace ballistic {
 	private:
 
 		var &					_ref;
-		id_t &					_id;
+		id_t					_id;
 		entity *				_container;
 
 	public:
@@ -50,7 +50,7 @@ namespace ballistic {
 		inline var_write_guard (
 			entity * container,
 			var & ref,
-			id_t & id
+			id_t id
 			) :
 			_ref (ref), _id (id), _container (container) {}
 
@@ -66,8 +66,8 @@ namespace ballistic {
 		}
 
 		template < class T >
-		inline operator T () {
-			return _ref.copy < T > ();
+		inline operator T () const {
+			return (T)_ref;
 		}
 
 		template < class T >

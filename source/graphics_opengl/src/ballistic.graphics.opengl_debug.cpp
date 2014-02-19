@@ -111,7 +111,7 @@ namespace ballistic {
 			gl_eval_scope(opengl_debug::initialize);
 			
 			_effect.load (_vs_source, _fs_source);
-			_color_uniform = _effect.get_constant (string_to_id ("in_color"));
+			_color_uniform = _effect.get_constant (text_to_id ("in_color"));
 
 			// --- create vector array
 			glGenVertexArrays (1, &_vao_id);

@@ -1,8 +1,8 @@
 #ifndef	_ballistic_text_h_
 #define _ballistic_text_h_
 
-#include "ballistic.debug.h"
 #include "ballistic.config.h"
+#include "ballistic.debug.h"
 
 #include <memory>
 #include <string>
@@ -27,6 +27,22 @@ namespace ballistic {
 		inline text & operator = (text && v) {
 			str = v.str;
 			return *this;
+		}
+
+		inline bool operator == (const text & v) {
+			return std::strcmp (+data, +v.data) != 0;
+		}
+
+		inline bool operator == (const char * v) {
+			return std::strcmp (+data, v) != 0;
+		}
+
+		inline bool operator != (const text & v) {
+			return !this->operator== (v);
+		}
+
+		inline bool operator != (const char * v) {
+			return !this->operator==(v);
 		}
 
 		// convert from const char *
@@ -55,7 +71,11 @@ namespace ballistic {
 			str.data [str.length] = '\0';
 		}
 
-		inline operator std::string () {
+		inline operator const char * () const {
+			return +data;
+		}
+
+		inline operator std::string () const {
 			return std::string (+str.data, str.length);
 		}
 

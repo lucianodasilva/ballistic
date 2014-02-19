@@ -130,14 +130,14 @@ namespace ballistic {
 			}
 
 			if (message.get_id () == ballistic::id::message_property_changed && message.get_sender () == get_entity ()) {
-				id_t property_id = message [ballistic::id::id].as < id_t > ();
+				id_t property_id = message [ballistic::id::id];
 
 				if (property_id == id::position)
-					position = message [ballistic::id::value].as < vec3 > ();
+					position = message [ballistic::id::value];
 				else if (property_id == id::target)
-					target = message [ballistic::id::target].as < vec3 > ();
+					target = message [ballistic::id::target];
 				else if (property_id == id::up)
-					up = message [ballistic::id::target].as < vec3 > ();
+					up = message [ballistic::id::target];
 
 				return;
 			}
@@ -177,25 +177,25 @@ namespace ballistic {
 				var & prop = prop_pair.second;
 
 				if (prop_id == id::graphics::projection) {
-					if (prop.as < string > () == "ortho")
+					if ((text)prop == "ortho")
 						type = proj_type_ortho;
-					else if (prop.as < string > () == "perspective")
+					else if ((text)prop == "perspective")
 						type = proj_type_persp;
 					
 				} else if (prop_id == id::graphics::left)
-					left = (real) prop.as < real > ();
+					left = prop;
 				else if (prop_id == id::graphics::right)
-					right = (real)prop.as < real > ();
+					right = prop;
 				else if (prop_id == id::graphics::top)
-					top = (real)prop.as < real > ();
+					top = prop;
 				else if (prop_id == id::graphics::bottom)
-					bottom = (real)prop.as < real > ();
+					bottom = prop;
 				else if (prop_id == id::graphics::near)
-					near = (real)prop.as < real > ();
+					near = prop;
 				else if (prop_id == id::graphics::far)
-					far = (real)prop.as < real > ();
+					far = prop;
 				else if (prop_id == id::graphics::fov)
-					fovy = (real)prop.as < real > ();
+					fovy = prop;
 
 			}
 

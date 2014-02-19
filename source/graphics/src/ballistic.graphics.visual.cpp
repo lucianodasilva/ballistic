@@ -40,19 +40,19 @@ namespace ballistic {
 			if (message.get_id () == ballistic::id::message_property_changed && 
 				message.get_sender () == get_entity ()
 			){
-				id_t property_id = message [ballistic::id::id].as < id_t > ();
+				id_t property_id = message [ballistic::id::id];
 
 				if (property_id == id::transform)
-					_transform = message [ballistic::id::value].as < mat4 > ();
+					_transform = message [ballistic::id::value];
 
 				if (property_id == id::material) {
-					id_t material_res_id = message [ballistic::id::value].as < id_t > ();
+					id_t material_res_id = message [ballistic::id::value];
 
 					_material = get_game ()->get_resource < imaterial > (material_res_id);
 				}
 
 				if (property_id == id::mesh) {
-					id_t mesh_res_id = message [ballistic::id::value].as < id_t > ();
+					id_t mesh_res_id = message [ballistic::id::value];
 					_mesh = get_game ()->get_resource < imesh > (mesh_res_id);
 				}
 

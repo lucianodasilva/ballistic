@@ -98,7 +98,7 @@ namespace ballistic {
 				name [name_len] = 0;
 				GLuint location = glGetUniformLocation (_shader_program_id, name);
 
-				id_t id = string_to_id (name);
+				id_t id = text_to_id (name);
 
 				_constants [id] = opengl_constant (location, id);
 			}
