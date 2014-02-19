@@ -3,13 +3,25 @@
 #define _ballistic_var_h_
 
 #include "ballistic.config.h"
-
-#include <string>
+#include "ballistic.vector_data.h"
 
 #ifdef BALLISTIC_COMPILER_MSVC
 #	pragma warning ( push )
 #	pragma warning (disable : 4996)
 #endif
+
+struct var_data {
+
+	union {
+		int32_t		v_int32;
+		uint32_t	v_uint32;
+		real		v_real;
+		bool		v_bool;
+		real		vector_data [16]; // matrix4 size
+		char		text_data [sizeof (real) * 16]; // text size
+	} data;
+
+};
 
 struct var {
 

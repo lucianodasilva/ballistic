@@ -1,14 +1,20 @@
 // var_math.cpp : Defines the entry point for the console application.
 //
 
+
+#pragma warning (disable : 4996)
+
 #include "stdafx.h"
 #include <cinttypes>
 #include <string>
 #include <iostream>
 
+#include <vector>
+
 #include <smmintrin.h>
 
 #include "calc_time.h"
+
 
 namespace math {
 
@@ -69,10 +75,10 @@ namespace math {
 		return r;
 	}
 
-	template < class value_t, class data_t >
-	inline vecn_t < value_t, data_t > operator * (
-		const vecn_t < value_t, data_t > & v1, 
-		const vecn_t < value_t, data_t > & v2) 
+	template < class value_t, class data_t, class this_type = vecn_t < value_t, data_t >>
+	inline this_type operator * (
+		const this_type & v1, 
+		const this_type & v2) 
 	{
 		vecn_t < value_t, data_t > r;
 
@@ -123,22 +129,6 @@ namespace math {
 		};
 	};
 
-	template < class value_t >
-	using vec4_t = vecn_t < value_t, vec4_data < value_t > >;
-
-	template < class value_t, class data_t >
-	inline value_t dot (
-		const vecn_t < value_t, data_t > & v1,
-		const vecn_t < value_t, data_t > & v2
-	) {
-		static_assert (data_t::size >= 4, "Invalid vector size for dot product calculation!");
-		value_t r = .000000000001F;
-		
-		for (int i = 0; i < data_t::size; ++i)
-			r += v1.data [i] * v2.data [i];
-
-		return r;
-	}
 
 	template < class value_t, class data_t, class this_type = vecn_t < value_t, data_t > >
 	inline value_t sqr_length (const this_type & v) {
@@ -162,63 +152,131 @@ namespace math {
 
 }
 
+struct A {
+
+	union {
+		struct {
+			double data [3];
+		};
+		struct {
+			double X;
+			double Y;
+			double Z;
+		};
+	};
+
+	inline A () {}
+	inline A (const std::initializer_list < double > & l) {
+		std::copy (l.begin (), l.end (), +data);
+	}
+
+	inline A (A && v) { 
+		std::copy (std::begin (v.data), std::end (v.data), +data);
+	}
+
+	inline A operator * (A v) {
+		A tmp;
+
+		tmp.X = X * v.X;
+		tmp.Y = Y * v.Y;
+		tmp.Z = Z * v.Z;
+
+		return tmp;
+	}
+
+	inline A & operator = (A && v) {
+		X = v.X;
+		Y = v.Y;
+		Z = v.Z;
+
+		return *this;
+	}
+
+};
+
+struct B {
+
+	double X;
+	double Y;
+	double Z;
+
+	inline B () {}
+	inline B (std::initializer_list < double > args) {
+		const double * V = args.begin ();
+
+		X = V [0];
+		Y = V [1];
+		Z = V [2];
+	}
+
+	inline B operator * (B v) const {
+		B tmp;
+
+		tmp.X = X * v.X;
+		tmp.Y = Y * v.Y;
+		tmp.Z = Z * v.Z;
+
+		return tmp;
+	}
+
+	inline B & operator *= (const B & v) {
+		X *= v.X;
+		Y *= v.Y;
+		Z *= v.Z;
+
+		return *this;
+	}
+
+};
+
 #define MAX_TURNS 1000000
 
-math::vec4_t < float > calculate_normal () {
+A calculate_A () {
 
-	math::vec4_t < float > x, y, z;
+	A x = {13.0, 12.0, 11.0}, y = {13.0, 12.0, 11.0}, z = {13.0, 12.0, 11.0};
 
-	x.x = 10;
-	y.x = 10;
+	z = x;
 
 	for (int i = 0; i < MAX_TURNS; ++i) {
-		math::vec4_t < float > zr;
-		math::for_op < 0, 4 >::run (
-			[&](int j) {zr.data [j] = x.data [j] * y.data [j]; }
-		);
-		z = zr;
+		z = x * y;
 	}
 
 	return z;
 
 }
 
-void test_normal () { 
-	math::vec4_t < float > v = calculate_normal ();
-	std::cout << v.x;
+void test_a () { 
+	A v = calculate_A ();
+	std::cout << v.X;
 }
 
-math::vec4_t < float > calculate_unfold () {
+B calculate_B () {
 
-	math::vec4_t < float > x, y, z;
+	B x = {13.0, 12.0, 11.0}, y = {13.0, 12.0, 11.0}, z = {13.0, 12.0, 11.0};
 
-	x.x = 10;
-	y.x = 10;
-
-	for (int i = 0; i < MAX_TURNS; ++i)
+	for (int i = 0; i < MAX_TURNS; ++i) {
 		z = x * y;
+	}
 
 	return z;
+
 }
 
-void test_unfold () { 
-	auto v = calculate_unfold ();
-	std::cout << v.x;
+void test_b () {
+	B v = calculate_B ();
+	std::cout << v.X;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	double seconds = diag::timed_avg_call (100, test_normal) ();
-	std::cout << std::endl << "Normal execution average: " << seconds << std::endl;
+	double seconds = diag::timed_avg_call (100, test_a) ();
+	std::cout << std::endl << "Move multiply and copy average: " << seconds << std::endl;
 
-	seconds = diag::timed_avg_call (100, test_unfold) ();
-	std::cout << std::endl << "Other execution average: " << seconds;
+	seconds = diag::timed_avg_call (100, test_b) ();
+	std::cout << std::endl << "Normal multiply and copy average: " << seconds;
 
 	std::cin >> seconds;
-
-	math::vec4_t < float > v1;
-	math::dot (v1, v1);
 
 	return 0;
 }

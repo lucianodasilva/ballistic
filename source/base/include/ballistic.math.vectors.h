@@ -2,6 +2,7 @@
 #define _ballistic_math_vectors_h_
 
 #include "ballistic.config.h"
+#include "ballistic.math.vecn_t.h"
 
 #include <string>
 
@@ -10,134 +11,88 @@ using namespace std;
 namespace ballistic {
 namespace math {
 
-	enum axis_index : uint32_t {
-		axis_index_x = 0U,
-		axis_index_y = 1U,
-		axis_index_z = 2U
-	};
+	namespace details {
 
-	template < class T = real >
-	struct vec2_t {
-
-		typedef T type;
-
-		static const uint32_t count;
-
-		static const vec2_t < T > zero;
-		static const vec2_t < T > one;
-
-		union {
-			T data [2];
-			struct { T x, y; };
+		enum axis_index : uint32_t {
+			axis_index_x = 0U,
+			axis_index_y = 1U,
+			axis_index_z = 2U
 		};
 
-		inline vec2_t ( T vx, T vy );
-		inline vec2_t ( );
+		template < class value_t > 
+		struct vec2_data_t {
+			const static uint32_t size = 2;
 
-		// copy
-		inline vec2_t ( const vec2_t < T > & v );
-		inline vec2_t < T > & operator = ( vec2_t < T > v );
-
-		// access
-		inline operator T * ();
-
-		// basic arithmetics
-		inline vec2_t < T > operator + ( const vec2_t < T > & v ) const;
-		inline vec2_t < T > operator - ( const vec2_t < T > & v ) const;
-		inline vec2_t < T > operator * ( T v ) const;
-		inline vec2_t < T > operator / ( T v ) const;
-
-		inline vec2_t < T > & operator += ( const vec2_t < T > & v );
-		inline vec2_t < T > & operator -= ( const vec2_t < T > & v );
-		inline vec2_t < T > & operator *= ( T v );
-		inline vec2_t < T > & operator /= ( T v );
-	};
-
-	template < class T = real >
-	struct vec3_t {
-
-		typedef T type;
-
-		static const uint32_t count;
-
-		static const vec3_t < T > zero;
-		static const vec3_t < T > one;
-
-		union {
-			T data [3];
-			struct { T x, y, z; };
-			struct { T r, g, b; };
+			union {
+				value_t data [size];
+				struct {
+					value_t x, y;
+				};
+			};
 		};
 
-		inline vec3_t (T vx, T vy, T vz);
-		inline vec3_t ();
+		template < class value_t > 
+		struct vec3_data_t {
+			const static uint32_t size = 3;
 
-		// copy
-		inline vec3_t ( const vec3_t < T > & v );
-		inline vec3_t & operator = ( vec3_t < T > v );
-
-		// Convert to graph api data
-		inline operator T * ();
-
-		inline vec3_t < T > operator + ( const vec3_t < T > & v ) const;
-		inline vec3_t < T > operator - ( const vec3_t < T > & v ) const;
-		inline vec3_t < T > operator * ( T v ) const;
-		inline vec3_t < T > operator / ( T v ) const;
-
-		inline vec3_t < T > & operator += ( const vec3_t < T > & v );
-		inline vec3_t < T > & operator -= ( const vec3_t < T > & v );
-		inline vec3_t < T > & operator *= ( T v );
-		inline vec3_t < T > & operator /= ( T v );
-
-	};
-
-	template < class T = real >
-	struct vec4_t {
-
-		typedef T type;
-
-		static const uint32_t count;
-
-		static const vec4_t < T > zero;
-		static const vec4_t < T > one;
-
-		union {
-			T data [4];
-			struct { T x, y, z, w;};
-			struct { T r, g, b, a; };
+			union {
+				value_t data [size];
+				struct {
+					value_t x, y, z;
+				};
+			};
 		};
 
-		inline vec4_t (T vx, T vy, T vz, T vw);
-		inline vec4_t ();
+		template < class value_t > 
+		struct vec4_data_t {
+			const static uint32_t size = 4;
 
-		inline vec4_t ( const vec4_t < T > & v );
-		inline vec4_t < T > & operator = ( vec4_t < T > v );
+			union {
+				value_t data [size];
+				struct {
+					value_t x, y, z, w;
+				};
+			};
+		};
 
-		// Convert to graph api data
-		inline operator T * ();
+	}
 
-		inline vec4_t < T > operator + ( const vec4_t < T > & v ) const;
-		inline vec4_t < T > operator - ( const vec4_t < T > & v ) const;
-		inline vec4_t < T > operator * ( T v ) const;
-		inline vec4_t < T > operator / ( T v ) const;
+	template < class value_t >
+	using vec2_t = vecn_t < value_t, details::vec2_data_t < value_t > >;
 
-		inline vec4_t < T > & operator += ( const vec4_t < T > & v );
-		inline vec4_t < T > & operator -= ( const vec4_t < T > & v );
-		inline vec4_t < T > & operator *= ( T v );
-		inline vec4_t < T > & operator /= ( T v );
+	template < class value_t >
+	using vec3_t = vecn_t < value_t, details::vec3_data_t < value_t > >;
 
-	};
-}
+	template < class value_t >
+	using vec4_t = vecn_t < value_t, details::vec4_data_t < value_t > >;
+
 }
 
-#include "ballistic.math.vectors.inl"
+	namespace details {
+		template < class value_t > 
+		struct color_data_t {
+			const static uint32_t size = 4;
 
-typedef ballistic::math::vec4_t < real > color;
+			union {
+				value_t data [size];
+				struct {
+					value_t r, g, b, a;
+				};
+			};
+		};
 
-typedef ballistic::math::vec2_t < int32_t > point;
+		template < class value_t >
+		using color_t = vecn_t < value_t, color_data_t < value_t > >;
+	}
 
-typedef ballistic::math::vec2_t < real > vec2;
-typedef ballistic::math::vec3_t < real > vec3;
-typedef ballistic::math::vec4_t < real > vec4;
+	typedef math::vec2_t < int32_t > point;
+
+	typedef math::vec2_t < real > vec2;
+	typedef math::vec3_t < real > vec3;
+	typedef math::vec4_t < real > vec4;
+
+	typedef details::color_t < real > color;
+
+}
 
 #endif
