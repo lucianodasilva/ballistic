@@ -1,29 +1,31 @@
 #include "ballistic.property_container.h"
+#include "ballistic.entity.h"
 
 namespace ballistic {
 
-	property_container::~property_container () {
+	void property_map::add (id_t id, const var & v) {
+		_properties [id] = v;
 	}
 
-	void property_container::property_changed_event (const property & p) {}
+	void property_map::remove (id_t id) {
+		auto it = _properties.find (id);
 
-	property & property_container::add_property (id_t id, const var & value) {
-		property & p = _property_map [id] = property (this, id);
-		p.set_value ( value );
-		return p;
+		if (it != _properties.end ())
+			_properties.erase (it);
 	}
 
-	bool property_container::has_property (id_t id) {
-		return _property_map.find (id) != _property_map.end ();
+	bool property_map::contains (id_t id) const {
+		return _properties.find (id) != _properties.end ();
 	}
 
-	property & property_container::get_property (id_t id) {
-		property_map_t::iterator it = _property_map.find (id);
-
-		if (it == _property_map.end ()) {
-			return add_property (id, var ());
-		} else
-			return it->second;
+	std::map < id_t, var >::iterator property_map::begin () {
+		return _properties.begin ();
 	}
+
+	std::map < id_t, var >::iterator property_map::end () {
+		return _properties.end ();
+	}
+
+	callback_property_map::callback_property_map (entity * parent) : _parent (parent) {}
 
 }

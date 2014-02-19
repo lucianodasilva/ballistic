@@ -11,13 +11,13 @@ using namespace std;
 namespace ballistic {
 namespace math {
 
-	namespace details {
+	enum axis_index : uint32_t {
+		axis_index_x = 0U,
+		axis_index_y = 1U,
+		axis_index_z = 2U
+	};
 
-		enum axis_index : uint32_t {
-			axis_index_x = 0U,
-			axis_index_y = 1U,
-			axis_index_z = 2U
-		};
+	namespace details {
 
 		template < class value_t > 
 		struct vec2_data_t {
@@ -82,7 +82,7 @@ namespace math {
 		};
 
 		template < class value_t >
-		using color_t = vecn_t < value_t, color_data_t < value_t > >;
+		using color_t = ballistic::math::vecn_t < value_t, color_data_t < value_t > >;
 	}
 
 	typedef math::vec2_t < int32_t > point;

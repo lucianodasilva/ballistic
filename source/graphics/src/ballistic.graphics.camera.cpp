@@ -43,7 +43,7 @@ namespace ballistic {
 
 		uint16_t camera::get_depth (mat4 & transform) const {
 			real z = math::length (
-					vec3 (transform.m12, transform.m13, transform.m14),
+					vec3 {transform.m12, transform.m13, transform.m14},
 					position
 				);
 
@@ -57,13 +57,13 @@ namespace ballistic {
 			vec3 yaxis = normalize (up);
 			vec3 xaxis = normalize (cross (zaxis, yaxis));
 			yaxis = cross (xaxis, zaxis);
-			
-			return mat4 (
+
+			return {
 				xaxis.x, yaxis.x, -zaxis.x, .0,
 				xaxis.y, yaxis.y, -zaxis.y, .0,
 				xaxis.z, yaxis.z, -zaxis.z, .0,
 				-dot (xaxis, position), -dot (yaxis, position), dot (zaxis, position), 1.
-			);
+			};
 		}
 
 		const mat4 & camera::get_proj () const {
@@ -72,12 +72,12 @@ namespace ballistic {
 
 		void camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
 
-			_proj =  mat4 (
-				real (2) / (right - left), real (0), real (0), real(0),
-				real (0), real(2) / (top - bottom), real (0), real (0),
+			_proj = {
+				real (2) / (right - left), real (0), real (0), real (0),
+				real (0), real (2) / (top - bottom), real (0), real (0),
 				real (0), real (0), real (1) / (far - near), real (0),
 				real (0), real (0), near / (near - far), real (1)
-			);
+			};
 
 			_far = far;
 			_near = near;
@@ -100,12 +100,12 @@ namespace ballistic {
 				t = range;
 
 
-			_proj = mat4 (
-				(real(2) * near) / (r - l), .0, .0, .0,
-				.0, (real(2) * near) / (t - b), .0, .0,
+			_proj = {
+				(real (2) * near) / (r - l), .0, .0, .0,
+				.0, (real (2) * near) / (t - b), .0, .0,
 				.0, .0, -(far + near) / (far - near), real (-1),
 				.0, .0, -(real (2) * far * near) / (far - near), .0
-				);
+			};
 			
 			_far = far;
 			_near = near;
@@ -148,13 +148,13 @@ namespace ballistic {
 
 				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
 
-				position = ent->get_property (ballistic::id::position).as < vec3 > ();
-				target = ent->get_property (ballistic::id::target).as < vec3 > ();
-				up = ent->get_property (ballistic::id::up).as < vec3 > ();
+				position = ent->properties [ballistic::id::position];
+				target = ent->properties [ballistic::id::target];
+				up = ent->properties [ballistic::id::up];
 			}
 		}
 
-		void camera::setup (entity * parent, vector < ballistic::property > & parameters) {
+		void camera::setup (entity * parent, property_map & parameters) {
 			component::setup (parent, parameters);
 			
 			real
@@ -172,8 +172,9 @@ namespace ballistic {
 				proj_type_persp
 			} type = proj_type_ortho;
 
-			for (property & prop : parameters) {
-				id_t prop_id = prop.get_id ();
+			for (auto & prop_pair : parameters) {
+				id_t prop_id = prop_pair.first;
+				var & prop = prop_pair.second;
 
 				if (prop_id == id::graphics::projection) {
 					if (prop.as < string > () == "ortho")

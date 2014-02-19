@@ -3,25 +3,9 @@
 #define _ballistic_var_h_
 
 #include "ballistic.config.h"
-#include "ballistic.vector_data.h"
-
-#ifdef BALLISTIC_COMPILER_MSVC
-#	pragma warning ( push )
-#	pragma warning (disable : 4996)
-#endif
-
-struct var_data {
-
-	union {
-		int32_t		v_int32;
-		uint32_t	v_uint32;
-		real		v_real;
-		bool		v_bool;
-		real		vector_data [16]; // matrix4 size
-		char		text_data [sizeof (real) * 16]; // text size
-	} data;
-
-};
+#include "ballistic.math.vecn_t.h"
+#include "ballistic.math.matrixes.h"
+#include "ballistic.text.h"
 
 struct var {
 
@@ -34,17 +18,30 @@ struct var {
 		char		text_data [sizeof (real)* 16]; // text size
 	} data;
 
-	inline void swap (var & v) {
-		std::swap (data.vector_data, v.data.vector_data);
+	template < class value_t, class data_t >
+	inline void set (const ballistic::math::vecn_t < value_t, data_t > & v) {
+		std::copy (
+			std::begin (v.data),
+			std::end (v.data),
+			+data.vector_data
+		);
 	}
 
-	template < class v_t >
-	inline void set (v_t & v) {
-		copy (
-			reinterpret_cast < real * >	(&v),
-			+data.vector_data,
-			sizeof (v_t) / 4
-			);
+	template < class value_t >
+	inline void set (const ballistic::math::mat4_t < value_t > & v) {
+		std::copy (
+			std::begin (v.data),
+			std::end (v.data),
+			+data.vector_data
+		);
+	}
+
+	inline void set (const ballistic::text & v) {
+		std::copy (
+			std::begin (v.data),
+			std::end (v.data),
+			+data.text_data
+		);
 	}
 
 	inline void set (int32_t v) {
@@ -63,22 +60,22 @@ struct var {
 		data.v_real = v;
 	}
 
+	template < class T >
+	inline T copy () {
+		return as < T > ();
+	}
+
+	template < class T >
+	inline T & as () {
+		return *reinterpret_cast <T *> (+data.vector_data);
+	}
+
 	inline var () {}
 
-	inline var (const var & v) : data (v.data) {}
+	inline var (var && v) : data (v.data) {}
 
-	template < class v_t >
-	inline static var & from (v_t & v) {
-		return *reinterpret_cast <var *>	(&v);
-	}
-
-	template < class v_t >
-	inline v_t as () {
-		return *reinterpret_cast <v_t *> (&data);
-	}
-
-	inline var & operator = (var v) {
-		swap (v);
+	inline var & operator = (var && v) {
+		data = v.data;
 		return *this;
 	}
 
@@ -90,9 +87,5 @@ struct var {
 	}
 
 };
-
-#ifdef BALLISTIC_COMPILER_MSVC
-#	pragma warning ( pop )
-#endif
 
 #endif

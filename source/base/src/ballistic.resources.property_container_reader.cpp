@@ -66,7 +66,7 @@ namespace ballistic {
 						}
 
 						// add to container
-						container->add_property (
+						container->add (
 							string_to_id (cursor->Name ()),
 							p_val
 							);

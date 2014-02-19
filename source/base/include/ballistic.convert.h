@@ -104,12 +104,12 @@ namespace ballistic {
 		dst = src;
 	}
 
-	template < class t >
-	inline void convert_vectors (const std::string & src, t & dst) {
+	template < class value_t, class data_t >
+	inline void convert_vectors (const std::string & src, ballistic::math::vecn_t < value_t, data_t > & dst) {
 		stringstream src_stream (src);
 		string trim;
 
-		for (uint32_t i = 0; i < t::count; ++i) {
+		for (uint32_t i = 0; i < data_t::size; ++i) {
 			convert_split (src_stream, trim, ',');
 			convert (trim, dst.data [i]);
 		}

@@ -5,7 +5,6 @@
 #include <type_traits>
 
 #include "ballistic.icomponent.h"
-#include "ballistic.property.h"
 #include "ballistic.resources.iresource.h"
 
 #define MSG_NOT_COMPONENT_TYPE "Constructor template parameter must be derived from icontructor!"
@@ -24,7 +23,7 @@ namespace resources {
 			virtual inline ~icomponent_constructor (){}
 
 			virtual icomponent * create (entity * parent) = 0;
-			virtual icomponent * create (entity * parent, vector < property > & parameters) = 0;
+			virtual icomponent * create (entity * parent, property_map & parameters ) = 0;
 
 		};
 
@@ -40,7 +39,7 @@ namespace resources {
 				return new_comp;
 			}
 
-			virtual icomponent * create ( entity * parent, vector < property > & parameters )
+			virtual icomponent * create (entity * parent, property_map & parameters)
 			{
 				icomponent * new_comp = new component_t ();
 				new_comp->setup (parent, parameters);

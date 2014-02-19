@@ -4,7 +4,6 @@
 
 #include "ballistic.igame.h"
 #include "ballistic.message.h"
-#include "ballistic.property.h"
 #include "ballistic.resources.id.h"
 
 #include <vector>
@@ -29,7 +28,7 @@ namespace ballistic {
 		virtual ~icomponent ();
 			
 		virtual void setup ( entity * parent ) = 0;
-		virtual void setup ( entity * parent, vector < property > & parameters ) = 0;
+		virtual void setup (entity * parent, property_map & parameters ) = 0;
 			
 		virtual void notify ( ballistic::message & message ) = 0;
 			
@@ -51,7 +50,7 @@ namespace ballistic {
 		component ();
 		
 		virtual void setup ( entity * parent );
-		virtual void setup ( entity * parent, vector < property > & parameters );
+		virtual void setup (entity * parent, property_map & parameters);
 
 		template < class T >
 		static inline void define (ballistic::igame * game, id_t id);
@@ -61,7 +60,7 @@ namespace ballistic {
 
 		static icomponent * create (entity * parent, const res_id_t & id);
 		static icomponent * create (entity * parent, id_t id);
-		static icomponent * create (entity * parent, id_t id, vector < property > & parameters);
+		static icomponent * create (entity * parent, id_t id, property_map & parameters);
 
 		template < class T >
 		static inline T * create (entity * parent, const res_id_t & id);
@@ -70,7 +69,7 @@ namespace ballistic {
 		static inline T * create (entity * parent, id_t id);
 
 		template < class T >
-		static inline T * create (entity * parent, id_t id, vector < property > & parameters);
+		static inline T * create (entity * parent, id_t id, property_map & parameters);
 
 		template < class T >
 		static inline T * create (entity * parent);
@@ -101,7 +100,7 @@ namespace ballistic {
 	}
 
 	template < class T >
-	T * component::create (entity * parent, id_t id, vector < property > & parameters) {
+	T * component::create (entity * parent, id_t id, property_map & parameters) {
 		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
 		return dynamic_cast <T *> (create (parent, id, parameters));
 	}

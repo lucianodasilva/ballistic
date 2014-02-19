@@ -16,7 +16,7 @@ namespace ballistic {
 	class igame;
 	class icomponent;
 
-	class entity : public property_container {
+	class entity {
 	private:
 
 		igame *					_game;
@@ -30,7 +30,9 @@ namespace ballistic {
 
 	public:
 
-		virtual void property_changed_event (const property & p);
+		callback_property_map properties;
+
+		virtual void property_changed_event (id_t id, const var & value);
 			
 		igame * get_game ();
 		void set_game (igame * g);

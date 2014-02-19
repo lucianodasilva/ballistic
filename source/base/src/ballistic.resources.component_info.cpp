@@ -15,35 +15,6 @@ namespace ballistic {
 		void component_info::set_constructor( icomponent_constructor * ctor ) {
 			_constructor = ctor;
 		}
-
-		// property container
-
-		property & component_info::add_property (id_t id, const var & v) {
-			_properties.push_back (property (this, id));
-
-			property & p = _properties.back ();
-			p.set_value (v);
-
-			return p;
-		}
-
-		bool component_info::has_property (id_t id) {
-			for (property & p : _properties)
-				if (p.get_id () == id)
-					return true;
-
-			return false;
-		}
-
-		property & component_info::get_property (id_t id) {
-			for (property & p : _properties) {
-				if (p.get_id () == id)
-					return p;
-			}
-
-			return add_property (id, var());
-		}
-		//
 		
 		icomponent * component_info::create (entity * parent) {
 			if (!_constructor) {
@@ -51,7 +22,7 @@ namespace ballistic {
 				return nullptr;
 			}
 			
-			icomponent * new_component = _constructor->create (parent, _properties);
+			icomponent * new_component = _constructor->create (parent, properties);
 			
 			return new_component;
 		}

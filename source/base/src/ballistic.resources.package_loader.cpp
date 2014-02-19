@@ -40,7 +40,7 @@ namespace ballistic {
 
 					if (ctor) {
 						comp_info.set_constructor (ctor);
-						property_container_reader::read (cursor, stack, &comp_info);
+						property_container_reader::read (cursor, stack, &comp_info.properties);
 					}
 					debug_run (
 					else
@@ -60,7 +60,7 @@ namespace ballistic {
 				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
 				while (cursor) {
 					if (strcmp (cursor->Name (), "properties") == 0)
-						property_container_reader::read (cursor, stack, ctor);
+						property_container_reader::read (cursor, stack, &ctor->properties);
 					
 					if (strcmp (cursor->Name (), "components") == 0)
 						load_components (cursor, stack, ctor->get_components());

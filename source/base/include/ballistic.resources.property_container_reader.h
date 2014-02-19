@@ -2,7 +2,7 @@
 #define _ballistic_resource_property_container_reader_h_
 
 #include "ballistic.convert.h"
-#include "ballistic.property.h"
+#include "ballistic.property_container.h"
 #include "ballistic.resources.stack.h"
 #include "ballistic.math.h"
 

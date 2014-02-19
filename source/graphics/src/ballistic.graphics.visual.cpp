@@ -10,7 +10,7 @@ namespace ballistic {
 
 		const id_t visual::component_id = ballistic::id::graphics::visual;
 
-		void visual::setup (entity * parent, vector < ballistic::property > & parameters)
+		void visual::setup (entity * parent, property_map & parameters)
 		{
 			component::setup (parent, parameters);
 		}
@@ -66,9 +66,10 @@ namespace ballistic {
 
 				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
 
-				_material = get_game ()->get_resource < imaterial > (ent->get_property (ballistic::id::material).as < id_t > ());
-				_mesh = get_game ()->get_resource < imesh > (ent->get_property (ballistic::id::mesh).as < id_t > ());
-				_transform	= ent->get_property (ballistic::id::transform).as < mat4 > ();
+				_material = get_game ()->get_resource < imaterial > ((id_t)ent->properties [ballistic::id::material]);
+
+				_mesh = get_game ()->get_resource < imesh > ((id_t)ent->properties [ballistic::id::mesh]);
+				_transform	= ent->properties [ballistic::id::transform];
 			}
 
 		}

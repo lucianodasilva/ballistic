@@ -75,6 +75,7 @@ namespace ballistic {
 			void set_constant (opengl_constant & u, const vec3 & v);
 			void set_constant (opengl_constant & u, const vec4 & v);
 			void set_constant (opengl_constant & u, const mat4 & v);
+			void set_constant (opengl_constant & u, const color & v);
 
 		};
 

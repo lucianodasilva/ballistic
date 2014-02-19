@@ -22,7 +22,7 @@ namespace ballistic {
 					debug_print ("[vecn_t::init_list_ctor] init list size invalid for used vector type");
 					return;
 				}
-				std::copy (l.begin (), l.end (), +data);
+				std::copy (init.begin (), init.end (), +data);
 			}
 
 			inline vecn_t ( this_type && v ) {

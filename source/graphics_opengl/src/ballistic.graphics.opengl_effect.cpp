@@ -164,6 +164,16 @@ namespace ballistic {
 			glUniform4f (u.location, v.x, v.y, v.z, v.w);
 		}
 
+		void opengl_effect::set_constant (opengl_constant & u, const color & v) {
+			if (!u.is_defined ()) {
+				//debug_error ("[ballistic::graphics::opengl_effect::set_constant] GL constant " << u.id << " location not defined");
+				return;
+			}
+
+			gl_eval_scope (opengl_effect::set_constant (color));
+			glUniform4f (u.location, v.r, v.g, v.b, v.a);
+		}
+
 		void opengl_effect::set_constant (opengl_constant & u, const mat4 & v) {
 			if (!u.is_defined ()) {
 				//debug_error ("[ballistic::graphics::opengl_effect::set_constant] GL constant " << u.id << " location not defined");

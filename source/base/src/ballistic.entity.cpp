@@ -8,11 +8,11 @@
 
 namespace ballistic {
 
-	void entity::property_changed_event (const property & p) {
+	void entity::property_changed_event (id_t id, const var & value) {
 		_property_changed_message.set_sender (this);
 
-		_property_changed_message [id::id] = var::from (p.get_id ());
-		_property_changed_message [id::value] = p.get_value ();
+		_property_changed_message [id::id] = id;
+		_property_changed_message [id::value] = value;
 
 		if (_game)
 			_game->send_message (_property_changed_message);
@@ -38,7 +38,12 @@ namespace ballistic {
 		}
 	}
 
-	entity::entity (id_t id) : _game (nullptr), _id (id), _property_changed_message (id::message_property_changed) {}
+	entity::entity (id_t id) : 
+		_game (nullptr), 
+		_id (id), 
+		_property_changed_message (id::message_property_changed), 
+		properties (this) 
+	{}
 
 	entity::~entity () {
 		for ( icomponent * it : _components ) {

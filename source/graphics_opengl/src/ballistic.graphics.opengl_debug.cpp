@@ -163,8 +163,8 @@ namespace ballistic {
 			_effect.apply (nullptr);
 			_effect.set_constant (_color_uniform, col);
 
-			vec3 uc = vec3 (p2.x, p1.y, p1.z);
-			vec3 bc = vec3 (p1.x, p2.y, p2.z);
+			vec3 uc = {p2.x, p1.y, p1.z};
+			vec3 bc = {p1.x, p2.y, p2.z};
 
 			vec3 buffer [8] = { 
 				p1, uc,

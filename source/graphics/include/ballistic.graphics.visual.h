@@ -30,7 +30,7 @@ namespace ballistic {
 
 			virtual void notify ( ballistic::message & message ) override;
 
-			virtual void setup (entity * parent, vector < ballistic::property > & parameters) override;
+			virtual void setup (entity * parent, property_map & parameters) override;
 
 		};
 				  
