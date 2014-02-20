@@ -16,7 +16,7 @@ namespace ballistic {
 	class igame;
 	class icomponent;
 
-	class entity {
+	class entity : public iproperty_event_raiser {
 	private:
 
 		igame *					_game;

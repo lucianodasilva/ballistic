@@ -7,7 +7,10 @@
 
 namespace ballistic {
 
-	class entity;
+	class iproperty_event_raiser {
+	public:
+		virtual void property_changed_event (id_t id, const var & value) = 0;
+	};
 
 	class iproperty_container {
 	public:
@@ -41,14 +44,14 @@ namespace ballistic {
 	class var_write_guard {
 	private:
 
-		var &					_ref;
-		id_t					_id;
-		entity *				_container;
+		var &						_ref;
+		id_t						_id;
+		iproperty_event_raiser *	_container;
 
 	public:
 
 		inline var_write_guard (
-			entity * container,
+			iproperty_event_raiser * container,
 			var & ref,
 			id_t id
 			) :
@@ -82,10 +85,10 @@ namespace ballistic {
 	class callback_property_map : public property_map {
 	private:
 		std::map < id_t, var > _properties;
-		entity * _parent;
+		iproperty_event_raiser * _parent;
 	public:
 
-		callback_property_map (entity * parent);
+		callback_property_map (iproperty_event_raiser * parent);
 
 		inline var_write_guard operator [] (id_t id) {
 			return var_write_guard ( _parent, _properties [id], id);

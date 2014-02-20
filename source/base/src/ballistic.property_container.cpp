@@ -26,6 +26,6 @@ namespace ballistic {
 		return _properties.end ();
 	}
 
-	callback_property_map::callback_property_map (entity * parent) : _parent (parent) {}
+	callback_property_map::callback_property_map (iproperty_event_raiser * parent) : _parent (parent) {}
 
 }

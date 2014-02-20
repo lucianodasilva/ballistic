@@ -24,7 +24,7 @@ namespace ballistic {
 		// resource handling
 	
 		virtual resources::iresource * get_resource (const res_id_t & res_id) = 0;
-		virtual resources::iresource * get_resource (id_t res_id) = 0;
+		virtual resources::iresource * get_resource (const id_t & res_id) = 0;
 		
 		virtual void push_resource_level () = 0;
 		virtual bool pop_resource_level () = 0;
@@ -35,7 +35,7 @@ namespace ballistic {
 		inline T * get_resource (const res_id_t & res_id);
 		
 		template < class T >
-		inline T * get_resource (id_t res_id);
+		inline T * get_resource (const id_t & res_id);
 
 		// -----------------
 
@@ -76,7 +76,7 @@ namespace ballistic {
 	}
 	
 	template < class T >
-	T * igame::get_resource (id_t id) {
+	T * igame::get_resource (const id_t & id) {
 		return dynamic_cast <T *> (get_resource (id));
 	}
 

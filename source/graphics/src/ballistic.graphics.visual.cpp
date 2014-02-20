@@ -66,9 +66,11 @@ namespace ballistic {
 
 				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
 
-				_material = get_game ()->get_resource < imaterial > ((id_t)ent->properties [ballistic::id::material]);
+				_material = get_game ()->get_resource < imaterial > (
+					(id_t)ent->properties [ballistic::id::material]
+				);
 
-				_mesh = get_game ()->get_resource < imesh > ((id_t)ent->properties [ballistic::id::mesh]);
+				_mesh = get_game ()->get_resource < imesh > (ent->properties [ballistic::id::mesh]);
 				_transform	= ent->properties [ballistic::id::transform];
 			}
 

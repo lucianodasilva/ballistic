@@ -19,6 +19,25 @@ struct var {
 		real		vector_data [16]; // matrix4 size
 		char		text_data [sizeof (real)* 16]; // text size
 	} data;
+	
+	inline var () {}
+	
+	inline var (var && v) : data (v.data) {}
+	
+	inline var (const var & v) : data (v.data) {}
+	
+	template < class T >
+	inline var ( const T & v ) { set < T > (v); }
+	
+	inline var & operator = (var && v) {
+		data = v.data;
+		return *this;
+	}
+	
+	inline var & operator = (var v ) {
+		data = v.data;
+		return *this;
+	}
 
 	template < class value_t, class data_t >
 	inline void set (const ballistic::math::vecn_t < value_t, data_t > & v) {
@@ -62,22 +81,13 @@ struct var {
 		data.v_real = v;
 	}
 
-	inline void set (ballistic::id_t v) {
-		data.v_id = v;
-	}
+//	inline void set (ballistic::id_t v) {
+//		data.v_id = v;
+//	}
 
 	template < class T >
 	inline T & as () {
 		return *reinterpret_cast <T *> (+data.vector_data);
-	}
-
-	inline var () {}
-
-	inline var (var && v) : data (v.data) {}
-
-	inline var & operator = (var && v) {
-		data = v.data;
-		return *this;
 	}
 
 	inline operator int32_t () const {
@@ -96,9 +106,9 @@ struct var {
 		return data.v_bool;
 	}
 
-	inline operator ballistic::id_t () const {
-		return data.v_id;
-	}
+//	inline operator ballistic::id_t () const {
+//		return data.v_id;
+//	}
 
 	inline operator ballistic::text () const {
 		return *reinterpret_cast <const ballistic::text *>(+data.text_data);
@@ -115,8 +125,8 @@ struct var {
 	}
 
 	// copy other stuffs
-	template < class v_t >
-	inline var & operator = (v_t v) {
+	template < class T >
+	inline var & operator = (const T & v) {
 		set (v);
 		return *this;
 	}

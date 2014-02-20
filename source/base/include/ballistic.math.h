@@ -4,7 +4,7 @@
 #include "ballistic.config.h"
 #include "ballistic.math.vectors.h"
 
-#include <math.h>
+#include <cmath>
 
 namespace ballistic {
 	namespace math {

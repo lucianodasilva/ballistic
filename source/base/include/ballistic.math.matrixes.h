@@ -41,8 +41,17 @@ namespace math {
 		inline mat4_t (this_type && v) {
 			std::copy (std::begin (v.data), std::end (v.data), +data);
 		}
+		
+		inline mat4_t (const this_type & v) {
+			std::copy (std::begin (v.data), std::end (v.data), +data);
+		}
 
 		inline this_type & operator = (this_type && v) {
+			std::copy (std::begin (v.data), std::end (v.data), +data);
+			return *this;
+		}
+		
+		inline this_type & operator = (const this_type & v) {
 			std::copy (std::begin (v.data), std::end (v.data), +data);
 			return *this;
 		}

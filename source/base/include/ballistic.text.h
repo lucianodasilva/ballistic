@@ -23,6 +23,8 @@ namespace ballistic {
 		inline text () { data [0] = '\0'; str.length = 0; }
 
 		inline text (text && v) : str (v.str) {}
+		
+		inline text (const text & v) : str (v.str) {}
 
 		inline text & operator = (text && v) {
 			str = v.str;
