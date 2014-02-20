@@ -66,12 +66,6 @@ ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
 
 int main ( int argc, char ** argv) {
 
-	var v;
-
-	v = 3;
-	int32_t p = v;
-
-	// --------------
 	debug_init();
 
 	_frontend = create_frontend (point{150, 150});

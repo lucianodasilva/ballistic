@@ -81,10 +81,6 @@ struct var {
 		data.v_real = v;
 	}
 
-//	inline void set (ballistic::id_t v) {
-//		data.v_id = v;
-//	}
-
 	template < class T >
 	inline T & as () {
 		return *reinterpret_cast <T *> (+data.vector_data);
@@ -105,10 +101,6 @@ struct var {
 	inline operator bool () const {
 		return data.v_bool;
 	}
-
-//	inline operator ballistic::id_t () const {
-//		return data.v_id;
-//	}
 
 	inline operator ballistic::text () const {
 		return *reinterpret_cast <const ballistic::text *>(+data.text_data);

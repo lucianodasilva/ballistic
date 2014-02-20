@@ -49,7 +49,7 @@ namespace ballistic {
 		// resource handling
 	
 		virtual resources::iresource * get_resource (const res_id_t & res_id);
-		virtual resources::iresource * get_resource (id_t res_id);
+		virtual resources::iresource * get_resource (const id_t & res_id);
 		
 		virtual void push_resource_level ();
 		virtual bool pop_resource_level ();

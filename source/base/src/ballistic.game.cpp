@@ -24,7 +24,7 @@ namespace ballistic {
 		return _resources [res_id];
 	}
 
-	resources::iresource * game::get_resource (id_t id) {
+	resources::iresource * game::get_resource (const id_t & id) {
 		return _resources.get_resource (id);
 	}
 	
