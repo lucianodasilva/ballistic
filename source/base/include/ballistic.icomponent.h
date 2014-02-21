@@ -1,6 +1,6 @@
 
-#ifndef _ballistic_icomponent_h_
-#define _ballistic_icomponent_h_
+#ifndef _ballistic_entity_model_icomponent_h_
+#define _ballistic_entity_model_icomponent_h_
 
 #include "ballistic.igame.h"
 #include "ballistic.message.h"
@@ -9,16 +9,14 @@
 #include <vector>
 
 namespace ballistic {
-	
-	namespace resources {
-		
+
+	namespace entity_model {
 		template < class T >
-		class component_constructor;
-		
+		class component_type;
 	}
-	
+
 	// --------------------
-	
+
 	class icomponent {
 	public:
 
@@ -26,30 +24,30 @@ namespace ballistic {
 		virtual igame *		get_game () const = 0;
 
 		virtual ~icomponent ();
-			
-		virtual void setup ( entity * parent ) = 0;
-		virtual void setup (entity * parent, property_map & parameters ) = 0;
-			
-		virtual void notify ( ballistic::message & message ) = 0;
-			
+
+		virtual void setup (entity * parent) = 0;
+		virtual void setup (entity * parent, property_map & parameters) = 0;
+
+		virtual void notify (ballistic::message & message) = 0;
+
 	};
-	
+
+
 	// abstract implementation
 	class component : public icomponent {
 	private:
-
 		entity * _entity;
 		igame * _game;
 	public:
-		
-		typedef void (*notify_callback)( entity & this_entity, ballistic::message & );
-		
+
+		typedef void (*notify_callback)(entity & this_entity, ballistic::message &);
+
 		virtual entity * get_entity () const;
 		virtual igame * get_game () const;
-		
+
 		component ();
-		
-		virtual void setup ( entity * parent );
+
+		virtual void setup (entity * parent);
 		virtual void setup (entity * parent, property_map & parameters);
 
 		template < class T >
@@ -95,13 +93,13 @@ namespace ballistic {
 
 	template < class T >
 	T * component::create (entity * parent, id_t id) {
-		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
-		return dynamic_cast < T * > (create (parent, id));
+		static_assert (is_base_of < icomponent, T >::value, "[base::component::create] Constructor template parameter must be derived from icontructor!");
+		return dynamic_cast <T *> (create (parent, id));
 	}
 
 	template < class T >
 	T * component::create (entity * parent, id_t id, property_map & parameters) {
-		static_assert (is_base_of < icomponent, T >::value, "[ballistic::component::create] Constructor template parameter must be derived from icontructor!");
+		static_assert (is_base_of < icomponent, T >::value, "[base::component::create] Constructor template parameter must be derived from icontructor!");
 		return dynamic_cast <T *> (create (parent, id, parameters));
 	}
 
@@ -111,17 +109,16 @@ namespace ballistic {
 	}
 
 	// extra tools
-
-	template < void (*message_handle)( entity * parent, ballistic::message & ) >
+	template < void (*message_handle)(entity * parent, ballistic::message &) >
 	class _func_component : public component {
 	public:
 
-		virtual inline void notify ( ballistic::message & message );
+		virtual inline void notify (ballistic::message & message);
 
 	};
 
-	template < void (*message_handle)( entity * parent, ballistic::message & ) >
-	void _func_component < message_handle >::notify ( ballistic::message & message ) {
+	template < void (*message_handle)(entity * parent, ballistic::message &) >
+	void _func_component < message_handle >::notify (ballistic::message & message) {
 		message_handle (get_entity (), message);
 	}
 	

@@ -15,13 +15,13 @@ namespace ballistic {
 			game->add_entity (ent);
 			
 			for (component_info & comp_info : _components ) {
-				ent->add_component(
+				ent->components.add (
 					comp_info.create (ent)
 				);
 			}
 
 			for (auto & p : properties)
-				ent->properties.add (p.first, p.second);
+				ent->properties.require (p.first, p.second);
 
 			return ent;
 		}

@@ -1,9 +1,8 @@
 #ifndef _ballistic_message_h_
 #define _ballistic_message_h_
 
-#include "ballistic.var.h"
 #include "ballistic.id.h"
-#include "ballistic.property_container.h"
+#include "ballistic.property_map.h"
 
 #include <functional>
 #include <map>
@@ -17,8 +16,7 @@ namespace ballistic {
 
 	class message : public property_map {
 	private:
-			
-		map < id_t, var >	_properties;
+
 		id_t				_id;
 		entity *			_sender;
 
@@ -44,7 +42,9 @@ namespace ballistic {
 
 	inline void message::set_sender (entity * s) { _sender = s; }
 
-	 
+	class inotification_target {
+		virtual void notify (ballistic::message & message) = 0;
+	};
 }
 
 #endif

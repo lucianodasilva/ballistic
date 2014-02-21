@@ -8,11 +8,10 @@
 
 namespace ballistic {
 
-	void entity::property_changed_event (id_t id, const var & value) {
+	void entity::property_changed_event (iproperty * changed_property) {
 		_property_changed_message.set_sender (this);
 
-		_property_changed_message [id::id] = id;
-		_property_changed_message [id::value] = value;
+		_property_changed_message [id::id] = changed_property->id ();
 
 		if (_game)
 			_game->send_message (_property_changed_message);
@@ -23,19 +22,9 @@ namespace ballistic {
 		
 	id_t entity::get_id () { return _id; }
 		
-	void entity::add_component ( icomponent * component ) {
-		if (!component) {
-			debug_error ("[ballistic::entity::add_component] instance of component not set.");
-			return;
-		}
-
-		_components.push_back (component);
-	}
 
 	void entity::notify ( ballistic::message & message ) {
-		for ( icomponent * it : _components) {
-			it->notify (message);
-		}
+		components.notify (message);
 	}
 
 	entity::entity (id_t id) : 
@@ -44,12 +33,6 @@ namespace ballistic {
 		_property_changed_message (id::message_property_changed), 
 		properties (this) 
 	{}
-
-	entity::~entity () {
-		for ( icomponent * it : _components ) {
-			delete it;
-		}
-	}
 
 	entity * entity::create (ballistic::igame * game, const res_id_t & type) {
 		return create (game, game->create_id_key (), type);

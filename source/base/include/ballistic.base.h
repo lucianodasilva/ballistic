@@ -21,10 +21,9 @@
 #include "ballistic.math.rect.h"
 #include "ballistic.math.vectors.h"
 #include "ballistic.message.h"
-#include "ballistic.property_container.h"
+#include "ballistic.property.h"
+#include "ballistic.property_map.h"
 #include "ballistic.resources.h"
 #include "ballistic.system.h"
-#include "ballistic.text.h"
-#include "ballistic.var.h"
 
 #endif

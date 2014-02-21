@@ -1,14 +1,16 @@
 #include "ballistic.icomponent.h"
+#include "ballistic.entity_model.icomponent_type.h"
+
 #include "ballistic.debug.h"
 #include "ballistic.igame.h"
-#include "ballistic.resources.component_constructor.h"
+
 
 #include <string>
 
 using namespace std;
 
 namespace ballistic {
-	
+
 	icomponent::~icomponent () {}
 
 	entity * component::get_entity () const {
@@ -36,23 +38,23 @@ namespace ballistic {
 
 	icomponent * component::create (entity * parent, id_t id) {
 
-		auto ctor = dynamic_cast <resources::icomponent_constructor *> (parent->get_game()->get_resource (id));
+		auto ctor = dynamic_cast <entity_model::icomponent_type *> (parent->get_game ()->get_resource (id));
 
 		if (ctor)
 			return ctor->create (parent);
 		else {
-			debug_print ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
+			debug_print ("[base::game::create_component] Unable to load component constructor with id: " << id);
 			return nullptr;
 		}
 	}
 
 	icomponent * component::create (entity * parent, id_t id, property_map & parameters) {
-		auto ctor = dynamic_cast <resources::icomponent_constructor *> (parent->get_game ()->get_resource (id));
+		auto ctor = dynamic_cast <entity_model::icomponent_type *> (parent->get_game ()->get_resource (id));
 
 		if (ctor)
 			return ctor->create (parent, parameters);
 		else {
-			debug_print ("[ballistic::game::create_component] Unable to load component constructor with id: " << id);
+			debug_print ("[base::game::create_component] Unable to load component constructor with id: " << id);
 			return nullptr;
 		}
 	}

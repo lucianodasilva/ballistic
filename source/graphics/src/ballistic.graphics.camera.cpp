@@ -155,58 +155,58 @@ namespace ballistic {
 		}
 
 		void camera::setup (entity * parent, property_map & parameters) {
-			component::setup (parent, parameters);
-			
-			real
-				left = 0,
-				right = 0,
-				top = 0,
-				bottom = 0,
-				near = 0,
-				far = 0,
-				fovy = 0;
-
-
-			enum {
-				proj_type_ortho,
-				proj_type_persp
-			} type = proj_type_ortho;
-
-			for (auto & prop_pair : parameters) {
-				id_t prop_id = prop_pair.first;
-				var & prop = prop_pair.second;
-
-				if (prop_id == id::graphics::projection) {
-					if ((text)prop == "ortho")
-						type = proj_type_ortho;
-					else if ((text)prop == "perspective")
-						type = proj_type_persp;
-					
-				} else if (prop_id == id::graphics::left)
-					left = prop;
-				else if (prop_id == id::graphics::right)
-					right = prop;
-				else if (prop_id == id::graphics::top)
-					top = prop;
-				else if (prop_id == id::graphics::bottom)
-					bottom = prop;
-				else if (prop_id == id::graphics::near)
-					near = prop;
-				else if (prop_id == id::graphics::far)
-					far = prop;
-				else if (prop_id == id::graphics::fov)
-					fovy = prop;
-
-			}
-
-			
-
-			if (type == proj_type_ortho)
-				make_ortho_projection (left, right, bottom, top, near, far);
-			else if (type == proj_type_persp) {
-				point size = get_game ()->get_frontend ()->get_client_size ();
-				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
-			}
+			//component::setup (parent, parameters);
+			//
+			//real
+			//	left = 0,
+			//	right = 0,
+			//	top = 0,
+			//	bottom = 0,
+			//	near = 0,
+			//	far = 0,
+			//	fovy = 0;
+			//
+			//
+			//enum {
+			//	proj_type_ortho,
+			//	proj_type_persp
+			//} type = proj_type_ortho;
+			//
+			//for (auto & prop_pair : parameters) {
+			//	id_t prop_id = prop_pair.first;
+			//	var & prop = prop_pair.second;
+			//
+			//	if (prop_id == id::graphics::projection) {
+			//		if ((text)prop == "ortho")
+			//			type = proj_type_ortho;
+			//		else if ((text)prop == "perspective")
+			//			type = proj_type_persp;
+			//		
+			//	} else if (prop_id == id::graphics::left)
+			//		left = prop;
+			//	else if (prop_id == id::graphics::right)
+			//		right = prop;
+			//	else if (prop_id == id::graphics::top)
+			//		top = prop;
+			//	else if (prop_id == id::graphics::bottom)
+			//		bottom = prop;
+			//	else if (prop_id == id::graphics::near)
+			//		near = prop;
+			//	else if (prop_id == id::graphics::far)
+			//		far = prop;
+			//	else if (prop_id == id::graphics::fov)
+			//		fovy = prop;
+			//
+			//}
+			//
+			//
+			//
+			//if (type == proj_type_ortho)
+			//	make_ortho_projection (left, right, bottom, top, near, far);
+			//else if (type == proj_type_persp) {
+			//	point size = get_game ()->get_frontend ()->get_client_size ();
+			//	make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
+			//}
 		}
 
 

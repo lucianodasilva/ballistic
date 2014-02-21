@@ -18,31 +18,29 @@ namespace ballistic {
 				string name = element->Attribute ("name");
 
 				imaterial * material = _device->create_material ();
-
-				var value;
 		
 				const tinyxml2::XMLAttribute * cursor = element->FirstAttribute ();
 
 				while (cursor) {
 
-					value = string (cursor->Value ());
-
-					if (strcmp (cursor->Name (), "diffuse") == 0) {
-						material->set_diffuse (value);
-					} else if (strcmp (cursor->Name (), "specular") == 0) {
-						material->set_specular (value);
-					} else if (strcmp (cursor->Name (), "opaque") == 0) {
-						material->set_opaque (value);
-					} else if (strcmp (cursor->Name (), "effect") == 0) {
-						ieffect * effect = dynamic_cast < ieffect *> (
-							stack.get_resource (
-								text_to_id ((text)value)
-							)
-						);
-						
-						
-						material->set_effect (effect);
-					}
+					//value = string (cursor->Value ());
+					//
+					//if (strcmp (cursor->Name (), "diffuse") == 0) {
+					//	material->set_diffuse (value);
+					//} else if (strcmp (cursor->Name (), "specular") == 0) {
+					//	material->set_specular (value);
+					//} else if (strcmp (cursor->Name (), "opaque") == 0) {
+					//	material->set_opaque (value);
+					//} else if (strcmp (cursor->Name (), "effect") == 0) {
+					//	ieffect * effect = dynamic_cast < ieffect *> (
+					//		stack.get_resource (
+					//			text_to_id ((text)value)
+					//		)
+					//	);
+					//	
+					//	
+					//	material->set_effect (effect);
+					//}
 
 					cursor = cursor->Next ();
 				}
