@@ -28,7 +28,7 @@ namespace ballistic {
 		_entity = parent;
 	}
 		
-	void component::setup (entity * parent, property_map & parameters) {
+	void component::setup (entity * parent, property_container & parameters) {
 		component::setup (parent);
 	}
 
@@ -48,7 +48,7 @@ namespace ballistic {
 		}
 	}
 
-	icomponent * component::create (entity * parent, id_t id, property_map & parameters) {
+	icomponent * component::create (entity * parent, id_t id, property_container & parameters) {
 		auto ctor = dynamic_cast <entity_model::icomponent_type *> (parent->get_game ()->get_resource (id));
 
 		if (ctor)

@@ -25,7 +25,7 @@ namespace ballistic {
 			icomponent_type * get_type ();
 			void set_type (icomponent_type * type);
 
-			property_map properties;
+			property_container properties;
 
 			icomponent * create (entity * parent);
 

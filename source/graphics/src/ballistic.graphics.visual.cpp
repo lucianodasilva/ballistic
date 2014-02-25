@@ -10,7 +10,7 @@ namespace ballistic {
 
 		const id_t visual::component_id = ballistic::id::graphics::visual;
 
-		void visual::setup (entity * parent, property_map & parameters)
+		void visual::setup (entity * parent, property_container & parameters)
 		{
 			component::setup (parent, parameters);
 		}

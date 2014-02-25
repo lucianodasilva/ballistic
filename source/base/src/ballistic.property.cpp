@@ -1,16 +1,29 @@
 #include "ballistic.property.h"
+
+#include "ballistic.common_id.h"
 #include "ballistic.entity.h"
 
 namespace ballistic {
 
+	iproperty::iproperty () : _id (0), _container (nullptr) {}
+
+	id_t iproperty::id () const { return _id; }
+
+	entity * iproperty::container () const { return _container; }
+
 	iproperty::~iproperty () {}
 
-	namespace details {
+	void iproperty::raise_event () const {
+		if (_container) {
 
-		null_property_container null_property_container::static_instance;
+			message m (id::message_property_changed, _container);
+			m [id::id] = _id;
 
-		void null_property_container::property_changed_event (iproperty * changed_property) {}
-
+			_container->game ()->send_message (m);
+		} 
+		debug_run ( else {
+			debug_print ("changed property with unset container");
+		})
 	}
 
 }

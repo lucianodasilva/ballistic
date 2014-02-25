@@ -30,7 +30,7 @@ namespace ballistic {
 
 			vector < component_info > & get_components ();
 
-			property_map properties;
+			property_container properties;
 
 			entity * create (igame * game, id_t id);
 

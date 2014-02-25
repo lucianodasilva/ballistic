@@ -78,8 +78,8 @@ namespace ballistic {
 	x
 
 #	define debug_init() ballistic::debug_service::initialize ()
-#	define debug_print(x) {ballistic::debug_service::message () << x;}
-#	define debug_error(x) {ballistic::debug_service::message () << x << " | " << __FILE__ << " @ " << __LINE__;}
+#	define debug_print(x) {ballistic::debug_service::message () << "[" << __FUNCTION__ << "] " << x;}
+#	define debug_error(x) {ballistic::debug_service::message () << "[" << __FUNCTION__ << "] " << x << " | " << " @ " << __LINE__;}
 
 #	define debug_assert(condition, x) if (condition) { debug_error (x) }
 

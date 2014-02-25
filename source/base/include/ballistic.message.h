@@ -2,7 +2,7 @@
 #define _ballistic_message_h_
 
 #include "ballistic.id.h"
-#include "ballistic.property_map.h"
+#include "ballistic.property_container.h"
 
 #include <functional>
 #include <map>
@@ -14,7 +14,7 @@ namespace ballistic {
 
 	class entity;
 
-	class message : public property_map {
+	class message : public property_container {
 	private:
 
 		id_t				_id;
@@ -25,10 +25,10 @@ namespace ballistic {
 		inline message (id_t message_id);
 		inline message ( entity * sender, id_t message_id );
 
-		inline id_t get_id () const;
+		inline id_t id () const;
 
-		inline entity * get_sender () const;
-		inline void set_sender (entity * s);
+		inline entity * sender () const;
+		inline void sender (entity * s);
 
 	};
 
@@ -36,11 +36,11 @@ namespace ballistic {
 
 	message::message ( entity * sender, id_t message_id ) : _id (message_id), _sender (sender) {}
 
-	inline id_t message::get_id () const { return _id; }
+	inline id_t message::id () const { return _id; }
 
-	inline entity * message::get_sender () const { return _sender; }
+	inline entity * message::sender () const { return _sender; }
 
-	inline void message::set_sender (entity * s) { _sender = s; }
+	inline void message::sender (entity * s) { _sender = s; }
 
 	class inotification_target {
 		virtual void notify (ballistic::message & message) = 0;

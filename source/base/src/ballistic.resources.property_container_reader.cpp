@@ -8,7 +8,7 @@ namespace ballistic {
 		void property_container_reader::read (
 			tinyxml2::XMLElement * element,
 			ballistic::resources::stack & stack,
-			property_map & container
+			property_container & container
 			) {
 				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
 				

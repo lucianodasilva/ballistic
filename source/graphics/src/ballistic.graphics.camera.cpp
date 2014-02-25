@@ -154,7 +154,7 @@ namespace ballistic {
 			}
 		}
 
-		void camera::setup (entity * parent, property_map & parameters) {
+		void camera::setup (entity * parent, property_container & parameters) {
 			//component::setup (parent, parameters);
 			//
 			//real

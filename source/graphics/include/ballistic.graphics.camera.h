@@ -49,7 +49,7 @@ namespace ballistic {
 			// component
 			virtual void notify (ballistic::message & message) override;
 
-			virtual void setup (entity * parent, property_map & parameters) override;
+			virtual void setup (entity * parent, property_container & parameters) override;
 
 		};
 

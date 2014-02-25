@@ -20,7 +20,7 @@ namespace ballistic {
 			virtual ~icomponent_type ();
 
 			virtual icomponent * create (entity * parent) = 0;
-			virtual icomponent * create (entity * parent, property_map & parameters) = 0;
+			virtual icomponent * create (entity * parent, property_container & parameters) = 0;
 
 		};
 
@@ -37,7 +37,7 @@ namespace ballistic {
 				return new_comp;
 			}
 
-			virtual icomponent * create (entity * parent, property_map & parameters) {
+			virtual icomponent * create (entity * parent, property_container & parameters) {
 				icomponent * new_comp = new component_t ();
 
 				new_comp->setup (parent, parameters);

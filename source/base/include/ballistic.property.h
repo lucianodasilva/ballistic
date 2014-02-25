@@ -8,30 +8,30 @@
 
 namespace ballistic {
 
-	class iproperty;
-
-	class iproperty_container {
-	public:
-		virtual void property_changed_event (iproperty * changed_property) = 0;
-	};
+	class entity;
 
 	class iproperty {
+	protected:
+
+		id_t							_id = 0;
+		entity *						_container;
+
 	public:
-		virtual id_t					id () = 0;
-		virtual iproperty_container *	container () = 0;
+
+		id_t							id () const;
+		entity *						container () const;
+
+		iproperty ();
+
 		virtual							~iproperty ();
+		void							raise_event () const;
 	};
 
 	template < class value_t >
 	class property : public iproperty {
-	private:
-		id_t					_id;		
+	private:		
 		value_t					_value;
-		iproperty_container *	_container;
 	public:
-
-		inline virtual id_t						id () { return _id; }
-		inline virtual iproperty_container *	container () { return _container; }
 
 		inline property (const id_t & id_v, const value_t & v, iproperty_container * ctner)
 			: _id (id_v), _value (v), _container (ctner)
@@ -39,7 +39,7 @@ namespace ballistic {
 
 		inline void operator = (const value_t & v) {
 			_value = v;
-			_container->property_changed_event (this);
+			iproperty::raise_event ();
 		}
 
 		inline operator value_t () const {
@@ -49,13 +49,6 @@ namespace ballistic {
 	};
 
 	namespace details {
-
-		class null_property_container : public iproperty_container {
-		public:
-			static null_property_container static_instance;
-
-			virtual void property_changed_event (iproperty * changed_property);
-		};
 
 		struct property_accessor {
 

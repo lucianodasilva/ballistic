@@ -1,9 +1,9 @@
 #ifndef	_ballistic_game_h_
 #define _ballistic_game_h_
 
-#include "ballistic.igame.h"
+#include "ballistic.entity.h"
+#include "ballistic.entity_container.h"
 #include "ballistic.isystem.h"
-#include "ballistic.system.h"
 
 #include <functional>
 #include <map>
@@ -15,7 +15,7 @@ using namespace std;
 
 namespace ballistic {
 	
-	class game : public igame {
+	class game : public entity {
 	protected:
 		
 		// entity id
@@ -44,31 +44,13 @@ namespace ballistic {
 
 	public:
 
-		virtual id_t create_id_key ();
-		
-		// resource handling
-	
-		virtual resources::iresource * get_resource (const res_id_t & res_id);
-		virtual resources::iresource * get_resource (const id_t & res_id);
-		
-		virtual void push_resource_level ();
-		virtual bool pop_resource_level ();
-		
-		virtual resources::stack & get_resource_stack ();
+		entity_container entities;
 
-		// -----------------
+		system_container systems;
 
-		virtual void add_entity (entity * ent);
+		resource_container resources;
 
-		virtual entity * find_entity ( id_t id );
-
-		// -----------------
-
-		virtual void add_system (isystem * system);
-
-		virtual isystem * find_system (id_t id);
-
-		// -----------------
+		id_t create_id_key ();
 
 		virtual void send_message ( ballistic::message & message );
 

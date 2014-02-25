@@ -7,18 +7,22 @@
 
 namespace ballistic {
 
-	class property_map {
+	class property_container {
 	private:
 		std::map < id_t, iproperty * >	_properties;
-		iproperty_container *			_container;
+		entity *						_container;
 	public:
+
+		// delete copy and assignment
+		property_container (const property_container & o) = delete;
+		property_container & operator = (const property_container & o) = delete;
 
 		typedef std::map < id_t, iproperty * >::iterator iterator;
 
-		property_map ();
-		property_map (iproperty_container * container);
+		property_container ();
+		property_container (entity * container);
 
-		virtual ~property_map ();
+		virtual ~property_container ();
 
 		virtual void remove ( id_t id );
 		virtual bool contains ( id_t id ) const;
@@ -38,7 +42,7 @@ namespace ballistic {
 				auto prop = dynamic_cast <property < value_t > *> (it->second);
 
 				if (!prop) {
-					debug_print ("[base::property_map::require] Property " << id << " already exists with different type. Property overwriten.");
+					debug_print ("property " << id << " already exists with different type. property overriden.");
 					delete it->second;
 					prop = new property < value_t > (id, default_value, _container);
 					it->second = prop;
