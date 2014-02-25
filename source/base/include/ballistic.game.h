@@ -4,6 +4,7 @@
 #include "ballistic.entity.h"
 #include "ballistic.entity_container.h"
 #include "ballistic.isystem.h"
+#include "ballistic.message_notifier.h"
 
 #include <functional>
 #include <map>
@@ -43,6 +44,10 @@ namespace ballistic {
 		ifrontend * _frontend;
 
 	public:
+
+		static game instance;
+
+		message_notifier global_notifier;
 
 		entity_container entities;
 

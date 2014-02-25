@@ -13,51 +13,18 @@ namespace ballistic {
 
 	icomponent::~icomponent () {}
 
-	entity * component::get_entity () const {
-		return _entity;
+	entity * component::container () const {
+		return _container;
 	}
 
-	igame * component::get_game () const {
-		return _game;
-	}
+	component::component () : _container (nullptr) {}
 
-	component::component () : _entity (nullptr), _game (nullptr) {}
-
-	void component::setup ( entity * parent ) {
-		_game = parent->get_game ();
-		_entity = parent;
+	void component::setup ( ballistic::entity * container_v ) {
+		_container = container_v;
 	}
 		
-	void component::setup (entity * parent, property_container & parameters) {
-		component::setup (parent);
+	void component::setup (entity * container_v, property_container & parameters) {
+		component::setup (container_v);
 	}
-
-	icomponent * component::create (entity * parent, const res_id_t & id) {
-		return create (parent, id.get_id ());
-	}
-
-	icomponent * component::create (entity * parent, id_t id) {
-
-		auto ctor = dynamic_cast <entity_model::icomponent_type *> (parent->get_game ()->get_resource (id));
-
-		if (ctor)
-			return ctor->create (parent);
-		else {
-			debug_print ("[base::game::create_component] Unable to load component constructor with id: " << id);
-			return nullptr;
-		}
-	}
-
-	icomponent * component::create (entity * parent, id_t id, property_container & parameters) {
-		auto ctor = dynamic_cast <entity_model::icomponent_type *> (parent->get_game ()->get_resource (id));
-
-		if (ctor)
-			return ctor->create (parent, parameters);
-		else {
-			debug_print ("[base::game::create_component] Unable to load component constructor with id: " << id);
-			return nullptr;
-		}
-	}
-
 
 }

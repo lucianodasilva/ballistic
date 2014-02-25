@@ -9,6 +9,8 @@
 
 namespace ballistic {
 
+	game game::instance = game ();
+
 	id_t game::create_id_key () {
 		return std::hash < unsigned int > ()(++_id_key);
 	}
@@ -139,7 +141,13 @@ namespace ballistic {
 		_running = false;
 	}
 
-	game::game () : igame (), _id_key(0), _m_update (this, id::message_update), _frontend (nullptr) {
+	game::game () : 
+		igame (), 
+		_id_key(0), 
+		_m_update (this, id::message_update), 
+		_frontend (nullptr),
+		global_notifier (this)
+	{
 		set_game (this);
 		_entity_map [this->get_id ()] = this;
 	}

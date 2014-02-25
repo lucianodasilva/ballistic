@@ -4,6 +4,7 @@
 #include "ballistic.id.h"
 #include "ballistic.property_container.h"
 #include "ballistic.component_container.h"
+#include "ballistic.message_notifier.h"
 
 using namespace std;
 
@@ -14,7 +15,6 @@ namespace ballistic {
 	class entity {
 	private:
 
-		game *					_game;
 		id_t					_id;
 
 	public:
@@ -23,11 +23,11 @@ namespace ballistic {
 		entity (const entity & orig) = delete;
 		entity & operator = (const entity & orig) = delete;
 
+		message_notifier local_notifier;
+
 		property_container properties;
 
 		component_container components;
-
-		game * game ();
 
 		id_t id ();
 			
