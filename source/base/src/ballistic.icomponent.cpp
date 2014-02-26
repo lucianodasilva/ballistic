@@ -26,5 +26,7 @@ namespace ballistic {
 	void component::setup (entity * container_v, property_container & parameters) {
 		component::setup (container_v);
 	}
+	
+	void component::terminate () {}
 
 }

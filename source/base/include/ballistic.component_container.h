@@ -24,9 +24,7 @@ namespace ballistic {
 		component_container (const component_container & o) = delete;
 		component_container & operator = (const component_container & o) = delete;
 
-
-		virtual void add (icomponent * component);
-		virtual void notify (ballistic::message & message);
+		virtual icomponent * create (/* add setup info */);
 
 	};
 }

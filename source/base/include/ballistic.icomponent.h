@@ -2,7 +2,7 @@
 #ifndef _ballistic_icomponent_h_
 #define _ballistic_icomponent_h_
 
-
+#include "ballistic.message_notifier.h"
 
 #include <vector>
 
@@ -10,7 +10,7 @@ namespace ballistic {
 
 	class entity;
 
-	class icomponent {
+	class icomponent : public imessage_listener {
 	public:
 
 		virtual ballistic::entity *	container () const = 0;
@@ -19,6 +19,8 @@ namespace ballistic {
 
 		virtual void setup (ballistic::entity * container_v) = 0;
 		virtual void setup (ballistic::entity * container_v, property_container & parameters) = 0;
+		
+		virtual void terminate () = 0;
 
 	};
 
@@ -33,8 +35,10 @@ namespace ballistic {
 
 		component ();
 
-		virtual void setup (ballistic::entity * containerv);
-		virtual void setup (ballistic::entity * containerv, property_container & parameters);
+		virtual void setup (ballistic::entity * container_v);
+		virtual void setup (ballistic::entity * container_v, property_container & parameters);
+		
+		virtual void terminate ();
 
 	};
 	

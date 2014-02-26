@@ -6,24 +6,16 @@
 namespace ballistic {
 
 	component_container::~component_container () {
-		for (icomponent * c : _components)
+		for (icomponent * c : _components) {
+			c->terminate ();
 			delete c;
-	}
-
-	void component_container::add (icomponent * component) {
-		if (!component) {
-			debug_error ("instance of component not set.");
-			return;
 		}
-
-		_components.push_back (component);
-		//TODO: register components
 	}
 
-	void component_container::notify (ballistic::message & message) {
-		for (icomponent * c : _components)
-			c->notify (message);
+	icomponent * component_container::create () {
+
 	}
+
 
 }
 

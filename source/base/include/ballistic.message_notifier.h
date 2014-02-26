@@ -33,8 +33,8 @@ namespace ballistic {
 		message_notifier (entity * container);
 		virtual ~message_notifier ();
 
-		void register_local (id_t message_id, imessage_listener * listener);
-		void register_global (id_t message_id, imessage_listener * listener);
+		void attach (id_t message_id, imessage_listener * listener);
+		void detach (id_t message_id, imessage_listener * listener);
 
 		virtual void notify (entity * sender, message & m);
 
