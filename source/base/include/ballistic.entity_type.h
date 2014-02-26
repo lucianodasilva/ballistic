@@ -7,6 +7,7 @@
 
 #include "ballistic.component_info.h"
 #include "ballistic.id.h"
+#include "ballistic.iresource.h"
 
 #include <string>
 #include <vector>
@@ -18,7 +19,7 @@ namespace ballistic {
 	class entity;
 	class igame;
 		
-	class entity_type {	
+	class entity_type : public iresource {	
 	public:
 
 		vector < component_info > components;

@@ -5,12 +5,12 @@
 #include "ballistic.config.h"
 #include "ballistic.debug.h"
 
-#include "ballistic.component_constructor.h"
 
 namespace ballistic {
 
 	class entity;
 	class icomponent;
+	class icomponent_constructor;
 
 	class component_info {
 	private:
