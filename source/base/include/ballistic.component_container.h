@@ -4,6 +4,7 @@
 
 #include "ballistic.config.h"
 #include "ballistic.message.h"
+#include "ballistic.component_info.h"
 
 #include <vector>
 
@@ -12,7 +13,7 @@ namespace ballistic {
 	class icomponent;
 	class entity;
 
-	class component_container : public inotification_target {
+	class component_container {
 	private:
 		entity *				_container;
 		vector < icomponent * > _components;
@@ -24,7 +25,7 @@ namespace ballistic {
 		component_container (const component_container & o) = delete;
 		component_container & operator = (const component_container & o) = delete;
 
-		virtual icomponent * create (/* add setup info */);
+		virtual icomponent * create (component_info & info);
 
 	};
 }

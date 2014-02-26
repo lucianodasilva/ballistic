@@ -22,6 +22,7 @@ namespace ballistic {
 		entity *						container () const;
 
 		iproperty ();
+		iproperty (id_t id_v, entity * container_v);
 
 		virtual							~iproperty ();
 		void							raise_event () const;
@@ -33,8 +34,8 @@ namespace ballistic {
 		value_t					_value;
 	public:
 
-		inline property (const id_t & id_v, const value_t & v, iproperty_container * ctner)
-			: _id (id_v), _value (v), _container (ctner)
+		inline property (const id_t & id_v, const value_t & v, entity * ctner)
+			: iproperty (id_v, ctner), _value (v)
 		{}
 
 		inline void operator = (const value_t & v) {

@@ -1,9 +1,6 @@
 #include "ballistic.icomponent.h"
-#include "ballistic.entity_model.icomponent_type.h"
 
 #include "ballistic.debug.h"
-#include "ballistic.igame.h"
-
 
 #include <string>
 

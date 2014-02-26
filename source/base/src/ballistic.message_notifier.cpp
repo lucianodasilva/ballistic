@@ -25,6 +25,10 @@ namespace ballistic {
 			listener_list.erase (it);
 	}
 
+	void message_notifier::notify (message & m) {
+		notify (_container, m);
+	}
+
 	void message_notifier::notify (entity * sender, message & m) {
 		auto message_listeners = _listeners [m.id ()];
 

@@ -24,8 +24,10 @@ namespace ballistic {
 
 		virtual ~property_container ();
 
-		virtual void remove ( id_t id );
-		virtual bool contains ( id_t id ) const;
+		void remove ( id_t id );
+		bool contains ( id_t id ) const;
+
+		size_t count () const;
 
 		iterator begin ();
 		iterator end ();

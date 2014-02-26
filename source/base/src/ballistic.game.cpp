@@ -2,7 +2,6 @@
 
 #include "ballistic.debug.h"
 #include "ballistic.common_id.h"
-#include "ballistic.resources.entity_info.h"
 #include "ballistic.system.h"
 
 #include <functional>
@@ -11,100 +10,18 @@ namespace ballistic {
 
 	game game::instance = game ();
 
-	id_t game::create_id_key () {
-		return std::hash < unsigned int > ()(++_id_key);
-	}
-
-	void game::add_entity ( entity * ent ) {
-		_entity_map [ent->get_id ()] = ent;
-		ent->set_game (this);
-	}
-	
-	// resource handling -------
-	
-	resources::iresource * game::get_resource(const ballistic::res_id_t &res_id)	{
-		return _resources [res_id];
-	}
-
-	resources::iresource * game::get_resource (const id_t & id) {
-		return _resources.get_resource (id);
-	}
-	
-	void game::push_resource_level() {
-		_resources.push();
-	}
-	
-	bool game::pop_resource_level() {
-		return _resources.pop ();
-	}
-	
-	resources::stack & game::get_resource_stack() { return _resources; }
-	
-	// -------------------------
-
-	entity * game::find_entity ( id_t id ) {
-		entity_map_t::iterator it = _entity_map.find (id);
-
-		if (it == _entity_map.end ()) {
-			debug_print ("[ballistic::game::find_entity] Entity with id: " << id << " not found in entity map");
-			return nullptr;
-		}
-
-		return it->second;
-	}
-
-	// ------------------------------------
-
-	void game::add_system (isystem * system) {
-
-		if (!system) {
-			debug_error ("[ballistic::game::add_system] System instance not set to an instance of an object. No system added.");
-			return;
-		}
-
-		for (auto s : _systems) {
-			if (s->get_id () == system->get_id ()) {
-				debug_error ("[ballistic::game::add_system] Duplicate system id found. System not added.");
-				return;
-			}
-		}
-
-		_systems.push_back (system);
-		system->set_game (this);
-	}
-
-	isystem * game::find_system (id_t id) {
-		for (auto s : _systems) {
-			if (s->get_id () == id)
-				return s;
-		}
-
-		return nullptr;
-	}
-
-	// ------------------------------------
-
-	void game::send_message ( ballistic::message & message ) {
-
-		for (auto it : _entity_map)
-			it.second->notify (message);
-
-		for (auto * sys : _systems)
-			sys->notify (message);
-	}
-
 	void game::initialize () {
 		_frame_start = _game_start_time = system::get_time_now ();
 		_frame_id = 1;
 		_running = true;
 
 		message m (this, id::message_initialize);
-		send_message (m);
+		global_notifier.notify (m);
 	}
 
 	bool game::is_running () { return _running; }
 
-	void game::do_loop (function < void ( igame * ) > system_callback) {
+	void game::do_loop (function < void ( game * ) > system_callback) {
 
 		if (!_frontend) {
 			debug_error ("[ballistic::game::do_loop] frontend not set!")
@@ -126,7 +43,7 @@ namespace ballistic {
 
 		_frame_start = system::get_time_now ();
 
-		send_message (_m_update);
+		global_notifier.notify (_m_update);
 
 		_frame_id++;
 
@@ -137,37 +54,25 @@ namespace ballistic {
 		message m (this, id::message_terminate);
 		// add message properties here
 
-		send_message (m);
+		global_notifier.notify (m);
 		_running = false;
 	}
 
-	game::game () : 
-		igame (), 
-		_id_key(0), 
+	game::game () :
+		entity (0, nullptr), 
 		_m_update (this, id::message_update), 
 		_frontend (nullptr),
+		entities (this),
 		global_notifier (this)
-	{
-		set_game (this);
-		_entity_map [this->get_id ()] = this;
+	{}
+
+	game::~game () {}
+
+	void game::frontend (ifrontend * fend) {
+		_frontend = fend;
 	}
 
-	game::~game () {
-
-		for (auto it : _entity_map)  {
-			if (it.second->get_id () != 0)
-				delete it.second;
-		}
-
-		for (auto sys : _systems)
-			delete sys;
-	}
-
-	void game::set_frontend (ifrontend * frontend) {
-		_frontend = frontend;
-	}
-
-	ifrontend * game::get_frontend () {
+	ifrontend * game::frontend () {
 		return _frontend;
 	}
 }

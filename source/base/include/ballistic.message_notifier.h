@@ -3,7 +3,6 @@
 
 #include "ballistic.id.h"
 #include "ballistic.message.h"
-#include "ballistic.icomponent.h"
 
 #include <functional>
 #include <map>
@@ -15,7 +14,8 @@ namespace ballistic {
 
 	class entity;
 
-	struct imessage_listener {
+	class imessage_listener {
+	public:
 		virtual void notify (entity * sender, message & m ) = 0;
 	};
 
@@ -36,6 +36,7 @@ namespace ballistic {
 		void attach (id_t message_id, imessage_listener * listener);
 		void detach (id_t message_id, imessage_listener * listener);
 
+		virtual void notify (message & m);
 		virtual void notify (entity * sender, message & m);
 
 	};

@@ -5,7 +5,7 @@
 
 namespace ballistic {
 
-	class igame;
+	class game;
 
 	class ifrontend {
 	public:
@@ -24,9 +24,9 @@ namespace ballistic {
 		virtual void show () = 0;
 		virtual void destroy () = 0;
 
-		virtual void update (ballistic::igame * game) = 0;
+		virtual void update (ballistic::game * game) = 0;
 
-		virtual void do_event_loop (ballistic::igame * game) = 0;
+		virtual void do_event_loop (ballistic::game * game) = 0;
 
 	};
 

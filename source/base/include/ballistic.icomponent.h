@@ -24,7 +24,6 @@ namespace ballistic {
 
 	};
 
-
 	// abstract implementation
 	class component : public icomponent {
 	private:

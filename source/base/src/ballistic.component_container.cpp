@@ -12,8 +12,13 @@ namespace ballistic {
 		}
 	}
 
-	icomponent * component_container::create () {
+	icomponent * component_container::create (component_info & info) {
+		icomponent * new_comp = info.create (_container);
 
+		if (new_comp)
+			_components.push_back (new_comp);
+
+		return new_comp;
 	}
 
 

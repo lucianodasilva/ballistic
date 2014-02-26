@@ -12,10 +12,13 @@ namespace ballistic {
 
 	class game;
 
+	class entity_type;
+
 	class entity {
 	private:
 
 		id_t					_id;
+		entity_type *			_type;
 
 	public:
 
@@ -30,8 +33,10 @@ namespace ballistic {
 		component_container components;
 
 		id_t id ();
+
+		entity_type * type ();
 			
-		entity ( id_t id_v );
+		entity ( id_t id_v, entity_type * type_v );
 		
 	};
 	

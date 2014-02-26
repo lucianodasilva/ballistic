@@ -25,6 +25,10 @@ namespace ballistic {
 		return _properties.find (id) != _properties.end ();
 	}
 
+	size_t property_container::count () const {
+		return _properties.size ();
+	}
+
 	property_container::iterator property_container::begin () {
 		return _properties.begin ();
 	}
