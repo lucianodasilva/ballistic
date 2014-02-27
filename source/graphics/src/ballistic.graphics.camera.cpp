@@ -117,98 +117,103 @@ namespace ballistic {
 
 		}
 
-		void camera::notify (ballistic::message & message) {
+		void camera::notify (entity * sender, ballistic::message & message) {
 
-			if (message.get_id () == ballistic::id::message_update)  {
+			if (message.id () == ballistic::id::message_update) {
 				if (_system)
 					_system->set_camera (this);
 				debug_run (else
-					debug_print ("[ballistic::graphics::camera::notify] Graphics system not set!");
+					debug_print ("graphics system not set!");
 				);
-
-				return;
-			}
-
-			if (message.get_id () == ballistic::id::message_property_changed && message.get_sender () == get_entity ()) {
+			} else if (message.id () == ballistic::id::message_property_changed) {
 				id_t property_id = message [ballistic::id::id];
 
-				if (property_id == id::position)
+				if (property_id == id::position) {
 					position = message [ballistic::id::value];
-				else if (property_id == id::target)
+				} else if (property_id == id::target) {
 					target = message [ballistic::id::target];
-				else if (property_id == id::up)
-					up = message [ballistic::id::target];
+				} else if (property_id == id::up) {
+					up = message [ballistic::id::up];
+				}
+			} else {
+				// initialize
+				_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
 
-				return;
+				position =	sender->properties [ballistic::id::position];
+				target =	sender->properties [ballistic::id::target];
+				up =		sender->properties [ballistic::id::up];
 			}
 
-			if (message.get_id () == ballistic::id::message_initialize) {
-
-				entity * ent = get_entity ();
-
-				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
-
-				position = ent->properties [ballistic::id::position];
-				target = ent->properties [ballistic::id::target];
-				up = ent->properties [ballistic::id::up];
-			}
 		}
 
 		void camera::setup (entity * parent, property_container & parameters) {
-			//component::setup (parent, parameters);
-			//
-			//real
-			//	left = 0,
-			//	right = 0,
-			//	top = 0,
-			//	bottom = 0,
-			//	near = 0,
-			//	far = 0,
-			//	fovy = 0;
-			//
-			//
-			//enum {
-			//	proj_type_ortho,
-			//	proj_type_persp
-			//} type = proj_type_ortho;
-			//
-			//for (auto & prop_pair : parameters) {
-			//	id_t prop_id = prop_pair.first;
-			//	var & prop = prop_pair.second;
-			//
-			//	if (prop_id == id::graphics::projection) {
-			//		if ((text)prop == "ortho")
-			//			type = proj_type_ortho;
-			//		else if ((text)prop == "perspective")
-			//			type = proj_type_persp;
-			//		
-			//	} else if (prop_id == id::graphics::left)
-			//		left = prop;
-			//	else if (prop_id == id::graphics::right)
-			//		right = prop;
-			//	else if (prop_id == id::graphics::top)
-			//		top = prop;
-			//	else if (prop_id == id::graphics::bottom)
-			//		bottom = prop;
-			//	else if (prop_id == id::graphics::near)
-			//		near = prop;
-			//	else if (prop_id == id::graphics::far)
-			//		far = prop;
-			//	else if (prop_id == id::graphics::fov)
-			//		fovy = prop;
-			//
-			//}
-			//
-			//
-			//
-			//if (type == proj_type_ortho)
-			//	make_ortho_projection (left, right, bottom, top, near, far);
-			//else if (type == proj_type_persp) {
-			//	point size = get_game ()->get_frontend ()->get_client_size ();
-			//	make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
-			//}
+			component::setup (parent, parameters);
+
+			// bind to local message notifier
+			container ()->local_notifier.attach (id::message_property_changed, this);
+			// bind to global message notifier
+			game::instance.global_notifier.attach (id::message_update, this);
+			
+			real
+				left = 0,
+				right = 0,
+				top = 0,
+				bottom = 0,
+				near = 0,
+				far = 0,
+				fovy = 0;
+			
+			
+			enum {
+				proj_type_ortho,
+				proj_type_persp
+			} type = proj_type_ortho;
+
+			string proj_value = parameters [id::graphics::projection];
+			
+			for (auto & prop_pair : parameters) {
+				id_t prop_id = prop_pair.first;
+				iproperty * prop = prop_pair.second;
+			
+				if (prop_id == id::graphics::projection) {
+					if ((text)prop == "ortho")
+						type = proj_type_ortho;
+					else if ((text)prop == "perspective")
+						type = proj_type_persp;
+					
+				} else if (prop_id == id::graphics::left)
+					left = prop;
+				else if (prop_id == id::graphics::right)
+					right = prop;
+				else if (prop_id == id::graphics::top)
+					top = prop;
+				else if (prop_id == id::graphics::bottom)
+					bottom = prop;
+				else if (prop_id == id::graphics::near)
+					near = prop;
+				else if (prop_id == id::graphics::far)
+					far = prop;
+				else if (prop_id == id::graphics::fov)
+					fovy = prop;
+			
+			}
+			
+			
+			
+			if (type == proj_type_ortho)
+				make_ortho_projection (left, right, bottom, top, near, far);
+			else if (type == proj_type_persp) {
+				point size = get_game ()->get_frontend ()->get_client_size ();
+				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
+			}
 		}
 
+		void camera::terminate () {
+			// bind to local message notifier
+			container ()->local_notifier.detach (id::message_property_changed, this);
+			// bind to global message notifier
+			game::instance.global_notifier.detach (id::message_update, this);
+		}
 
 	}
 }

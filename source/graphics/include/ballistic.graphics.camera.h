@@ -47,9 +47,10 @@ namespace ballistic {
 			void make_perspective_proj (real fov, real aspect, real near, real far );
 
 			// component
-			virtual void notify (ballistic::message & message) override;
+			virtual void notify (entity * sender, ballistic::message & message) override;
 
 			virtual void setup (entity * parent, property_container & parameters) override;
+			virtual void terminate () override;
 
 		};
 

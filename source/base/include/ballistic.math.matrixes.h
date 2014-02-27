@@ -248,16 +248,82 @@ namespace math {
 			};
 		}
 
-			// Create matrixes
-			//static mat4_t make_translation ( const vec3_t < value_t > & p );
-			//static mat4_t make_translation ( const vec4_t < value_t > & p );
-			//
-			//static mat4_t make_rotation_x ( value_t r );
-			//static mat4_t make_rotation_y ( value_t r );
-			//static mat4_t make_rotation_z ( value_t r );
-			//
-			//static mat4_t make_scale ( const vec3_t < value_t > & p );
-			//static mat4_t make_scale ( const vec4_t < value_t > & p );
+		inline static this_type make_translation (const vec3_t < value_t > & p) {
+			return{
+				T (1), T (0), T (0), T (0),
+				T (0), T (1), T (0), T (0),
+				T (0), T (0), T (1), T (0),
+				p.x, p.y, p.z, T (1)
+			};
+		}
+
+
+		inline static this_type make_translation (const vec4_t < value_t > & p) {
+			return{
+				T (1), T (0), T (0), T (0),
+				T (0), T (1), T (0), T (0),
+				T (0), T (0), T (1), T (0),
+				p.x, p.y, p.z, p.w
+			};
+		}
+		
+		inline static this_type make_rotation_x (value_t r) {
+			T
+				r_sin = sin (r),
+				r_cos = cos (r);
+
+			return{
+				T (1), T (0), T (0), T (0),
+				T (0), r_cos, r_sin, T (0),
+				T (0), -r_sin, r_cos, T (0),
+				T (0), T (0), T (0), T (1)
+			};
+		}
+
+		inline static this_type make_rotation_y (value_t r) {
+			T
+				r_sin = sin (r),
+				r_cos = cos (r);
+
+			return {
+				r_cos, T (0), -r_sin, T (0),
+				T (0), T (1), T (0), T (0),
+				r_sin, T (0), r_cos, T (0),
+				T (0), T (0), T (0), T (1)
+			};
+		}
+
+		inline static this_type make_rotation_z (value_t r) {
+			T
+				r_sin = sin (r),
+				r_cos = cos (r);
+
+			return{
+				r_cos, r_sin, T (0), T (0),
+				-r_sin, r_cos, T (0), T (0),
+				T (0), T (0), T (1), T (0),
+				T (0), T (0), T (0), T (1)
+			};
+		}
+		
+		inline static this_type make_scale (const vec3_t < value_t > & p) {
+			return{
+				p.x, T (0), T (0), T (0),
+				T (0), p.y, T (0), T (0),
+				T (0), T (0), p.z, T (0),
+				T (0), T (0), T (0), T (1)
+			};
+		}
+
+		inline static this_type make_scale (const vec4_t < value_t > & p) {
+			return{
+				p.x, T (0), T (0), T (0),
+				T (0), p.y, T (0), T (0),
+				T (0), T (0), p.z, T (0),
+				T (0), T (0), T (0), p.w
+			};
+		}
+
 	};
 }
 
