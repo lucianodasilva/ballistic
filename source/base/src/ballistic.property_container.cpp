@@ -37,4 +37,18 @@ namespace ballistic {
 		return _properties.end ();
 	}
 
+	property_container::const_iterator property_container::cbegin () const {
+		return _properties.cbegin ();
+	}
+
+	property_container::const_iterator property_container::cend () const {
+		return _properties.cend ();
+	}
+
+	void property_container::copy_to (property_container & dest) const {
+		for (auto it : _properties) {
+			dest [it.first] = it.second->clone ();
+		}
+	}
+
 }

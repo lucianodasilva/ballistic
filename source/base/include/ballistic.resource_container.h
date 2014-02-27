@@ -20,10 +20,12 @@
 
 namespace ballistic {
 
-	class iloader;
-	class istorage;
-		
-	class package_loader;
+	namespace io {
+		class iloader;
+		class istorage;
+
+		class package_loader;
+	}
 		
 	class resource_container {
 	private:
@@ -34,10 +36,10 @@ namespace ballistic {
 		typedef std::vector < id_t >
 			resource_id_vector_t;
 		
-		typedef std::vector < istorage * >
+		typedef std::vector < io::istorage * >
 			storage_vector_t;
 		
-		typedef std::vector < iloader * >
+		typedef std::vector < io::iloader * >
 			loader_vector_t;
 			
 		// -----------
@@ -54,22 +56,22 @@ namespace ballistic {
 		list < resource_id_vector_t >
 			_stacked_resources;
 			
-		package_loader * _package_loader;
+		io::package_loader * _package_loader;
 		
 	public:
 
-		package_loader * package_loader ();
+		io::package_loader * package_loader ();
 		
 		resource_container ();
 		virtual ~resource_container ();
 		
-		void register_storage ( istorage * storage );
+		void register_storage ( io::istorage * storage );
 			
-		istorage * find_storage ( const string & source );
+		io::istorage * find_storage ( const string & source );
 			
 		
 		
-		void register_loader ( iloader * loader );
+		void register_loader ( io::iloader * loader );
 		
 		void push_level ();
 		bool pop_level ();
@@ -102,12 +104,12 @@ namespace ballistic {
 	};
 		
 	template < class T >
-	T * stack::get_resource ( id_t id ) {
+	T * resource_container::get_resource ( id_t id ) {
 		return dynamic_cast <T *> ( get_resource(id) );
 	}
 		
 	template < class T >
-	T * stack::operator [] ( const res_id_t & res_id ) {
+	T * resource_container::operator [] ( const res_id_t & res_id ) {
 		return get_resource <T> (res_id);
 	}
 		

@@ -18,6 +18,7 @@ namespace ballistic {
 		property_container & operator = (const property_container & o) = delete;
 
 		typedef std::map < id_t, iproperty * >::iterator iterator;
+		typedef std::map < id_t, iproperty * >::const_iterator const_iterator;
 
 		property_container ();
 		property_container (entity * container);
@@ -31,6 +32,11 @@ namespace ballistic {
 
 		iterator begin ();
 		iterator end ();
+
+		const_iterator cbegin () const;
+		const_iterator cend () const;
+
+		void copy_to (property_container & dest) const;
 
 		template < class value_t >
 		inline property < value_t > * require (const id_t & id, const value_t & default_value) {

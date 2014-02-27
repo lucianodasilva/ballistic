@@ -13,9 +13,9 @@
 
 namespace ballistic {
 
-#	define MSG_NOT_FUNDAMENTAL_SRC	"Non fundamental source type for conversion."
-#	define MSG_NOT_FUNDAMENTAL_DST	"Non fundamental destination type for conversion."
-#	define MSG_STRING_CONV_FAILED	"Conversion from string failed."
+#	define MSG_NOT_FUNDAMENTAL_SRC	"non fundamental source type for conversion"
+#	define MSG_NOT_FUNDAMENTAL_DST	"non fundamental destination type for conversion"
+#	define MSG_STRING_CONV_FAILED	"conversion from string failed"
 
 	inline istream & convert_split (istream & stream, string & trim, char delimiter) {
 		char c;
@@ -41,8 +41,8 @@ namespace ballistic {
 	template < class src_t, class dst_t > 
 	inline void convert ( src_t & src, dst_t & dst ){
 		// Compile time type conversion errors
-		static_assert (std::is_fundamental < src_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_SRC);
-		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_DST);
+		static_assert (std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC);
+		static_assert (std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST);
 
 		dst = (dst_t)src;
 	}
@@ -57,14 +57,14 @@ namespace ballistic {
 	template < class string_t, class dst_t > 
 	inline void __convert_string ( const string_t & src, dst_t & dst ) {
 		// Compile time type conversion errors
-		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::__convert_string] " MSG_NOT_FUNDAMENTAL_DST);
+		static_assert (std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST);
 
 		std::stringstream stream (src);
 
 		//extract whitespaces
 		stream >> std::ws >> dst;
 		if (stream.fail ()) {
-			debug_error ("[ballistic::convert::__convert_string] " MSG_STRING_CONV_FAILED);
+			debug_error (MSG_STRING_CONV_FAILED);
 			dst = dst_t ();
 		}
 	}
@@ -75,7 +75,7 @@ namespace ballistic {
 		else if (src == "false")
 			dst = false;
 		else
-			debug_error ("[ballistic::convert::__convert_string] Cannot convert " << src << " to boolean.");
+			debug_error ("cannot convert " << src << " to boolean.");
 	}
 
 	template < class dst_t > 
@@ -96,7 +96,7 @@ namespace ballistic {
 	template < class src_t >
 	inline void convert ( src_t & src, std::string & dst ) {
 		// Compile time type conversion errors
-		static_assert ( std::is_fundamental < src_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_SRC );
+		static_assert ( std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC );
 		dst = std::to_string (src);
 	}
 

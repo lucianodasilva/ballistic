@@ -22,6 +22,8 @@ namespace ballistic {
 	class entity_type : public iresource {	
 	public:
 
+		entity_type (id_t id_v);
+
 		vector < component_info > components;
 
 		property_container properties;

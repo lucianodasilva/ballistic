@@ -26,6 +26,8 @@ namespace ballistic {
 
 		virtual							~iproperty ();
 		void							raise_event () const;
+
+		virtual iproperty *				clone () const = 0;
 	};
 
 	template < class value_t >
@@ -45,6 +47,10 @@ namespace ballistic {
 
 		inline operator value_t () const {
 			return _value;
+		}
+
+		inline virtual iproperty * clone () const {
+			return new property < value_t > (id (), _value, container ());
 		}
 
 	};

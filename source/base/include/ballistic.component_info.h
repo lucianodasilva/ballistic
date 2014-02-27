@@ -5,6 +5,8 @@
 #include "ballistic.config.h"
 #include "ballistic.debug.h"
 
+#include "ballistic.property_container.h"
+
 
 namespace ballistic {
 
@@ -18,6 +20,7 @@ namespace ballistic {
 	public:
 
 		component_info ();
+		component_info (const component_info & o);
 
 		icomponent_constructor * ctor ();
 		void ctor (icomponent_constructor * ctor_v);

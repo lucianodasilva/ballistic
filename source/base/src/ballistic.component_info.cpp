@@ -6,6 +6,10 @@
 namespace ballistic {
 
 	component_info::component_info () : _ctor (nullptr) {}
+
+	component_info::component_info (const component_info & o) : _ctor (o._ctor) {
+		o.properties.copy_to (properties);
+	}
 	
 	icomponent_constructor * component_info::ctor () {
 		return _ctor;
