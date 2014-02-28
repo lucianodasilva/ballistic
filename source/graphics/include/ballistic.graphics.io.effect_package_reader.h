@@ -1,5 +1,5 @@
-#ifndef _ballistic_graphics_resources_effect_package_type_h_
-#define _ballistic_graphics_resources_effect_package_type_h_
+#ifndef _ballistic_graphics_io_effect_package_reader_h_
+#define _ballistic_graphics_io_effect_package_reader_h_
 
 #include <ballistic.base.h>
 #include "ballistic.graphics.idevice.h"
@@ -8,7 +8,7 @@ namespace ballistic {
 	namespace graphics {
 		namespace resources {
 
-			class effect_package_type : public ballistic::resources::package_loader::itype {
+			class effect_package_type : public ballistic::ipackage_ {
 			private:
 
 				idevice * _device;

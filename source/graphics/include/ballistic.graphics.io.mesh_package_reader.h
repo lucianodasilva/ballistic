@@ -1,14 +1,14 @@
-#ifndef _ballistic_graphics_resource_mesh_package_type_h_
-#define _ballistic_graphics_resource_mesh_package_type_h_
+#ifndef _ballistic_graphics_io_mesh_package_reader_h_
+#define _ballistic_graphics_io_mesh_package_reader_h_
 
 #include <ballistic.base.h>
 #include "ballistic.graphics.idevice.h"
 
 namespace ballistic {
 	namespace graphics {
-		namespace resources {
+		namespace io {
 
-			class mesh_package_type : public ballistic::resources::package_loader::itype {
+			class mesh_package_reader : public ballistic::io::package_loader::ipackage_element_reader {
 			private:
 
 				idevice * _device;
@@ -17,13 +17,13 @@ namespace ballistic {
 
 			public:
 
-				mesh_package_type (idevice * device);
+				mesh_package_reader (idevice * device);
 
 				virtual string get_name ();
 
 				virtual void load_element (
 					tinyxml2::XMLElement * element,
-					ballistic::resources::stack & stack
+					ballistic::resource_container & container
 					);
 
 			};
@@ -32,4 +32,4 @@ namespace ballistic {
 	}
 }
 
-#endif //!_ballistic_graphics_resource_mesh_package_type_h_
+#endif //!_ballistic_graphics_resource_mesh_package_reader_h_

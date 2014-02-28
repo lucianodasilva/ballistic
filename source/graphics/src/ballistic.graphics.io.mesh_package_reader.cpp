@@ -1,4 +1,4 @@
-#include "ballistic.graphics.resources.mesh_package_type.h"
+#include "ballistic.graphics.io.mesh_package_reader.h"
 
 #include "ballistic.graphics.imesh.h"
 
@@ -8,15 +8,15 @@ using namespace std;
 
 namespace ballistic {
 	namespace graphics {
-		namespace resources {
+		namespace io {
 
-			mesh_package_type::mesh_package_type (idevice * device) : _device (device) {}
+			mesh_package_reader::mesh_package_reader (idevice * device) : _device (device) {}
 
-			string mesh_package_type::get_name () {
+			string mesh_package_reader::get_name () {
 				return "mesh";
 			}
 
-			istream & mesh_package_type::get_line (istream & stream, string & trim, char delimiter) {
+			istream & mesh_package_reader::get_line (istream & stream, string & trim, char delimiter) {
 				char c;
 
 				trim.clear ();
@@ -34,7 +34,7 @@ namespace ballistic {
 				return stream;
 			}
 
-			void mesh_package_type::load_element (tinyxml2::XMLElement * element, ballistic::resources::stack & stack) {
+			void mesh_package_reader::load_element (tinyxml2::XMLElement * element, ballistic::resource_container & container) {
 
 				string name = element->Attribute ("name");
 
@@ -62,7 +62,7 @@ namespace ballistic {
 
 
 						if (position.size () % 3 != 0) {
-							debug_error ("[ballistic::graphics::resources::mesh_package_type::load_element] mesh position vector not multiple of 3!");
+							debug_error ("mesh position vector not multiple of 3!");
 							delete mesh;
 							return;
 						}
@@ -77,13 +77,13 @@ namespace ballistic {
 						}
 
 						if (uv.size () % 2 != 0) {
-							debug_error ("[ballistic::graphics::resources::mesh_package_type::load_element] mesh uv vector not multiple of 2!");
+							debug_error ("mesh uv vector not multiple of 2!");
 							delete mesh;
 							return;
 						}
 
 						if (uv.size () / 2 != position.size () / 3) {
-							debug_error ("[ballistic::graphics::resources::mesh_package_type::load_element] mesh uv vector size does not match the size of the position vector!");
+							debug_error ("mesh uv vector size does not match the size of the position vector!");
 							delete mesh;
 							return;
 						}
@@ -98,13 +98,13 @@ namespace ballistic {
 						}
 
 						if (normal.size () % 3 != 0) {
-							debug_error ("[ballistic::graphics::resources::mesh_package_type::load_element] mesh normal vector not multiple of 3!");
+							debug_error ("mesh normal vector not multiple of 3!");
 							delete mesh;
 							return;
 						}
 
 						if (normal.size () / 3 != position.size () / 3) {
-							debug_error ("[ballistic::graphics::resources::mesh_package_type::load_element] mesh normal vector size does not match the size of the position vector!");
+							debug_error ("mesh normal vector size does not match the size of the position vector!");
 							delete mesh;
 							return;
 						}
@@ -161,7 +161,7 @@ namespace ballistic {
 
 				delete [] data_buffer;
 
-				stack.add_to_level (text_to_id (name.c_str ()), mesh);
+				container.add_to_level (text_to_id (name.c_str ()), mesh);
 
 			}
 

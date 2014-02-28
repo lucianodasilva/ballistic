@@ -37,10 +37,10 @@ namespace ballistic {
 			const camera & operator = (const camera &v);
 
 			// methods
-			uint16_t get_depth (mat4 & transform) const;
+			uint16_t depth (mat4 & transform) const;
 
-			mat4 get_view () const;
-			const mat4 & get_proj () const;
+			mat4 view () const;
+			const mat4 & proj () const;
 
 			// utilities
 			void make_ortho_projection (real left, real right, real bottom, real top, real near, real far);

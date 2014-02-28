@@ -1,27 +1,27 @@
-#ifndef _ballistic_graphics_resources_material_package_type_h_
-#define _ballistic_graphics_resources_material_package_type_h_
+#ifndef _ballistic_graphics_io_material_package_reader_h_
+#define _ballistic_graphics_io_material_package_reader_h_
 
 #include <ballistic.base.h>
 #include "ballistic.graphics.idevice.h"
 
 namespace ballistic {
 	namespace graphics {
-		namespace resources {
+		namespace io {
 
-			class material_package_type : public ballistic::resources::package_loader::itype {
+			class material_package_reader : public ballistic::io::package_loader::ipackage_element_reader {
 			private:
 
 				idevice * _device;
 
 			public:
 
-				material_package_type (idevice * device);
+				material_package_reader (idevice * device);
 
-				virtual string get_name ();
+				virtual string name ();
 
 				virtual void load_element (
 					tinyxml2::XMLElement * element,
-					ballistic::resources::stack & stack
+					ballistic::resource_container & container
 				);
 
 			};

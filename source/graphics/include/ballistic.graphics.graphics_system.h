@@ -25,17 +25,17 @@ namespace ballistic {
 
 			graphics_system ();
 
-			virtual id_t get_id ();
+			virtual id_t id ();
 
-			void set_device (idevice * device);
-			idevice * get_device ();
+			void device (idevice * dev);
+			idevice * device ();
 
-			void set_camera (camera * cam);
-			const camera * get_camera ();
+			void camera (ballistic::graphics::camera * cam);
+			const ballistic::graphics::camera * camera ();
 
 			void render ();
 
-			virtual void notify ( ballistic::message & message );
+			virtual void notify ( entity * sender, ballistic::message & message );
 
 			// methods
 			virtual void push_item ( imaterial * material, imesh * mesh, const mat4 & transform );

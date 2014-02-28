@@ -41,7 +41,7 @@ namespace ballistic {
 			return *this;
 		}
 
-		uint16_t camera::get_depth (mat4 & transform) const {
+		uint16_t camera::depth (mat4 & transform) const {
 			real z = math::length (
 					vec3 {transform.m12, transform.m13, transform.m14},
 					position
@@ -51,7 +51,7 @@ namespace ballistic {
 			return uint16_t ((1 << 16) * _depth_divisor / z);
 		}
 
-		mat4 camera::get_view () const {
+		mat4 camera::view () const {
 
 			vec3 zaxis = normalize (target - position);
 			vec3 yaxis = normalize (up);
@@ -66,7 +66,7 @@ namespace ballistic {
 			};
 		}
 
-		const mat4 & camera::get_proj () const {
+		const mat4 & camera::proj () const {
 			return _proj;
 		}
 
@@ -121,7 +121,7 @@ namespace ballistic {
 
 			if (message.id () == ballistic::id::message_update) {
 				if (_system)
-					_system->set_camera (this);
+					_system->camera (this);
 				debug_run (else
 					debug_print ("graphics system not set!");
 				);
@@ -169,41 +169,29 @@ namespace ballistic {
 				proj_type_persp
 			} type = proj_type_ortho;
 
-			string proj_value = parameters [id::graphics::projection];
+			string proj_type_value = parameters [id::graphics::projection];
 			
-			for (auto & prop_pair : parameters) {
-				id_t prop_id = prop_pair.first;
-				iproperty * prop = prop_pair.second;
-			
-				if (prop_id == id::graphics::projection) {
-					if ((text)prop == "ortho")
-						type = proj_type_ortho;
-					else if ((text)prop == "perspective")
-						type = proj_type_persp;
-					
-				} else if (prop_id == id::graphics::left)
-					left = prop;
-				else if (prop_id == id::graphics::right)
-					right = prop;
-				else if (prop_id == id::graphics::top)
-					top = prop;
-				else if (prop_id == id::graphics::bottom)
-					bottom = prop;
-				else if (prop_id == id::graphics::near)
-					near = prop;
-				else if (prop_id == id::graphics::far)
-					far = prop;
-				else if (prop_id == id::graphics::fov)
-					fovy = prop;
-			
+			if (proj_type_value == "ortho")
+				type = proj_type_ortho;
+			else if (proj_type_value == "perspective")
+				type = proj_type_persp;
+			else {
+				debug_print ("unknown projection type \"" << proj_type_value << "\". default to ortho.");
 			}
 			
+			left = parameters [id::graphics::left];
+			right = parameters [id::graphics::right];
+			top = parameters [id::graphics::top];
+			bottom = parameters[id::graphics::bottom];
+			near = parameters[id::graphics::near];
+			far = parameters [id::graphics::far];
+			fovy = parameters [id::graphics::fov];
 			
 			
 			if (type == proj_type_ortho)
 				make_ortho_projection (left, right, bottom, top, near, far);
 			else if (type == proj_type_persp) {
-				point size = get_game ()->get_frontend ()->get_client_size ();
+				point size = game::instance.frontend ()->get_client_size ();
 				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
 		}
