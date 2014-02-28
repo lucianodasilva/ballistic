@@ -49,6 +49,10 @@ namespace ballistic {
 			return _value;
 		}
 
+		inline value_t get () const {
+			return _value;
+		}
+
 		inline virtual iproperty * clone () const {
 			return new property < value_t > (id (), _value, container ());
 		}

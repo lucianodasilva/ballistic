@@ -12,7 +12,7 @@ namespace ballistic {
 
 			mesh_package_reader::mesh_package_reader (idevice * device) : _device (device) {}
 
-			string mesh_package_reader::get_name () {
+			const char * mesh_package_reader::name () const {
 				return "mesh";
 			}
 
@@ -36,9 +36,9 @@ namespace ballistic {
 
 			void mesh_package_reader::load_element (tinyxml2::XMLElement * element, ballistic::resource_container & container) {
 
-				string name = element->Attribute ("name");
+				const char * name = element->Attribute ("name");
 
-				imesh * mesh = _device->create_mesh ();
+				imesh * mesh = _device->create_mesh (text_to_id (name));
 
 				mesh_attribute m_attribute = mesh_attribute ();
 
@@ -161,7 +161,7 @@ namespace ballistic {
 
 				delete [] data_buffer;
 
-				container.add_to_level (text_to_id (name.c_str ()), mesh);
+				container.add_to_level (mesh);
 
 			}
 

@@ -5,6 +5,7 @@
 #include "ballistic.entity_container.h"
 #include "ballistic.ifrontend.h"
 #include "ballistic.message_notifier.h"
+#include "ballistic.resource_container.h"
 #include "ballistic.system.h"
 #include "ballistic.system_container.h"
 
@@ -40,6 +41,8 @@ namespace ballistic {
 		message_notifier global_notifier;
 
 		entity_container entities;
+
+		resource_container resources;
 
 		system_container systems;
 

@@ -4,16 +4,18 @@
 namespace ballistic {
 	namespace graphics {
 
-		opengl_material::opengl_material (uint8_t run_id) :
+		opengl_material::opengl_material (id_t id, uint8_t run_id) :
+			imaterial (*this),
+			iresource (id),
 			_opaque (false),
 			_texture (nullptr),
 			_effect (nullptr),
 			_run_id (run_id)
 		{}
 
-		uint8_t opengl_material::get_run_id () { return _run_id; }
+		uint8_t opengl_material::run_id () { return _run_id; }
 
-		void opengl_material::set_effect (ieffect * effect) {
+		void opengl_material::effect (ieffect * effect) {
 			_effect = dynamic_cast <opengl_effect *> (effect);
 
 			if (!_effect) {
@@ -21,43 +23,43 @@ namespace ballistic {
 				return;
 			}
 
-			_diffuse_constant = _effect->get_constant (id::graphics::effect::diffuse);
-			_specular_constant = _effect->get_constant (id::graphics::effect::specular);
+			_diffuse_constant = _effect->constant (id::graphics::effect::diffuse);
+			_specular_constant = _effect->constant (id::graphics::effect::specular);
 		}
 
-		ieffect * opengl_material::get_effect () {
+		ieffect * opengl_material::effect () {
 			return _effect;
 		}
 
-		void opengl_material::set_diffuse (const color & v) {
+		void opengl_material::diffuse (const color & v) {
 			_diffuse = v;
 		}
 
-		color opengl_material::get_diffuse () {
+		color opengl_material::diffuse () {
 			return _diffuse;
 		}
 
-		void opengl_material::set_specular (const color & v) {
+		void opengl_material::specular (const color & v) {
 			_specular = v;
 		}
 
-		color opengl_material::get_specular () {
+		color opengl_material::specular () {
 			return _specular;
 		}
 
-		void opengl_material::set_opaque (bool v) {
+		void opengl_material::opaque (bool v) {
 			_opaque = v;
 		}
 
-		bool opengl_material::get_opaque () {
+		bool opengl_material::opaque () {
 			return _opaque;
 		}
 
-		void opengl_material::set_texture (itexture * v) {
+		void opengl_material::texture (itexture * v) {
 			_texture = v;
 		}
 
-		itexture * opengl_material::get_texture () {
+		itexture * opengl_material::texture () {
 			return _texture;
 		}
 
@@ -68,8 +70,8 @@ namespace ballistic {
 			}
 
 			// apply material
-			_effect->set_constant (_diffuse_constant, _diffuse);
-			_effect->set_constant (_specular_constant, _specular);
+			_effect->constant (_diffuse_constant, _diffuse);
+			_effect->constant (_specular_constant, _specular);
 		}
 
 	}

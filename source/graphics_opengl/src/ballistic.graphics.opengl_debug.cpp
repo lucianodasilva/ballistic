@@ -104,14 +104,14 @@ namespace ballistic {
 		GLuint opengl_debug::_vao_id = 0;
 		GLuint opengl_debug::_vbo_id = 0;
 		
-		graphics::opengl_effect		opengl_debug::_effect (0);
+		graphics::opengl_effect		opengl_debug::_effect (0, 0);
 		graphics::opengl_constant	opengl_debug::_color_uniform;
 
 		void opengl_debug::initialize () {
 			gl_eval_scope(opengl_debug::initialize);
 			
 			_effect.load (_vs_source, _fs_source);
-			_color_uniform = _effect.get_constant (text_to_id ("in_color"));
+			_color_uniform = _effect.constant (text_to_id ("in_color"));
 
 			// --- create vector array
 			glGenVertexArrays (1, &_vao_id);
@@ -130,7 +130,7 @@ namespace ballistic {
 			gl_eval_scope (opengl_debug::draw_line);
 
 			_effect.apply (nullptr);
-			_effect.set_constant (_color_uniform, col);
+			_effect.constant (_color_uniform, col);
 
 			vec3 buffer [2] = { p1, p2 };
 
@@ -161,7 +161,7 @@ namespace ballistic {
 			gl_eval_scope (opengl_debug::draw_line);
 
 			_effect.apply (nullptr);
-			_effect.set_constant (_color_uniform, col);
+			_effect.constant (_color_uniform, col);
 
 			vec3 uc = {p2.x, p1.y, p1.z};
 			vec3 bc = {p1.x, p2.y, p2.z};

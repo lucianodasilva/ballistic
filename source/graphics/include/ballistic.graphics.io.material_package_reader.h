@@ -8,7 +8,7 @@ namespace ballistic {
 	namespace graphics {
 		namespace io {
 
-			class material_package_reader : public ballistic::io::package_loader::ipackage_element_reader {
+			class material_package_reader : public ballistic::io::ipackage_element_reader {
 			private:
 
 				idevice * _device;
@@ -17,7 +17,7 @@ namespace ballistic {
 
 				material_package_reader (idevice * device);
 
-				virtual string name ();
+				virtual const char * name () const;
 
 				virtual void load_element (
 					tinyxml2::XMLElement * element,

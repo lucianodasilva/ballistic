@@ -5,29 +5,31 @@
 #include "ballistic.graphics.graphics_system.h"
 #include "ballistic.graphics.visual.h"
 
-#include "ballistic.graphics.resources.effect_package_type.h"
-#include "ballistic.graphics.resources.material_package_type.h"
-#include "ballistic.graphics.resources.mesh_package_type.h"
+#include "ballistic.graphics.io.effect_package_reader.h"
+#include "ballistic.graphics.io.material_package_reader.h"
+#include "ballistic.graphics.io.mesh_package_reader.h"
 
 namespace ballistic {
 	namespace graphics {
 
-		void define_resources (ballistic::igame * game, ballistic::graphics::idevice * device) {
+		void define_resources (ballistic::graphics::idevice * device) {
 
-			component::define < visual > (game);
-			component::define < camera > (game);
+			//component::define < visual > (game);
+			//component::define < camera > (game);
 
-			game->get_resource_stack ().get_package_loader ()->register_type (
-				new graphics::resources::effect_package_type (device)
+			game & g = game::instance;
+
+			g.resources.package_loader ()->register_reader (
+				new graphics::io::effect_package_reader (device)
 			);
 
-			game->get_resource_stack ().get_package_loader ()->register_type (
-				new graphics::resources::material_package_type (device)
+			g.resources.package_loader ()->register_reader (
+				new graphics::io::material_package_reader (device)
 			);
 
-			game->get_resource_stack ().get_package_loader ()->register_type (
-				new graphics::resources::mesh_package_type (device)
-				);
+			g.resources.package_loader ()->register_reader (
+				new graphics::io::mesh_package_reader (device)
+			);
 		}
 
 	}

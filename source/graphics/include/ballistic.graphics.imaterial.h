@@ -11,7 +11,7 @@ namespace ballistic {
 
 		class idevice;
 
-		class imaterial : public ballistic::iresource {
+		class imaterial : virtual public ballistic::iresource {
 		public:
 
 			virtual uint8_t		run_id () = 0;

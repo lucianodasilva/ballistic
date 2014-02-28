@@ -6,23 +6,23 @@
 
 namespace ballistic {
 	namespace graphics {
-		namespace resources {
+		namespace io {
 
-			class effect_package_type : public ballistic::ipackage_ {
+			class effect_package_reader : public ballistic::io::ipackage_element_reader {
 			private:
 
 				idevice * _device;
 
 			public:
 
-				effect_package_type (idevice * device);
+				effect_package_reader (idevice * device);
 
-				virtual string get_name ();
+				virtual const char * name () const;
 
 				virtual void load_element (
 					tinyxml2::XMLElement * element,
-					ballistic::resources::stack & stack
-					);
+					resource_container & container
+				);
 
 			};
 

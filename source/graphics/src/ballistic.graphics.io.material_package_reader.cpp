@@ -9,15 +9,15 @@ namespace ballistic {
 
 			material_package_reader::material_package_reader (idevice * device) : _device (device) {}
 
-			string material_package_reader::name () {
+			const char * material_package_reader::name () const {
 				return "material";
 			}
 
 			void material_package_reader::load_element (tinyxml2::XMLElement * element, ballistic::resource_container & container) {
 
-				string name = element->Attribute ("name");
+				const char * name = element->Attribute ("name");
 
-				imaterial * material = _device->create_material ();
+				imaterial * material = _device->create_material (text_to_id (name));
 		
 				const tinyxml2::XMLAttribute * cursor = element->FirstAttribute ();
 
@@ -44,7 +44,7 @@ namespace ballistic {
 					cursor = cursor->Next ();
 				}
 
-				container.add_to_level (text_to_id (name.c_str ()), material);
+				container.add_to_level (material);
 			}
 
 		}

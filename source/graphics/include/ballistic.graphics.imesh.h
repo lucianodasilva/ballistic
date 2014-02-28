@@ -14,10 +14,10 @@ namespace ballistic {
 
 		class idevice;
 
-		class imesh : public ballistic::iresource {
+		class imesh : virtual public ballistic::iresource {
 		public:
 
-			virtual uint8_t get_run_id () = 0;
+			virtual uint8_t run_id () = 0;
 			
 			virtual void set_data (
 				uint8_t *		data_buffer,

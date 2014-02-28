@@ -15,12 +15,12 @@ namespace ballistic {
 		class visual : public ballistic::component {
 		private:
 
-			mat4				_transform;
+			property < mat4 > *			_transform;
 
-			imaterial *			_material;
-			imesh *				_mesh;
+			property < imaterial * > *	_material;
+			property < imesh * > *		_mesh;
 
-			graphics_system *	_system;
+			graphics_system *			_system;
 
 		public:
 
@@ -28,10 +28,11 @@ namespace ballistic {
 
 			visual ();
 
-			virtual void notify ( ballistic::message & message ) override;
+			virtual void notify ( entity * sender, ballistic::message & message ) override;
 
 			virtual void setup (entity * parent, property_container & parameters) override;
 
+			virtual void terminate ();
 		};
 				  
 	}

@@ -23,7 +23,7 @@ namespace ballistic {
 
 		class idevice;
 
-		class ieffect : public ballistic::iresource {
+		class ieffect : virtual public ballistic::iresource {
 		public:
 
 			virtual uint8_t run_id () = 0;

@@ -30,6 +30,8 @@ namespace ballistic {
 
 		_systems [sys->id ()] = sys;
 
+		sys->attach ();
+
 		return sys;
 	}
 
@@ -41,7 +43,10 @@ namespace ballistic {
 			return nullptr;
 		}
 
+		it->second->detach ();
+
 		_systems.erase (it);
+
 		return it->second;
 	}
 

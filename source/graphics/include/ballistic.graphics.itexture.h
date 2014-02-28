@@ -6,7 +6,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		class itexture : public ballistic::resources::iresource {
+		class itexture : virtual public ballistic::iresource {
 		public:
 
 		};

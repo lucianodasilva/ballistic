@@ -55,12 +55,12 @@ namespace ballistic {
 
 		public:
 			
-			opengl_effect (uint8_t run_id);
+			opengl_effect (id_t id, uint8_t run_id);
 			~opengl_effect ();
 
-			virtual uint8_t get_run_id ();
+			virtual uint8_t run_id ();
 
-			virtual opengl_constant get_constant (id_t id) const;
+			virtual opengl_constant constant (id_t id) const;
 			
 			virtual void load (
 				const string & vs_shader_source,
@@ -69,13 +69,13 @@ namespace ballistic {
 			
 			virtual void apply (idevice * device);
 
-			void set_constant (opengl_constant & u, int32_t v);
-			void set_constant (opengl_constant & u, real v);
-			void set_constant (opengl_constant & u, const vec2 & v);
-			void set_constant (opengl_constant & u, const vec3 & v);
-			void set_constant (opengl_constant & u, const vec4 & v);
-			void set_constant (opengl_constant & u, const mat4 & v);
-			void set_constant (opengl_constant & u, const color & v);
+			void constant (opengl_constant & u, int32_t v);
+			void constant (opengl_constant & u, real v);
+			void constant (opengl_constant & u, const vec2 & v);
+			void constant (opengl_constant & u, const vec3 & v);
+			void constant (opengl_constant & u, const vec4 & v);
+			void constant (opengl_constant & u, const mat4 & v);
+			void constant (opengl_constant & u, const color & v);
 
 		};
 

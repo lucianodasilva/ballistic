@@ -1,25 +1,27 @@
-#include "ballistic.graphics.resources.effect_package_type.h"
+#include "ballistic.graphics.io.effect_package_reader.h"
 
 #include "ballistic.graphics.ieffect.h"
 
 namespace ballistic {
 	namespace graphics {
-		namespace resources {
+		namespace io {
 
-			effect_package_type::effect_package_type (idevice * device) : _device (device) {}
+			effect_package_reader::effect_package_reader (idevice * device) : _device (device) {}
 
-			string effect_package_type::get_name () {
+			const char * effect_package_reader::name () const {
 				return "effect";
 			}
 
-			void effect_package_type::load_element (tinyxml2::XMLElement * element, ballistic::resources::stack & stack) {
+			void effect_package_reader::load_element (tinyxml2::XMLElement * element, resource_container & container ) {
+
+				
+				const char * name = element->Attribute ("name");
 
 				string
-					name = element->Attribute ("name"),
 					vs_source,
 					fs_source;
 
-				ieffect * effect = _device->create_effect ();
+				ieffect * effect = _device->create_effect (text_to_id (name));
 
 				tinyxml2::XMLElement * cursor = element->FirstChildElement ();
 
@@ -35,7 +37,7 @@ namespace ballistic {
 				}
 
 				effect->load (vs_source, fs_source);
-				stack.add_to_level (text_to_id (name.c_str ()), effect);
+				container.add_to_level (effect);
 			}
 
 		}

@@ -75,8 +75,8 @@ namespace ballistic {
 			for (uint32_t i = 0; i < render_count; ++i) {
 				render_item & item = _render_list [i];
 
-				if (item.material->get_effect () != effect) {
-					effect = item.material->get_effect ();
+				if (item.material->effect () != effect) {
+					effect = item.material->effect ();
 					_device->activate (effect);
 				}
 
@@ -94,7 +94,7 @@ namespace ballistic {
 				mat4 mv = current_view * item.transform;
 				normal_matrix = mv.transpose ().invert ();
 				
-				_device->set_normal (normal_matrix);
+				_device->normal (normal_matrix);
 				
 				// render the stuffs
 				_device->draw_active_mesh ();
@@ -106,9 +106,15 @@ namespace ballistic {
 		}
 
 		void graphics_system::notify ( entity * sender, ballistic::message & message ) {
-
 			render ();
+		}
 
+		void graphics_system::attach () {
+			game::instance.global_notifier.attach (id::message_update, this);
+		}
+
+		void graphics_system::detach () {
+			game::instance.global_notifier.detach (id::message_update, this);
 		}
 
 		void graphics_system::push_item (imaterial * material, imesh * mesh, const mat4 & transform) {

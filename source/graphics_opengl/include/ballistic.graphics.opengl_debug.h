@@ -24,7 +24,7 @@ namespace ballistic {
 		{ \
 			GLenum error = glGetError (); \
 			if (error != GL_NO_ERROR) \
-				debug_error ("GL Call [" << #x << "] Failed in file " << __FILE__ << " at line " << __LINE__ << " with " << ballistic::graphics::opengl_debug::error_to_string (error) ); \
+				debug_error ("gl call [" << #x << "] failed with " << ballistic::graphics::opengl_debug::error_to_string (error) ); \
 		}
 
 #	define gl_eval_shader_compile(shader_id) \

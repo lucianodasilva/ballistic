@@ -37,6 +37,9 @@ namespace ballistic {
 
 			virtual void notify ( entity * sender, ballistic::message & message );
 
+			virtual void attach ();
+			virtual void detach ();
+
 			// methods
 			virtual void push_item ( imaterial * material, imesh * mesh, const mat4 & transform );
 
