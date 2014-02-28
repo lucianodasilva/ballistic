@@ -28,21 +28,31 @@ namespace ballistic {
 		}
 	}
 
-	entity * entity_container::create (entity_type & type) {
-		entity * ent = type.create (reserve_id ());
+	entity * entity_container::create (entity_type * type) {
+		if (!type) {
+			debug_print ("entity type null. no entity created");
+			return nullptr;
+		}
+
+		entity * ent = type->create (reserve_id ());
 		
 		_entities [ent->id ()] = ent;
 
 		return ent;
 	}
 
-	entity * entity_container::create (id_t id, entity_type & type) {
+	entity * entity_container::create (id_t id, entity_type * type) {
+		if (!type) {
+			debug_print ("entity type null. no entity created");
+			return nullptr;
+		}
+
 		if (contains_id (id)) {
 			debug_print ("entity with id " << id << " already exists");
 			return nullptr;
 		}
 
-		entity * ent = type.create (id);
+		entity * ent = type->create (id);
 		_entities [id] = ent;
 		return ent;
 	}

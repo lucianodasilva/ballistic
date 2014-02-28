@@ -127,7 +127,7 @@ namespace ballistic {
 			DestroyWindow (_window_handle);
 		}
 
-		void frontend::update (ballistic::game * game) {
+		void frontend::update () {
 			// Process windows events ------------------------------------
 			MSG msg;
 			while(PeekMessage(&msg, _window_handle, 0, 0, PM_REMOVE) > 0)
@@ -143,9 +143,9 @@ namespace ballistic {
 #			endif
 		}
 
-		void frontend::do_event_loop (ballistic::game * game) {
-			while (game->frame ()) {
-				update (game);
+		void frontend::do_event_loop () {
+			while (game::instance.frame ()) {
+				update ();
 			}
 		}
 

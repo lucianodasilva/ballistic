@@ -9,7 +9,6 @@
 
 using namespace ballistic;
 
-ballistic::game *				_game;
 ballistic::ifrontend *			_frontend;
 ballistic::graphics::idevice *	_device;
 
@@ -42,21 +41,32 @@ ballistic::graphics::idevice * create_device () {
 float angle = 0.0F;
 float radius = 4.0F;
 
-void circle_camera ( ballistic::entity * parent, ballistic::message & message ) {
+class orbit_camera : public ballistic::component {
+public:
 
-	if (message.get_id () != ballistic::id::message_update)
-		return;
+	virtual void setup (ballistic::entity * parent) {
+		component::setup (parent);
+		parent->local_notifier.attach (ballistic::id::message_update, this);
+	}
 
-	vec3 pos;
+	virtual void terminate () {
+		container ()->local_notifier.detach (ballistic::id::message_update, this);
+	}
 
-	pos.x = cos (angle) * radius;
-	pos.y = 2.F;
-	pos.z = sin (angle) * radius;
+	virtual void notify (ballistic::entity * parent, ballistic::message & message) {
 
-	angle = (real)message [ballistic::id::game_time] * real (1); // one radian per second
+		vec3 pos;
 
-	parent->properties [ballistic::id::position] = pos;
-}
+		pos.x = cos (angle) * radius;
+		pos.y = 2.F;
+		pos.z = sin (angle) * radius;
+
+		angle = (real)message [ballistic::id::game_time] * real (1); // one radian per second
+
+		parent->properties [ballistic::id::position] = pos;
+	}
+
+};
 
 ballistic::res_id_t res_rotating_square ("rotating_square.entity", "resources/game.xml");
 ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
@@ -73,28 +83,34 @@ int main ( int argc, char ** argv) {
 	_frontend->show ();
 
 	_device = create_device ();
-	_device->set_clear_color (color{.0F, .6F, 1.F, 1.F});
+	_device->clear_color (color{.0F, .6F, 1.F, 1.F});
 	
-	_game = new ballistic::game ();
-	_game->set_frontend (_frontend);
+	game & g = game::instance;
+
+	g.frontend (_frontend);
 
 	// setup game stuffs
-	ballistic::graphics::define_resources (_game, _device);
-	ballistic::component::define < ballistic::_func_component < &circle_camera > > (_game, ballistic::text_to_id ("orbit_cam"));
+	ballistic::graphics::define_resources (_device);
+
+	g.resources.add_to_global (new component_constructor < orbit_camera > (text_to_id ("orbit_camera")));
 
 	auto graphics = new ballistic::graphics::graphics_system ();
-	graphics->set_device (_device);
+	graphics->device (_device);
 
-	_game->add_system (graphics);
+	g.systems.attach (graphics);
 
 	// create entities
-	ballistic::entity * camera = ballistic::entity::create (_game, res_camera);
-	ballistic::entity * rot_square = ballistic::entity::create (_game, res_rotating_square);
+	g.entities.create (
+		g.resources.get_resource < entity_type > (res_camera)
+	);
+	g.entities.create (
+		g.resources.get_resource < entity_type > (res_rotating_square)
+	);
 
 	// initialize
-	_game->initialize ();
+	g.initialize ();
 
-	_frontend->do_event_loop (_game);
+	_frontend->do_event_loop ();
 
 	return 0;
 }

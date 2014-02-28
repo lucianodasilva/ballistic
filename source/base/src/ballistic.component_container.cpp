@@ -5,6 +5,8 @@
 
 namespace ballistic {
 
+	component_container::component_container (entity * cont) : _container (cont) {}
+
 	component_container::~component_container () {
 		for (icomponent * c : _components) {
 			c->terminate ();

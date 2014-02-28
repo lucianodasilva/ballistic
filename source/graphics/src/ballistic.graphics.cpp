@@ -14,10 +14,12 @@ namespace ballistic {
 
 		void define_resources (ballistic::graphics::idevice * device) {
 
-			//component::define < visual > (game);
-			//component::define < camera > (game);
 
 			game & g = game::instance;
+
+			
+			g.resources.add_to_global (new component_constructor < visual > (id::graphics::visual));
+			g.resources.add_to_global (new component_constructor < camera > (id::graphics::camera));
 
 			g.resources.package_loader ()->register_reader (
 				new graphics::io::effect_package_reader (device)

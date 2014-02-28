@@ -169,7 +169,7 @@ namespace ballistic {
 				proj_type_persp
 			} type = proj_type_ortho;
 
-			string proj_type_value = parameters [id::graphics::projection];
+			const char * proj_type_value = parameters [id::graphics::projection];
 			
 			if (proj_type_value == "ortho")
 				type = proj_type_ortho;

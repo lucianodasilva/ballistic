@@ -31,7 +31,7 @@ namespace ballistic {
 			if (system_callback)
 				system_callback (this);
 
-			_frontend->update (this);
+			_frontend->update ();
 		}
 	}
 

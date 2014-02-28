@@ -96,7 +96,7 @@
         <far    value="100"/>
 
       </graphics_camera>
-      <orbit_cam/>
+      <orbit_camera/>
     </components>
   </entity>
 

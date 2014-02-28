@@ -107,6 +107,11 @@ namespace ballistic {
 	T * resource_container::get_resource ( id_t id ) {
 		return dynamic_cast <T *> ( get_resource(id) );
 	}
+
+	template < class T >
+	T * resource_container::get_resource (const res_id_t & id) {
+		return dynamic_cast <T *> (get_resource (id));
+	}
 		
 	template < class T >
 	T * resource_container::operator [] ( const res_id_t & res_id ) {

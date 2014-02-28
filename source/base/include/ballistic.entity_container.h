@@ -32,8 +32,8 @@ namespace ballistic {
 
 		id_t reserve_id ();
 
-		entity * create (entity_type & type);
-		entity * create (id_t id, entity_type & type);
+		entity * create (entity_type * type);
+		entity * create (id_t id, entity_type * type);
 
 		inline bool contains_id (id_t id) const {
 			return _entities.find (id) != _entities.end ();

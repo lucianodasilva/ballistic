@@ -5,6 +5,7 @@
 #include <type_traits>
 
 #include "ballistic.icomponent.h"
+#include "ballistic.iresource.h"
 
 using namespace std;
 
@@ -12,7 +13,7 @@ namespace ballistic {
 
 	class entity;
 		
-	class icomponent_constructor {
+	class icomponent_constructor : virtual public iresource {
 	public:
 
 		virtual inline ~icomponent_constructor (){}
@@ -23,9 +24,11 @@ namespace ballistic {
 	};
 
 	template < class component_t >
-	class component_constructor : public icomponent_constructor {
+	class component_constructor : virtual public icomponent_constructor {
 		static_assert ( is_base_of < icomponent, component_t >::value, "component constructor can only refer to classes derived from icomponent");
 	public:
+
+		inline component_constructor (id_t id) : icomponent_constructor (*this), iresource (id) {}
 
 		inline virtual icomponent * create (entity * parent) {
 			icomponent * new_comp = new component_t ();

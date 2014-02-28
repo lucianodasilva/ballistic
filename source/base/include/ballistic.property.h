@@ -80,9 +80,9 @@ namespace ballistic {
 				} else {
 					debug_run (
 						if (prop) {
-							debug_print ("[base::property_accessor::assign] wrong type property assign for" << id);
+							debug_print ("wrong type property assign for" << id);
 						} else {
-							debug_print ("[base::property_accessor::assign] property " << id << " not found");
+							debug_print ("property " << id << " not found");
 						}
 					);
 				}
@@ -100,9 +100,9 @@ namespace ballistic {
 				else {
 					debug_run (
 						if (prop) {
-							debug_print ("[base::property_accessor::access] wrong type property access for" << id);
+							debug_print ("wrong type property access for" << id);
 						} else {
-							debug_print ("[base::property_accessor::access] property " << id << " not found");
+							debug_print ("property " << id << " not found");
 						}
 					);
 					return value_t ();

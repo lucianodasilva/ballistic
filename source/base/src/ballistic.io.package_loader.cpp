@@ -13,6 +13,8 @@ using namespace tinyxml2;
 namespace ballistic {
 	namespace io {
 
+		ipackage_element_reader::~ipackage_element_reader () {}
+
 		bool package_loader::handles (const string & name) {
 			if (name.size () < 4)
 				return false;
