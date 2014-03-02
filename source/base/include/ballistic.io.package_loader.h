@@ -10,28 +10,28 @@
 #define _ballistic_io_package_loader_h_
 
 #include "ballistic.io.iloader.h"
-#include <tinyxml2.h>
+#include <cpptoml.h>
 
 #include <map>
 
 namespace ballistic {
 	namespace io {
 
-		class ipackage_element_reader {
+		class ipackage_group_reader {
 		public:
 
-			virtual const char * name () const = 0;
+			virtual const char * type () const = 0;
 
-			virtual void load_element (tinyxml2::XMLElement * element, ballistic::resource_container & container) = 0;
+			virtual void load_element (cpptoml::toml_group & group, ballistic::resource_container & container) = 0;
 
-			virtual ~ipackage_element_reader ();
+			virtual ~ipackage_group_reader ();
 
 		};
 
 		class package_loader : public iloader {
 		public:
 
-			typedef map < string, ipackage_element_reader * > reader_map_t;
+			typedef map < string, ipackage_group_reader * > reader_map_t;
 
 		private:
 
@@ -41,7 +41,7 @@ namespace ballistic {
 
 			package_loader ();
 
-			void register_reader (ipackage_element_reader * reader);
+			void register_reader (ipackage_group_reader * reader);
 
 			virtual bool handles (const string & name);
 

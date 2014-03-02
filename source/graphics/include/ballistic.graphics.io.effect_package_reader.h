@@ -8,7 +8,7 @@ namespace ballistic {
 	namespace graphics {
 		namespace io {
 
-			class effect_package_reader : public ballistic::io::ipackage_element_reader {
+			class effect_package_reader : public ballistic::io::ipackage_group_reader {
 			private:
 
 				idevice * _device;
@@ -17,10 +17,10 @@ namespace ballistic {
 
 				effect_package_reader (idevice * device);
 
-				virtual const char * name () const;
+				virtual const char * type () const;
 
 				virtual void load_element (
-					tinyxml2::XMLElement * element,
+					cpptoml::toml_group & group,
 					resource_container & container
 				);
 

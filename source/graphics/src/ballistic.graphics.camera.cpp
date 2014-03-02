@@ -169,23 +169,23 @@ namespace ballistic {
 				proj_type_persp
 			} type = proj_type_ortho;
 
-			const char * proj_type_value = parameters [id::graphics::projection];
-			
-			if (proj_type_value == "ortho")
+			string projection_type = *parameters.require < string > (id::graphics::projection, "ortho");
+
+			if (projection_type == "ortho")
 				type = proj_type_ortho;
-			else if (proj_type_value == "perspective")
+			else if (projection_type == "perspective")
 				type = proj_type_persp;
 			else {
-				debug_print ("unknown projection type \"" << proj_type_value << "\". default to ortho.");
+				debug_print ("unknown projection type \"" << projection_type << "\". default to ortho.");
 			}
 			
-			left = parameters [id::graphics::left];
-			right = parameters [id::graphics::right];
-			top = parameters [id::graphics::top];
-			bottom = parameters[id::graphics::bottom];
-			near = parameters[id::graphics::near];
-			far = parameters [id::graphics::far];
-			fovy = parameters [id::graphics::fov];
+			left	= parameters [id::graphics::left];
+			right	= parameters [id::graphics::right];
+			top		= parameters [id::graphics::top];
+			bottom	= parameters [id::graphics::bottom];
+			near	= parameters [id::graphics::near];
+			far		= parameters [id::graphics::far];
+			fovy	= parameters [id::graphics::fov];
 			
 			
 			if (type == proj_type_ortho)

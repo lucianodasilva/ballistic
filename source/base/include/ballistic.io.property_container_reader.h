@@ -4,7 +4,7 @@
 #include "ballistic.property_container.h"
 #include "ballistic.resource_container.h"
 
-#include <tinyxml2.h>
+#include <cpptoml.h>
 
 namespace ballistic {
 	namespace io {
@@ -12,7 +12,7 @@ namespace ballistic {
 		struct property_container_reader {
 
 			static void read (
-				tinyxml2::XMLElement * element,
+				cpptoml::toml_group & group,
 				ballistic::resource_container & resources,
 				property_container & container
 			);

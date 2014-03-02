@@ -10,12 +10,12 @@
 namespace ballistic {
 	namespace io {
 
-		class package_reader : public ipackage_element_reader {
+		class package_reader : public ipackage_group_reader {
 		public:
 
-			virtual const char * name () const;
+			virtual const char * type () const;
 
-			virtual void load_element (tinyxml2::XMLElement * element, ballistic::resource_container & container);
+			virtual void load_element (cpptoml::toml_group & group, ballistic::resource_container & container);
 
 		};
 	}
