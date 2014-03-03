@@ -1,11 +1,11 @@
 #ifndef _ballistic_system_container_h_
 #define _ballistic_system_container_h_
 
-using namespace std;
-
 #include <map>
 
 #include "ballistic.id.h"
+
+using namespace std;
 
 namespace ballistic {
 

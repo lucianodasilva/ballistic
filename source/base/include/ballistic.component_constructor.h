@@ -28,7 +28,10 @@ namespace ballistic {
 		static_assert ( is_base_of < icomponent, component_t >::value, "component constructor can only refer to classes derived from icomponent");
 	public:
 
-		inline component_constructor (id_t id) : icomponent_constructor (*this), iresource (id) {}
+		inline component_constructor (id_t id) :
+			iresource (id),
+			icomponent_constructor (*this)
+		{}
 
 		inline virtual icomponent * create (entity * parent) {
 			icomponent * new_comp = new component_t ();

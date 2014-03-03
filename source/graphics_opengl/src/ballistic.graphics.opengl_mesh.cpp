@@ -66,17 +66,17 @@ namespace ballistic {
 				type,         // type
 				GL_FALSE,     // normalized?
 				stride,
-				(void*)offset // array buffer offset in bytes
+				(GLvoid*)offset // array buffer offset in bytes
 				);
 
 			glEnableVertexAttribArray (id);
-
+	
 			return offset + size * sizeof (GL_FLOAT);
 		}
 		
-		opengl_mesh::opengl_mesh ( id_t id, uint8_t run_id ) : 
-			imesh (*this),
+		opengl_mesh::opengl_mesh ( id_t id, uint8_t run_id ) :
 			iresource (id),
+			imesh (*this),
 			_run_id (run_id), 
 			_vertex_array_id (0),
 			_vertex_buffer_id(0),

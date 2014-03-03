@@ -7,8 +7,6 @@
 namespace ballistic {
 	namespace mac_desktop {
 		
-		ballistic::igame * frontend::_game;
-		
 		void frontend::update_frame(){
 			game::instance.frame ();
 			glutSwapBuffers();

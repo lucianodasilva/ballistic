@@ -10,9 +10,9 @@ namespace ballistic {
 	entity::entity (id_t id_v, entity_type * type_v ) : 
 		_id (id_v),
 		_type (type_v),
+		local_notifier (this),
 		properties (this),
-		components (this),
-		local_notifier (this)
+		components (this)
 	{}
 
 }

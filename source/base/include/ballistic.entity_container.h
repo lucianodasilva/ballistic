@@ -1,13 +1,13 @@
 #ifndef _ballistic_entity_container_h_
 #define _ballistic_entity_container_h_
 
-using namespace std;
-
 #include <atomic>
 #include <map>
 
 #include "ballistic.id.h"
 #include "ballistic.entity_type.h"
+
+using namespace std;
 
 namespace ballistic {
 

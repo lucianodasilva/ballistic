@@ -8,7 +8,7 @@
 
 namespace ballistic {
 
-	game game::instance = game ();
+	game game::instance;
 
 	void game::initialize () {
 		_frame_start = _game_start_time = system::get_time_now ();
@@ -62,8 +62,8 @@ namespace ballistic {
 		entity (0, nullptr), 
 		_m_update (this, id::message_update), 
 		_frontend (nullptr),
-		entities (this),
-		global_notifier (this)
+		global_notifier (this),
+		entities (this)
 	{}
 
 	game::~game () {}
