@@ -71,9 +71,6 @@ public:
 ballistic::res_id_t res_rotating_square ("rotating_square.entity", "resources/game.xml");
 ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
 
-#include <chrono>
-
-
 int main ( int argc, char ** argv) {
 
 	debug_init();

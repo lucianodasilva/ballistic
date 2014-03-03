@@ -9,7 +9,8 @@ namespace ballistic {
 			return "include";
 		}
 
-		void package_reader::load_element (
+		void package_reader::load_group (
+			const string & group_name,
 			cpptoml::toml_group & group,
 			ballistic::resource_container & container
 			) {

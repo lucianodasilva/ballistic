@@ -13,6 +13,7 @@
 #include <cpptoml.h>
 
 #include <map>
+#include <string>
 
 namespace ballistic {
 	namespace io {
@@ -22,7 +23,7 @@ namespace ballistic {
 
 			virtual const char * type () const = 0;
 
-			virtual void load_element (cpptoml::toml_group & group, ballistic::resource_container & container) = 0;
+			virtual void load_group (const string & group_name, cpptoml::toml_group & group, ballistic::resource_container & container) = 0;
 
 			virtual ~ipackage_group_reader ();
 

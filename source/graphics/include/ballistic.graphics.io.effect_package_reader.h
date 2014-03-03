@@ -19,7 +19,8 @@ namespace ballistic {
 
 				virtual const char * type () const;
 
-				virtual void load_element (
+				virtual void load_group (
+					const string & group_name,
 					cpptoml::toml_group & group,
 					resource_container & container
 				);
