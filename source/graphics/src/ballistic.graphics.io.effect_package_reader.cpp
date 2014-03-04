@@ -12,7 +12,7 @@ namespace ballistic {
 				return "effect";
 			}
 
-			void effect_package_reader::load_element (cpptoml::toml_group & group, resource_container & container) {
+			void effect_package_reader::load_group (const string & group_name, cpptoml::toml_group & group, resource_container & container) {
 
 				
 				//const char * name = element->Attribute ("name");

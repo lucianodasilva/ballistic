@@ -12,11 +12,14 @@ using namespace std;
 namespace ballistic {
 
 	class entity;
+	class entity_type;
 		
 	class icomponent_constructor : virtual public iresource {
 	public:
 
 		virtual inline ~icomponent_constructor (){}
+
+		virtual void require_properties (entity_type * new_entity_type) = 0;
 
 		virtual icomponent * create (entity * parent) = 0;
 		virtual icomponent * create (entity * parent, property_container & parameters ) = 0;
@@ -32,6 +35,10 @@ namespace ballistic {
 			iresource (id),
 			icomponent_constructor (*this)
 		{}
+
+		inline virtual void require_properties (entity_type * new_entity_type) {
+			
+		}
 
 		inline virtual icomponent * create (entity * parent) {
 			icomponent * new_comp = new component_t ();

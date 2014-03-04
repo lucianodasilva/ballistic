@@ -62,7 +62,7 @@ namespace ballistic {
 						continue;
 					}
 					
-					reader_it->second->load_element(*it_group, container);
+					reader_it->second->load_group(it.first, *it_group, container);
 				
 				}
 				

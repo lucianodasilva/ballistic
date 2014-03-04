@@ -15,6 +15,7 @@ namespace ballistic {
 		private:
 
 			void load_component (
+				const string & group_name,
 				cpptoml::toml_group & group,
 				ballistic::resource_container & container,
 				vector < component_info > & component_vector
@@ -24,7 +25,7 @@ namespace ballistic {
 
 			virtual const char * type () const;
 
-			virtual void load_element (cpptoml::toml_group & group, ballistic::resource_container & container);
+			virtual void load_group (const string & group_name, cpptoml::toml_group & group, ballistic::resource_container & container);
 
 		};
 

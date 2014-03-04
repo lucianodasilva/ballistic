@@ -34,7 +34,7 @@ namespace ballistic {
 				return stream;
 			}
 
-			void mesh_package_reader::load_element (cpptoml::toml_group & group, ballistic::resource_container & container) {
+			void mesh_package_reader::load_group (const string & group_name, cpptoml::toml_group & group, ballistic::resource_container & container) {
 
 				//const char * name = element->Attribute ("name");
 				//

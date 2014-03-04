@@ -8,10 +8,11 @@ namespace ballistic {
 	namespace io {
 
 		const char * entity_type_reader::type () const {
-			return "entity";
+			return "entity_type";
 		}
 
 		void entity_type_reader::load_component (
+			const string & group_name,
 			cpptoml::toml_group & group,
 			ballistic::resource_container & container,
 			vector < component_info > & component_vector
@@ -38,10 +39,35 @@ namespace ballistic {
 			//}
 		}
 
-		void entity_type_reader::load_element (
+		void entity_type_reader::load_group (
+			const string & group_name,
 			cpptoml::toml_group & group,
 			ballistic::resource_container & container
-			) {
+		) {
+
+			entity_type * new_type = new entity_type (text_to_id (group_name.c_str ()));
+
+			// load components
+			for (auto it : group) {
+				if (!it.second->is_group ())
+					continue;
+				
+				//load_component (
+				//	it.first, 
+				//	*group.get_group (it.first), 
+				//	container
+				//);
+			}
+
+			// load properties
+			for (auto it : group) {
+				if (!it.second->is_value ())
+					continue;
+
+
+			}
+
+
 
 			//const char * type_name = element->Attribute ("name");
 			//
