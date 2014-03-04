@@ -6,8 +6,6 @@
 #include "ballistic.debug.h"
 #include "ballistic.id.h"
 
-#include <cpptoml.h>
-
 namespace ballistic {
 
 	class entity;
@@ -29,7 +27,6 @@ namespace ballistic {
 		virtual							~iproperty ();
 		void							raise_event () const;
 
-		virtual void parse_config		(cpptoml::toml_base  * value) = 0;
 		virtual iproperty *				clone () const = 0;
 	};
 
@@ -54,18 +51,6 @@ namespace ballistic {
 
 		inline value_t get () const {
 			return _value;
-		}
-		
-		inline virtual void parse_config (cpptoml::toml_base * value) {
-			if (!value->is_value()) {
-				debug_print ("invalid toml value type. unable to parse property");
-				return;
-			}
-			
-			auto typed_value = value->as<value_t> ();
-			// TODO: check this
-			
-			_value = typed_value->value ();
 		}
 
 		inline virtual iproperty * clone () const {
