@@ -9,6 +9,9 @@
 #include "ballistic.component_info.h"
 
 namespace ballistic {
+
+	class entity_type;
+
 	namespace io {
 
 		class entity_type_reader : public ipackage_group_reader {
@@ -18,7 +21,7 @@ namespace ballistic {
 				const string & group_name,
 				cpptoml::toml_group & group,
 				ballistic::resource_container & container,
-				vector < component_info > & component_vector
+				entity_type * new_type
 				);
 
 		public:

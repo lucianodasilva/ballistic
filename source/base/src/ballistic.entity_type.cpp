@@ -12,9 +12,7 @@ namespace ballistic {
 		for (component_info & comp_info : components )
 			ent->components.create (comp_info);
 
-		// fill entity with properties
-		for (auto & p : properties)
-			ent->properties.require (p.first, p.second);
+		properties.copy_to (ent->properties);
 
 		return ent;
 	}

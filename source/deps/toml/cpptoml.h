@@ -541,7 +541,7 @@ class parser {
                 return parse_type::STRING;
             } else if( is_date( it, end ) ) {
                 return parse_type::DATE;
-            } else if( is_number( *it ) || *it == '-' ) {
+            } else if( is_number( *it ) || *it == '-' || *it == '.' ) {
                 return determine_number_type( it, end );
             } else if( *it == 't' || *it == 'f' ) {
                 return parse_type::BOOL;
@@ -625,7 +625,7 @@ class parser {
                 ++check_it;
             while( check_it != end && is_number( *check_it ) )
                 ++check_it;
-            if( check_it != end && *check_it == '.' ) {
+            if( check_it != end ) {
                 ++check_it;
                 if( check_it == end )
                     throw toml_parse_exception{ "Floats must have trailing digits" };
@@ -769,18 +769,7 @@ class parser {
 
         bool is_date( const std::string::iterator & it,
                       const std::string::iterator & end ) {
-            auto date_end = std::find_if( it, end, [this]( char c ) {
-                return !is_number( c ) && c != 'T' && c != 'Z' && c != ':' && c != '-';
-            });
-            std::string to_match{ it, date_end };
-#if CPPTOML_HAS_STD_REGEX
-            std::regex pattern{ "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z" };
-            return std::regex_match( to_match, pattern );
-#else
-        return to_match[4] == '-' && to_match[7] == '-'
-               && to_match[10] == 'T' && to_match[13] == ':'
-               && to_match[16] == ':' && to_match[19] == 'Z';
-#endif
+			return false;
         }
 
         std::istream & input_;

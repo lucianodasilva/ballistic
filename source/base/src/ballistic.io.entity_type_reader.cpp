@@ -15,28 +15,41 @@ namespace ballistic {
 			const string & group_name,
 			cpptoml::toml_group & group,
 			ballistic::resource_container & container,
-			vector < component_info > & component_vector
+			entity_type * new_type
 		) {
 
-			//auto cursor = element->FirstChildElement ();
-			//
-			//while (cursor) {
-			//	component_vector.push_back (component_info ());
-			//	component_info & info = component_vector.back ();
-			//
-			//	auto ctor = dynamic_cast <icomponent_constructor *> (container [text_to_id (cursor->Name ())]);
-			//
-			//	if (ctor) {
-			//		info.ctor (ctor);
-			//		property_container_reader::read (cursor, container, info.properties);
-			//	}
-			//	debug_run (
-			//	else
-			//	debug_error ("component constructor " << cursor->Name () << "not defined");
-			//	);
-			//
-			//	cursor = cursor->NextSiblingElement ();
-			//}
+			// load respective component constructor
+			auto ctor = dynamic_cast <icomponent_constructor *> (container [text_to_id (group_name.c_str ())]);
+
+			if (!ctor) {
+				debug_error ("component constructor " << group_name << "not defined");
+				return;
+			}
+
+			new_type->components.push_back (component_info ());
+			component_info & new_info = new_type->components.back ();
+
+			// load component expected parameters
+			ctor->require_properties (new_type, new_info);
+
+			for (auto it : group) {
+
+				if (!it.second->is_value ()) {
+					debug_print ("element \"" << it.first << "\" has unexpected type");
+					continue;
+				}
+
+				// try to load arguments
+				id_t property_id = text_to_id (it.first.c_str ());
+
+				if (!new_info.properties.contains (property_id)) {
+					debug_print ("unexpected argument property \"" << it.first << "\" for component \"" << group_name << "\"");
+					continue;
+				}
+
+				new_info.properties [property_id].prop->parse (it.second);
+			}
+
 		}
 
 		void entity_type_reader::load_group (
@@ -51,12 +64,8 @@ namespace ballistic {
 			for (auto it : group) {
 				if (!it.second->is_group ())
 					continue;
-				
-				//load_component (
-				//	it.first, 
-				//	*group.get_group (it.first), 
-				//	container
-				//);
+
+				load_component (it.first, *group.get_group (it.first), container, new_type);
 			}
 
 			// load properties
@@ -64,23 +73,16 @@ namespace ballistic {
 				if (!it.second->is_value ())
 					continue;
 
+				id_t property_id = text_to_id (it.first.c_str ());
 
+				if (!new_type->properties.contains (property_id)) {
+					debug_print ("unrequested entity property \"" << it.first << "\". value not set");
+					continue;
+				}
+
+				new_type->properties [property_id].prop->parse (it.second);
 			}
 
-
-
-			//const char * type_name = element->Attribute ("name");
-			//
-			//entity_type * type = new entity_type (text_to_id (type_name));
-			//
-			//property_container_reader::read (
-			//	element,
-			//	container,
-			//	type->properties
-			//	);
-			//
-			//load_component (element, container, type->components);
-			//container.add_to_level (type);
 		}
 
 	}

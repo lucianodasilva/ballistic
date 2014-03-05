@@ -6,7 +6,7 @@ namespace ballistic {
 	namespace io {
 
 		const char * package_reader::type () const {
-			return "include";
+			return "package";
 		}
 
 		void package_reader::load_group (
@@ -14,6 +14,9 @@ namespace ballistic {
 			cpptoml::toml_group & group,
 			ballistic::resource_container & container
 			) {
+
+				debug_error ("NOT IMPLEMENTED");
+
 
 			//string source = element->Attribute ("source");
 			//istorage * storage = container.find_storage (source);

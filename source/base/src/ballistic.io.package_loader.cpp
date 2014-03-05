@@ -15,10 +15,10 @@ namespace ballistic {
 		ipackage_group_reader::~ipackage_group_reader () {}
 
 		bool package_loader::handles (const string & name) {
-			if (name.size () < 4)
+			if (name.size () < 5)
 				return false;
 
-			return name.compare (name.size () - 4, 4, ".xml") == 0;
+			return name.compare (name.size () - 5, 5, ".toml") == 0;
 		}
 
 		package_loader::package_loader () {

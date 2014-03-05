@@ -13,18 +13,47 @@ namespace ballistic {
 
 	class entity;
 	class entity_type;
+	class component_info;
 		
 	class icomponent_constructor : virtual public iresource {
 	public:
 
 		virtual inline ~icomponent_constructor (){}
 
-		virtual void require_properties (entity_type * new_entity_type) = 0;
+		virtual void require_properties (entity_type * new_entity_type, component_info & info) = 0;
 
 		virtual icomponent * create (entity * parent) = 0;
 		virtual icomponent * create (entity * parent, property_container & parameters ) = 0;
 
 	};
+
+	namespace details {
+
+		template < class T >
+		struct component_has_requirements {
+		private:
+			typedef char one;
+			typedef long two;
+
+			template < class C > static inline one test (decltype (C::require_properties));
+			template < class C > static inline two test (...);
+		public:
+			enum { value = sizeof (test <T> (0)) == sizeof (char) };
+		};
+
+		template < class T, bool has_requirements = component_has_requirements < T >::value >
+		struct component_require_properties {
+			inline static void require (entity_type * new_entity_type, component_info & info) {
+				T::require_properties (new_entity_type, info);
+			}
+		};
+
+		template < class T >
+		struct component_require_properties < T, false > {
+			inline static void require (entity_type * new_entity_type, component_info & info) {}
+		};
+
+	}
 
 	template < class component_t >
 	class component_constructor : virtual public icomponent_constructor {
@@ -36,8 +65,8 @@ namespace ballistic {
 			icomponent_constructor (*this)
 		{}
 
-		inline virtual void require_properties (entity_type * new_entity_type) {
-			
+		inline virtual void require_properties (entity_type * new_entity_type, component_info & info) {
+			details::component_require_properties < component_t >::require (new_entity_type, info);
 		}
 
 		inline virtual icomponent * create (entity * parent) {

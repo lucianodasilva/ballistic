@@ -47,7 +47,7 @@ namespace ballistic {
 
 	void property_container::copy_to (property_container & dest) const {
 		for (auto it : _properties) {
-			dest [it.first] = it.second->clone ();
+			dest._properties [it.first] = it.second->clone ();
 		}
 	}
 

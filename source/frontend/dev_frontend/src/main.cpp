@@ -44,6 +44,10 @@ float radius = 4.0F;
 class orbit_camera : public ballistic::component {
 public:
 
+	static void require_properties (entity_type * new_type, component_info & info) {
+		new_type->properties.require (id::position, vec3 ({0, 0, 0}));
+	}
+
 	virtual void setup (ballistic::entity * parent) {
 		component::setup (parent);
 		parent->local_notifier.attach (ballistic::id::message_update, this);
@@ -68,8 +72,8 @@ public:
 
 };
 
-ballistic::res_id_t res_rotating_square ("rotating_square.entity", "resources/game.xml");
-ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
+ballistic::res_id_t res_monkey_head ("monkey_head_entity", "resources/game.toml");
+ballistic::res_id_t res_camera ("orbit_camera_entity", "resources/game.toml");
 
 int main ( int argc, char ** argv) {
 
@@ -101,7 +105,7 @@ int main ( int argc, char ** argv) {
 		g.resources.get_resource < entity_type > (res_camera)
 	);
 	g.entities.create (
-		g.resources.get_resource < entity_type > (res_rotating_square)
+		g.resources.get_resource < entity_type > (res_monkey_head)
 	);
 
 	// initialize

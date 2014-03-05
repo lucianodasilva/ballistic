@@ -22,6 +22,8 @@ namespace ballistic {
 
 		public:
 
+			static void require_properties (entity_type * new_type, component_info & info);
+
 			static const id_t component_id;
 
 			vec3 target;

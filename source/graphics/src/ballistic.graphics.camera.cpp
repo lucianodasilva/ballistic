@@ -5,9 +5,27 @@
 namespace ballistic {
 	namespace graphics {
 
+		void camera::require_properties (entity_type * new_type, component_info & info) {
+
+			// entity requirements
+			new_type->properties.require (id::position, vec3 ({.0, .0, .0}));
+			new_type->properties.require (id::target, vec3 ({.0, .0, .0}));
+			new_type->properties.require (id::up, vec3 ({.0, 1.0, .0}));
+
+			// component arguments
+			info.properties.require < string > (id::graphics::projection, "ortho");
+			info.properties.require (id::graphics::near, .0);
+			info.properties.require (id::graphics::far, .0);
+			info.properties.require (id::graphics::left, .0);
+			info.properties.require (id::graphics::right, .0);
+			info.properties.require (id::graphics::top, .0); 
+			info.properties.require (id::graphics::bottom, .0);
+			info.properties.require (id::graphics::fov, .0);
+		}
+
 		const id_t camera::component_id = id::graphics::camera;
 
-		camera::camera () {}
+		camera::camera () {}			  
 
 		camera::camera (const camera & v)
 			: 
@@ -169,7 +187,7 @@ namespace ballistic {
 				proj_type_persp
 			} type = proj_type_ortho;
 
-			string projection_type = *parameters.require < string > (id::graphics::projection, "ortho");
+			string projection_type = parameters [id::graphics::projection].as < string > ();
 
 			if (projection_type == "ortho")
 				type = proj_type_ortho;
