@@ -10,7 +10,8 @@
 #define _ballistic_io_package_loader_h_
 
 #include "ballistic.io.iloader.h"
-#include <cpptoml.h>
+
+#include <tinyxml2.h>
 
 #include <map>
 #include <string>
@@ -23,7 +24,7 @@ namespace ballistic {
 
 			virtual const char * type () const = 0;
 
-			virtual void load_group (const string & group_name, cpptoml::toml_group & group, ballistic::resource_container & container) = 0;
+			virtual void load_element (const tinyxml2::XMLElement * element, ballistic::resource_container & container) = 0;
 
 			virtual ~ipackage_group_reader ();
 

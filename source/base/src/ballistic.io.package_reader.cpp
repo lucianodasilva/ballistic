@@ -9,22 +9,17 @@ namespace ballistic {
 			return "package";
 		}
 
-		void package_reader::load_group (
-			const string & group_name,
-			cpptoml::toml_group & group,
+		void package_reader::load_element (
+			const tinyxml2::XMLElement * element,
 			ballistic::resource_container & container
-			) {
-
-				debug_error ("NOT IMPLEMENTED");
-
-
-			//string source = element->Attribute ("source");
-			//istorage * storage = container.find_storage (source);
-			//
-			//if (storage) {
-			//	package_loader loader;
-			//	storage->load (&loader, source, container);
-			//}
+		) {
+			string source = element->Attribute ("source");
+			istorage * storage = container.find_storage (source);
+			
+			if (storage) {
+				package_loader loader;
+				storage->load (&loader, source, container);
+			}
 
 		}
 	}

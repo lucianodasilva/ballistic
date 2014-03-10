@@ -6,8 +6,9 @@
 #include "ballistic.io.entity_type_reader.h"
 #include "ballistic.io.package_reader.h"
 
-#include <cpptoml.h>
-using namespace cpptoml;
+#include <tinyxml2.h>
+
+using namespace tinyxml2;
 
 namespace ballistic {
 	namespace io {
@@ -15,10 +16,10 @@ namespace ballistic {
 		ipackage_group_reader::~ipackage_group_reader () {}
 
 		bool package_loader::handles (const string & name) {
-			if (name.size () < 5)
+			if (name.size () < 4)
 				return false;
 
-			return name.compare (name.size () - 5, 5, ".toml") == 0;
+			return name.compare (name.size () - 4, 4, ".xml") == 0;
 		}
 
 		package_loader::package_loader () {
@@ -32,45 +33,34 @@ namespace ballistic {
 
 		bool package_loader::load (istream & source, uint32_t length, ballistic::resource_container & container)
 		{
-			try {
-			
-				parser document_parser (source);
-				auto base_group = document_parser.parse();
-			
-				for (auto it : base_group) {
-				
-					// if element other than group
-					if (!it.second->is_group()) {
-						debug_print ("unexpected toml file element \"" << it.first << "\"");
-						continue;
-					}
-					
-					auto it_group = base_group.get_group(it.first);
-					
-					if (!it_group->contains("type")) {
-						debug_print ("group \"" << it.first << "\" has no defined type");
-						continue;
-					}
-					
-					string group_type = *it_group->get_as< string >("type");
-					
-					// search for appropriate reader
-					reader_map_t::iterator reader_it = _registered_types.find (group_type);
-					
-					if (reader_it == _registered_types.end ()) {
-						debug_print ("type \"" << group_type << "\" for group \"" << it.first << "\" has no defined reader" );
-						continue;
-					}
-					
-					reader_it->second->load_group(it.first, *it_group, container);
-				
-				}
-				
-			} catch (const cpptoml::toml_parse_exception & e) {
-				debug_print ("failed parsing toml file with exception \"" << e.what() << "\"");
+			XMLDocument document;
+
+			if (document.LoadStream (source, length)) {
+				debug_error ("failed to load xml package file");
 				return false;
 			}
-			
+
+			auto root = document.FirstChildElement ("package");
+
+			if (!root) {
+				debug_error ("failed to find \"package\" root node in package xml file");
+				return false;
+			}
+
+			XMLElement * cursor = root->FirstChildElement ();
+			while (cursor) {
+				reader_map_t::iterator it = _registered_types.find (cursor->Name ());
+
+				if (it != _registered_types.end ())
+					it->second->load_element (cursor, container);
+				debug_run (
+				else
+				debug_print ("unregistered element type \"" << cursor->Name () << "\" found in package.");
+				);
+
+				cursor = cursor->NextSiblingElement ();
+			}
+
 			return true;
 		}
 	}

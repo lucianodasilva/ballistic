@@ -14,7 +14,7 @@ namespace ballistic {
 		}
 
 		bool storage_filesystem::load (iloader * loader, const string & path, ballistic::resource_container & container) {
-			ifstream file_stream (path, ios::in | ios::ate);
+			ifstream file_stream (path, ios::in | ios::binary | ios::ate);
 
 			uint32_t length = file_stream.tellg ();
 			file_stream.seekg (ios::beg);

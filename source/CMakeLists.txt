@@ -31,7 +31,7 @@ set ( ballistic_graphics_dir  ${ballistic_graphics_dir} CACHE PATH "Path to Grap
 set ( ballistic_graphics_opengl3_dir ${ballistic_graphics_opengl3_dir} CACHE PATH "Path to OpenGL device implementation")
 
 # --------- dependencies ----------
-include_directories (${proj_dir}/deps/toml)
+include (${proj_dir}/deps/tinyxml2/CMakeLists.txt )
 include (${proj_dir}/deps/glew/CMakeLists.txt)
 
 # --------- core projects ----------

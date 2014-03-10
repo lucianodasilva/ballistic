@@ -3,7 +3,6 @@
 #define _ballistic_convert_h_
 
 #include "ballistic.debug.h"
-#include "ballistic.math.vectors.h"
 
 #include <string>
 #include <sstream>
@@ -104,15 +103,19 @@ namespace ballistic {
 		dst = src;
 	}
 
-	template < class value_t, class data_t >
-	inline void convert_vectors (const std::string & src, ballistic::math::vecn_t < value_t, data_t > & dst) {
+	template < class data_t, size_t length>
+	inline bool convert_vectors (const std::string & src, data_t dst [length]) {
 		stringstream src_stream (src);
 		string trim;
 
-		for (uint32_t i = 0; i < data_t::size; ++i) {
-			convert_split (src_stream, trim, ',');
-			convert (trim, dst.data [i]);
+		for (uint32_t i = 0; i < length; ++i) {
+			if (!convert_split (src_stream, trim, ','))
+				return false;
+
+			convert (trim, dst [i]);
 		}
+
+		return true;
 	}
 
 	template < class t >
@@ -120,13 +123,13 @@ namespace ballistic {
 		stringstream stream;
 
 		stream << src.data [0];
-		for (uint32_t i = 1; i < t::count; ++i) {
+		for (uint32_t i = 1; i < t::size; ++i) {
 			stream << ',' << src.data [i];
 		}
 	}
 
 	template < class dst_t, class src_t >
-	inline dst_t convert_to ( src_t & src ) {
+	inline dst_t convert_to ( src_t src ) {
 		dst_t tmp_value;
 		convert (src, tmp_value);
 		return tmp_value;

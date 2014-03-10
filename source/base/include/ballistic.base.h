@@ -22,7 +22,6 @@
 #include "ballistic.io.istorage.h"
 #include "ballistic.io.package_loader.h"
 #include "ballistic.io.package_reader.h"
-#include "ballistic.io.property_container_reader.h"
 #include "ballistic.io.storage_filesystem.h"
 #include "ballistic.iresource.h"
 #include "ballistic.isystem.h"

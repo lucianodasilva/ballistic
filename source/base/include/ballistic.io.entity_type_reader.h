@@ -18,8 +18,7 @@ namespace ballistic {
 		private:
 
 			void load_component (
-				const string & group_name,
-				cpptoml::toml_group & group,
+				const tinyxml2::XMLElement * element,
 				ballistic::resource_container & container,
 				entity_type * new_type
 				);
@@ -28,7 +27,7 @@ namespace ballistic {
 
 			virtual const char * type () const;
 
-			virtual void load_group (const string & group_name, cpptoml::toml_group & group, ballistic::resource_container & container);
+			virtual void load_element (const tinyxml2::XMLElement * element, ballistic::resource_container & container);
 
 		};
 

@@ -13,38 +13,34 @@ namespace ballistic {
 				return "material";
 			}
 
-			void material_package_reader::load_group (const string & group_name, cpptoml::toml_group & group, ballistic::resource_container & container) {
+			void material_package_reader::load_element (const tinyxml2::XMLElement * element, ballistic::resource_container & container) {
 
-				//const char * name = element->Attribute ("name");
-				//
-				//imaterial * material = _device->create_material (text_to_id (name));
-				//
-				//const tinyxml2::XMLAttribute * cursor = element->FirstAttribute ();
-				//
-				//while (cursor) {
-				//
-				//	const char * value = cursor->Value ();
-				//	
-				//	if (strcmp (cursor->Name (), "diffuse") == 0) {
-				//		color tmp;
-				//		convert_vectors(value, tmp);
-				//		material->diffuse (tmp);
-				//	} else if (strcmp (cursor->Name (), "specular") == 0) {
-				//		color tmp;
-				//		convert_vectors(value, tmp);
-				//		material->specular (tmp);
-				//	} else if (strcmp (cursor->Name (), "opaque") == 0) {
-				//		material->opaque (convert_to < bool > (value));
-				//	} else if (strcmp (cursor->Name (), "effect") == 0) {
-				//		ieffect * effect = dynamic_cast < ieffect *> (container [text_to_id (value)]);
-				//		
-				//		material->effect (effect);
-				//	}
-				//
-				//	cursor = cursor->Next ();
-				//}
-				//
-				//container.add_to_level (material);
+				const char * name = element->Attribute ("name");
+				
+				imaterial * material = _device->create_material (text_to_id (name));
+				
+				auto * cursor = element->FirstAttribute ();
+				
+				while (cursor) {
+					if (strcmp (cursor->Name (), "diffuse") == 0) {
+						color tmp;
+						color::parse (cursor, tmp);
+						material->diffuse (tmp);
+					} else if (strcmp (cursor->Name (), "specular") == 0) {
+						color tmp;
+						color::parse (cursor, tmp);
+						material->specular (tmp);
+					} else if (strcmp (cursor->Name (), "opaque") == 0) {
+						material->opaque (convert_to < bool > (cursor->Value()));
+					} else if (strcmp (cursor->Name (), "effect") == 0) {
+						ieffect * effect = dynamic_cast < ieffect *> (container [text_to_id (cursor->Value ())]);
+						material->effect (effect);
+					}
+				
+					cursor = cursor->Next ();
+				}
+				
+				container.add_to_level (material);
 			}
 
 		}

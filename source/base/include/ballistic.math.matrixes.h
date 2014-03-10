@@ -324,30 +324,8 @@ namespace math {
 			};
 		}
 
-		inline static bool parse (std::shared_ptr < cpptoml::toml_base > config_value, this_type & ret) {
-			auto v = config_value->as < std::vector < std::shared_ptr < cpptoml::toml_base > > > ();
-
-			if (!v)
-				return false;
-
-			if (v->value ().size () != size) {
-				debug_print ("unexpected dimension count");
-				return false;
-			}
-
-			value_t * cursor = +ret.data;
-
-			for (auto it : v->value ()) {
-				auto typed_value = it->as < value_t > ();
-
-				if (!typed_value)
-					return false;
-
-				*cursor = typed_value->value ();
-				++cursor;
-			}
-
-			return true;
+		inline static bool parse (const tinyxml2::XMLAttribute * config_value, this_type & ret) {
+			return convert_vectors < value_t, size > (config_value->Value (), ret.data);
 		}
 
 	};

@@ -72,8 +72,8 @@ public:
 
 };
 
-ballistic::res_id_t res_monkey_head ("monkey_head_entity", "resources/game.toml");
-ballistic::res_id_t res_camera ("orbit_camera_entity", "resources/game.toml");
+ballistic::res_id_t res_monkey_head ("monkey_head_entity", "resources/game.xml");
+ballistic::res_id_t res_camera ("orbit_camera_entity", "resources/game.xml");
 
 int main ( int argc, char ** argv) {
 

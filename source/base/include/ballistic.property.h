@@ -3,11 +3,13 @@
 #define _ballistic_property_h_
 
 #include "ballistic.config.h"
+#include "ballistic.convert.h"
 #include "ballistic.debug.h"
 #include "ballistic.id.h"
-#include <cpptoml.h>
 
 #include <type_traits>
+
+#include <tinyxml2.h>
 
 namespace ballistic {
 
@@ -30,7 +32,7 @@ namespace ballistic {
 		virtual							~iproperty ();
 		void							raise_event () const;
 
-		virtual bool					parse (std::shared_ptr < cpptoml::toml_base > value) = 0;
+		virtual bool					parse (const tinyxml2::XMLAttribute * value) = 0;
 		virtual iproperty *				clone () const = 0;
 	};
 
@@ -43,54 +45,51 @@ namespace ballistic {
 		>
 		struct property_parser {
 
-			inline static bool parse (std::shared_ptr < cpptoml::toml_base > value, value_t & ret) {
-				auto typed_value = value->as < value_t > ();
-
-				if (!typed_value)
+			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
+				try {
+					ret = convert_to < value_t > (value->Value ());
+					return true;
+				} catch (...) {
 					return false;
-
-				ret = typed_value->value ();
-				return true;
+				}
 			}
 
 		};
 
 		template < class value_t >
 		struct property_parser < value_t, false, false > {
-			inline static bool parse (std::shared_ptr < cpptoml::toml_base > value, value_t & ret) {
+			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
 				return value_t::parse (value, ret);
 			}
 		};
 
 		template < >
 		struct property_parser < id_t, std::is_fundamental < id_t >::value, false > {
-			inline static bool parse (std::shared_ptr < cpptoml::toml_base > value, id_t & ret) {
-				auto typed_value = value->as < string  > ();
-
-				if (!typed_value)
+			inline static bool parse (const tinyxml2::XMLAttribute * value, id_t & ret) {
+				try {
+					ret = text_to_id (value->Value());
+					return true;
+				} catch (...) {
 					return false;
-
-				ret = text_to_id (typed_value->value ().c_str ());
-				return true;
+				}
 			}
 		};
 
 		template < >
 		struct property_parser < string, false, false > {
-			inline static bool parse (std::shared_ptr < cpptoml::toml_base > value, string & ret) {
-				auto typed_value = value->as < string  > ();
-
-				if (!typed_value)
+			inline static bool parse (const tinyxml2::XMLAttribute * value, string & ret) {
+				try {
+					ret = value->Value ();
+					return true;
+				} catch (...) {
 					return false;
-
-				ret = typed_value->value ();
-				return true;
+				}
 			}
 		};
 
 		template < class value_t, bool is_fundamental >
 		struct property_parser < value_t, is_fundamental, true > {
-			inline static bool parse (std::shared_ptr < cpptoml::toml_base > value, value_t & ret) {
+			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
 				debug_print ("pointer type value cannot be parsed");
 				return false;
 			}
@@ -121,7 +120,7 @@ namespace ballistic {
 			return _value;
 		}
 
-		inline virtual bool parse (std::shared_ptr < cpptoml::toml_base > config_value) {
+		inline virtual bool parse (const tinyxml2::XMLAttribute * config_value) {
 			bool ret = details::property_parser < value_t >::parse (config_value, _value);
 
 			if (!ret)

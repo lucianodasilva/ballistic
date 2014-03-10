@@ -2,7 +2,6 @@
 #include "ballistic.entity_type.h"
 #include "ballistic.component_info.h"
 #include "ballistic.component_constructor.h"
-#include "ballistic.io.property_container_reader.h"
 
 namespace ballistic {
 	namespace io {
@@ -12,17 +11,16 @@ namespace ballistic {
 		}
 
 		void entity_type_reader::load_component (
-			const string & group_name,
-			cpptoml::toml_group & group,
+			const tinyxml2::XMLElement * element,
 			ballistic::resource_container & container,
 			entity_type * new_type
 		) {
 
 			// load respective component constructor
-			auto ctor = dynamic_cast <icomponent_constructor *> (container [text_to_id (group_name.c_str ())]);
+			auto ctor = dynamic_cast <icomponent_constructor *> (container [text_to_id (element->Name ())]);
 
 			if (!ctor) {
-				debug_error ("component constructor " << group_name << "not defined");
+				debug_error ("component constructor " << element->Name () << "not defined");
 				return;
 			}
 
@@ -32,56 +30,58 @@ namespace ballistic {
 			// load component expected parameters
 			ctor->require_properties (new_type, new_info);
 
-			for (auto it : group) {
+			auto prop_cursor = element->FirstAttribute ();
 
-				if (!it.second->is_value ()) {
-					debug_print ("element \"" << it.first << "\" has unexpected type");
-					continue;
+			while (prop_cursor) {
+				if (strcmp (prop_cursor->Name (), "name") != 0) {
+					id_t property_id = text_to_id (prop_cursor->Name ());
+
+					if (new_info.properties.contains (property_id)) {
+						new_info.properties [property_id].prop->parse (prop_cursor);
+					} else {
+						debug_print ("unrequested entity property \"" << prop_cursor->Name () << "\". value not set");
+					}
 				}
 
-				// try to load arguments
-				id_t property_id = text_to_id (it.first.c_str ());
-
-				if (!new_info.properties.contains (property_id)) {
-					debug_print ("unexpected argument property \"" << it.first << "\" for component \"" << group_name << "\"");
-					continue;
-				}
-
-				new_info.properties [property_id].prop->parse (it.second);
+				prop_cursor = prop_cursor->Next ();
 			}
 
 		}
 
-		void entity_type_reader::load_group (
-			const string & group_name,
-			cpptoml::toml_group & group,
+		void entity_type_reader::load_element (
+			const tinyxml2::XMLElement * element,
 			ballistic::resource_container & container
 		) {
 
-			entity_type * new_type = new entity_type (text_to_id (group_name.c_str ()));
+			const char * type_name = element->Attribute ("name");
+			entity_type * new_type = new entity_type (text_to_id (type_name));
 
 			// load components
-			for (auto it : group) {
-				if (!it.second->is_group ())
-					continue;
+			auto comp_cursor = element->FirstChildElement ();
 
-				load_component (it.first, *group.get_group (it.first), container, new_type);
+			while (comp_cursor) {
+				load_component (comp_cursor, container, new_type);
+				comp_cursor = comp_cursor->NextSiblingElement ();
 			}
 
 			// load properties
-			for (auto it : group) {
-				if (!it.second->is_value ())
-					continue;
+			auto prop_cursor = element->FirstAttribute ();
 
-				id_t property_id = text_to_id (it.first.c_str ());
+			while (prop_cursor) {
+				if (strcmp (prop_cursor->Name (), "name") != 0) {
+					id_t property_id = text_to_id (prop_cursor->Name ());
 
-				if (!new_type->properties.contains (property_id)) {
-					debug_print ("unrequested entity property \"" << it.first << "\". value not set");
-					continue;
+					if (new_type->properties.contains (property_id)) {
+						new_type->properties [property_id].prop->parse (prop_cursor);
+					} else {
+						debug_print ("unrequested entity property \"" << prop_cursor->Name () << "\". value not set");
+					}
 				}
 
-				new_type->properties [property_id].prop->parse (it.second);
+				prop_cursor = prop_cursor->Next ();
 			}
+
+			container.add_to_level (new_type);
 
 		}
 
