@@ -82,9 +82,8 @@
   </entity_type>
 
   <entity_type name="monkey_head_entity"
-          position="0,0,0"
-          material="monkey.material"
-          mesh="monkey.mesh"
+          material_id="monkey.material"
+          mesh_id="monkey.mesh"
    >
       <graphics_visual/>
   </entity_type>

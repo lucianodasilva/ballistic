@@ -30,6 +30,8 @@ namespace ballistic {
 
 			virtual void notify ( entity * sender, ballistic::message & message ) override;
 
+			static void require_properties (entity_type * new_type, component_info & info);
+
 			virtual void setup (entity * parent, property_container & parameters) override;
 
 			virtual void terminate ();

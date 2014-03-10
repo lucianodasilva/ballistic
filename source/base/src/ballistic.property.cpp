@@ -24,9 +24,9 @@ namespace ballistic {
 
 			_container->local_notifier.notify (m);
 		} 
-		debug_run ( else {
-			debug_print ("changed property with unset container");
-		})
+		//debug_run ( else {
+		//	debug_print ("changed property with unset container");
+		//})
 	}
 
 }

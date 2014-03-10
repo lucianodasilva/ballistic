@@ -35,10 +35,14 @@ namespace ballistic {
 				const id_t t_normal = text_to_id ("effect_t_normal");
 				const id_t t_proj	= text_to_id ("effect_t_proj");
 			}
+
+			const id_t material_id = text_to_id ("material_id");
+			const id_t mesh_id = text_to_id ("mesh_id");
+
+			const id_t material = text_to_id ("material");
+			const id_t mesh = text_to_id ("mesh");
+
 		}
-		
-		const id_t material	= text_to_id ("material");
-		const id_t mesh	= text_to_id ("mesh");
 
 		const id_t message_render = text_to_id ("message_render");
 

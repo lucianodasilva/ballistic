@@ -14,34 +14,26 @@ namespace ballistic {
 
 			// component arguments
 			info.properties.require < string > (id::graphics::projection, "ortho");
-			info.properties.require (id::graphics::near, .0);
-			info.properties.require (id::graphics::far, .0);
-			info.properties.require (id::graphics::left, .0);
-			info.properties.require (id::graphics::right, .0);
-			info.properties.require (id::graphics::top, .0); 
-			info.properties.require (id::graphics::bottom, .0);
-			info.properties.require (id::graphics::fov, .0);
+			info.properties.require < real > (id::graphics::near, .0);
+			info.properties.require < real > (id::graphics::far, .0);
+			info.properties.require < real > (id::graphics::left, .0);
+			info.properties.require < real > (id::graphics::right, .0);
+			info.properties.require < real > (id::graphics::top, .0); 
+			info.properties.require < real > (id::graphics::bottom, .0);
+			info.properties.require < real > (id::graphics::fov, .0);
 		}
 
 		const id_t camera::component_id = id::graphics::camera;
 
-		camera::camera () {}			  
-
-		camera::camera (const camera & v)
-			: 
-			_near (v._near), 
-			_far (v._far), 
-			_depth_divisor (v._depth_divisor),
-			target (v.target),
-			position (v.position),
-			up (v.up)
-		{}
+		camera::camera () : 
+			_system (nullptr)
+		{}			  
 
 		camera::camera (real near, real far) 
 			: 
+			_system (nullptr),
 			_near (near),
-			_far (far),
-			_system (nullptr)
+			_far (far)
 		{
 			_depth_divisor =
 				far / (far - near)
@@ -49,20 +41,10 @@ namespace ballistic {
 				far * near / (near - far);
 		}
 
-		const camera & camera::operator= (const camera & v) {
-			_near = v._near;
-			_far = v._far;
-			_depth_divisor = v._depth_divisor;
-			target = v.target;
-			position = v.position;
-			up = v.up;
-			return *this;
-		}
-
 		uint16_t camera::depth (mat4 & transform) const {
 			real z = math::length (
 					vec3 {transform.m12, transform.m13, transform.m14},
-					position
+					(vec3)*_p_position
 				);
 
 			// 16 = bitness
@@ -70,6 +52,11 @@ namespace ballistic {
 		}
 
 		mat4 camera::view () const {
+
+			vec3
+				target = *_p_target,
+				position = *_p_position,
+				up = *_p_up;
 
 			vec3 zaxis = normalize (target - position);
 			vec3 yaxis = normalize (up);
@@ -137,30 +124,11 @@ namespace ballistic {
 
 		void camera::notify (entity * sender, ballistic::message & message) {
 
-			if (message.id () == ballistic::id::message_update) {
-				if (_system)
-					_system->camera (this);
-				debug_run (else
-					debug_print ("graphics system not set!");
-				);
-			} else if (message.id () == ballistic::id::message_property_changed) {
-				id_t property_id = message [ballistic::id::id];
-
-				if (property_id == id::position) {
-					position = message [ballistic::id::value];
-				} else if (property_id == id::target) {
-					target = message [ballistic::id::target];
-				} else if (property_id == id::up) {
-					up = message [ballistic::id::up];
-				}
-			} else {
-				// initialize
-				_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
-
-				position =	sender->properties [ballistic::id::position];
-				target =	sender->properties [ballistic::id::target];
-				up =		sender->properties [ballistic::id::up];
-			}
+			if (_system)
+				_system->camera (this);
+			debug_run (else
+				debug_print ("graphics system not set!");
+			);
 
 		}
 
@@ -171,6 +139,9 @@ namespace ballistic {
 			container ()->local_notifier.attach (id::message_property_changed, this);
 			// bind to global message notifier
 			game::instance.global_notifier.attach (id::message_update, this);
+
+			// get graphics system in use
+			_system = dynamic_cast <graphics_system *> (game::instance.systems [id::graphics::system]);
 			
 			real
 				left = 0,
@@ -212,12 +183,16 @@ namespace ballistic {
 				point size = game::instance.frontend ()->get_client_size ();
 				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
+
+			_p_position = parent->properties.require < vec3 > (id::position, vec3 ());
+			_p_target = parent->properties.require < vec3 > (id::target, vec3 ());
+			_p_up = parent->properties.require < vec3 > (id::up, vec3 ());
 		}
 
 		void camera::terminate () {
-			// bind to local message notifier
+			// unbind to local message notifier
 			container ()->local_notifier.detach (id::message_property_changed, this);
-			// bind to global message notifier
+			// unbind to global message notifier
 			game::instance.global_notifier.detach (id::message_update, this);
 		}
 

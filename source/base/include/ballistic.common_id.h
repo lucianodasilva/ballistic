@@ -8,6 +8,9 @@ using namespace std;
 namespace ballistic {
 
 	namespace id {
+
+		const id_t null							= text_to_id ("null");
+
 		const id_t message_update				= text_to_id ("message_update");
 
 		const id_t game_time					= text_to_id ("game_time");

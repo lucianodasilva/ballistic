@@ -6,6 +6,7 @@
 
 #include "ballistic.id.h"
 #include "ballistic.entity_type.h"
+#include "ballistic.res_id.h"
 
 using namespace std;
 
@@ -32,8 +33,8 @@ namespace ballistic {
 
 		id_t reserve_id ();
 
-		entity * create (entity_type * type);
-		entity * create (id_t id, entity_type * type);
+		entity * create (res_id_t entity_type_id);
+		entity * create (id_t id, res_id_t entity_type_id);
 
 		inline bool contains_id (id_t id) const {
 			return _entities.find (id) != _entities.end ();

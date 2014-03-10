@@ -93,7 +93,7 @@ int main ( int argc, char ** argv) {
 	// setup game stuffs
 	ballistic::graphics::define_resources (_device);
 
-	g.resources.add_to_global (new component_constructor < orbit_camera > (text_to_id ("orbit_camera")));
+	component::declare < orbit_camera > (text_to_id ("orbit_camera"));
 
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->device (_device);
@@ -101,12 +101,8 @@ int main ( int argc, char ** argv) {
 	g.systems.attach (graphics);
 
 	// create entities
-	g.entities.create (
-		g.resources.get_resource < entity_type > (res_camera)
-	);
-	g.entities.create (
-		g.resources.get_resource < entity_type > (res_monkey_head)
-	);
+	g.entities.create (res_camera);
+	g.entities.create (res_monkey_head);
 
 	// initialize
 	g.initialize ();

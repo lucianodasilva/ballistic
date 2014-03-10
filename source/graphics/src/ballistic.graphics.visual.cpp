@@ -10,6 +10,16 @@ namespace ballistic {
 
 		const id_t visual::component_id = ballistic::id::graphics::visual;
 
+		void visual::require_properties (entity_type * new_type, component_info & info) {
+			
+			new_type->properties.require < id_t > (id::graphics::material_id, id::null);
+			new_type->properties.require < id_t > (id::graphics::mesh_id, id::null);
+
+			new_type->properties.require < imaterial * > (id::graphics::material, nullptr);
+			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
+			new_type->properties.require < mat4 > (id::transform, mat4 ());
+		}
+
 		void visual::setup (entity * parent, property_container & parameters)
 		{
 			component::setup (parent, parameters);
@@ -18,9 +28,15 @@ namespace ballistic {
 
 			_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
 
-			_material = parent->properties.require < imaterial * > (id::material, nullptr);
-			_mesh = parent->properties.require < imesh * > (id::mesh, nullptr);
-			_transform = parent->properties.require < mat4 > (id::transform, mat4 ());
+			_material = parent->properties.require < imaterial * > (
+				id::graphics::material,
+				parent->properties [id::graphics::material_id]
+			);
+
+			_mesh = parent->properties.require < imesh * > (
+				id::graphics::mesh, 
+				parent->properties [id::graphics::mesh_id]
+			);
 		}
 
 		void visual::terminate () {
@@ -47,7 +63,7 @@ namespace ballistic {
 			)
 				_system->push_item (material, mesh, *_transform); //TODO: think about transforms for rendering
 			debug_run ( else
-				debug_print ("incomplete visual component. Will not render!");
+				debug_print ("incomplete visual component. will not render!");
 			);
 
 		}

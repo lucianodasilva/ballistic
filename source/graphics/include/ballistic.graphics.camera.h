@@ -20,23 +20,19 @@ namespace ballistic {
 
 			mat4 _proj;
 
+			property < vec3 > * _p_target;
+			property < vec3 > * _p_position;
+			property < vec3 > * _p_up;
+
 		public:
 
 			static void require_properties (entity_type * new_type, component_info & info);
 
 			static const id_t component_id;
 
-			vec3 target;
-			vec3 position;
-			vec3 up;
-
 			// constructors
 			camera ();
-			camera (const camera & v);
 			camera (real near, real far);
-
-			// attribution
-			const camera & operator = (const camera &v);
 
 			// methods
 			uint16_t depth (mat4 & transform) const;

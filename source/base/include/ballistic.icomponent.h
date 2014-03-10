@@ -39,7 +39,26 @@ namespace ballistic {
 		
 		virtual void terminate ();
 
+		// declare helpers
+		template < class component_t >
+		static inline void declare ();
+
+		template < class component_t >
+		static inline void declare (id_t id);
+
 	};
+
+	template < class component_t >
+	void component::declare () {
+		declare < component_t > (component_t::component_id);
+	}
+
+	template < class component_t >
+	void component::declare (id_t id) {
+		game::instance.resources.add_to_global (
+			new component_constructor < component_t > (id)
+		);
+	}
 	
 }
 

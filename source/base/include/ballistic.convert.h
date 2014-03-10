@@ -68,13 +68,17 @@ namespace ballistic {
 		}
 	}
 
-	inline void convert (string & src, bool & dst) {
+	inline void convert (string src, bool & dst) {
 		if (src == "true")
 			dst = true;
 		else if (src == "false")
 			dst = false;
 		else
 			debug_error ("cannot convert " << src << " to boolean.");
+	}
+
+	inline void convert (const char * src, bool & dst) {
+		convert (string (src), dst);
 	}
 
 	template < class dst_t > 

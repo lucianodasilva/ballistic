@@ -29,6 +29,7 @@ namespace ballistic {
 
 			// load component expected parameters
 			ctor->require_properties (new_type, new_info);
+			new_info.ctor (ctor);
 
 			auto prop_cursor = element->FirstAttribute ();
 
