@@ -21,7 +21,7 @@ namespace ballistic {
 		}
 
 		void opengl_mesh::set_attributes (mesh_attribute attributes) {
-			GLint attribute_id = 0;
+			//GLint attribute_id = 0;
 			GLint attribute_offset = 0;
 			GLint attribute_stride = calc_stride (attributes);
 

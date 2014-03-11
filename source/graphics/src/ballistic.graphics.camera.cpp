@@ -31,9 +31,9 @@ namespace ballistic {
 
 		camera::camera (real near, real far) 
 			: 
-			_system (nullptr),
 			_near (near),
-			_far (far)
+			_far (far),
+			_system (nullptr)
 		{
 			_depth_divisor =
 				far / (far - near)

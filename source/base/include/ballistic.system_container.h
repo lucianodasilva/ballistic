@@ -22,7 +22,7 @@ namespace ballistic {
 		system_container & operator = (const system_container & o) = delete;
 
 		system_container ();
-		virtual inline ~system_container ();
+		virtual ~system_container ();
 
 		isystem * attach (isystem * sys);
 

@@ -9,6 +9,7 @@
 #ifndef _ballistic_resource_container_h_
 #define _ballistic_resource_container_h_
 
+#include "ballistic.debug.h"
 #include "ballistic.id.h"
 #include "ballistic.iresource.h"
 #include "ballistic.res_id.h"

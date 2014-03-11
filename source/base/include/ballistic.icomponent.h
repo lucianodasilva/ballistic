@@ -3,12 +3,16 @@
 #define _ballistic_icomponent_h_
 
 #include "ballistic.message_notifier.h"
+#include "ballistic.game.h"
 
 #include <vector>
 
 namespace ballistic {
 
 	class entity;
+	
+	template < class component_t >
+	class component_constructor;
 
 	class icomponent : public imessage_listener {
 	public:

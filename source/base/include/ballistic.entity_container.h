@@ -29,12 +29,12 @@ namespace ballistic {
 		entity_container (const entity_container & o) = delete;
 		entity_container & operator = (const entity_container & o) = delete;
 
-		virtual inline ~entity_container ();
+		virtual ~entity_container ();
 
 		id_t reserve_id ();
 
-		entity * create (res_id_t entity_type_id);
-		entity * create (id_t id, res_id_t entity_type_id);
+		entity * create (const res_id_t & entity_type_id);
+		entity * create (const id_t & id, const res_id_t & entity_type_id);
 
 		inline bool contains_id (id_t id) const {
 			return _entities.find (id) != _entities.end ();

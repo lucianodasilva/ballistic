@@ -28,11 +28,11 @@ namespace ballistic {
 		}
 	}
 
-	entity * entity_container::create (res_id_t entity_type_id) {
+	entity * entity_container::create (const res_id_t & entity_type_id) {
 		return create (reserve_id (), entity_type_id);
 	}
 
-	entity * entity_container::create (id_t id, res_id_t entity_type_id) {
+	entity * entity_container::create (const id_t & id, const res_id_t & entity_type_id) {
 
 		entity_type * type = game::instance.resources.get_resource < entity_type > (entity_type_id);
 

@@ -2,6 +2,7 @@
 #define _ballistic_vector_data_h_
 
 #include "ballistic.config.h"
+#include "ballistic.convert.h"
 #include "ballistic.debug.h"
 
 #include <memory>
