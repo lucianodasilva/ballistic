@@ -28,7 +28,13 @@ namespace math {
 			};
 		};
 
-		inline mat4_t () {}
+		inline mat4_t () :
+			m00 (real (1)), m01 (real (0)), m02 (real (0)), m03 (real (0)),
+			m04 (real (0)), m05 (real (1)), m06 (real (0)), m07 (real (0)),
+			m08 (real (0)), m09 (real (0)), m10 (real (1)), m11 (real (0)),
+			m12 (real (0)), m13 (real (0)), m14 (real (0)), m15 (real (1))
+		
+		{}
 
 		inline mat4_t (const std::initializer_list < value_t > & init) {
 			if (init.size () != size) {

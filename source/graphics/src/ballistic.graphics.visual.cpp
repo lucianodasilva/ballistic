@@ -30,13 +30,28 @@ namespace ballistic {
 
 			_material = parent->properties.require < imaterial * > (
 				id::graphics::material,
-				parent->properties [id::graphics::material_id]
+				nullptr
 			);
 
 			_mesh = parent->properties.require < imesh * > (
 				id::graphics::mesh, 
-				parent->properties [id::graphics::mesh_id]
+				nullptr
 			);
+
+			_transform = parent->properties.require < mat4 > (
+				id::transform,
+				mat4 ()
+			);
+
+			if (!*_material)
+				*_material = game::instance.resources [
+					parent->properties [id::graphics::material_id].as < id_t >()
+				].as < imaterial > () ;
+
+			if (!*_mesh)
+				*_mesh = game::instance.resources [
+					parent->properties [id::graphics::mesh_id].as < id_t > ()
+				].as < imesh > ();
 		}
 
 		void visual::terminate () {

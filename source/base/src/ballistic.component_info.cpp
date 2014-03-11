@@ -26,12 +26,9 @@ namespace ballistic {
 		}
 			
 		icomponent * new_component = nullptr;
-		
-		if (properties.count ())
-			new_component = _ctor->create (parent, properties);
-		else
-			new_component = _ctor->create (parent);
-			
+
+		new_component = _ctor->create (parent, properties);
+	
 		return new_component;
 	}
 		

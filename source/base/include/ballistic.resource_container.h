@@ -26,6 +26,54 @@ namespace ballistic {
 
 		class package_loader;
 	}
+
+	namespace details {
+
+		struct resource_auto_caster {
+
+			template < class T >
+			struct fix_pointer {
+				typedef T * type;
+			};
+
+			template < class T >
+			struct fix_pointer < T * > {
+				typedef T * type;
+			};
+
+			iresource * res;
+
+			inline resource_auto_caster (iresource * res_inst) : res (res_inst) {} 
+
+			template < class T >
+			inline typename fix_pointer < T >::type as () const {
+
+				typename fix_pointer < T >::type typed_instance = nullptr;
+
+				if (res) {
+
+#ifdef BALLISTIC_DEBUG 
+					typed_instance = dynamic_cast < typename fix_pointer < T >::type > (res);
+
+					if (!typed_instance) {
+						debug_print ("unsuported resource cast");
+					}
+#else
+					typed_instance = static_cast < typename fix_pointer < T >::type > (res);
+#endif
+				}
+
+				return typed_instance;
+			}
+
+			template < class T >
+			inline operator T () const {
+				return as < T > ();
+			}
+
+		};
+
+	}
 		
 	class resource_container {
 	private:
@@ -93,13 +141,10 @@ namespace ballistic {
 		
 		template < class T >
 		inline T * get_resource ( const res_id_t & res_id );
-		
-		iresource * operator [] ( const res_id_t & res_id );
-
-		iresource * operator [] (id_t id);
 			
-		template < class T >
-		inline T * operator [] ( const res_id_t & res_id );
+		inline details::resource_auto_caster operator [] ( const res_id_t & res_id );
+
+		inline details::resource_auto_caster operator [] (const id_t & id);
 			
 	};
 		
@@ -112,11 +157,15 @@ namespace ballistic {
 	T * resource_container::get_resource (const res_id_t & id) {
 		return dynamic_cast <T *> (get_resource (id));
 	}
-		
-	template < class T >
-	T * resource_container::operator [] ( const res_id_t & res_id ) {
-		return get_resource <T> (res_id);
+
+	details::resource_auto_caster resource_container::operator [] (const res_id_t & res_id) {
+		return details::resource_auto_caster (get_resource (res_id));
 	}
+
+	details::resource_auto_caster resource_container::operator [] (const id_t & id) {
+		return details::resource_auto_caster (get_resource (id));
+	}
+		
 		
 }
 

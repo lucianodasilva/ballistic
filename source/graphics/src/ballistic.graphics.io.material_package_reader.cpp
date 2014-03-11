@@ -33,7 +33,7 @@ namespace ballistic {
 					} else if (strcmp (cursor->Name (), "opaque") == 0) {
 						material->opaque (convert_to < bool > (cursor->Value()));
 					} else if (strcmp (cursor->Name (), "effect") == 0) {
-						ieffect * effect = dynamic_cast < ieffect *> (container [text_to_id (cursor->Value ())]);
+						ieffect * effect = container [text_to_id (cursor->Value ())];
 						material->effect (effect);
 					}
 				

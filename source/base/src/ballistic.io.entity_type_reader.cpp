@@ -17,7 +17,7 @@ namespace ballistic {
 		) {
 
 			// load respective component constructor
-			auto ctor = dynamic_cast <icomponent_constructor *> (container [text_to_id (element->Name ())]);
+			icomponent_constructor * ctor = container [text_to_id (element->Name ())];
 
 			if (!ctor) {
 				debug_error ("component constructor " << element->Name () << "not defined");

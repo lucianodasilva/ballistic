@@ -8,11 +8,12 @@ namespace ballistic {
 	entity * entity_type::create ( id_t id ) {
 			
 		entity * ent = new entity (id, this);
+		properties.copy_to (ent->properties);
 			
 		for (component_info & comp_info : components )
 			ent->components.create (comp_info);
 
-		properties.copy_to (ent->properties);
+		
 
 		return ent;
 	}
