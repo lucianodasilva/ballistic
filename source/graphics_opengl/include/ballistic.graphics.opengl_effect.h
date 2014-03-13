@@ -55,7 +55,7 @@ namespace ballistic {
 
 		public:
 			
-			opengl_effect (id_t id, uint8_t run_id);
+			opengl_effect (const id_t & id, uint8_t run_id);
 			~opengl_effect ();
 
 			virtual uint8_t run_id ();

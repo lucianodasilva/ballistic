@@ -14,8 +14,10 @@ namespace ballistic {
 
 		class idevice;
 
-		class imesh : virtual public ballistic::iresource {
+		class imesh : public ballistic::iresource {
 		public:
+
+			imesh (const id_t & id);
 
 			virtual uint8_t run_id () = 0;
 			

@@ -3,7 +3,7 @@
 
 namespace ballistic {
 
-	entity_type::entity_type (id_t id_v) : iresource (id_v) {}
+	entity_type::entity_type (const id_t & id_v) : iresource (id_v) {}
 
 	entity * entity_type::create ( id_t id ) {
 			

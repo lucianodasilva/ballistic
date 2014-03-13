@@ -22,7 +22,7 @@ namespace ballistic {
 
 		id_t id () const;
 			
-		iresource (id_t id_v);
+		iresource (const id_t & id_v);
 		virtual ~iresource ();
 	};
 }

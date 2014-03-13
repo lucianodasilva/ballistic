@@ -74,9 +74,8 @@ namespace ballistic {
 			return offset + size * sizeof (GL_FLOAT);
 		}
 		
-		opengl_mesh::opengl_mesh ( id_t id, uint8_t run_id ) :
-			iresource (id),
-			imesh (*this),
+		opengl_mesh::opengl_mesh ( const id_t & id, uint8_t run_id ) :
+			imesh (id),
 			_run_id (run_id), 
 			_vertex_array_id (0),
 			_vertex_buffer_id(0),

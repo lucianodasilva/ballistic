@@ -167,9 +167,9 @@ namespace ballistic {
 			template < class value_t >
 			inline value_t as () const {
 #ifdef BALLISTIC_DEBUG
-				auto p = dynamic_cast <property < value_t > *> (prop);
+				auto p = dynamic_cast < property < value_t > * > (prop);
 #else
-				auto p = static_cast <property < value_t, > *> (prop);
+				auto p = static_cast < property < value_t > * > (prop);
 #endif
 				if (p)
 					return *p;

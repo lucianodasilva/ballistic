@@ -48,16 +48,16 @@ public:
 		new_type->properties.require (id::position, vec3 ({0, 0, 0}));
 	}
 
-	virtual void setup (ballistic::entity * parent) {
-		component::setup (parent);
-		parent->local_notifier.attach (ballistic::id::message_update, this);
+	virtual void setup (ballistic::entity * parent, ballistic::property_container & parameters) {
+		component::setup (parent, parameters);
+		game::instance.global_notifier.attach (ballistic::id::message_update, this);
 	}
 
 	virtual void terminate () {
 		container ()->local_notifier.detach (ballistic::id::message_update, this);
 	}
 
-	virtual void notify (ballistic::entity * parent, ballistic::message & message) {
+	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
 
 		vec3 pos;
 
@@ -67,7 +67,7 @@ public:
 
 		angle = (real)message [ballistic::id::game_time] * real (1); // one radian per second
 
-		parent->properties [ballistic::id::position] = pos;
+		container ()->properties [ballistic::id::position] = pos;
 	}
 
 };

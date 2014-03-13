@@ -27,7 +27,7 @@ namespace ballistic {
 		
 		public:
 
-			opengl_material		(id_t id, uint8_t run_id);
+			opengl_material		(const id_t & id, uint8_t run_id);
 
 			virtual uint8_t		run_id ();
 

@@ -21,7 +21,6 @@ namespace ballistic {
 
 		virtual ~icomponent ();
 
-		virtual void setup (ballistic::entity * container_v) = 0;
 		virtual void setup (ballistic::entity * container_v, property_container & parameters) = 0;
 		
 		virtual void terminate () = 0;
@@ -38,7 +37,6 @@ namespace ballistic {
 
 		component ();
 
-		virtual void setup (ballistic::entity * container_v);
 		virtual void setup (ballistic::entity * container_v, property_container & parameters);
 		
 		virtual void terminate ();

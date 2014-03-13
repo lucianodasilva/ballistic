@@ -28,7 +28,7 @@ namespace ballistic {
 
 		public:
 			
-			opengl_mesh ( id_t id, uint8_t run_id );
+			opengl_mesh ( const id_t & id, uint8_t run_id );
 			~opengl_mesh ();
 
 			virtual uint8_t run_id ();

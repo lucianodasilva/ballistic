@@ -135,8 +135,6 @@ namespace ballistic {
 		void camera::setup (entity * parent, property_container & parameters) {
 			component::setup (parent, parameters);
 
-			// bind to local message notifier
-			container ()->local_notifier.attach (id::message_property_changed, this);
 			// bind to global message notifier
 			game::instance.global_notifier.attach (id::message_update, this);
 
@@ -190,8 +188,6 @@ namespace ballistic {
 		}
 
 		void camera::terminate () {
-			// unbind to local message notifier
-			container ()->local_notifier.detach (id::message_property_changed, this);
 			// unbind to global message notifier
 			game::instance.global_notifier.detach (id::message_update, this);
 		}

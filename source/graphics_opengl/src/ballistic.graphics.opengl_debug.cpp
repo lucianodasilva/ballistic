@@ -196,5 +196,9 @@ namespace ballistic {
 			glUseProgram (0);
 		}
 
+		void opengl_debug::draw_text (const vec3 & pos, const color & col, const char message []) {
+
+		}
+
 	}
 }

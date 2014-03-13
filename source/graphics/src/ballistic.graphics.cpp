@@ -9,6 +9,11 @@
 #include "ballistic.graphics.io.material_package_reader.h"
 #include "ballistic.graphics.io.mesh_package_reader.h"
 
+#include "ballistic.graphics.ieffect.h"
+#include "ballistic.graphics.imaterial.h"
+#include "ballistic.graphics.imesh.h"
+#include "ballistic.graphics.itexture.h"
+
 namespace ballistic {
 	namespace graphics {
 
@@ -31,6 +36,15 @@ namespace ballistic {
 				new graphics::io::mesh_package_reader (device)
 			);
 		}
+
+		// default constructors for resource objects
+		ieffect::ieffect (const id_t & id) : iresource (id) {}
+
+		imaterial::imaterial (const id_t & id) : iresource (id) {}
+
+		imesh::imesh (const id_t & id) : iresource (id) {}
+
+		itexture::itexture (const id_t & id) : iresource (id) {}
 
 	}
 }

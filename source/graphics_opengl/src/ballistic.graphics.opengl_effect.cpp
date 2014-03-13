@@ -4,9 +4,8 @@
 namespace ballistic {
 	namespace graphics {
 
-		opengl_effect::opengl_effect (id_t id, uint8_t run_id) :
-			iresource (id),
-			ieffect (*this),
+		opengl_effect::opengl_effect (const id_t & id, uint8_t run_id) :
+			ieffect (id),
 			_shader_program_id(-1),
 			_run_id (run_id)
 		{}

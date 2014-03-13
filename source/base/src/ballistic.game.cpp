@@ -45,6 +45,9 @@ namespace ballistic {
 		_m_update [id::frame_time] = system::get_elapsed_seconds (_frame_start);
 		_m_update [id::frame_count] = _frame_id;
 
+		// do something with this
+		// real average_fps = real (_frame_id) / system::get_elapsed_seconds (_game_start_time);
+
 		_frame_start = system::get_time_now ();
 
 		global_notifier.notify (_m_update);

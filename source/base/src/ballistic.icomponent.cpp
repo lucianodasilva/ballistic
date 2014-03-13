@@ -16,12 +16,8 @@ namespace ballistic {
 
 	component::component () : _container (nullptr) {}
 
-	void component::setup ( ballistic::entity * container_v ) {
-		_container = container_v;
-	}
-		
 	void component::setup (entity * container_v, property_container & parameters) {
-		component::setup (container_v);
+		_container = container_v;
 	}
 	
 	void component::terminate () {}

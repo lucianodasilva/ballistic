@@ -15,8 +15,10 @@ namespace ballistic {
 	class entity_type;
 	class component_info;
 		
-	class icomponent_constructor : virtual public iresource {
+	class icomponent_constructor : public iresource {
 	public:
+
+		icomponent_constructor (const id_t & id);
 
 		virtual inline ~icomponent_constructor (){}
 
@@ -55,13 +57,12 @@ namespace ballistic {
 	}
 
 	template < class component_t >
-	class component_constructor : virtual public icomponent_constructor {
+	class component_constructor : public icomponent_constructor {
 		static_assert ( is_base_of < icomponent, component_t >::value, "component constructor can only refer to classes derived from icomponent");
 	public:
 
-		inline component_constructor (id_t id) :
-			iresource (id),
-			icomponent_constructor (*this)
+		inline component_constructor (const id_t & id) :
+			icomponent_constructor (id)
 		{}
 
 		inline virtual void require_properties (entity_type * new_entity_type, component_info & info) {

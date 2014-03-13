@@ -4,9 +4,8 @@
 namespace ballistic {
 	namespace graphics {
 
-		opengl_material::opengl_material (id_t id, uint8_t run_id) :
-			iresource (id),
-			imaterial (*this),
+		opengl_material::opengl_material (const id_t & id, uint8_t run_id) :
+			imaterial (id),
 			_opaque (false),
 			_texture (nullptr),
 			_effect (nullptr),
