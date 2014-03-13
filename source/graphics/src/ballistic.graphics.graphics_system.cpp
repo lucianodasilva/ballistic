@@ -8,7 +8,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		id_t graphics_system::get_id () {
+		id_t graphics_system::id () {
 			return ballistic::id::graphics::system;
 		}
 
@@ -18,19 +18,19 @@ namespace ballistic {
 			_render_message (id::message_render)
 		{}
 
-		void graphics_system::set_device ( idevice * device ) {
-			_device = device;
+		void graphics_system::device ( idevice * dev ) {
+			_device = dev;
 		}
 
-		idevice * graphics_system::get_device () {
+		idevice * graphics_system::device () {
 			return _device;
 		}
 
-		void graphics_system::set_camera (camera * cam) {
+		void graphics_system::camera (ballistic::graphics::camera * cam) {
 			_camera = cam;
 		}
 
-		const camera * graphics_system::get_camera () {
+		const ballistic::graphics::camera * graphics_system::camera () {
 			return _camera;
 		}
 
@@ -41,29 +41,24 @@ namespace ballistic {
 				normal_matrix;
 
 			if (!_device) {
-				debug_error ("[ballistic::graphics::graphics_system::render] Graphics device not set!");
-				return;
-			}
-
-			if (!get_game ()) {
-				debug_error ("[ballistic::graphics::graphics_system::render] Graphics game not set!");
+				debug_error ("graphics device not set! will not render");
 				return;
 			}
 
 			if (!_camera) {
-				debug_error ("[ballistic::graphics::graphics_system::render] Active camera not set!");
+				debug_error ("active camera not set! will not render");
 				return;
 			}
 
 			_render_list.clear ();
 			
-			current_view = _camera->get_view ();
+			current_view = _camera->view ();
 
-			_device->set_view (current_view);
-			_device->set_proj (_camera->get_proj ());
+			_device->view (current_view);
+			_device->proj (_camera->proj ());
 
 			// notify entities with visuals
-			get_game ()->send_message (_render_message);
+			game::instance.global_notifier.notify(_render_message);
 
 			// sort
 			_render_list.sort ();
@@ -80,8 +75,8 @@ namespace ballistic {
 			for (uint32_t i = 0; i < render_count; ++i) {
 				render_item & item = _render_list [i];
 
-				if (item.material->get_effect () != effect) {
-					effect = item.material->get_effect ();
+				if (item.material->effect () != effect) {
+					effect = item.material->effect ();
 					_device->activate (effect);
 				}
 
@@ -99,7 +94,7 @@ namespace ballistic {
 				mat4 mv = current_view * item.transform;
 				normal_matrix = mv.transpose ().invert ();
 				
-				_device->set_normal (normal_matrix);
+				_device->normal (normal_matrix);
 				
 				// render the stuffs
 				_device->draw_active_mesh ();
@@ -110,12 +105,16 @@ namespace ballistic {
 			_device->present ();
 		}
 
-		void graphics_system::notify ( ballistic::message & message ) {
-
-			if (message.get_id () != ballistic::id::message_update) return;
-
+		void graphics_system::notify ( entity * sender, ballistic::message & message ) {
 			render ();
+		}
 
+		void graphics_system::attach () {
+			game::instance.global_notifier.attach (id::message_update, this);
+		}
+
+		void graphics_system::detach () {
+			game::instance.global_notifier.detach (id::message_update, this);
 		}
 
 		void graphics_system::push_item (imaterial * material, imesh * mesh, const mat4 & transform) {

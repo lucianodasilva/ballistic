@@ -5,19 +5,29 @@
 namespace ballistic {
 	namespace graphics {
 
+		void camera::require_properties (entity_type * new_type, component_info & info) {
+
+			// entity requirements
+			new_type->properties.require (id::position, vec3 ({.0, .0, .0}));
+			new_type->properties.require (id::target, vec3 ({.0, .0, .0}));
+			new_type->properties.require (id::up, vec3 ({.0, 1.0, .0}));
+
+			// component arguments
+			info.properties.require < string > (id::graphics::projection, "ortho");
+			info.properties.require < real > (id::graphics::near, .0);
+			info.properties.require < real > (id::graphics::far, .0);
+			info.properties.require < real > (id::graphics::left, .0);
+			info.properties.require < real > (id::graphics::right, .0);
+			info.properties.require < real > (id::graphics::top, .0); 
+			info.properties.require < real > (id::graphics::bottom, .0);
+			info.properties.require < real > (id::graphics::fov, .0);
+		}
+
 		const id_t camera::component_id = id::graphics::camera;
 
-		camera::camera () {}
-
-		camera::camera (const camera & v)
-			: 
-			_near (v._near), 
-			_far (v._far), 
-			_depth_divisor (v._depth_divisor),
-			target (v.target),
-			position (v.position),
-			up (v.up)
-		{}
+		camera::camera () : 
+			_system (nullptr)
+		{}			  
 
 		camera::camera (real near, real far) 
 			: 
@@ -31,53 +41,48 @@ namespace ballistic {
 				far * near / (near - far);
 		}
 
-		const camera & camera::operator= (const camera & v) {
-			_near = v._near;
-			_far = v._far;
-			_depth_divisor = v._depth_divisor;
-			target = v.target;
-			position = v.position;
-			up = v.up;
-			return *this;
-		}
-
-		uint16_t camera::get_depth (mat4 & transform) const {
+		uint16_t camera::depth (mat4 & transform) const {
 			real z = math::length (
-					vec3 (transform.m12, transform.m13, transform.m14),
-					position
+					vec3 {transform.m12, transform.m13, transform.m14},
+					(vec3)*_p_position
 				);
 
 			// 16 = bitness
 			return uint16_t ((1 << 16) * _depth_divisor / z);
 		}
 
-		mat4 camera::get_view () const {
+		mat4 camera::view () const {
+
+			vec3
+				target = *_p_target,
+				position = *_p_position,
+				up = *_p_up;
 
 			vec3 zaxis = normalize (target - position);
 			vec3 yaxis = normalize (up);
 			vec3 xaxis = normalize (cross (zaxis, yaxis));
 			yaxis = cross (xaxis, zaxis);
-			
-			return mat4 (
+
+			return {
 				xaxis.x, yaxis.x, -zaxis.x, .0,
 				xaxis.y, yaxis.y, -zaxis.y, .0,
 				xaxis.z, yaxis.z, -zaxis.z, .0,
 				-dot (xaxis, position), -dot (yaxis, position), dot (zaxis, position), 1.
-			);
+			};
 		}
 
-		const mat4 & camera::get_proj () const {
+		const mat4 & camera::proj () const {
 			return _proj;
 		}
 
 		void camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
 
-			_proj =  mat4 (
-				real (2) / (right - left), real (0), real (0), real(0),
-				real (0), real(2) / (top - bottom), real (0), real (0),
+			_proj = {
+				real (2) / (right - left), real (0), real (0), real (0),
+				real (0), real (2) / (top - bottom), real (0), real (0),
 				real (0), real (0), real (1) / (far - near), real (0),
 				real (0), real (0), near / (near - far), real (1)
-			);
+			};
 
 			_far = far;
 			_near = near;
@@ -100,12 +105,12 @@ namespace ballistic {
 				t = range;
 
 
-			_proj = mat4 (
-				(real(2) * near) / (r - l), .0, .0, .0,
-				.0, (real(2) * near) / (t - b), .0, .0,
+			_proj = {
+				(real (2) * near) / (r - l), .0, .0, .0,
+				.0, (real (2) * near) / (t - b), .0, .0,
 				.0, .0, -(far + near) / (far - near), real (-1),
 				.0, .0, -(real (2) * far * near) / (far - near), .0
-				);
+			};
 			
 			_far = far;
 			_near = near;
@@ -117,45 +122,24 @@ namespace ballistic {
 
 		}
 
-		void camera::notify (ballistic::message & message) {
+		void camera::notify (entity * sender, ballistic::message & message) {
 
-			if (message.get_id () == ballistic::id::message_update)  {
-				if (_system)
-					_system->set_camera (this);
-				debug_run (else
-					debug_warn ("[ballistic::graphics::camera::notify] Graphics system not set!");
-				);
+			if (_system)
+				_system->camera (this);
+			debug_run (else
+				debug_print ("graphics system not set!");
+			);
 
-				return;
-			}
-
-			if (message.get_id () == ballistic::id::message_property_changed && message.get_sender () == get_entity ()) {
-				id_t property_id = message [ballistic::id::id].as < id_t > ();
-
-				if (property_id == id::position)
-					position = message [ballistic::id::value].as < vec3 > ();
-				else if (property_id == id::target)
-					target = message [ballistic::id::target].as < vec3 > ();
-				else if (property_id == id::up)
-					up = message [ballistic::id::target].as < vec3 > ();
-
-				return;
-			}
-
-			if (message.get_id () == ballistic::id::message_initialize) {
-
-				entity * ent = get_entity ();
-
-				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
-
-				position = ent->get_property (ballistic::id::position).as < vec3 > ();
-				target = ent->get_property (ballistic::id::target).as < vec3 > ();
-				up = ent->get_property (ballistic::id::up).as < vec3 > ();
-			}
 		}
 
-		void camera::setup (entity * parent, vector < ballistic::property > & parameters) {
+		void camera::setup (entity * parent, property_container & parameters) {
 			component::setup (parent, parameters);
+
+			// bind to global message notifier
+			game::instance.global_notifier.attach (id::message_update, this);
+
+			// get graphics system in use
+			_system = dynamic_cast <graphics_system *> (game::instance.systems [id::graphics::system]);
 			
 			real
 				left = 0,
@@ -165,49 +149,48 @@ namespace ballistic {
 				near = 0,
 				far = 0,
 				fovy = 0;
-
-
+			
+			
 			enum {
 				proj_type_ortho,
 				proj_type_persp
 			} type = proj_type_ortho;
 
-			for (property & prop : parameters) {
-				id_t prop_id = prop.get_id ();
+			string projection_type = parameters [id::graphics::projection].as < string > ();
 
-				if (prop_id == id::graphics::projection) {
-					if (prop.as < string > () == "ortho")
-						type = proj_type_ortho;
-					else if (prop.as < string > () == "perspective")
-						type = proj_type_persp;
-					
-				} else if (prop_id == id::graphics::left)
-					left = (real) prop.as < real > ();
-				else if (prop_id == id::graphics::right)
-					right = (real)prop.as < real > ();
-				else if (prop_id == id::graphics::top)
-					top = (real)prop.as < real > ();
-				else if (prop_id == id::graphics::bottom)
-					bottom = (real)prop.as < real > ();
-				else if (prop_id == id::graphics::near)
-					near = (real)prop.as < real > ();
-				else if (prop_id == id::graphics::far)
-					far = (real)prop.as < real > ();
-				else if (prop_id == id::graphics::fov)
-					fovy = (real)prop.as < real > ();
-
+			if (projection_type == "ortho")
+				type = proj_type_ortho;
+			else if (projection_type == "perspective")
+				type = proj_type_persp;
+			else {
+				debug_print ("unknown projection type \"" << projection_type << "\". default to ortho.");
 			}
-
 			
-
+			left	= parameters [id::graphics::left];
+			right	= parameters [id::graphics::right];
+			top		= parameters [id::graphics::top];
+			bottom	= parameters [id::graphics::bottom];
+			near	= parameters [id::graphics::near];
+			far		= parameters [id::graphics::far];
+			fovy	= parameters [id::graphics::fov];
+			
+			
 			if (type == proj_type_ortho)
 				make_ortho_projection (left, right, bottom, top, near, far);
 			else if (type == proj_type_persp) {
-				point size = get_game ()->get_frontend ()->get_client_size ();
+				point size = game::instance.frontend ()->get_client_size ();
 				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
+
+			_p_position = parent->properties.require < vec3 > (id::position, vec3 ());
+			_p_target = parent->properties.require < vec3 > (id::target, vec3 ());
+			_p_up = parent->properties.require < vec3 > (id::up, vec3 ());
 		}
 
+		void camera::terminate () {
+			// unbind to global message notifier
+			game::instance.global_notifier.detach (id::message_update, this);
+		}
 
 	}
 }

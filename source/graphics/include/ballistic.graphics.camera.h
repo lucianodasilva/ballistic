@@ -20,36 +20,35 @@ namespace ballistic {
 
 			mat4 _proj;
 
+			property < vec3 > * _p_target;
+			property < vec3 > * _p_position;
+			property < vec3 > * _p_up;
+
 		public:
+
+			static void require_properties (entity_type * new_type, component_info & info);
 
 			static const id_t component_id;
 
-			vec3 target;
-			vec3 position;
-			vec3 up;
-
 			// constructors
 			camera ();
-			camera (const camera & v);
 			camera (real near, real far);
 
-			// attribution
-			const camera & operator = (const camera &v);
-
 			// methods
-			uint16_t get_depth (mat4 & transform) const;
+			uint16_t depth (mat4 & transform) const;
 
-			mat4 get_view () const;
-			const mat4 & get_proj () const;
+			mat4 view () const;
+			const mat4 & proj () const;
 
 			// utilities
 			void make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
 			void make_perspective_proj (real fov, real aspect, real near, real far );
 
 			// component
-			virtual void notify (ballistic::message & message) override;
+			virtual void notify (entity * sender, ballistic::message & message) override;
 
-			virtual void setup (entity * parent, vector < ballistic::property > & parameters) override;
+			virtual void setup (entity * parent, property_container & parameters) override;
+			virtual void terminate () override;
 
 		};
 

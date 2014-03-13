@@ -1,51 +1,42 @@
 #ifndef	_ballistic_entity_h_
 #define _ballistic_entity_h_
 
-#include <vector>
-
 #include "ballistic.id.h"
-#include "ballistic.message.h"
 #include "ballistic.property_container.h"
-#include "ballistic.resources.id.h"
-#include "ballistic.var.h"
+#include "ballistic.component_container.h"
+#include "ballistic.message_notifier.h"
 
 using namespace std;
 
 namespace ballistic {
 
-	class igame;
-	class icomponent;
+	class game;
 
-	class entity : public property_container {
+	class entity_type;
+
+	class entity {
 	private:
 
-		igame *					_game;
 		id_t					_id;
-		vector < icomponent * > _components;
-
-		entity ( const entity & orig );
-		entity & operator = ( const entity & orig );
-
-		message _property_changed_message;
+		entity_type *			_type;
 
 	public:
 
-		virtual void property_changed_event (const property & p);
+		// avoid copy and assignment
+		entity (const entity & orig) = delete;
+		entity & operator = (const entity & orig) = delete;
+
+		message_notifier local_notifier;
+
+		property_container properties;
+
+		component_container components;
+
+		id_t id ();
+
+		entity_type * type ();
 			
-		igame * get_game ();
-		void set_game (igame * g);
-
-		id_t get_id ();
-			
-		void add_component ( icomponent * component );
-
-		virtual void notify ( ballistic::message & message );
-
-		entity ( id_t id );
-		virtual ~entity ();
-
-		static entity * create (ballistic::igame * game, const res_id_t & type);
-		static entity * create (ballistic::igame * game, id_t id, const res_id_t & type);
+		entity ( id_t id_v, entity_type * type_v );
 		
 	};
 	

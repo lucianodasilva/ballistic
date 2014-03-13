@@ -21,7 +21,7 @@ namespace ballistic {
 		}
 
 		void opengl_mesh::set_attributes (mesh_attribute attributes) {
-			GLint attribute_id = 0;
+			//GLint attribute_id = 0;
 			GLint attribute_offset = 0;
 			GLint attribute_stride = calc_stride (attributes);
 
@@ -66,15 +66,16 @@ namespace ballistic {
 				type,         // type
 				GL_FALSE,     // normalized?
 				stride,
-				(void*)offset // array buffer offset in bytes
+				(GLvoid*)offset // array buffer offset in bytes
 				);
 
 			glEnableVertexAttribArray (id);
-
+	
 			return offset + size * sizeof (GL_FLOAT);
 		}
 		
-		opengl_mesh::opengl_mesh ( uint8_t run_id ) : 
+		opengl_mesh::opengl_mesh ( const id_t & id, uint8_t run_id ) :
+			imesh (id),
 			_run_id (run_id), 
 			_vertex_array_id (0),
 			_vertex_buffer_id(0),
@@ -88,7 +89,7 @@ namespace ballistic {
 			}
 		}
 		
-		uint8_t opengl_mesh::get_run_id () { return _run_id; }
+		uint8_t opengl_mesh::run_id () { return _run_id; }
 
 		void opengl_mesh::set_data (
 			uint8_t *			data_buffer,
@@ -143,7 +144,7 @@ namespace ballistic {
 			mesh_attribute	attributes
 		){
 			if (_vertex_array_id == 0) {
-				debug_error ("[ballistic::graphics::opengl_mesh::update_data] GL cannot update data from undefined mesh");
+				debug_error ("gL cannot update data from undefined mesh");
 				return;
 			}
 
@@ -169,7 +170,7 @@ namespace ballistic {
 			uint32_t			index_buffer_size
 		){
 			if (_vertex_array_id == 0) {
-				debug_error ("[ballistic::graphics::opengl_mesh::update_index] GL cannot update data from undefined mesh");
+				debug_error ("gl cannot update data from undefined mesh");
 				return;
 			}
 

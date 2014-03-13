@@ -27,24 +27,24 @@ namespace ballistic {
 		
 		public:
 
-			opengl_material		(uint8_t run_id);
+			opengl_material		(const id_t & id, uint8_t run_id);
 
-			virtual uint8_t		get_run_id ();
+			virtual uint8_t		run_id ();
 
-			virtual void		set_effect (ieffect * effect);
-			virtual ieffect *	get_effect ();
+			virtual void		effect (ieffect * effect);
+			virtual ieffect *	effect ();
 
-			virtual void		set_diffuse (const color & v);
-			virtual color		get_diffuse ();
+			virtual void		diffuse (const color & v);
+			virtual color		diffuse ();
 
-			virtual void		set_specular (const color & v);
-			virtual color		get_specular ();
+			virtual void		specular (const color & v);
+			virtual color		specular ();
 
-			virtual void		set_opaque ( bool v );
-			virtual bool		get_opaque ();
+			virtual void		opaque ( bool v );
+			virtual bool		opaque ();
 
-			virtual void		set_texture (itexture * v);
-			virtual itexture *	get_texture ();
+			virtual void		texture (itexture * v);
+			virtual itexture *	texture ();
 
 			virtual void		apply (idevice * device);
 

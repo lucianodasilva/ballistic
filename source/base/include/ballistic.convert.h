@@ -3,7 +3,6 @@
 #define _ballistic_convert_h_
 
 #include "ballistic.debug.h"
-#include "ballistic.math.vectors.h"
 
 #include <string>
 #include <sstream>
@@ -13,9 +12,9 @@
 
 namespace ballistic {
 
-#	define MSG_NOT_FUNDAMENTAL_SRC	"Non fundamental source type for conversion."
-#	define MSG_NOT_FUNDAMENTAL_DST	"Non fundamental destination type for conversion."
-#	define MSG_STRING_CONV_FAILED	"Conversion from string failed."
+#	define MSG_NOT_FUNDAMENTAL_SRC	"non fundamental source type for conversion"
+#	define MSG_NOT_FUNDAMENTAL_DST	"non fundamental destination type for conversion"
+#	define MSG_STRING_CONV_FAILED	"conversion from string failed"
 
 	inline istream & convert_split (istream & stream, string & trim, char delimiter) {
 		char c;
@@ -41,8 +40,8 @@ namespace ballistic {
 	template < class src_t, class dst_t > 
 	inline void convert ( src_t & src, dst_t & dst ){
 		// Compile time type conversion errors
-		static_assert (std::is_fundamental < src_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_SRC);
-		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_DST);
+		static_assert (std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC);
+		static_assert (std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST);
 
 		dst = (dst_t)src;
 	}
@@ -57,25 +56,29 @@ namespace ballistic {
 	template < class string_t, class dst_t > 
 	inline void __convert_string ( const string_t & src, dst_t & dst ) {
 		// Compile time type conversion errors
-		static_assert (std::is_fundamental < dst_t >::value, "[ballistic::convert::__convert_string] " MSG_NOT_FUNDAMENTAL_DST);
+		static_assert (std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST);
 
 		std::stringstream stream (src);
 
 		//extract whitespaces
 		stream >> std::ws >> dst;
 		if (stream.fail ()) {
-			debug_error ("[ballistic::convert::__convert_string] " MSG_STRING_CONV_FAILED);
+			debug_error (MSG_STRING_CONV_FAILED);
 			dst = dst_t ();
 		}
 	}
 
-	inline void convert (string & src, bool & dst) {
+	inline void convert (string src, bool & dst) {
 		if (src == "true")
 			dst = true;
 		else if (src == "false")
 			dst = false;
 		else
-			debug_error ("[ballistic::convert::__convert_string] Cannot convert " << src << " to boolean.");
+			debug_error ("cannot convert " << src << " to boolean.");
+	}
+
+	inline void convert (const char * src, bool & dst) {
+		convert (string (src), dst);
 	}
 
 	template < class dst_t > 
@@ -96,7 +99,7 @@ namespace ballistic {
 	template < class src_t >
 	inline void convert ( src_t & src, std::string & dst ) {
 		// Compile time type conversion errors
-		static_assert ( std::is_fundamental < src_t >::value, "[ballistic::convert::convert] " MSG_NOT_FUNDAMENTAL_SRC );
+		static_assert ( std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC );
 		dst = std::to_string (src);
 	}
 
@@ -104,15 +107,19 @@ namespace ballistic {
 		dst = src;
 	}
 
-	template < class t >
-	inline void convert_vectors (const std::string & src, t & dst) {
+	template < class data_t, size_t length>
+	inline bool convert_vectors (const std::string & src, data_t dst [length]) {
 		stringstream src_stream (src);
 		string trim;
 
-		for (uint32_t i = 0; i < t::count; ++i) {
-			convert_split (src_stream, trim, ',');
-			convert (trim, dst.data [i]);
+		for (uint32_t i = 0; i < length; ++i) {
+			if (!convert_split (src_stream, trim, ','))
+				return false;
+
+			convert (trim, dst [i]);
 		}
+
+		return true;
 	}
 
 	template < class t >
@@ -120,13 +127,13 @@ namespace ballistic {
 		stringstream stream;
 
 		stream << src.data [0];
-		for (uint32_t i = 1; i < t::count; ++i) {
+		for (uint32_t i = 1; i < t::size; ++i) {
 			stream << ',' << src.data [i];
 		}
 	}
 
 	template < class dst_t, class src_t >
-	inline dst_t convert_to ( src_t & src ) {
+	inline dst_t convert_to ( src_t src ) {
 		dst_t tmp_value;
 		convert (src, tmp_value);
 		return tmp_value;

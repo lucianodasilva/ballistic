@@ -1,80 +1,196 @@
-#ifndef	_ballistic_property_h_
+
+#ifndef _ballistic_property_h_
 #define _ballistic_property_h_
 
+#include "ballistic.config.h"
+#include "ballistic.convert.h"
+#include "ballistic.debug.h"
 #include "ballistic.id.h"
-#include "ballistic.var.h"
 
-#include <map>
+#include <type_traits>
 
-using namespace std;
+#include <tinyxml2.h>
 
 namespace ballistic {
 
-	class iproperty_container;
+	class entity;
 
-	class property {
-	private:
+	class iproperty {
+	protected:
 
-		var						_value;
-		id_t					_id;
-		iproperty_container *	_container;
-
-		inline void raise_property_changed_event ();
-
-		inline static void swap (property & v1, property & v2);
+		id_t							_id = 0;
+		entity *						_container;
 
 	public:
 
-		inline property ();
-		inline property (id_t id);
-		inline property (iproperty_container * container, id_t id);
-		inline property (const property & v);
+		id_t							id () const;
+		entity *						container () const;
 
-		inline property (property && v);
+		iproperty ();
+		iproperty (id_t id_v, entity * container_v);
 
-		template < class T >
-		inline T as () const;
+		virtual							~iproperty ();
+		void							raise_event () const;
 
-		template < class T >
-		inline property & operator = (const T & v);
+		virtual bool					parse (const tinyxml2::XMLAttribute * value) = 0;
+		virtual iproperty *				clone () const = 0;
+	};
 
-		inline property & operator = (property v);
+	namespace details {
 
-		inline id_t get_id () const;
+		template < 
+			class value_t, 
+			bool is_fundamental = std::is_fundamental < value_t >::value, 
+			bool is_pointer = std::is_pointer < value_t >::value 
+		>
+		struct property_parser {
 
-		inline var get_value () const;
-		inline void set_value (var v);
+			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
+				try {
+					ret = convert_to < value_t > (value->Value ());
+					return true;
+				} catch (...) {
+					return false;
+				}
+			}
 
-		inline iproperty_container * get_container () const;
-		inline void set_container (iproperty_container * container);
+		};
+
+		template < class value_t >
+		struct property_parser < value_t, false, false > {
+			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
+				return value_t::parse (value, ret);
+			}
+		};
+
+		template < >
+		struct property_parser < id_t, std::is_fundamental < id_t >::value, false > {
+			inline static bool parse (const tinyxml2::XMLAttribute * value, id_t & ret) {
+				try {
+					ret = text_to_id (value->Value());
+					return true;
+				} catch (...) {
+					return false;
+				}
+			}
+		};
+
+		template < >
+		struct property_parser < string, false, false > {
+			inline static bool parse (const tinyxml2::XMLAttribute * value, string & ret) {
+				try {
+					ret = value->Value ();
+					return true;
+				} catch (...) {
+					return false;
+				}
+			}
+		};
+
+		template < class value_t, bool is_fundamental >
+		struct property_parser < value_t, is_fundamental, true > {
+			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
+				debug_print ("pointer type value cannot be parsed");
+				return false;
+			}
+		};
+
+	}
+
+	template < class value_t >
+	class property : public iproperty {
+	private:		
+		value_t					_value;
+	public:
+
+		inline property (const id_t & id_v, const value_t & v, entity * ctner)
+			: iproperty (id_v, ctner), _value (v)
+		{}
+
+		inline void operator = (const value_t & v) {
+			_value = v;
+			iproperty::raise_event ();
+		}
+
+		inline operator value_t () const {
+			return _value;
+		}
+
+		inline value_t get () const {
+			return _value;
+		}
+
+		inline virtual bool parse (const tinyxml2::XMLAttribute * config_value) {
+			bool ret = details::property_parser < value_t >::parse (config_value, _value);
+
+			if (!ret)
+				debug_print ("unexpected data type for property " << id ());
+
+			return ret;
+		}
+
+		inline virtual iproperty * clone () const {
+			return new property < value_t > (id (), _value, container ());
+		}
 
 	};
 
-	class iproperty_container {
-	public:
+	namespace details {
 
-		virtual void property_changed_event (const property & p);
+		struct property_accessor {
 
-		virtual property & add_property (id_t id, const var & v) = 0;
+			id_t			id;
+			iproperty *		prop;
 
-		virtual bool has_property (id_t id) = 0;
+			inline property_accessor (const id_t & id_v, iproperty * p) : id (id_v), prop (p) {}
 
-		virtual property & get_property (id_t id) = 0;
-
+			template < class value_t >
+			inline void operator = (const value_t & v) {
 #ifdef BALLISTIC_DEBUG
-		virtual inline bool has_property (const string & name) {
-			return this->has_property (string_to_id (name));
-		}
+				auto p = dynamic_cast <property < value_t > *> (prop);
+#else
+				auto p = static_cast <property < value_t > *> (prop);
+#endif
+				if (p) {
+					*p = v;
+				} else {
+					debug_run (
+						if (prop) {
+							debug_print ("wrong type property assign for" << id);
+						} else {
+							debug_print ("property " << id << " not found");
+						}
+					);
+				}
+			}
 
-		virtual inline property & get_property (const string & name) {
-			return this->get_property (string_to_id (name));
-		}
-#endif // BALLISTIC_DEBUG 
+			template < class value_t >
+			inline value_t as () const {
+#ifdef BALLISTIC_DEBUG
+				auto p = dynamic_cast < property < value_t > * > (prop);
+#else
+				auto p = static_cast < property < value_t > * > (prop);
+#endif
+				if (p)
+					return *p;
+				else {
+					debug_run (
+						if (prop) {
+							debug_print ("wrong type property access for" << id);
+						} else {
+							debug_print ("property " << id << " not found");
+						}
+					);
+					return value_t ();
+				}
+			}
 
-	};
-
+			template < class value_t >
+			inline operator value_t () const {
+				return as < value_t > ();
+			}
+		};
+	}
 }
-
-#include "ballistic.property.inl"
 
 #endif

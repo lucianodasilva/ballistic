@@ -18,9 +18,9 @@ namespace ballistic {
 		public:
 
 			// Resources ----------------
-			virtual ieffect *	create_effect () = 0;
-			virtual imaterial * create_material () = 0;
-			virtual imesh *		create_mesh () = 0;
+			virtual ieffect *	create_effect (id_t id) = 0;
+			virtual imaterial * create_material (id_t id) = 0;
+			virtual imesh *		create_mesh (id_t ) = 0;
 			virtual itexture *	create_texture (const point & size) = 0;
 			// ---------------------------
 
@@ -30,19 +30,19 @@ namespace ballistic {
 
 			// ---------------------------
 
-			virtual void		set_clear_color ( const color & cr ) = 0;
+			virtual void		clear_color ( const color & cr ) = 0;
 
-			virtual void 		set_view (const mat4 & view) = 0;
-			virtual const mat4 & get_view () const = 0;
+			virtual void 		view (const mat4 & view) = 0;
+			virtual const mat4 & view () const = 0;
 
-			virtual void		set_model (const mat4 & model) = 0;
-			virtual const mat4 & get_model () const = 0;
+			virtual void		model (const mat4 & model) = 0;
+			virtual const mat4 & model () const = 0;
 
-			virtual void		set_proj (const mat4 & proj) = 0;
-			virtual const mat4 & get_proj () const = 0;
+			virtual void		proj (const mat4 & proj) = 0;
+			virtual const mat4 & proj () const = 0;
 			
-			virtual void		set_normal (const mat4 & norm) = 0;
-			virtual const mat4 & get_normal () const = 0;
+			virtual void		normal (const mat4 & norm) = 0;
+			virtual const mat4 & normal () const = 0;
 
 			virtual void		clear () = 0;
 

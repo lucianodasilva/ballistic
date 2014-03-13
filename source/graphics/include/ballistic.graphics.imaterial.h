@@ -11,25 +11,27 @@ namespace ballistic {
 
 		class idevice;
 
-		class imaterial : public ballistic::resources::iresource {
+		class imaterial : public ballistic::iresource {
 		public:
 
-			virtual uint8_t		get_run_id () = 0;
+			imaterial (const id_t & id);
 
-			virtual void		set_effect (ieffect * effect) = 0;
-			virtual ieffect *	get_effect () = 0;
+			virtual uint8_t		run_id () = 0;
 
-			virtual void		set_diffuse (const color & v) = 0;
-			virtual color		get_diffuse () = 0;
+			virtual void		effect (ieffect * effect) = 0;
+			virtual ieffect *	effect () = 0;
 
-			virtual void		set_specular (const color & v) = 0;
-			virtual color		get_specular () = 0;
+			virtual void		diffuse (const color & v) = 0;
+			virtual color		diffuse () = 0;
 
-			virtual void		set_opaque (bool v) = 0;
-			virtual bool		get_opaque () = 0;
+			virtual void		specular (const color & v) = 0;
+			virtual color		specular () = 0;
 
-			virtual void		set_texture (itexture * v) = 0;
-			virtual itexture *	get_texture () = 0;
+			virtual void		opaque (bool v) = 0;
+			virtual bool		opaque () = 0;
+
+			virtual void		texture (itexture * v) = 0;
+			virtual itexture *	texture () = 0;
 
 			virtual void		apply (idevice * device) = 0;
 

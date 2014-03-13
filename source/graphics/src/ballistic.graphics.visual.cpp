@@ -10,9 +10,52 @@ namespace ballistic {
 
 		const id_t visual::component_id = ballistic::id::graphics::visual;
 
-		void visual::setup (entity * parent, vector < ballistic::property > & parameters)
+		void visual::require_properties (entity_type * new_type, component_info & info) {
+			
+			new_type->properties.require < id_t > (id::graphics::material_id, id::null);
+			new_type->properties.require < id_t > (id::graphics::mesh_id, id::null);
+
+			new_type->properties.require < imaterial * > (id::graphics::material, nullptr);
+			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
+			new_type->properties.require < mat4 > (id::transform, mat4 ());
+		}
+
+		void visual::setup (entity * parent, property_container & parameters)
 		{
 			component::setup (parent, parameters);
+
+			game::instance.global_notifier.attach (id::message_render, this);
+
+			_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
+
+			_material = parent->properties.require < imaterial * > (
+				id::graphics::material,
+				nullptr
+			);
+
+			_mesh = parent->properties.require < imesh * > (
+				id::graphics::mesh, 
+				nullptr
+			);
+
+			_transform = parent->properties.require < mat4 > (
+				id::transform,
+				mat4 ()
+			);
+
+			if (!*_material)
+				*_material = game::instance.resources [
+					parent->properties [id::graphics::material_id].as < id_t >()
+				].as < imaterial > () ;
+
+			if (!*_mesh)
+				*_mesh = game::instance.resources [
+					parent->properties [id::graphics::mesh_id].as < id_t > ()
+				].as < imesh > ();
+		}
+
+		void visual::terminate () {
+			game::instance.global_notifier.detach (id::message_render, this);
 		}
 
 		visual::visual ()
@@ -22,54 +65,21 @@ namespace ballistic {
 			_system (nullptr)
 		{}
 
-		void visual::notify ( ballistic::message & message ) {
+		void visual::notify ( entity * sender, ballistic::message & message ) {
 
-			// if render... render :D 
-			if (message.get_id () == id::message_render) {
+			imaterial * material = *_material;
+			imesh * mesh = *_mesh;
 
-				if (_system && _material && _material->get_effect () && _mesh)
-					_system->push_item (_material, _mesh, mat4 ()); //TODO: think about transforms for rendering
-				debug_run ( else
-					debug_warn ("[ballistic::graphics::visual] Incomplete visual component. Will not render!");
-				);
-
-				return;
-			}
-
-			// handle property changes
-			if (message.get_id () == ballistic::id::message_property_changed && 
-				message.get_sender () == get_entity ()
-			){
-				id_t property_id = message [ballistic::id::id].as < id_t > ();
-
-				if (property_id == id::transform)
-					_transform = message [ballistic::id::value].as < mat4 > ();
-
-				if (property_id == id::material) {
-					id_t material_res_id = message [ballistic::id::value].as < id_t > ();
-
-					_material = get_game ()->get_resource < imaterial > (material_res_id);
-				}
-
-				if (property_id == id::mesh) {
-					id_t mesh_res_id = message [ballistic::id::value].as < id_t > ();
-					_mesh = get_game ()->get_resource < imesh > (mesh_res_id);
-				}
-
-				return;
-			}
-
-			// if initialize load game and entity properties
-			if (message.get_id () == ballistic::id::message_initialize) {
-
-				entity * ent = get_entity ();
-
-				_system = dynamic_cast <graphics_system *> (get_game ()->find_system (ballistic::id::graphics::system));
-
-				_material = get_game ()->get_resource < imaterial > (ent->get_property (ballistic::id::material).as < id_t > ());
-				_mesh = get_game ()->get_resource < imesh > (ent->get_property (ballistic::id::mesh).as < id_t > ());
-				_transform	= ent->get_property (ballistic::id::transform).as < mat4 > ();
-			}
+			if (
+				_system && 
+				material &&
+				material->effect () &&
+				mesh
+			)
+				_system->push_item (material, mesh, *_transform); //TODO: think about transforms for rendering
+			debug_run ( else
+				debug_print ("incomplete visual component. will not render!");
+			);
 
 		}
 

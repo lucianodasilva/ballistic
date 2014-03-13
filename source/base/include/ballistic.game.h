@@ -1,9 +1,13 @@
 #ifndef	_ballistic_game_h_
 #define _ballistic_game_h_
 
-#include "ballistic.igame.h"
-#include "ballistic.isystem.h"
+#include "ballistic.entity.h"
+#include "ballistic.entity_container.h"
+#include "ballistic.ifrontend.h"
+#include "ballistic.message_notifier.h"
+#include "ballistic.resource_container.h"
 #include "ballistic.system.h"
+#include "ballistic.system_container.h"
 
 #include <functional>
 #include <map>
@@ -15,17 +19,8 @@ using namespace std;
 
 namespace ballistic {
 	
-	class game : public igame {
+	class game : public entity {
 	protected:
-		
-		// entity id
-		atomic<unsigned int> _id_key;
-
-		typedef map < id_t, entity * > entity_map_t;
-		entity_map_t _entity_map;
-
-		typedef vector < isystem * > system_list_t;
-		system_list_t _systems;
 
 		bool _running;
 
@@ -36,47 +31,26 @@ namespace ballistic {
 
 		uint32_t	_frame_id;
 		message _m_update;
-		
-		// internal systems
-		resources::stack _resources;
 
 		ifrontend * _frontend;
 
 	public:
 
-		virtual id_t create_id_key ();
-		
-		// resource handling
-	
-		virtual resources::iresource * get_resource (const res_id_t & res_id);
-		virtual resources::iresource * get_resource (id_t res_id);
-		
-		virtual void push_resource_level ();
-		virtual bool pop_resource_level ();
-		
-		virtual resources::stack & get_resource_stack ();
+		static game instance;
 
-		// -----------------
+		message_notifier global_notifier;
 
-		virtual void add_entity (entity * ent);
+		entity_container entities;
 
-		virtual entity * find_entity ( id_t id );
+		resource_container resources;
 
-		// -----------------
-
-		virtual void add_system (isystem * system);
-
-		virtual isystem * find_system (id_t id);
-
-		// -----------------
-
-		virtual void send_message ( ballistic::message & message );
+		system_container systems;
 
 		virtual void initialize ();
 
 		virtual bool is_running ();
 
-		virtual void do_loop (function < void ( igame * )> system_callback = nullptr);
+		virtual void do_loop (function < void ( game * )> system_callback = nullptr);
 
 		virtual bool frame ();
 
@@ -86,8 +60,8 @@ namespace ballistic {
 		virtual ~game ();
 
 		// ---------------------
-		virtual ifrontend * get_frontend ();
-		virtual void set_frontend (ifrontend * frontend);
+		virtual ifrontend * frontend ();
+		virtual void frontend (ifrontend * frontend);
 
 	};
 

@@ -36,22 +36,22 @@ namespace ballistic {
 			} byte_handler;
 
 			try {
-				if (item.material->get_opaque ()) {
+				if (item.material->opaque ()) {
 
 					byte_handler.b0 = 0;
-					byte_handler.b1 = item.material->get_run_id ();
-					byte_handler.b2 = item.material->get_effect ()->get_run_id ();
-					byte_handler.b3 = item.mesh->get_run_id ();
+					byte_handler.b1 = item.material->run_id ();
+					byte_handler.b2 = item.material->effect ()->run_id ();
+					byte_handler.b3 = item.mesh->run_id ();
 
 				} else {
 
 					byte_handler.b0 = 1;
 
-					uint16_t depth = camera->get_depth (item.transform);
+					uint16_t depth = camera->depth (item.transform);
 					*((uint16_t *)&byte_handler.b1) = depth;
 
 					byte_handler.b3 =
-						item.material->get_effect ()->get_run_id ();
+						item.material->effect ()->run_id ();
 
 				}
 
