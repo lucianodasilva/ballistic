@@ -49,10 +49,10 @@ namespace ballistic {
 			
 			opengl_device ();
 			
-			virtual ieffect *	create_effect (id_t id);
-			virtual imaterial * create_material (id_t id);
-			virtual imesh *		create_mesh (id_t id);
-			virtual itexture *	create_texture (const point & size);
+			virtual ieffect *	create_effect (const id_t & id);
+			virtual imaterial * create_material (const id_t & id);
+			virtual imesh *		create_mesh (const id_t & id);
+			virtual itexture *	create_texture (const id_t & id);
 
 			virtual void		activate (ieffect * effect);
 			virtual void		activate (imaterial * material);

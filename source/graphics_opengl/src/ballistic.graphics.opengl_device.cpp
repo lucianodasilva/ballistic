@@ -55,20 +55,20 @@ namespace ballistic {
 			
 		}
 
-		ieffect * opengl_device::create_effect (id_t id) {
+		ieffect * opengl_device::create_effect (const id_t & id) {
 			return new opengl_effect (id, ++_effect_run_id);
 		}
 
-		imaterial * opengl_device::create_material (id_t id) {
+		imaterial * opengl_device::create_material (const id_t & id) {
 			return new opengl_material (id, ++_material_run_id);
 		}
 		
-		imesh *	opengl_device::create_mesh (id_t id)
+		imesh *	opengl_device::create_mesh (const id_t & id)
 		{
 			return new opengl_mesh (id, ++_mesh_run_id);
 		}
 		
-		itexture * opengl_device::create_texture (const point & size)
+		itexture * opengl_device::create_texture (const id_t & id)
 		{
 			return nullptr;
 		}

@@ -88,4 +88,30 @@
       <graphics_visual/>
   </entity_type>
 
+  <material name="square.material" diffuse="0, 0, 0, 1" opaque="true" effect="monkey.effect"/>
+
+  <mesh name="square.mesh">
+    <position>
+      -1, -1, 0,
+      1, -1, 0,
+      1, 1, 0,
+      -1, 1, 0
+    </position>
+    <uv>
+      0, 0,
+      1, 0,
+      1, 1,
+      0, 1
+    </uv>
+    <index>
+      0, 1, 2, 0, 2, 3
+    </index>
+  </mesh>
+
+  <entity_type name="textured_square.entity"
+               material_id="square.material"
+               mesh_id="square.mesh">
+    <graphics_visual/>
+  </entity_type>
+
 </package>

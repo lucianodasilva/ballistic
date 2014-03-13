@@ -18,10 +18,10 @@ namespace ballistic {
 		public:
 
 			// Resources ----------------
-			virtual ieffect *	create_effect (id_t id) = 0;
-			virtual imaterial * create_material (id_t id) = 0;
-			virtual imesh *		create_mesh (id_t ) = 0;
-			virtual itexture *	create_texture (const point & size) = 0;
+			virtual ieffect *	create_effect (const id_t & id) = 0;
+			virtual imaterial * create_material (const id_t & id) = 0;
+			virtual imesh *		create_mesh (const id_t & id) = 0;
+			virtual itexture *	create_texture (const id_t & id) = 0;
 			// ---------------------------
 
 			virtual void		activate (ieffect * effect) = 0;

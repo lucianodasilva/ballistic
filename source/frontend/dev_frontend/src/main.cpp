@@ -72,6 +72,7 @@ public:
 
 };
 
+ballistic::res_id_t res_textured_square ("textured_square.entity", "resources/game.xml");
 ballistic::res_id_t res_monkey_head ("monkey_head_entity", "resources/game.xml");
 ballistic::res_id_t res_camera ("orbit_camera_entity", "resources/game.xml");
 
@@ -102,7 +103,8 @@ int main ( int argc, char ** argv) {
 
 	// create entities
 	g.entities.create (res_camera);
-	g.entities.create (res_monkey_head);
+	//g.entities.create (res_monkey_head);
+	g.entities.create (res_textured_square);
 
 	// initialize
 	g.initialize ();
