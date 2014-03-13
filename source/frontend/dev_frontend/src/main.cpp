@@ -7,7 +7,8 @@
 #include <chrono>
 #include <limits>
 
-ballistic::game *				_game;
+using namespace ballistic;
+
 ballistic::ifrontend *			_frontend;
 ballistic::graphics::idevice *	_device;
 
@@ -20,7 +21,7 @@ ballistic::ifrontend * create_frontend ( const point & size ) {
 	return new ballistic::win_desktop::frontend (size);
 }
 
-#elif defined (BALLISTIC_OS_MACOSX)
+#elif defined (BALLISTIC_OS_DARWIN)
 #	include "ballistic.mac_frontend.h"
 #	include <GLUT/GLUT.h>
 ballistic::ifrontend * create_frontend (const point & size) {
@@ -40,62 +41,73 @@ ballistic::graphics::idevice * create_device () {
 float angle = 0.0F;
 float radius = 4.0F;
 
-void circle_camera ( ballistic::entity * parent, ballistic::message & message ) {
+class orbit_camera : public ballistic::component {
+public:
 
-	if (message.get_id () != ballistic::id::message_update)
-		return;
+	static void require_properties (entity_type * new_type, component_info & info) {
+		new_type->properties.require (id::position, vec3 ({0, 0, 0}));
+	}
 
-	vec3 pos;
+	virtual void setup (ballistic::entity * parent, ballistic::property_container & parameters) {
+		component::setup (parent, parameters);
+		game::instance.global_notifier.attach (ballistic::id::message_update, this);
+	}
 
-	pos.x = cos (angle) * radius;
-	pos.y = 2.F;
-	pos.z = sin (angle) * radius;
+	virtual void terminate () {
+		container ()->local_notifier.detach (ballistic::id::message_update, this);
+	}
 
-	angle = message [ballistic::id::game_time].as < real > () * real (1); // one radian per second
-	//radius += 0.025;
-	
-	//if (angle > (3.1415926 * 2.)) {
-	//	angle = 0.0;
-	//	//radius = 1.0;
-	//}
+	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
 
-	parent->get_property (ballistic::id::position) = pos;
-}
+		vec3 pos;
 
-ballistic::res_id_t res_rotating_square ("rotating_square.entity", "resources/game.xml");
-ballistic::res_id_t res_camera ("camera.entity", "resources/game.xml");
+		pos.x = cos (angle) * radius;
+		pos.y = 2.F;
+		pos.z = sin (angle) * radius;
+
+		angle = (real)message [ballistic::id::game_time] * real (1); // one radian per second
+
+		container ()->properties [ballistic::id::position] = pos;
+	}
+
+};
+
+ballistic::res_id_t res_monkey_head ("monkey_head_entity", "resources/game.xml");
+ballistic::res_id_t res_camera ("orbit_camera_entity", "resources/game.xml");
 
 int main ( int argc, char ** argv) {
-	
+
 	debug_init();
 
-	_frontend = create_frontend (point ( 800, 800));
+	_frontend = create_frontend (point{150, 150});
 	_frontend->create ();
 	_frontend->show ();
 
 	_device = create_device ();
-	_device->set_clear_color(color (.0F, .6F, 1.F, 1.F));
+	_device->clear_color (color{.0F, .6F, 1.F, 1.F});
 	
-	_game = new ballistic::game ();
-	_game->set_frontend (_frontend);
+	game & g = game::instance;
+
+	g.frontend (_frontend);
 
 	// setup game stuffs
-	ballistic::graphics::define_resources (_game, _device);
-	ballistic::component::define < ballistic::_func_component < &circle_camera > > (_game, ballistic::string_to_id ("orbit_cam"));
+	ballistic::graphics::define_resources (_device);
+
+	component::declare < orbit_camera > (text_to_id ("orbit_camera"));
 
 	auto graphics = new ballistic::graphics::graphics_system ();
-	graphics->set_device (_device);
+	graphics->device (_device);
 
-	_game->add_system (graphics);
+	g.systems.attach (graphics);
 
 	// create entities
-	ballistic::entity * camera = ballistic::entity::create (_game, res_camera);
-	ballistic::entity * rot_square = ballistic::entity::create (_game, res_rotating_square);
+	g.entities.create (res_camera);
+	g.entities.create (res_monkey_head);
 
 	// initialize
-	_game->initialize ();
+	g.initialize ();
 
-	_frontend->do_event_loop (_game);
+	_frontend->do_event_loop ();
 
 	return 0;
 }

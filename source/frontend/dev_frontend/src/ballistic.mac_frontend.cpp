@@ -1,16 +1,14 @@
 #include "ballistic.mac_frontend.h"
 
-#ifdef BALLISTIC_OS_MACOSX
+#ifdef BALLISTIC_OS_DARWIN
 
 #include <GLUT/GLUT.h>
 
 namespace ballistic {
 	namespace mac_desktop {
 		
-		ballistic::igame * frontend::_game;
-		
 		void frontend::update_frame(){
-			_game->frame ();
+			game::instance.frame ();
 			glutSwapBuffers();
 			glutPostRedisplay ();
 		}
@@ -39,13 +37,11 @@ namespace ballistic {
 		void frontend::destroy () {
 		}
 		
-		void frontend::update ( ballistic::igame * game ) {
+		void frontend::update () {
 			
 		}
 
-		void frontend::do_event_loop ( ballistic::igame * game ) {
-			_game = game;
-			
+		void frontend::do_event_loop () {
 			glutDisplayFunc(update_frame);
 			glutMainLoop ();
 		}

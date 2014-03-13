@@ -6,8 +6,10 @@
 namespace ballistic {
 	namespace graphics {
 
-		class itexture : public ballistic::resources::iresource {
+		class itexture : public ballistic::iresource {
 		public:
+
+			itexture (const id_t & id);
 
 		};
 

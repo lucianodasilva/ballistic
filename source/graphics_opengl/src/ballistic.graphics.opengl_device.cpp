@@ -29,7 +29,7 @@ namespace ballistic {
 			
 			debug_run ({
 				string gl_str_version = (const char *)glGetString (GL_VERSION);
-				debug_print ("OpenGL version: " << gl_str_version);
+				debug_print ("openGL version: " << gl_str_version);
 			});
 
 			{
@@ -55,17 +55,17 @@ namespace ballistic {
 			
 		}
 
-		ieffect * opengl_device::create_effect () {
-			return new opengl_effect (++_effect_run_id);
+		ieffect * opengl_device::create_effect (id_t id) {
+			return new opengl_effect (id, ++_effect_run_id);
 		}
 
-		imaterial * opengl_device::create_material () {
-			return new opengl_material (++_material_run_id);
+		imaterial * opengl_device::create_material (id_t id) {
+			return new opengl_material (id, ++_material_run_id);
 		}
 		
-		imesh *	opengl_device::create_mesh ()
+		imesh *	opengl_device::create_mesh (id_t id)
 		{
-			return new opengl_mesh (++_mesh_run_id);
+			return new opengl_mesh (id, ++_mesh_run_id);
 		}
 		
 		itexture * opengl_device::create_texture (const point & size)
@@ -84,17 +84,18 @@ namespace ballistic {
 
 			// get constants
 			//_gl_const_model = _effect->get_constant (id::graphics::effect::t_model);
-			_gl_const_view = _effect->get_constant (id::graphics::effect::t_view);
-			_gl_const_proj = _effect->get_constant (id::graphics::effect::t_proj);
+			_gl_const_view = _effect->constant (id::graphics::effect::t_view);
+			_gl_const_proj = _effect->constant (id::graphics::effect::t_proj);
+			_gl_const_normal = _effect->constant (id::graphics::effect::t_normal);
 			
-			_gl_const_diffuse = _effect->get_constant (id::graphics::effect::diffuse);
-			_gl_const_specular = _effect->get_constant (id::graphics::effect::specular);
+			_gl_const_diffuse = _effect->constant (id::graphics::effect::diffuse);
+			_gl_const_specular = _effect->constant (id::graphics::effect::specular);
 
 			// set least changing constants
 			// TODO: replace by uniform block
-			_effect->set_constant (_gl_const_view, _view);
+			_effect->constant (_gl_const_view, _view);
 			//_effect->set_constant (_gl_const_model, _model);
-			_effect->set_constant (_gl_const_proj, _proj);
+			_effect->constant (_gl_const_proj, _proj);
 		}
 
 		void opengl_device::activate (imaterial * material) {
@@ -107,39 +108,50 @@ namespace ballistic {
 			_mesh->apply (this);
 		}
 
-		void opengl_device::set_clear_color ( const color & cr ) {
+		void opengl_device::clear_color ( const color & cr ) {
 			_clear_color = cr;
 		}
 
-		void opengl_device::set_view (const mat4 & view) {
+		void opengl_device::view (const mat4 & view) {
 			_view = view;
 			if (_effect)
-				_effect->set_constant (_gl_const_view, _view);
+				_effect->constant (_gl_const_view, _view);
 		}
 
-		const mat4 & opengl_device::get_view () const {
+		const mat4 & opengl_device::view () const {
 			return _view;
 		}
 
-		void opengl_device::set_model (const mat4 & model) {
+		void opengl_device::model (const mat4 & model) {
 			_model = model;
 			if (_effect)
-				_effect->set_constant (_gl_const_model, _model);
+				_effect->constant (_gl_const_model, _model);
 		}
 
-		const mat4 & opengl_device::get_model () const {
+		const mat4 & opengl_device::model () const {
 			return _model;
 		}
 
-		void opengl_device::set_proj (const mat4 & proj) {
+		void opengl_device::proj (const mat4 & proj) {
 			_proj = proj;
 
 			if (_effect)
-				_effect->set_constant (_gl_const_proj, _proj);
+				_effect->constant (_gl_const_proj, _proj);
 		}
 
-		const mat4 & opengl_device::get_proj () const {
+		const mat4 & opengl_device::proj () const {
 			return _proj;
+		}
+		
+		void opengl_device::normal (const mat4 & norm) {
+			_normal = norm;
+			
+			if (_effect)
+				_effect->constant (_gl_const_normal, _normal);
+		}
+		
+		const mat4 & opengl_device::normal () const {
+			return _normal;
 		}
 
 		void opengl_device::clear () {
@@ -150,12 +162,12 @@ namespace ballistic {
 				_clear_color.a
 			);
 
-			glClear (GL_COLOR_BUFFER_BIT);
+			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		}
 
 		void opengl_device::begin_frame ()
 		{
-			glClear(GL_DEPTH_BUFFER_BIT);			
+			glClear(GL_DEPTH_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );			
 		}
 
 		void opengl_device::end_frame ()
@@ -173,7 +185,7 @@ namespace ballistic {
 		
 		}
 
-		void opengl_device::draw_active_mesh (const mat4 transform) {
+		void opengl_device::draw_active_mesh () {
 			if (!_material) {
 				debug_error ("draw_active_mesh: No active instance of material set.");
 				return;
@@ -188,9 +200,6 @@ namespace ballistic {
 				debug_error ("render_mesh: No active instance of mesh set.");
 				return;
 			}
-
-			//_effect->set_constant (_gl_const_model, transform);
-
 			_mesh->render ();
 		}
 

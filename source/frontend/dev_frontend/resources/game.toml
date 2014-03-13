@@ -1,0 +1,22 @@
+# define camera entity
+[orbit_camera_entity]
+  type = "entity_type"
+  position = [.0, .0, .0]
+  target = [.0, .0, .0]
+  up = [.0, 1., .0]
+
+[orbit_camera_entity.graphics_camera]
+  projection = "perspective"
+  fov = 45.0
+  near = 0.1
+  far = 100.0
+
+[orbit_camera_entity.orbit_camera]
+
+# define model entity
+[monkey_head_entity]
+  position = [.0, .0, .0]
+  material = "square_material"
+  mesh = "square_mesh"
+
+[money_head_entity.visual]

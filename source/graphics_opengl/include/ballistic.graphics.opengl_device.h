@@ -16,7 +16,7 @@ namespace ballistic {
 		class opengl_material;
 		class opengl_mesh;
 		
-		class opengl_device : public idevice{
+		class opengl_device : public idevice {
 		private:
 
 			color _clear_color;
@@ -28,7 +28,8 @@ namespace ballistic {
 			mat4
 				_view,
 				_model,
-				_proj;
+				_proj,
+				_normal;
 
 
 			opengl_effect *		_effect;
@@ -39,6 +40,7 @@ namespace ballistic {
 			opengl_constant		_gl_const_model;
 			opengl_constant		_gl_const_view;
 			opengl_constant		_gl_const_proj;
+			opengl_constant		_gl_const_normal;
 
 			opengl_constant		_gl_const_diffuse;
 			opengl_constant		_gl_const_specular;
@@ -47,25 +49,28 @@ namespace ballistic {
 			
 			opengl_device ();
 			
-			virtual ieffect *	create_effect ();
-			virtual imaterial * create_material ();
-			virtual imesh *		create_mesh ();
+			virtual ieffect *	create_effect (id_t id);
+			virtual imaterial * create_material (id_t id);
+			virtual imesh *		create_mesh (id_t id);
 			virtual itexture *	create_texture (const point & size);
 
 			virtual void		activate (ieffect * effect);
 			virtual void		activate (imaterial * material);
 			virtual void		activate (imesh * mesh);
 			
-			virtual void		set_clear_color ( const color & cr );
+			virtual void		clear_color ( const color & cr );
 
-			virtual void 		set_view (const mat4 & view);
-			virtual const mat4 & get_view () const;
+			virtual void 		view (const mat4 & view);
+			virtual const mat4 & view () const;
 
-			virtual void		set_model (const mat4 & model);
-			virtual const mat4 & get_model () const;
+			virtual void		model (const mat4 & model);
+			virtual const mat4 & model () const;
 
-			virtual void		set_proj (const mat4 & proj);
-			virtual const mat4 & get_proj () const;
+			virtual void		proj (const mat4 & proj);
+			virtual const mat4 & proj () const;
+			
+			virtual void		normal (const mat4 & norm);
+			virtual const mat4 & normal () const;
 
 			virtual void		clear ();
 
@@ -76,7 +81,7 @@ namespace ballistic {
 			
 			virtual void		destroy ();
 
-			virtual void		draw_active_mesh (const mat4 transform);
+			virtual void		draw_active_mesh ();
 		};
 		
 	}

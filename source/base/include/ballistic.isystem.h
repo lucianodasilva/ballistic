@@ -2,27 +2,19 @@
 #define _ballistic_isystem_h_
 
 #include "ballistic.id.h"
-#include "ballistic.message.h"
+#include "ballistic.message_notifier.h"
 
 namespace ballistic {
 
-	class igame;
-
-	class isystem {
-	private:
-
-		ballistic::igame * _game;
-
+	class isystem : public imessage_listener {
 	public:
 
 		virtual ~isystem ();
 
-		virtual id_t get_id () = 0;
+		virtual id_t id () = 0;
 
-		virtual ballistic::igame * get_game ();
-		virtual void set_game (ballistic::igame * value);
-
-		virtual void notify ( ballistic::message & message ) = 0;
+		virtual void attach () = 0;
+		virtual void detach () = 0;
 
 	};
 

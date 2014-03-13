@@ -33,6 +33,8 @@ set ( ballistic_graphics_opengl3_dir ${ballistic_graphics_opengl3_dir} CACHE PAT
 # --------- dependencies ----------
 include (${proj_dir}/deps/tinyxml2/CMakeLists.txt )
 include (${proj_dir}/deps/glew/CMakeLists.txt)
+include (${proj_dir}/deps/zlib/CMakeLists.txt)
+include (${proj_dir}/deps/lpng/CMakeLists.txt)
 
 # --------- core projects ----------
 include ( ${ballistic_base_dir}/CMakeLists.txt )

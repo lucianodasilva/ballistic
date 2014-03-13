@@ -23,10 +23,12 @@ namespace ballistic {
 
 		class idevice;
 
-		class ieffect : public ballistic::resources::iresource {
+		class ieffect : public ballistic::iresource {
 		public:
 
-			virtual uint8_t get_run_id () = 0;
+			ieffect (const id_t & id);
+
+			virtual uint8_t run_id () = 0;
 
 			virtual void load (
 				const string & vs_shader_source,
