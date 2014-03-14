@@ -8,6 +8,7 @@
 #include "ballistic.graphics.io.effect_package_reader.h"
 #include "ballistic.graphics.io.material_package_reader.h"
 #include "ballistic.graphics.io.mesh_package_reader.h"
+#include "ballistic.graphics.io.texture_package_reader.h"
 
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.imaterial.h"
@@ -34,6 +35,10 @@ namespace ballistic {
 
 			g.resources.package_loader ()->register_reader (
 				new graphics::io::mesh_package_reader (device)
+			);
+
+			g.resources.package_loader ()->register_reader (
+				new graphics::io::texture_package_reader (device)
 			);
 		}
 

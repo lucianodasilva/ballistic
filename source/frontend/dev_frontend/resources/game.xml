@@ -6,6 +6,7 @@
       #version 330 core
       
       layout (location = 1) in vec3 in_position;
+      layout (location = 2) in vec2 in_uv;
       layout (location = 3) in vec3 in_normal;
       
       uniform vec4        effect_diffuse;
@@ -18,6 +19,8 @@
 
       out vec3            var_normal;
       out vec4            var_color;
+      
+      out vec2            var_uv;
 
       void main () {
 
@@ -30,6 +33,8 @@
         vec4 pos = mvp * vec4 (in_position, 1.0);
         
         var_normal = (effect_t_normal * vec4 (in_normal, 1.0)).xyz;
+        
+        var_uv = in_uv;
     
         gl_Position = pos;
       }
@@ -39,24 +44,30 @@
     <fragment>
       <![CDATA[
       #version 330 core
+      
+      uniform sampler2D   effect_texture;
 
       in vec3 var_normal;
       in vec4 var_color;
+      in vec2 var_uv;
       out vec4 out_color;
       
       void main () {
+      
+        vec4 texture_color = texture (effect_texture, var_uv);
+        out_color = texture_color;
     
-        float si = dot (var_normal, vec3 (.0, 1., .0));
-        
-        vec3 sky_color = vec3 (.6, .6, .7);
-        vec3 floor_color = vec3 (.3, .3, .2);
-        
-        vec3 tint = mix (floor_color, sky_color, si);
-        
-        out_color = vec4 (
-          mix (var_color.rgb, tint, .5),
-          1.
-         );
+        //float si = dot (var_normal, vec3 (.0, 1., .0));
+        //
+        //vec3 sky_color = vec3 (.6, .6, .7);
+        //vec3 floor_color = vec3 (.3, .3, .2);
+        //
+        //vec3 tint = mix (floor_color, sky_color, si);
+        //
+        //out_color = vec4 (
+        //  mix (var_color.rgb, tint, .5),
+        //  1.
+        // );
     
       }
       
@@ -88,7 +99,9 @@
       <graphics_visual/>
   </entity_type>
 
-  <material name="square.material" diffuse="0, 0, 0, 1" opaque="true" effect="monkey.effect"/>
+  <texture name="square.texture" min_filter="linear" mag_filter="linear" file="resources/evil_monkey.png"/>
+
+  <material name="square.material" diffuse="0, 0, 0, 1" opaque="true" effect="monkey.effect" texture="square.texture"/>
 
   <mesh name="square.mesh">
     <position>

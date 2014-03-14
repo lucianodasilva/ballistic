@@ -16,4 +16,4 @@ file ( GLOB graphics_source
 
 add_library ( graphics STATIC ${graphics_source} )
 
-target_link_libraries ( graphics base )
+target_link_libraries ( graphics base png )

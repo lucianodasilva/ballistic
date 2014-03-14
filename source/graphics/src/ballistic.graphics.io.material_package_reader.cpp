@@ -2,6 +2,7 @@
 
 #include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.ieffect.h"
+#include "ballistic.graphics.itexture.h"
 
 namespace ballistic {
 	namespace graphics {
@@ -35,6 +36,9 @@ namespace ballistic {
 					} else if (strcmp (cursor->Name (), "effect") == 0) {
 						ieffect * effect = container [text_to_id (cursor->Value ())];
 						material->effect (effect);
+					} else if (strcmp (cursor->Name (), "texture") == 0) {
+						itexture * texture = container [text_to_id (cursor->Value ())];
+						material->texture (texture);
 					}
 				
 					cursor = cursor->Next ();

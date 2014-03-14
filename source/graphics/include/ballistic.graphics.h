@@ -13,6 +13,7 @@
 #include "ballistic.graphics.io.effect_package_reader.h"
 #include "ballistic.graphics.io.material_package_reader.h"
 #include "ballistic.graphics.io.mesh_package_reader.h"
+#include "ballistic.graphics.io.texture_package_reader.h"
 #include "ballistic.graphics.itexture.h"
 #include "ballistic.graphics.render_item.h"
 #include "ballistic.graphics.render_list.h"

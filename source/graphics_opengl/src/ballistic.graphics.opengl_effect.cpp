@@ -116,6 +116,9 @@ namespace ballistic {
 			}
 			
 			glUseProgram (_shader_program_id);
+
+			// reset texture unit
+			constant (_constants [id::graphics::effect::texture], 0);
 		}
 
 		void opengl_effect::constant (opengl_constant & u, int32_t v) {

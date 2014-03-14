@@ -20,6 +20,11 @@ namespace ballistic {
 			texture_filter_linear
 		};
 
+		enum texture_format {
+			texture_format_rgb,
+			texture_format_rgba
+		};
+
 		class itexture : public ballistic::iresource {
 		public:
 
@@ -28,21 +33,27 @@ namespace ballistic {
 			// properties
 			virtual uint8_t run_id () = 0;
 
-			virtual texture_wrap wrap_s () = 0;
-			virtual void wrap_u (const texture_wrap & v) = 0;
-
-			virtual texture_wrap wrap_t () = 0;
-			virtual void wrap_t (const texture_wrap & v) = 0;
-
-			virtual texture_filter mag_filter () = 0;
-			virtual void mag_filter (const texture_filter & v) = 0;
-
-			virtual texture_filter min_filter () = 0;
-			virtual void min_filter (const texture_filter & v) = 0;
-
 			// load data
-			virtual void set_data (char * data, int width, int height) = 0;
-			virtual void update_data (char * data, int width, int height) = 0;
+			virtual void set_data (
+				char * data,
+				uint32_t width,
+				uint32_t height,
+				const texture_format & format,
+				const texture_wrap & wrap_s_v = texture_wrap_clamp_to_border,
+				const texture_wrap & wrap_t_v = texture_wrap_clamp_to_border,
+				const texture_filter & mag_filter_v = texture_filter_nearest,
+				const texture_filter & min_filter_v = texture_filter_nearest
+			) = 0;
+
+			//virtual void update_data (
+			//	char * data,
+			//	int width,
+			//	int height,
+			//	const texture_wrap & wrap_s_v = texture_wrap_clamp_to_border,
+			//	const texture_wrap & wrap_t_v = texture_wrap_clamp_to_border,
+			//	const texture_filter & mag_filter_v = texture_filter_nearest,
+			//	const texture_filter & min_filter_v = texture_filter_nearest
+			//) = 0;
 
 			virtual void apply (idevice * device) = 0;
 

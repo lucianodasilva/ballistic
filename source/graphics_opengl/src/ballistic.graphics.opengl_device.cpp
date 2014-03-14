@@ -5,12 +5,14 @@
 #include "ballistic.graphics.opengl_effect.h"
 #include "ballistic.graphics.opengl_material.h"
 #include "ballistic.graphics.opengl_mesh.h"
+#include "ballistic.graphics.opengl_texture.h"
 
 namespace ballistic {
 	namespace graphics {
 		
 		opengl_device::opengl_device ()
 			:
+			_alpha_blend (false),
 			_effect_run_id (0),
 			_material_run_id (0),
 			_mesh_run_id (0),
@@ -70,7 +72,7 @@ namespace ballistic {
 		
 		itexture * opengl_device::create_texture (const id_t & id)
 		{
-			return nullptr;
+			return new opengl_texture (id, ++_texture_run_id);
 		}
 
 		void opengl_device::activate (ieffect * effect) {
@@ -106,6 +108,26 @@ namespace ballistic {
 		void opengl_device::activate (imesh * mesh) {
 			_mesh = reinterpret_cast <opengl_mesh *>(mesh);
 			_mesh->apply (this);
+		}
+
+		void opengl_device::activate (itexture * texture) {
+			_texture = reinterpret_cast <opengl_texture *> (texture);
+			_texture->apply (this);
+		}
+
+		bool opengl_device::alpha_blend () {
+			return _alpha_blend;
+		}
+
+		void opengl_device::alpha_blend (const bool & v) {
+			if (v) {
+				_alpha_blend = true;
+				glEnable (GL_BLEND);
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			} else {
+				_alpha_blend = false;
+				glDisable (GL_BLEND);
+			}
 		}
 
 		void opengl_device::clear_color ( const color & cr ) {

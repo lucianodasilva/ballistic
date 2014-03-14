@@ -15,15 +15,19 @@ namespace ballistic {
 		class opengl_effect;
 		class opengl_material;
 		class opengl_mesh;
+		class opengl_texture;
 		
 		class opengl_device : public idevice {
 		private:
+
+			bool _alpha_blend;
 
 			color _clear_color;
 
 			atomic <unsigned char> _effect_run_id;
 			atomic <unsigned char> _material_run_id;
 			atomic <unsigned char> _mesh_run_id;
+			atomic <unsigned char> _texture_run_id;
 
 			mat4
 				_view,
@@ -35,6 +39,7 @@ namespace ballistic {
 			opengl_effect *		_effect;
 			opengl_material *	_material;
 			opengl_mesh *		_mesh;
+			opengl_texture *	_texture;
 
 			// constants
 			opengl_constant		_gl_const_model;
@@ -57,6 +62,10 @@ namespace ballistic {
 			virtual void		activate (ieffect * effect);
 			virtual void		activate (imaterial * material);
 			virtual void		activate (imesh * mesh);
+			virtual void		activate (itexture * texture);
+
+			virtual bool		alpha_blend ();
+			virtual void		alpha_blend (const bool & v);
 			
 			virtual void		clear_color ( const color & cr );
 

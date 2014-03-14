@@ -63,6 +63,7 @@ namespace ballistic {
 			// sort
 			_render_list.sort ();
 
+			_device->alpha_blend (false);
 			_device->clear ();
 			_device->begin_frame ();
 
@@ -71,6 +72,9 @@ namespace ballistic {
 			imaterial * material = nullptr;
 			ieffect * effect = nullptr;
 			imesh * mesh = nullptr;
+			itexture * texture = nullptr;
+
+			bool alpha_blend = false;
 
 			for (uint32_t i = 0; i < render_count; ++i) {
 				render_item & item = _render_list [i];
@@ -83,6 +87,16 @@ namespace ballistic {
 				if (item.material != material) {
 					material = item.material;
 					_device->activate (material);
+				}
+
+				if (item.material->texture () != texture) {
+					texture = item.material->texture ();
+					_device->activate (texture);
+				}
+
+				if (item.material->opaque () != alpha_blend) {
+					alpha_blend = true;
+					_device->alpha_blend (true);
 				}
 
 				if (item.mesh != mesh) {

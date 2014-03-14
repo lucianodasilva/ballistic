@@ -8,5 +8,6 @@
 #include "ballistic.graphics.opengl_effect.h"
 #include "ballistic.graphics.opengl_material.h"
 #include "ballistic.graphics.opengl_mesh.h"
+#include "ballistic.graphics.opengl_texture.h"
 
 #endif

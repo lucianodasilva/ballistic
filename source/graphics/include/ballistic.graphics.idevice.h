@@ -27,8 +27,12 @@ namespace ballistic {
 			virtual void		activate (ieffect * effect) = 0;
 			virtual void		activate (imaterial * material) = 0;
 			virtual void		activate (imesh * mesh) = 0;
+			virtual void		activate (itexture * texture) = 0;
 
 			// ---------------------------
+
+			virtual bool		alpha_blend () = 0;
+			virtual void		alpha_blend (const bool & v) = 0;
 
 			virtual void		clear_color ( const color & cr ) = 0;
 
