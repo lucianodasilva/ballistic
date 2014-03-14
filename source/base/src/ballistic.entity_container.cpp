@@ -24,7 +24,8 @@ namespace ballistic {
 	entity_container::~entity_container () {
 		for (auto it_pair : _entities) 
 		{
-			delete it_pair.second;
+			if (it_pair.second != &game::instance)
+				delete it_pair.second;
 		}
 	}
 
