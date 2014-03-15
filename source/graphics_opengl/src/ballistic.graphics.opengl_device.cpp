@@ -46,7 +46,7 @@ namespace ballistic {
 
 				// enable anti-aliasing
 				//glEnable (GL_BLEND);
-				glEnable (GL_POLYGON_SMOOTH);
+				//glEnable (GL_POLYGON_SMOOTH);
 
 			}
 

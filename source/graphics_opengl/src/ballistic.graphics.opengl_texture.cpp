@@ -71,8 +71,8 @@ namespace ballistic {
 
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, convert_filter_to_gl (mag_filter_v));
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, convert_filter_to_gl (min_filter_v));
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, convert_wrap_to_gl (wrap_s_v));
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, convert_wrap_to_gl (wrap_t_v));
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);//convert_wrap_to_gl (wrap_s_v));
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);//convert_wrap_to_gl (wrap_t_v));
 		}
 
 		//void opengl_texture::update_data (

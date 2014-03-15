@@ -35,6 +35,8 @@
         var_normal = (effect_t_normal * vec4 (in_normal, 1.0)).xyz;
         
         var_uv = in_uv;
+        // invert texture
+        var_uv.y = 1.0 - var_uv.y;
     
         gl_Position = pos;
       }
@@ -105,10 +107,10 @@
 
   <mesh name="square.mesh">
     <position>
-      -1, -1, 0,
-      1, -1, 0,
+      -1, 1, 0,
       1, 1, 0,
-      -1, 1, 0
+      1, -1, 0,
+      -1, -1, 0
     </position>
     <uv>
       0, 0,
