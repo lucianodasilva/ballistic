@@ -80,7 +80,7 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{600, 600});
+	_frontend = create_frontend (point{150, 150});
 	_frontend->create ();
 	_frontend->show ();
 
