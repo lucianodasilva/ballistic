@@ -3,39 +3,49 @@
 
 #include "ballistic.id.h"
 
+#define define_id(x) \
+	const ballistic::id_t x = text_to_id (#x)
+
 using namespace std;
 
 namespace ballistic {
 
 	namespace id {
 
-		const id_t null							= text_to_id ("null");
+		define_id (null);
+		define_id (message_update);
 
-		const id_t message_update				= text_to_id ("message_update");
-
-		const id_t game_time					= text_to_id ("game_time");
-		const id_t frame_time					= text_to_id ("frame_time");
-		const id_t frame_count					= text_to_id ("frame_count");
-
-		// -------------------------------------- 
-		const id_t message_terminate			= text_to_id ("message_terminate");
+		define_id (game_time);
+		define_id (frame_time);
+		define_id (frame_count);
 
 		// -------------------------------------- 
-		const id_t message_initialize			= text_to_id ("initialize");
+		define_id (message_terminate);
 
 		// -------------------------------------- 
-		const id_t message_property_changed	= text_to_id ("message_property_changes");
+		define_id (message_initialize);
 
-		const id_t name							= text_to_id ("name");
-		const id_t id							= text_to_id ("id");
-		const id_t value						= text_to_id ("value");
+		// -------------------------------------- 
+		define_id (message_property_changed);
+
+		define_id (name);
+		define_id (id);
+		define_id (value);
 
 		// --------------------------------------
-		const id_t transform					= text_to_id ("transform");
-		const id_t position						= text_to_id ("position");
+		define_id (transform);
+		define_id (position);
 
 		// --------------------------------------
-		const id_t storyboard_id				= text_to_id ("storyboard_id");
+		// ANIMATION 
+		// --------------------------------------
+		define_id (storyboard_id);
+		define_id (start);
+		define_id (end);
+		define_id (control_1);
+		define_id (control_2);
+		define_id (target_id);
+
 	}
 }
 

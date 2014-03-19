@@ -34,10 +34,9 @@ namespace ballistic {
 
 		void component::notify (ballistic::entity * sender, ballistic::message & message) {
 			real game_time = message [id::game_time];
-			real frame_time = message [id::frame_time];
 
 			if (_storyboard)
-				_storyboard->update (game_time, frame_time);
+				_storyboard->update (game_time);
 		}
 
 	}
