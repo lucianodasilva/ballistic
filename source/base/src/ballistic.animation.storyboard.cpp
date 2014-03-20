@@ -5,29 +5,30 @@
 namespace ballistic {
 	namespace animation {
 
-		storyboard::storyboard (id_t id, ianimation * anim) :
-			iresource (id),
-			_start_time (real ()),
-			_animation (anim)
+		void storyboard::add_segment (
+			real start,
+			real duration,
+			repeat_mode repeat,
+			ifunction * anim
+		){
+			_animation_segments.push_back (
+				storyboard_segment (start, duration, repeat, anim)
+			);
+		}
+
+		storyboard::storyboard (id_t id) :
+			iresource (id)
 		{}
 
 		storyboard::~storyboard () {
-			if (_animation)
-				delete _animation;
+			for (auto anim : _animation_segments)
+				delete anim.function;
 		}
 
-		real storyboard::start_time () { return _start_time; }
+		void storyboard::update (real animation_time) {
 
-		void storyboard::start_time (const real & v) { _start_time = v; }
-
-		ianimation * storyboard::animation () { return _animation; }
-
-		void storyboard::update (real game_time) {
-			if (!_animation)
-				return;
-			
-			real elapsed = game_time - _start_time;
-			_animation->update (elapsed);
+			for (auto anim : _animation_segments)
+				anim.update (animation_time);
 		}
 
 	}

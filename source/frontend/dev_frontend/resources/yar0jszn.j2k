@@ -1,11 +1,13 @@
 <package>
 
-  <!--
-  <storyboard name="bouncing_box.animation">
-    <vec3_bezier start_time="0" duration="1" repeat="reverse" start="0, 0, 0" control_1=".8, 0, 0" control_2=".2, .0, .0" end="1, 0, 0"/>
-    <material_linear start_time="8" duration
+  <storyboard 
+      name="bouncing_box.animation"
+      start="0"
+      duration="10"
+      repeat="loop"
+  >
   </storyboard>
-  -->    
+      
   
   <effect name="monkey.effect">
     <vertex>

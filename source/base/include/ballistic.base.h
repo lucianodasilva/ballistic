@@ -3,6 +3,9 @@
 
 #define BALLISTIC_BASE_EXPORT
 
+#include "ballistic.animation.component.h"
+#include "ballistic.animation.function.h"
+#include "ballistic.animation.storyboard.h"
 #include "ballistic.common_id.h"
 #include "ballistic.component_constructor.h"
 #include "ballistic.component_container.h"
