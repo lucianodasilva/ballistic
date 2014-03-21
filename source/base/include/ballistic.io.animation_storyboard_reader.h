@@ -1,12 +1,12 @@
 
-#ifndef _ballistic_io_animation_sequence_reader_h_
-#define _ballistic_io_animation_sequence_reader_h_
+#ifndef _ballistic_io_animation_storyboard_reader_h_
+#define _ballistic_io_animation_storyboard_reader_h_
 
 #include "ballistic.config.h"
 #include "ballistic.debug.h"
 
 #include "ballistic.io.package_loader.h"
-#include "ballistic.component_info.h"
+#include "ballistic.animation.storyboard.h"
 
 namespace ballistic {
 
@@ -14,14 +14,15 @@ namespace ballistic {
 
 	namespace io {
 
-		class animation_sequence_reader : public ipackage_group_reader {
+		class animation_storyboard_reader : public ipackage_group_reader {
 		private:
 
-			void load_component (
+			void load_action (
 				const tinyxml2::XMLElement * element,
 				ballistic::resource_container & container,
-				entity_type * new_type
+				animation::storyboard * new_story
 				);
+
 
 		public:
 

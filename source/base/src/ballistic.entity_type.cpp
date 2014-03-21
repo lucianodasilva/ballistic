@@ -13,8 +13,6 @@ namespace ballistic {
 		for (component_info & comp_info : components )
 			ent->components.create (comp_info);
 
-		
-
 		return ent;
 	}
 		

@@ -1,4 +1,5 @@
 #include "ballistic.icomponent.h"
+#include "ballistic.component.h"
 
 #include "ballistic.debug.h"
 

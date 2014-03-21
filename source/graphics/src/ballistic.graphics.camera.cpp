@@ -182,9 +182,9 @@ namespace ballistic {
 				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
 
-			_p_position = parent->properties.require < vec3 > (id::position, vec3 ());
-			_p_target = parent->properties.require < vec3 > (id::target, vec3 ());
-			_p_up = parent->properties.require < vec3 > (id::up, vec3 ());
+			_p_position = parent->properties.aquire < vec3 > (id::position);
+			_p_target = parent->properties.aquire < vec3 > (id::target);
+			_p_up = parent->properties.aquire < vec3 > (id::up);
 		}
 
 		void camera::terminate () {

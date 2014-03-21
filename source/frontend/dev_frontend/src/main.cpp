@@ -89,6 +89,8 @@ int main ( int argc, char ** argv) {
 	
 	game & g = game::instance;
 
+	g.initialize ();
+
 	g.frontend (_frontend);
 
 	// setup game stuffs

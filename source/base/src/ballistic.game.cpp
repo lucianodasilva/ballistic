@@ -4,6 +4,8 @@
 #include "ballistic.common_id.h"
 #include "ballistic.system.h"
 
+#include "ballistic.animation.h"
+
 #include <functional>
 
 namespace ballistic {
@@ -18,6 +20,9 @@ namespace ballistic {
 		_m_update.require < real > (id::game_time, .0);
 		_m_update.require < real > (id::frame_time, .0);
 		_m_update.require < uint32_t > (id::frame_count, 0);
+
+		// default resources and others
+		animation::define_resources ();
 
 		message m (this, id::message_initialize);
 		global_notifier.notify (m);

@@ -6,27 +6,21 @@
 
 namespace ballistic {
 
-	iproperty::iproperty () : _id (0), _container (nullptr) {}
+	iproperty::iproperty () : p_id (0), p_container (nullptr) {}
 
-	iproperty::iproperty (id_t id_v, entity * container_v) : _id (id_v), _container (container_v) {}
+	iproperty::iproperty (id_t id_v, entity * container_v) : p_id (id_v), p_container (container_v) {}
 
-	id_t iproperty::id () const { return _id; }
+	id_t iproperty::id () const { return p_id; }
 
-	entity * iproperty::container () const { return _container; }
+	entity * iproperty::container () const { return p_container; }
 
 	iproperty::~iproperty () {}
 
 	void iproperty::raise_event () const {
-		if (_container) {
+		message m (p_container, id::message_property_changed);
+		m [id::id] = p_id;
 
-			message m (_container, id::message_property_changed);
-			m [id::id] = _id;
-
-			_container->local_notifier.notify (m);
-		} 
-		//debug_run ( else {
-		//	debug_print ("changed property with unset container");
-		//})
+		p_container->local_notifier.notify (m);
 	}
 
 }

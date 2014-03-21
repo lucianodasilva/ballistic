@@ -3,6 +3,7 @@
 #include "ballistic.config.h"
 #include "ballistic.debug.h"
 
+#include "ballistic.io.animation_storyboard_reader.h"
 #include "ballistic.io.entity_type_reader.h"
 #include "ballistic.io.package_reader.h"
 
@@ -25,6 +26,7 @@ namespace ballistic {
 		package_loader::package_loader () {
 			register_reader (new package_reader ());
 			register_reader (new entity_type_reader ());
+			register_reader (new animation_storyboard_reader ());
 		}
 
 		void package_loader::register_reader (ballistic::io::ipackage_group_reader * reader) {

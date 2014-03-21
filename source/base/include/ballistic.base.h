@@ -4,9 +4,14 @@
 #define BALLISTIC_BASE_EXPORT
 
 #include "ballistic.animation.component.h"
+#include "ballistic.animation.driver.h"
 #include "ballistic.animation.function.h"
+#include "ballistic.animation.function_implementation.h"
+#include "ballistic.animation.function_type.h"
+#include "ballistic.animation.h"
 #include "ballistic.animation.storyboard.h"
 #include "ballistic.common_id.h"
+#include "ballistic.component.h"
 #include "ballistic.component_constructor.h"
 #include "ballistic.component_container.h"
 #include "ballistic.component_info.h"
@@ -20,6 +25,7 @@
 #include "ballistic.icomponent.h"
 #include "ballistic.id.h"
 #include "ballistic.ifrontend.h"
+#include "ballistic.io.animation_storyboard_reader.h"
 #include "ballistic.io.entity_type_reader.h"
 #include "ballistic.io.iloader.h"
 #include "ballistic.io.istorage.h"

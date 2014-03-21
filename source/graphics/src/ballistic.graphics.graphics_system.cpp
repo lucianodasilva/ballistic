@@ -109,6 +109,7 @@ namespace ballistic {
 				normal_matrix = mv.transpose ().invert ();
 				
 				_device->normal (normal_matrix);
+				_device->model (item.transform);
 				
 				// render the stuffs
 				_device->draw_active_mesh ();

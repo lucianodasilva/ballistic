@@ -85,7 +85,7 @@ namespace ballistic {
 			_effect->apply (this);
 
 			// get constants
-			//_gl_const_model = _effect->get_constant (id::graphics::effect::t_model);
+			_gl_const_model = _effect->constant (id::graphics::effect::t_model);
 			_gl_const_view = _effect->constant (id::graphics::effect::t_view);
 			_gl_const_proj = _effect->constant (id::graphics::effect::t_proj);
 			_gl_const_normal = _effect->constant (id::graphics::effect::t_normal);

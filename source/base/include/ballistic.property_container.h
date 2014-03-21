@@ -11,6 +11,28 @@ namespace ballistic {
 	private:
 		std::map < id_t, iproperty * >	_properties;
 		entity *						_container;
+
+		template < class value_t >
+		inline property < value_t > * require (const id_t & id, const value_t & default_value, entity * container) {
+			iterator it = _properties.find (id);
+
+			if (it == _properties.end ()) {
+				auto prop = new property < value_t > (id, default_value, container);
+				_properties [id] = prop;
+				return prop;
+			} else {
+				auto prop = dynamic_cast <property < value_t > *> (it->second);
+
+				if (!prop) {
+					debug_print ("property " << id << " already exists with different type. property overriden.");
+					delete it->second;
+					prop = new property < value_t > (id, default_value, container);
+					it->second = prop;
+				}
+				return prop;
+			}
+		}
+
 	public:
 
 		// delete copy and assignment
@@ -40,21 +62,29 @@ namespace ballistic {
 
 		template < class value_t >
 		inline property < value_t > * require (const id_t & id, const value_t & default_value) {
+			return require < value_t > (id, default_value, _container);
+		}
+
+		template < class value_t >
+		inline property < value_t > * require_silent (const id_t & id, const value_t & default_value) {
+			return require < value_t > (id, default_value, nullptr);
+		}
+
+		template < class value_t >
+		inline property < value_t > * aquire (const id_t & id) {
 			iterator it = _properties.find (id);
 
 			if (it == _properties.end ()) {
-				auto prop = new property < value_t > (id, default_value, _container);
-				_properties [id] = prop;
-				return prop;
+				debug_print ("no property with id \"" << id << "\" defined");
+				return new property < value_t > (id, value_t (), nullptr); // null property
 			} else {
 				auto prop = dynamic_cast <property < value_t > *> (it->second);
 
 				if (!prop) {
-					debug_print ("property " << id << " already exists with different type. property overriden.");
-					delete it->second;
-					prop = new property < value_t > (id, default_value, _container);
-					it->second = prop;
+					debug_print ("property " << id << " required with different type.");
+					return new property < value_t > (id, value_t (), nullptr); // null property
 				}
+
 				return prop;
 			}
 		}

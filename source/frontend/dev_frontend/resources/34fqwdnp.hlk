@@ -30,7 +30,7 @@
         var_color = effect_diffuse;
     
         // test view + projection
-        mat4 mvp = effect_t_proj * effect_t_view * effect_t_model;
+        mat4 mvp = effect_t_proj * effect_t_view;
         vec4 pos = mvp * vec4 (in_position, 1.0);
         
         var_normal = (effect_t_normal * vec4 (in_normal, 1.0)).xyz;
@@ -96,7 +96,7 @@
   </entity_type>
 
   <storyboard name="bouncing_box.animation">
-    <vec3_linear start_time="0" duration="1" repeat="repeat_loop" start="0, -1, 0" end="0, 1, 0" target_id="position"/>
+    <vec3_linear start_time="0" duration="1" repeat="reverse" start="0, 0, 0" end="0, 1, 0" target="position"/>
   </storyboard>
 
   <entity_type name="monkey_head_entity"
@@ -132,7 +132,6 @@
                material_id="square.material"
                mesh_id="square.mesh">
     <graphics_visual/>
-    <animation storyboard_id="bouncing_box.animation"/>
   </entity_type>
 
 </package>

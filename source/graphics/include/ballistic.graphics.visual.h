@@ -15,7 +15,9 @@ namespace ballistic {
 		class visual : public ballistic::component {
 		private:
 
-			property < mat4 > *			_transform;
+			property < vec3 > *			_position;
+			property < vec3 > *			_rotation;
+			property < vec3 > *			_scale;
 
 			property < imaterial * > *	_material;
 			property < imesh * > *		_mesh;

@@ -18,8 +18,8 @@ namespace ballistic {
 	class iproperty {
 	protected:
 
-		id_t							_id = 0;
-		entity *						_container;
+		id_t							p_id = 0;
+		entity *						p_container;
 
 	public:
 
@@ -30,7 +30,7 @@ namespace ballistic {
 		iproperty (id_t id_v, entity * container_v);
 
 		virtual							~iproperty ();
-		void							raise_event () const;
+		virtual void					raise_event () const;
 
 		virtual bool					parse (const tinyxml2::XMLAttribute * value) = 0;
 		virtual iproperty *				clone () const = 0;
@@ -99,38 +99,36 @@ namespace ballistic {
 
 	template < class value_t >
 	class property : public iproperty {
-	private:		
-		value_t					_value;
+	protected:		
+		value_t					p_value;
 	public:
 
 		inline property (const id_t & id_v, const value_t & v, entity * ctner)
-			: iproperty (id_v, ctner), _value (v)
+			: iproperty (id_v, ctner), p_value (v)
 		{}
 
 		inline void operator = (const value_t & v) {
-			_value = v;
-			iproperty::raise_event ();
+			p_value = v;
+
+			if (iproperty::p_container)
+				iproperty::raise_event ();
 		}
 
 		inline operator value_t () const {
-			return _value;
+			return p_value;
 		}
 
-		inline value_t get () const {
-			return _value;
-		}
-
-		inline virtual bool parse (const tinyxml2::XMLAttribute * config_value) {
-			bool ret = details::property_parser < value_t >::parse (config_value, _value);
+		inline virtual bool parse (const tinyxml2::XMLAttribute * config_value) override {
+			bool ret = details::property_parser < value_t >::parse (config_value, p_value);
 
 			if (!ret)
-				debug_print ("unexpected data type for property " << id ());
+				debug_print ("unexpected data type for property " << p_id);
 
 			return ret;
 		}
 
-		inline virtual iproperty * clone () const {
-			return new property < value_t > (id (), _value, container ());
+		inline virtual iproperty * clone () const override {
+			return new property < value_t > (iproperty::p_id, p_value, iproperty::p_container);
 		}
 
 	};

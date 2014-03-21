@@ -33,18 +33,27 @@ namespace ballistic {
 		define_id (value);
 
 		// --------------------------------------
-		define_id (transform);
 		define_id (position);
+		define_id (rotation);
+		define_id (scale);
 
 		// --------------------------------------
 		// ANIMATION 
 		// --------------------------------------
+		define_id (animation);
 		define_id (storyboard_id);
+		define_id (start_time);
+		define_id (duration);
+		define_id (repeat);
 		define_id (start);
 		define_id (end);
 		define_id (control_1);
 		define_id (control_2);
 		define_id (target_id);
+
+		define_id (repeat_none);
+		define_id (repeat_loop);
+		define_id (repeat_reverse);
 
 	}
 }
