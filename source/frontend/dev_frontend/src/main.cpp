@@ -38,49 +38,16 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-float angle = 0.0F;
-float radius = 4.0F;
 
-class orbit_camera : public ballistic::component {
-public:
 
-	static void require_properties (entity_type * new_type, component_info & info) {
-		new_type->properties.require (id::position, vec3 ({0, 0, 0}));
-	}
-
-	virtual void setup (ballistic::entity * parent, ballistic::property_container & parameters) {
-		component::setup (parent, parameters);
-		game::instance.global_notifier.attach (ballistic::id::message_update, this);
-	}
-
-	virtual void terminate () {
-		container ()->local_notifier.detach (ballistic::id::message_update, this);
-	}
-
-	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
-
-		vec3 pos;
-
-		pos.x = cos (angle) * radius;
-		pos.y = 2.F;
-		pos.z = sin (angle) * radius;
-
-		angle = (real)message [ballistic::id::game_time] * real (1); // one radian per second
-
-		container ()->properties [ballistic::id::position] = pos;
-	}
-
-};
-
-ballistic::res_id_t res_textured_square ("textured_square.entity", "resources/game.xml");
-ballistic::res_id_t res_monkey_head ("monkey_head_entity", "resources/game.xml");
-ballistic::res_id_t res_camera ("orbit_camera_entity", "resources/game.xml");
+ballistic::res_id_t res_cube ("cube.entity", "resources/test_anim.xml");
+ballistic::res_id_t res_camera ("camera.entity", "resources/test_anim.xml");
 
 int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{150, 150});
+	_frontend = create_frontend (point{600, 600});
 	_frontend->create ();
 	_frontend->show ();
 
@@ -96,8 +63,6 @@ int main ( int argc, char ** argv) {
 	// setup game stuffs
 	ballistic::graphics::define_resources (_device);
 
-	component::declare < orbit_camera > (text_to_id ("orbit_camera"));
-
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->device (_device);
 
@@ -105,8 +70,7 @@ int main ( int argc, char ** argv) {
 
 	// create entities
 	g.entities.create (res_camera);
-	//g.entities.create (res_monkey_head);
-	g.entities.create (res_textured_square);
+	g.entities.create (res_cube);
 
 	// initialize
 	g.initialize ();

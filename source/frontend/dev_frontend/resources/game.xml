@@ -96,7 +96,7 @@
   </entity_type>
 
   <storyboard name="bouncing_box.animation">
-    <vec3_linear start_time="0" duration="1" repeat="repeat_loop" start="0, -1, 0" end="0, 1, 0" target_id="position"/>
+    <vec3_linear start_time="0" duration="1" repeat="repeat_reverse" start="0, -1, 0" end="0, 0, 0" target_id="position"/>
   </storyboard>
 
   <entity_type name="monkey_head_entity"

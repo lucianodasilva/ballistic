@@ -82,12 +82,12 @@ namespace ballistic {
 				break;
 			case repeat_mode_reverse:
 				t =	// adapted triangle function
-					real (0.63661977236758134307553505349006) // half pi
+					real (0.31830988618379067153776752674503) // half pi
 					* std::asin (
-					std::sin (
-					(real (6.283185307179586476925286766559) / _duration) * t // 2pi
-					)
-					) + real (1);
+						std::sin (
+							(real (6.283185307179586476925286766559) / (_duration * real(2))) * (t - (real(_duration) / real(2))) // 2pi
+						)
+					) + real (.5);
 				break;
 			default:
 				// repeat_mode_none
