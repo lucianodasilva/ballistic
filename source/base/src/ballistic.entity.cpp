@@ -1,5 +1,6 @@
 #include "ballistic.entity.h"
 #include "ballistic.entity_type.h"
+#include "ballistic.game.h"
 
 namespace ballistic {
 		
@@ -14,5 +15,9 @@ namespace ballistic {
 		properties (this),
 		components (this)
 	{}
+
+	void entity::kill () {
+		game::instance.entities.kill (this);
+	}
 
 }

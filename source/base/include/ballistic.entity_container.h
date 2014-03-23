@@ -20,7 +20,8 @@ namespace ballistic {
 
 		atomic<unsigned int> _id_key;
 
-		map < id_t, entity * > _entities;
+		map < id_t, entity * >	_entities;
+		vector < entity * >		_death_row;
 
 	public:
 
@@ -35,6 +36,10 @@ namespace ballistic {
 
 		entity * create (const res_id_t & entity_type_id);
 		entity * create (const id_t & id, const res_id_t & entity_type_id);
+
+		void kill (entity * inst);
+
+		void execute_death_row ();
 
 		inline bool contains_id (id_t id) const {
 			return _entities.find (id) != _entities.end ();

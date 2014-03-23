@@ -52,6 +52,16 @@ namespace ballistic {
 		return ent;
 	}
 
+	void entity_container::kill (entity * instance) {
+		_death_row.push_back (instance);
+	}
+
+	void entity_container::execute_death_row () {
+		for (entity * i : _death_row)
+			delete i;
+
+		_death_row.clear ();
+	}
 
 }
 

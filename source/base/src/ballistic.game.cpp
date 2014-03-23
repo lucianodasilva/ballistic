@@ -57,6 +57,9 @@ namespace ballistic {
 
 		global_notifier.notify (_m_update);
 
+		// clean up dead entities
+		entities.execute_death_row ();
+
 		_frame_id++;
 
 		return _running;

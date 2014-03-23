@@ -37,6 +37,8 @@ namespace ballistic {
 		entity_type * type ();
 			
 		entity ( id_t id_v, entity_type * type_v );
+
+		void kill ();
 		
 	};
 	
