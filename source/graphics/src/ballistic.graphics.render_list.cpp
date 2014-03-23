@@ -50,7 +50,7 @@ namespace ballistic {
 			if (_data) {
 				// copy and clean up
 				for (uint32_t i = 0; i < _capacity; ++i) {
-					if (i < _size)
+					if (i < new_capacity)
 						new_data [i] = _data [i];
 					else
 						delete _data [i];
@@ -63,11 +63,10 @@ namespace ballistic {
 			_data = new_data;
 			_swap_buffer = new render_item * [new_capacity];
 
-			_capacity = new_capacity;
-
-			for (uint32_t i = _size; i < _capacity; ++i) {
+			for (uint32_t i = _size; i < new_capacity; ++i)
 				_data [i] = new render_item ();
-			}
+
+			_capacity = new_capacity;
 		}
 
 		void render_list::sort () {

@@ -50,6 +50,9 @@ namespace ballistic {
 		_m_update [id::frame_time] = system::get_elapsed_seconds (_frame_start);
 		_m_update [id::frame_count] = _frame_id;
 
+		// execute entity creations
+		entities.execute_creates ();
+
 		// do something with this
 		// real average_fps = real (_frame_id) / system::get_elapsed_seconds (_game_start_time);
 
@@ -58,7 +61,7 @@ namespace ballistic {
 		global_notifier.notify (_m_update);
 
 		// clean up dead entities
-		entities.execute_death_row ();
+		entities.execute_kills();
 
 		_frame_id++;
 

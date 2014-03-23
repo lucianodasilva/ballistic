@@ -48,7 +48,8 @@ namespace ballistic {
 		}
 
 		entity * ent = type->create (id);
-		_entities [id] = ent;
+		_new_entities.push_back (ent);
+
 		return ent;
 	}
 
@@ -56,9 +57,20 @@ namespace ballistic {
 		_death_row.push_back (instance);
 	}
 
-	void entity_container::execute_death_row () {
-		for (entity * i : _death_row)
+	void entity_container::execute_creates () {
+		for (entity * i : _new_entities) {
+			i->type ()->setup (i);
+			_entities [i->id ()] = i;
+		}
+
+		_new_entities.clear ();
+	}
+
+	void entity_container::execute_kills () {
+		for (entity * i : _death_row) {
+			_entities.erase (i->id ());
 			delete i;
+		}
 
 		_death_row.clear ();
 	}

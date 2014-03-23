@@ -28,7 +28,8 @@ namespace ballistic {
 
 		property_container properties;
 
-		entity * create (id_t id);
+		entity * create (const id_t & id);
+		entity * setup (entity * instance);
 
 	};
 }
