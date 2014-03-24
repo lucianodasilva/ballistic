@@ -24,6 +24,8 @@ namespace math {
 			const static uint32_t size = 2;
 
 			union {
+				struct { value_t v1, v2;  } copy_handle;
+				// accessors
 				value_t data [size];
 				struct {
 					value_t x, y;
@@ -36,6 +38,8 @@ namespace math {
 			const static uint32_t size = 3;
 
 			union {
+				struct { value_t v1, v2, v3; } copy_handle;
+				// accessors
 				value_t data [size];
 				struct {
 					value_t x, y, z;
@@ -48,6 +52,8 @@ namespace math {
 			const static uint32_t size = 4;
 
 			union {
+				struct { value_t v1, v2, v3, v4; } copy_handle;
+				// accessors
 				value_t data [size];
 				struct {
 					value_t x, y, z, w;
@@ -74,6 +80,8 @@ namespace math {
 			const static uint32_t size = 4;
 
 			union {
+				struct { value_t v1, v2, v3, v4; } copy_handle;
+				// accessors
 				value_t data [size];
 				struct {
 					value_t r, g, b, a;

@@ -77,6 +77,8 @@
       ]]>
     </fragment>
   </effect>
+  
+  
 
   <storyboard name="camera.animation">
     <vec3_bezier start_time="0"
@@ -89,6 +91,7 @@
                  target_id="position"/>
   </storyboard>
 
+
   <storyboard name="cube.animation">
     <vec3_bezier start_time="0"
                  duration="0.5"
@@ -99,6 +102,13 @@
                  control_2="0, 0.9, 0"
                  target_id="bounce"/>
   </storyboard>
+  
+  <!-- This is a good possibility
+  <trigger_storyboard name="trigger.animation">
+    <trigger message="message_update" storyboard_id="cube.animation"/>
+    <trigger message="end" storyboard_id="cube.animation"/>
+  </trigger_storyboard>
+  -->
   
   <texture name="cube.texture" min_filter="linear" mag_filter="linear" file="resources/box.png"/>
 

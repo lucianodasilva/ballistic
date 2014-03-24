@@ -28,20 +28,20 @@ namespace ballistic {
 			}
 
 			inline vecn_t ( this_type && v ) {
-				std::copy (std::begin (v.data), std::end (v.data), +data_t::data);
+				data_t::copy_handle = v.copy_handle;
 			}
 			
 			inline vecn_t ( const this_type & v ) {
-				std::copy (std::begin (v.data), std::end (v.data), +data_t::data);
+				data_t::copy_handle = v.copy_handle;
 			}
 
 			inline this_type & operator = ( this_type && v ) {
-				std::copy (std::begin (v.data), std::end (v.data), +data_t::data);
+				data_t::copy_handle = v.copy_handle;
 				return *this;
 			}
 			
 			inline this_type & operator = ( const this_type & v ) {
-				std::copy (std::begin (v.data), std::end (v.data), +data_t::data);
+				data_t::copy_handle = v.copy_handle;
 				return *this;
 			}
 

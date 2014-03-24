@@ -1,13 +1,4 @@
 <package>
-
-  <storyboard 
-      name="bouncing_box.animation"
-      start="0"
-      duration="10"
-      repeat="loop"
-  >
-  </storyboard>
-      
   
   <effect name="monkey.effect">
     <vertex>
