@@ -70,6 +70,13 @@ namespace ballistic {
 			imaterial * material = *_material;
 			imesh * mesh = *_mesh;
 
+
+
+			if (!material) {
+				debug_print ("missing material instance. will not render");
+				return;
+			}
+
 			if (
 				_system &&
 				material &&

@@ -4,8 +4,16 @@
 #include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.imesh.h"
 
+#include <limits>
+
 namespace ballistic {
 	namespace graphics {
+
+		render_item::render_item ()	:
+			mesh (nullptr),
+			material (nullptr),
+			bucket (std::numeric_limits < render_bucket >::max ())
+		{}
 
 		void render_item::set_render_bucket (render_item & item, camera * camera) {
 

@@ -12,6 +12,11 @@ namespace ballistic {
 		}
 
 		render_list::render_list () : _capacity (0), _size (0), _data (nullptr), _swap_buffer (nullptr) {
+			// setup shortcuts
+			for (int i = 0; i < radix_count; ++i) {
+				_hr [i] = &_histograms [256 * i];
+				_or [i] = &_offsets [256 * i];
+			}
 		}
 
 		render_list::~render_list () {
@@ -76,11 +81,6 @@ namespace ballistic {
 
 			render_item * item;
 			render_item ** swap_tmp;
-
-			for (int i = 0; i < radix_count; ++i) {
-				_hr [i] = &_histograms [256 * i];
-				_or [i] = &_offsets [256 * i];
-			}
 			
 			// calculate histograms
 			memset ((void *)&_histograms [0], 0, table_size * sizeof (uint32_t));
@@ -93,19 +93,22 @@ namespace ballistic {
 			}
 
 			for (uint32_t i = 0; i < table_size; ++i) {
-				if (i % 256 == 0)
-					_offsets [i] = 0;
-				else
+				if (i % 256 != 0)
 					_offsets [i] = _offsets [i - 1] + _histograms [i - 1];
+				else
+					_offsets [i] = 0;
 			}
 
 			// swap stuff around
 			for (uint32_t radix = 0; radix < radix_count; ++radix) {
 
 				// check if empty byte pass
-				if (_hr [radix][0] == _size) {
-					continue;
-				}
+				//if (_hr [radix][0] == _size) {
+				//	swap_tmp = _data;
+				//	_data = _swap_buffer;
+				//	_swap_buffer = swap_tmp;
+				//	continue;
+				//}
 
 				// copy to offseted positions
 				for (uint32_t i = 0; i < _size; ++i) {

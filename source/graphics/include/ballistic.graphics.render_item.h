@@ -21,6 +21,8 @@ namespace ballistic {
 
 			render_bucket	bucket;
 
+			render_item ();
+
 			static void set_render_bucket (render_item & item, camera * camera);
 
 		};
