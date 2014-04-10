@@ -23,6 +23,7 @@ namespace ballistic {
 
 			const id_t device = text_to_id ("graphics_device");
 			const id_t system = text_to_id ("graphics_system");
+			const id_t font_renderer = text_to_id ("font_renderer");
 
 			const id_t visual = text_to_id ("graphics_visual");
 			const id_t camera = text_to_id ("graphics_camera");

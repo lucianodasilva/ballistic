@@ -13,6 +13,7 @@
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.imesh.h"
+#include "ballistic.graphics.iraster_font.h"
 #include "ballistic.graphics.itexture.h"
 
 namespace ballistic {
@@ -50,6 +51,8 @@ namespace ballistic {
 		imesh::imesh (const id_t & id) : iresource (id) {}
 
 		itexture::itexture (const id_t & id) : iresource (id) {}
+
+		iraster_font::iraster_font (const id_t & id) : iresource (id) {}
 
 	}
 }

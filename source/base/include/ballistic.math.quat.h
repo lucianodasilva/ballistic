@@ -164,7 +164,7 @@ namespace math {
 			T (0),
 			T (0),
 			T (1)
-			);
+		);
 	}
 
 	template < class T >

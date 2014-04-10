@@ -49,8 +49,6 @@ namespace ballistic {
 				debug_error ("active camera not set! will not render");
 				return;
 			}
-
-			_render_list.clear ();
 			
 			current_view = _camera->view ();
 
@@ -118,6 +116,8 @@ namespace ballistic {
 
 			_device->end_frame ();
 			_device->present ();
+
+			_render_list.clear ();
 		}
 
 		void graphics_system::notify ( entity * sender, ballistic::message & message ) {

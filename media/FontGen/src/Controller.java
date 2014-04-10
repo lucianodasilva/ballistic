@@ -68,13 +68,13 @@ public class Controller implements Initializable {
         FontMetrics metrics = g2.getFontMetrics();
 
         int
-                char_height = metrics.getHeight(),
-                char_width = -1;
+                char_height = metrics.getAscent() + metrics.getDescent(),
+                char_width = metrics.getMaxAdvance();
 
         int [] widths = metrics.getWidths();
 
-        for ( int i = 0; i < 256; ++i){
-            int cwidth = metrics.charWidth(i);
+        for ( char i = 0; i < 256; ++i){
+            int cwidth = (int)metrics.getStringBounds(new char [] {i}, 0, 1, g2).getWidth();
             if (char_width < cwidth)
                 char_width = cwidth;
         }
