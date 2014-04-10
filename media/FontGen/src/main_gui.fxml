@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane prefHeight="190.00009999999747" prefWidth="481.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controller">
+  <children>
+    <VBox padding="$x1" prefHeight="169.0" prefWidth="441.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+      <children>
+        <Label text="Font Name" />
+        <ComboBox fx:id="cmbFontName" prefHeight="21.0" prefWidth="429.0" />
+        <Label text="Font Size" />
+        <TextField fx:id="txtSize" maxWidth="50.0" prefWidth="50.0" text="12" />
+        <Label text="Texture Size" />
+        <ComboBox fx:id="cmbTextureSize" prefHeight="21.0" prefWidth="64.0" value="128">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="128" />
+              <String fx:value="256" />
+              <String fx:value="512" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+        <Button fx:id="cmdGenerate" mnemonicParsing="false" onAction="#onGenerate" text="Generate Preview">
+          <VBox.margin>
+            <Insets top="10.0" fx:id="x1" />
+          </VBox.margin>
+        </Button>
+        <Button id="cmdGenerate" fx:id="cmdGenFile" mnemonicParsing="false" onAction="#onGenerateFile" text="Generate To File">
+          <VBox.margin>
+            <Insets top="10.0" fx:id="x1" />
+          </VBox.margin>
+        </Button>
+      </children>
+    </VBox>
+  </children>
+  <columnConstraints>
+    <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="414.0" />
+    <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+</GridPane>
