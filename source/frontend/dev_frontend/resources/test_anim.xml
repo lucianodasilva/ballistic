@@ -222,6 +222,7 @@
       material_id="cube.material"
       mesh_id="cube.mesh"
    >
+    <transform/>
     <graphics_visual/>
     <animation storyboard_id="cube.animation"/>
     <box_brain/>

@@ -6,6 +6,7 @@
 namespace ballistic {
 	namespace id {
 
+		const id_t position = text_to_id ("position");
 		const id_t target	= text_to_id ("target");
 		const id_t up		= text_to_id ("up");
 

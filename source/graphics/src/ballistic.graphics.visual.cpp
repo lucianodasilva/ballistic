@@ -18,9 +18,7 @@ namespace ballistic {
 			new_type->properties.require < imaterial * > (id::graphics::material, nullptr);
 			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
 
-			new_type->properties.require < vec3 > (id::position, vec3 ());
-			new_type->properties.require < vec3 > (id::rotation, vec3 ());
-			new_type->properties.require < vec3 > (id::scale, vec3 ({1, 1, 1}));
+			new_type->properties.require < mat4 > (id::transform, mat4 ());
 		}
 
 		void visual::setup (entity * parent, property_container & parameters)
@@ -39,9 +37,7 @@ namespace ballistic {
 				id::graphics::mesh
 			);
 
-			_position = parent->properties.aquire < vec3 > (id::position);
-			_rotation = parent->properties.aquire < vec3 > (id::rotation);
-			_scale = parent->properties.aquire < vec3 > (id::scale);
+			_transform = parent->properties.aquire < mat4 > (id::transform);
 
 			if (!*_material)
 				*_material = game::instance.resources [
@@ -83,8 +79,7 @@ namespace ballistic {
 				material->effect () &&
 				mesh
 			){
-				//TODO: handle remaining transformations
-				_system->push_item (material, mesh, mat4::make_translation (*_position));
+				_system->push_item (material, mesh, *_transform);
 			} else {
 				debug_print ("incomplete visual component. will not render!");
 			}
