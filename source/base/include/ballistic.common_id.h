@@ -6,6 +6,9 @@
 #define define_id(x) \
 	const ballistic::id_t x = text_to_id (#x)
 
+#define define_id_ext(x,y) \
+	const ballistic::id_t x = text_to_id (#y)
+
 using namespace std;
 
 namespace ballistic {
@@ -33,9 +36,10 @@ namespace ballistic {
 		define_id (value);
 
 		// --------------------------------------
-		define_id (position);
-		define_id (rotation);
-		define_id (scale);
+		define_id_ext (transform_position, transform.position);
+		define_id_ext (transform_rotation, transform.rotation);
+		define_id_ext (transform_scale, transform.scale);
+		define_id (transform);
 
 		// --------------------------------------
 		// ANIMATION 

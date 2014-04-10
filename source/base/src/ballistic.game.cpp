@@ -5,6 +5,7 @@
 #include "ballistic.system.h"
 
 #include "ballistic.animation.h"
+#include "ballistic.transform.h"
 
 #include <functional>
 
@@ -23,6 +24,9 @@ namespace ballistic {
 
 		// default resources and others
 		animation::define_resources ();
+
+		// define base components
+		ballistic::component::declare < transform > ();
 
 		message m (this, id::message_initialize);
 		global_notifier.notify (m);

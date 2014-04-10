@@ -2,8 +2,10 @@
 #define _ballistic_math_quat_h_
 
 #include "ballistic.config.h"
+#include "ballistic.convert.h"
 #include "ballistic.math.h"
 #include "ballistic.math.vectors.h"
+#include "ballistic.math.matrixes.h"
 
 namespace ballistic {
 namespace math {
@@ -46,6 +48,8 @@ namespace math {
 		inline quat_t < T > uconj ();
 
 		static inline quat_t < T > from_axis (const vec3_t < T > & axis, T angle);
+
+		inline static bool parse (const tinyxml2::XMLAttribute * config_value, quat_t < T > & ret);
 		
 	};
 
@@ -147,7 +151,7 @@ namespace math {
 	template < class T >
 	mat4_t < T > quat_t < T >::to_matrix () const {
 
-		return mat4_t < T > (
+		return mat4_t < T > ({
 			(T (1) - (T (2) * ((v.y * v.y) + (v.z * v.z)))),
 			(T (2) * ((v.x * v.y) - (v.z * w))),
 			(T (2) * ((v.x * v.z) + (v.y * w))),
@@ -164,7 +168,7 @@ namespace math {
 			T (0),
 			T (0),
 			T (1)
-		);
+		});
 	}
 
 	template < class T >
@@ -183,6 +187,11 @@ namespace math {
 			T (cos (half_angle))
 			);
 
+	}
+
+	template < class T >
+	bool quat_t < T >::parse (const tinyxml2::XMLAttribute * config_value, quat_t < T > & ret) {
+		return convert_vectors < T, 4 > (config_value->Value (), ret.data);
 	}
 	
 }

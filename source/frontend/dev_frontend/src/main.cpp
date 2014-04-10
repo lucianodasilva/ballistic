@@ -99,7 +99,7 @@ public:
 		}
 
 		// update position with animation
-		container ()->properties [id::position] = vec3(*_start_pos) + vec3(*_bounce);
+		container ()->properties [id::transform_position] = vec3(*_start_pos) + vec3(*_bounce);
 																	 
 	}
 
