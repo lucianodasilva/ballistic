@@ -28,7 +28,7 @@ namespace ballistic {
 		// define base components
 		ballistic::component::declare < transform > ();
 
-		message m (this, id::message_initialize);
+		message m (this, id::message::initialize);
 		global_notifier.notify (m);
 	}
 
@@ -73,7 +73,7 @@ namespace ballistic {
 	}
 
 	void game::terminate () {
-		message m (this, id::message_terminate);
+		message m (this, id::message::terminate);
 		// add message properties here
 
 		global_notifier.notify (m);
@@ -82,7 +82,7 @@ namespace ballistic {
 
 	game::game () :
 		entity (0, nullptr), 
-		_m_update (this, id::message_update), 
+		_m_update (this, id::message::update), 
 		_frontend (nullptr),
 		global_notifier (this),
 		entities (this)

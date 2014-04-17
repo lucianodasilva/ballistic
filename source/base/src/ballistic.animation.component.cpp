@@ -38,7 +38,7 @@ namespace ballistic {
 
 			// attach animation drivers
 			_storyboard->create_drivers (this);
-			game::instance.global_notifier.attach (id::message_update, this);
+			game::instance.global_notifier.attach (id::message::update, this);
 		}
 
 		void component::terminate () {
@@ -47,7 +47,7 @@ namespace ballistic {
 			for (auto d : _drivers)
 				delete d;
 
-			game::instance.global_notifier.detach (id::message_update, this);
+			game::instance.global_notifier.detach (id::message::update, this);
 		}
 
 		void component::notify (ballistic::entity * sender, ballistic::message & message) {

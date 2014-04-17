@@ -214,16 +214,16 @@
           target="0,0,0"
           up="0,1,0"
   >
-    <graphics_camera projection="perspective" fov="45" near="0.1" far="100"/>
+    <graphics.camera projection="perspective" fov="45" near="0.1" far="100"/>
     <animation storyboard_id="camera.animation"/>
   </entity_type>
 
   <entity_type name="cube.entity"
-      material_id="cube.material"
-      mesh_id="cube.mesh"
+      graphics.material.id="cube.material"
+      graphics.mesh.id="cube.mesh"
    >
     <transform/>
-    <graphics_visual/>
+    <graphics.visual/>
     <animation storyboard_id="cube.animation"/>
     <box_brain/>
   </entity_type>

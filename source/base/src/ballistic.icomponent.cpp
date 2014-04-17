@@ -11,14 +11,14 @@ namespace ballistic {
 
 	icomponent::~icomponent () {}
 
-	entity * component::container () const {
-		return _container;
+	entity * component::parent () const {
+		return _parent;
 	}
 
-	component::component () : _container (nullptr) {}
+	component::component () : _parent (nullptr) {}
 
-	void component::setup (entity * container_v, property_container & parameters) {
-		_container = container_v;
+	void component::setup (entity * parent_v, property_container & parameters) {
+		_parent = parent_v;
 	}
 	
 	void component::terminate () {}

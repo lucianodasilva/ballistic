@@ -17,11 +17,11 @@ namespace ballistic {
 	class icomponent : public imessage_listener {
 	public:
 
-		virtual ballistic::entity *	container () const = 0;
+		virtual ballistic::entity *	parent () const = 0;
 
 		virtual ~icomponent ();
 
-		virtual void setup (ballistic::entity * container_v, property_container & parameters) = 0;
+		virtual void setup (ballistic::entity * parent_v, property_container & parameters) = 0;
 		
 		virtual void terminate () = 0;
 

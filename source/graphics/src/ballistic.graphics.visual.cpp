@@ -18,14 +18,16 @@ namespace ballistic {
 			new_type->properties.require < imaterial * > (id::graphics::material, nullptr);
 			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
 
-			new_type->properties.require < mat4 > (id::transform, mat4 ());
+			new_type->properties.require_silent < uint8_t > (id::graphics::layer, 0);
+
+			new_type->properties.require_silent < mat4 > (id::transform, mat4 ());
 		}
 
 		void visual::setup (entity * parent, property_container & parameters)
 		{
 			component::setup (parent, parameters);
 
-			game::instance.global_notifier.attach (id::message_render, this);
+			game::instance.global_notifier.attach (id::message::render, this);
 
 			_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
 
@@ -48,10 +50,12 @@ namespace ballistic {
 				*_mesh = game::instance.resources [
 					parent->properties [id::graphics::mesh_id].as < id_t > ()
 				].as < imesh > ();
+
+			_layer = parent->properties.aquire < uint8_t > (id::graphics::layer);
 		}
 
 		void visual::terminate () {
-			game::instance.global_notifier.detach (id::message_render, this);
+			game::instance.global_notifier.detach (id::message::render, this);
 		}
 
 		visual::visual ()
@@ -79,7 +83,7 @@ namespace ballistic {
 				material->effect () &&
 				mesh
 			){
-				_system->push_item (material, mesh, *_transform);
+				_system->push_item (material, mesh, *_layer, *_transform);
 			} else {
 				debug_print ("incomplete visual component. will not render!");
 			}

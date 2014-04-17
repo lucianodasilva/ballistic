@@ -6,10 +6,10 @@
 namespace ballistic {
 	namespace graphics {
 
-		enum mesh_attribute {
-			mesh_attribute_position = 1,
-			mesh_attribute_uv		= 2,
-			mesh_attribute_normal	= 4
+		enum mesh_attribute : uint32_t {
+			mesh_attribute_position = 1U,
+			mesh_attribute_uv		= 2U,
+			mesh_attribute_normal	= 4U
 		};
 
 		class idevice;

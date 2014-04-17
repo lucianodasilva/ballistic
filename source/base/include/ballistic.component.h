@@ -10,14 +10,14 @@ namespace ballistic {
 	// abstract implementation
 	class component : public icomponent {
 	private:
-		ballistic::entity * _container;
+		ballistic::entity * _parent;
 	public:
 
-		virtual ballistic::entity * container () const;
+		virtual ballistic::entity * parent () const;
 
 		component ();
 
-		virtual void setup (ballistic::entity * container_v, property_container & parameters);
+		virtual void setup (ballistic::entity * parent_v, property_container & parameters);
 		
 		virtual void terminate ();
 

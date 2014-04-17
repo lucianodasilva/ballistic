@@ -15,7 +15,7 @@ namespace ballistic {
 		graphics_system::graphics_system () :
 			_device (nullptr),
 			_camera (nullptr),
-			_render_message (id::message_render)
+			_render_message (id::message::render)
 		{}
 
 		void graphics_system::device ( idevice * dev ) {
@@ -125,19 +125,20 @@ namespace ballistic {
 		}
 
 		void graphics_system::attach () {
-			game::instance.global_notifier.attach (id::message_update, this);
+			game::instance.global_notifier.attach (id::message::update, this);
 		}
 
 		void graphics_system::detach () {
-			game::instance.global_notifier.detach (id::message_update, this);
+			game::instance.global_notifier.detach (id::message::update, this);
 		}
 
-		void graphics_system::push_item (imaterial * material, imesh * mesh, const mat4 & transform) {
+		void graphics_system::push_item (imaterial * material, imesh * mesh, uint8_t layer, const mat4 & transform) {
 			render_item & item = _render_list.reserve_item ();
 
 			item.material = material;
 			item.mesh = mesh;
 			item.transform = transform;
+			item.layer = layer;
 
 			render_item::set_render_bucket (item, _camera);
 		}

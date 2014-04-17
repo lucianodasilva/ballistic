@@ -6,48 +6,67 @@
 namespace ballistic {
 	namespace id {
 
-		const id_t position = text_to_id ("position");
-		const id_t target	= text_to_id ("target");
-		const id_t up		= text_to_id ("up");
+		define_id (position);
+		define_id (target);
+		define_id (up);
 
 		namespace graphics {
 
+			// default res
+			define_id_ext (mesh_quad_one, graphics.mesh_quad_one);
+
 			// camera stuffs
-			const id_t left = text_to_id ("left");
-			const id_t right = text_to_id ("right");
-			const id_t top = text_to_id ("top");
-			const id_t bottom = text_to_id ("bottom");
-			const id_t near = text_to_id ("near");
-			const id_t far = text_to_id ("far");
-			const id_t fov = text_to_id ("fov");
-			const id_t projection = text_to_id ("projection");
+			define_id (left);
+			define_id (right);
+			define_id (top);
+			define_id (bottom);
+			define_id (near);
+			define_id (far);
+			define_id (fov);
+			define_id (projection);
 
-			const id_t device = text_to_id ("graphics_device");
-			const id_t system = text_to_id ("graphics_system");
-			const id_t font_renderer = text_to_id ("font_renderer");
+			// systems and components
+			define_id_ext (device, graphics.device);
+			define_id_ext (system,  graphics.system);
+			define_id_ext (font_renderer, font_renderer);
 
-			const id_t visual = text_to_id ("graphics_visual");
-			const id_t camera = text_to_id ("graphics_camera");
+			define_id_ext (visual, graphics.visual);
+			define_id_ext (camera, graphics.camera);
+			define_id_ext (raster_text, graphics.raster_text);
 
+			define_id_ext (layer, graphics.layer);
+
+			// effect 
 			namespace effect {
-				const id_t diffuse	= text_to_id ("effect_diffuse");
-				const id_t specular = text_to_id ("effect_specular");
-				const id_t texture	= text_to_id ("effect_texture");
-				const id_t t_model	= text_to_id ("effect_t_model");
-				const id_t t_view	= text_to_id ("effect_t_view");
-				const id_t t_normal = text_to_id ("effect_t_normal");
-				const id_t t_proj	= text_to_id ("effect_t_proj");
+				define_id_ext (diffuse, effect_diffuse);
+				define_id_ext (specular, effect_specular);
+				define_id_ext (texture, effect_texture);
+				define_id_ext (t_model, effect_t_model);
+				define_id_ext (t_view, effect_t_view);
+				define_id_ext (t_normal, effect_t_normal);
+				define_id_ext (t_proj, effect_t_proj);
 			}
 
-			const id_t material_id = text_to_id ("material_id");
-			const id_t mesh_id = text_to_id ("mesh_id");
+			define_id_ext (material_id, graphics.material.id);
+			define_id_ext (mesh_id, graphics.mesh.id);
 
-			const id_t material = text_to_id ("material");
-			const id_t mesh = text_to_id ("mesh");
+			define_id (material);
+			define_id (mesh);
+
+			namespace text {
+
+				define_id_ext (text, text.text);
+				define_id_ext (font, text.font);
+
+				define_id_ext (font_id, text.font.id);
+
+			}
 
 		}
 
-		const id_t message_render = text_to_id ("message_render");
+		namespace message {
+			define_id_ext (render, message.render);
+		}
 
 	}
 }

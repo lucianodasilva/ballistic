@@ -10,7 +10,15 @@
 namespace ballistic {
 	namespace graphics {
 
+		class graphics_system;
+		class imesh;
+
 		class font_rendering_system : public ballistic::isystem {
+		private:
+
+			graphics_system *	_graphics;
+			imesh *				_mesh;
+
 		public:
 
 			font_rendering_system ();
@@ -23,7 +31,7 @@ namespace ballistic {
 			virtual void detach ();
 
 			// methods
-			void render_string (const string & text, real x, real y, real size, iraster_font * font, color color);
+			void render_string (const string & text, real x, real y, uint8_t layer, iraster_font * font, color color);
 
 		};
 				  

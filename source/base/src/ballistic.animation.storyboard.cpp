@@ -63,7 +63,7 @@ namespace ballistic {
 
 		void storyboard::create_drivers (component * instance) {
 			for (action & act : _animation_actions)
-				instance->drivers ().push_back (act.create_driver (instance->container ()));
+				instance->drivers ().push_back (act.create_driver (instance->parent ()));
 		}
 
 		storyboard::storyboard (id_t id) :

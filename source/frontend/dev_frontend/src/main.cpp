@@ -63,7 +63,7 @@ public:
 
 	virtual void setup (ballistic::entity * parent, ballistic::property_container & parameters) {
 		component::setup (parent, parameters);
-		game::instance.global_notifier.attach (id::message_update, this);
+		game::instance.global_notifier.attach (id::message::update, this);
 
 		_bounce = parent->properties.aquire < vec3 > (text_to_id ("bounce"));
 		_start_pos = parent->properties.aquire < vec3 > (text_to_id ("start_pos"));
@@ -71,7 +71,7 @@ public:
 	}
 
 	virtual void terminate () {
-		game::instance.global_notifier.detach (id::message_update, this);
+		game::instance.global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
@@ -94,12 +94,12 @@ public:
 				new_entity->properties [text_to_id ("life_time")] = (real (std::rand () % 100) / real (25) + real (3));
 			}
 
-			container ()->kill ();
+			parent ()->kill ();
 			return;
 		}
 
 		// update position with animation
-		container ()->properties [id::transform_position] = vec3(*_start_pos) + vec3(*_bounce);
+		parent ()->properties [id::transform_position] = vec3(*_start_pos) + vec3(*_bounce);
 																	 
 	}
 

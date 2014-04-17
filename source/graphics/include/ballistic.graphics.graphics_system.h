@@ -41,7 +41,7 @@ namespace ballistic {
 			virtual void detach ();
 
 			// methods
-			virtual void push_item ( imaterial * material, imesh * mesh, const mat4 & transform );
+			virtual void push_item (imaterial * material, imesh * mesh, uint8_t layer, const mat4 & transform);
 
 		};
 				  

@@ -17,7 +17,7 @@ namespace ballistic {
 	iproperty::~iproperty () {}
 
 	void iproperty::raise_event () const {
-		message m (p_container, id::message_property_changed);
+		message m (p_container, id::message::property_changed);
 		m [id::id] = p_id;
 
 		p_container->local_notifier.notify (m);

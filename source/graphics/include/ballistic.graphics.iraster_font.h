@@ -4,20 +4,24 @@
 #include <ballistic.base.h>
 #include <string>
 
+#include "ballistic.graphics.imaterial.h"
+
 using namespace std;
 
 namespace ballistic {
 	namespace graphics {
 
 		class idevice;
+		
 
-		class iraster_font : public ballistic::iresource {
+		class iraster_font : public imaterial {
+		private:
 		public:
 
 			iraster_font (const id_t & id);
 
-			virtual uint8_t run_id () = 0;
-
+			virtual string text () = 0;
+			virtual void text (const string & value) = 0;
 
 		};
 

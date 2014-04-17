@@ -20,6 +20,8 @@ namespace ballistic {
 			property < imaterial * > *	_material;
 			property < imesh * > *		_mesh;
 
+			property < uint8_t > *			_layer;
+
 			graphics_system *			_system;
 
 		public:

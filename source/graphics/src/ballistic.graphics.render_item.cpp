@@ -63,6 +63,8 @@ namespace ballistic {
 
 				}
 
+				byte_handler.b0 += item.layer;
+
 				item.bucket = byte_handler.uint_value;
 			} catch (...) {
 				debug_error ("render_item::set_render_bucket unable to properly calculate render bucket id.");

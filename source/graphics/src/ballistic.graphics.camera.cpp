@@ -136,7 +136,7 @@ namespace ballistic {
 			component::setup (parent, parameters);
 
 			// bind to global message notifier
-			game::instance.global_notifier.attach (id::message_update, this);
+			game::instance.global_notifier.attach (id::message::update, this);
 
 			// get graphics system in use
 			_system = dynamic_cast <graphics_system *> (game::instance.systems [id::graphics::system]);
@@ -189,7 +189,7 @@ namespace ballistic {
 
 		void camera::terminate () {
 			// unbind to global message notifier
-			game::instance.global_notifier.detach (id::message_update, this);
+			game::instance.global_notifier.detach (id::message::update, this);
 		}
 
 	}
