@@ -17,7 +17,7 @@ namespace ballistic {
 
 	component::component () : _parent (nullptr) {}
 
-	void component::setup (entity * parent_v, property_container & parameters) {
+	void component::setup (entity * parent_v, containers::property_container & parameters) {
 		_parent = parent_v;
 	}
 	

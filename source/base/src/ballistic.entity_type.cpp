@@ -7,7 +7,7 @@ namespace ballistic {
 
 	entity * entity_type::create (const id_t & id) {
 		entity * instance = new entity (id, this);
-		properties.copy_to (instance->properties);
+		properties.setup_container (instance->properties);
 
 		return instance;
 	}

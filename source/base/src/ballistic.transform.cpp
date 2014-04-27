@@ -8,14 +8,14 @@ namespace ballistic {
 
 
 	void transform::require_properties (entity_type * new_type, component_info & info) {																	   
-		new_type->properties.require (id::transform_position, vec3 ());
-		new_type->properties.require (id::transform_scale, vec3 ({real (1), real (1), real (1)}));
-		new_type->properties.require (id::transform_rotation, quat());
+		new_type->properties.require_notify (id::transform_position, vec3 ());
+		new_type->properties.require_notify (id::transform_scale, vec3 ({real (1), real (1), real (1)}));
+		new_type->properties.require_notify (id::transform_rotation, quat());
 
-		new_type->properties.require_silent (id::transform, mat4 ());
+		new_type->properties.require (id::transform, mat4 ());
 	}
 
-	void transform::setup (ballistic::entity * parent, ballistic::property_container & parameters) {
+	void transform::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 		ballistic::component::setup (parent, parameters);
 			
 		game::instance.global_notifier.attach (id::message::update, this);

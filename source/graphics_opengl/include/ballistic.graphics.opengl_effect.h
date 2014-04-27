@@ -12,6 +12,14 @@ using namespace std;
 namespace ballistic {
 	namespace graphics {
 
+		template < class value_t >
+		class gl_uniform : public property < value_t > {
+		public:
+			
+			GLuint location;
+
+		};
+
 		struct opengl_constant {
 			GLuint	location;
 			id_t	id;

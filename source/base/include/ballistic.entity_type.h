@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 
+#include "ballistic.containers.property_definition_container.h"
 #include "ballistic.component_info.h"
 #include "ballistic.id.h"
 #include "ballistic.iresource.h"
@@ -26,7 +27,7 @@ namespace ballistic {
 
 		vector < component_info > components;
 
-		property_container properties;
+		containers::property_definition_container properties;
 
 		entity * create (const id_t & id);
 		entity * setup (entity * instance);

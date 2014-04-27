@@ -2,7 +2,7 @@
 #define _ballistic_message_h_
 
 #include "ballistic.id.h"
-#include "ballistic.property_container.h"
+#include "ballistic.containers.property_container.h"
 
 #include <functional>
 #include <map>
@@ -14,7 +14,7 @@ namespace ballistic {
 
 	class entity;
 
-	class message : public property_container {
+	class message : public containers::property_container {
 	private:
 
 		id_t				_id;

@@ -23,6 +23,10 @@ namespace ballistic {
 
 		class idevice;
 
+		class iuniform : public iproperty {
+
+		};
+
 		class ieffect : public ballistic::iresource {
 		public:
 
@@ -36,6 +40,8 @@ namespace ballistic {
 			) = 0;
 
 			virtual void apply (idevice * device) = 0;
+
+			//containers::property_container < iuniform > uniforms;
 
 		};
 

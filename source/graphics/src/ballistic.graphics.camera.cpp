@@ -132,7 +132,7 @@ namespace ballistic {
 
 		}
 
-		void camera::setup (entity * parent, property_container & parameters) {
+		void camera::setup (entity * parent, containers::property_container & parameters) {
 			component::setup (parent, parameters);
 
 			// bind to global message notifier

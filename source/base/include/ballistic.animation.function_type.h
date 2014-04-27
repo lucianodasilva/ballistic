@@ -25,14 +25,14 @@ namespace ballistic {
 
 			template < class T, bool has_requirements = function_has_requirements < T >::value >
 			struct function_require_properties {
-				inline static void require (property_container & parameters) {
+				inline static void require (containers::property_container & parameters) {
 					T::require_parameters (parameters);
 				}
 			};
 
 			template < class T >
 			struct function_require_properties < T, false > {
-				inline static void require (property_container & parameters) {}
+				inline static void require (containers::property_container & parameters) {}
 			};
 
 		}
@@ -44,9 +44,9 @@ namespace ballistic {
 
 			virtual ~ifunction_type ();
 
-			virtual void require_parameters (property_container & parameters) = 0;
+			virtual void require_parameters (containers::property_container & parameters) = 0;
 
-			virtual ifunction * create (property_container & parameters) = 0;
+			virtual ifunction * create (containers::property_container & parameters) = 0;
 		};
 
 		template < class function_t >
@@ -56,11 +56,11 @@ namespace ballistic {
 
 			inline function_type (const id_t & id) : ifunction_type (id) {}
 
-			virtual void require_parameters (property_container & parameters) {
+			virtual void require_parameters (containers::property_container & parameters) {
 				details::function_require_properties < function_t >::require (parameters);
 			}
 
-			virtual ifunction * create (property_container & parameters) {
+			virtual ifunction * create (containers::property_container & parameters) {
 				ifunction * new_func = new function_t ();
 				new_func->setup (parameters);
 				return new_func;
