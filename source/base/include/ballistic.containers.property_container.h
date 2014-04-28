@@ -2,6 +2,7 @@
 #define _ballistic_property_container_h_
 
 #include "ballistic.property.h"
+#include "ballistic.containers.icontainer.h"
 
 #include <map>
 
@@ -9,19 +10,9 @@ namespace ballistic {
 	namespace containers {
 
 		template < class base_property_t = iproperty >
-		class iproperty_container {
-		protected:
-			std::map < id_t, typename base_property_t * >	data;
+		class iproperty_container : public icontainer < std::map < id_t, typename base_property_t * > > {
 		public:
 
-			// delete copy and assignment
-			iproperty_container (const iproperty_container < iproperty > & o) = delete;
-			iproperty_container & operator = (const iproperty_container < iproperty > & o) = delete;
-
-			typedef typename std::map < id_t, base_property_t * >::iterator iterator;
-			typedef typename std::map < id_t, typename base_property_t * >::const_iterator const_iterator;
-
-			inline iproperty_container () {}
 			inline virtual ~iproperty_container () {
 				for (auto & pair : data) {
 					if (pair.second)
@@ -34,7 +25,7 @@ namespace ballistic {
 
 				if (it != data.end ()) {
 					delete it->second;
-					_properties.erase (it);
+					data.erase (it);
 				}
 			}
 

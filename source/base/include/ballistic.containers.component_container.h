@@ -16,17 +16,13 @@ namespace ballistic {
 
 	namespace containers {
 
-		class component_container {
+		class component_container : public icontainer < std::vector < icomponent * > > {
 		private:
 			entity *				_container;
-			vector < icomponent * > _components;
 		public:
 
 			component_container (entity * container);
 			virtual ~component_container ();
-
-			component_container (const component_container & o) = delete;
-			component_container & operator = (const component_container & o) = delete;
 
 			virtual icomponent * create (component_info & info);
 

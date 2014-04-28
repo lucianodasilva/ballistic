@@ -1,13 +1,13 @@
 #ifndef	_ballistic_game_h_
 #define _ballistic_game_h_
 
+#include "ballistic.containers.entity_container.h"
+#include "ballistic.containers.system_container.h"
 #include "ballistic.entity.h"
-#include "ballistic.entity_container.h"
 #include "ballistic.ifrontend.h"
 #include "ballistic.message_notifier.h"
 #include "ballistic.resource_container.h"
 #include "ballistic.system.h"
-#include "ballistic.system_container.h"
 
 #include <functional>
 #include <map>
@@ -48,11 +48,11 @@ namespace ballistic {
 
 		message_notifier global_notifier;
 
-		entity_container entities;
+		containers::entity_container entities;
+		containers::system_container systems;
 
 		resource_container resources;
 
-		system_container systems;
 
 		virtual void initialize ();
 

@@ -10,6 +10,8 @@ namespace ballistic {
 			data_container_t data;
 		public:
 
+			inline icontainer () {}
+
 			// erase copy constructors and operators
 			icontainer (const icontainer &) = delete;
 			icontainer & operator = (const icontainer &) = delete;
@@ -25,7 +27,7 @@ namespace ballistic {
 			inline const_iterator cbegin () const { return data.cbegin (); }
 			inline const_iterator cend () const { return data.cend (); }
 
-			// -
+			// ---
 			virtual ~icontainer () {}
 
 		};
