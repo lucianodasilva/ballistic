@@ -36,7 +36,7 @@ namespace ballistic {
 			_value = v;
 
 			message m (id::message::property_changed);
-			m [id::id] = _id;
+			m.require (id::id, _id);
 
 			_parent->local_notifier.notify (_parent, m);
 		}

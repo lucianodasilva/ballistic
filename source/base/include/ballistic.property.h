@@ -159,8 +159,6 @@ namespace ballistic {
 					debug_run (
 						if (property) {
 							debug_print ("wrong type property access for" << property->id ());
-						} else {
-							debug_print ("property  not found");
 						}
 					);
 					return value_t ();

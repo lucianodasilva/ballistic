@@ -30,7 +30,15 @@ namespace ballistic {
 				_frame_start;
 
 		uint32_t	_frame_id;
+
 		message _m_update;
+
+		property < real >
+			* _m_update_game_time,
+			* _m_update_frame_time;
+
+		property < uint32_t > 
+			* _m_update_frame_count;
 
 		ifrontend * _frontend;
 

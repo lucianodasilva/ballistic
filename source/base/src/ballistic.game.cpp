@@ -18,9 +18,9 @@ namespace ballistic {
 		_frame_id = 1;
 		_running = true;
 
-		_m_update.require < real > (id::game_time, .0);
-		_m_update.require < real > (id::frame_time, .0);
-		_m_update.require < uint32_t > (id::frame_count, 0);
+		_m_update_game_time = _m_update.require < real > (id::game_time, .0);
+		_m_update_frame_time = _m_update.require < real > (id::frame_time, .0);
+		_m_update_frame_count = _m_update.require < uint32_t > (id::frame_count, 0);
 
 		// default resources and others
 		animation::define_resources ();
@@ -50,9 +50,9 @@ namespace ballistic {
 
 	bool game::frame () {
 		
-		_m_update [id::game_time] =	system::get_elapsed_seconds (_game_start_time);
-		_m_update [id::frame_time] = system::get_elapsed_seconds (_frame_start);
-		_m_update [id::frame_count] = _frame_id;
+		*_m_update_game_time =	system::get_elapsed_seconds (_game_start_time);
+		*_m_update_frame_time = system::get_elapsed_seconds (_frame_start);
+		*_m_update_frame_count = _frame_id;
 
 		// execute entity creations
 		entities.execute_creates ();

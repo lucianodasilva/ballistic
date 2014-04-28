@@ -134,7 +134,13 @@ namespace ballistic {
 			}
 
 			inline details::property_accessor < base_property_t, default_property_t > operator [](id_t id) {
-				return details::property_accessor < base_property_t, default_property_t > (find (id));
+				auto p = find (id);
+
+				if (!p) {
+					debug_print ("property " << id << " not found!");
+				}
+
+				return details::property_accessor < base_property_t, default_property_t > (p);
 			}
 
 		};
