@@ -12,10 +12,10 @@ namespace ballistic {
 		private:
 
 			color				_diffuse;
-			opengl_constant		_diffuse_constant;
+			opengl_constant_old		_diffuse_constant;
 
 			color				_specular;
-			opengl_constant		_specular_constant;
+			opengl_constant_old		_specular_constant;
 
 			bool				_opaque;
 
@@ -23,13 +23,10 @@ namespace ballistic {
 
 			opengl_effect *		_effect;
 
-			uint8_t				_run_id;
 		
 		public:
 
-			opengl_material		(const id_t & id, uint8_t run_id);
-
-			virtual uint8_t		run_id ();
+			opengl_material		(const id_t & id);
 
 			virtual void		effect (ieffect * effect);
 			virtual ieffect *	effect ();

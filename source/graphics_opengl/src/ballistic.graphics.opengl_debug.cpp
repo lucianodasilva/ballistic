@@ -105,7 +105,7 @@ namespace ballistic {
 		GLuint opengl_debug::_vbo_id = 0;
 		
 		graphics::opengl_effect		opengl_debug::_effect (0, 0);
-		graphics::opengl_constant	opengl_debug::_color_uniform;
+		graphics::opengl_constant_old	opengl_debug::_color_uniform;
 
 		void opengl_debug::initialize () {
 			gl_eval_scope(opengl_debug::initialize);

@@ -14,7 +14,6 @@ namespace ballistic {
 			:
 			_alpha_blend (false),
 			_effect_run_id (0),
-			_material_run_id (0),
 			_mesh_run_id (0),
 			_effect (nullptr),
 			_material (nullptr),
@@ -62,7 +61,7 @@ namespace ballistic {
 		}
 
 		imaterial * opengl_device::create_material (const id_t & id) {
-			return new opengl_material (id, ++_material_run_id);
+			return new opengl_material (id);
 		}
 		
 		imesh *	opengl_device::create_mesh (const id_t & id)

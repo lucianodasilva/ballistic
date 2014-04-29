@@ -20,7 +20,7 @@ namespace ballistic {
 			property < imaterial * > *	_material;
 			property < imesh * > *		_mesh;
 
-			property < uint8_t > *			_layer;
+			property < uint8_t > *		_layer;
 
 			graphics_system *			_system;
 
@@ -34,7 +34,7 @@ namespace ballistic {
 
 			static void require_properties (entity_type * new_type, component_info & info);
 
-			virtual void setup (entity * parent, containers::property_container & parameters) override;
+			virtual void setup (entity * parent, ballistic::containers::property_container & parameters) override;
 
 			virtual void terminate ();
 		};

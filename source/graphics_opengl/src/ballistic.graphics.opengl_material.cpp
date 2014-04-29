@@ -4,15 +4,12 @@
 namespace ballistic {
 	namespace graphics {
 
-		opengl_material::opengl_material (const id_t & id, uint8_t run_id) :
+		opengl_material::opengl_material (const id_t & id) :
 			imaterial (id),
 			_opaque (false),
 			_texture (nullptr),
-			_effect (nullptr),
-			_run_id (run_id)
+			_effect (nullptr)
 		{}
-
-		uint8_t opengl_material::run_id () { return _run_id; }
 
 		void opengl_material::effect (ieffect * effect) {
 			_effect = dynamic_cast <opengl_effect *> (effect);

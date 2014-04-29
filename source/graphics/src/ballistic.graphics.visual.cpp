@@ -23,7 +23,7 @@ namespace ballistic {
 			new_type->properties.require < mat4 > (id::transform, mat4 ());
 		}
 
-		void visual::setup (entity * parent, containers::property_container & parameters)
+		void visual::setup (entity * parent, ballistic::containers::property_container & parameters)
 		{
 			component::setup (parent, parameters);
 

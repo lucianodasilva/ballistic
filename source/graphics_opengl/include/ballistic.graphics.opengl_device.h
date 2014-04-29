@@ -25,7 +25,6 @@ namespace ballistic {
 			color _clear_color;
 
 			atomic <unsigned char> _effect_run_id;
-			atomic <unsigned char> _material_run_id;
 			atomic <unsigned char> _mesh_run_id;
 			atomic <unsigned char> _texture_run_id;
 
@@ -42,13 +41,13 @@ namespace ballistic {
 			opengl_texture *	_texture;
 
 			// constants
-			opengl_constant		_gl_const_model;
-			opengl_constant		_gl_const_view;
-			opengl_constant		_gl_const_proj;
-			opengl_constant		_gl_const_normal;
+			opengl_constant_old		_gl_const_model;
+			opengl_constant_old		_gl_const_view;
+			opengl_constant_old		_gl_const_proj;
+			opengl_constant_old		_gl_const_normal;
 
-			opengl_constant		_gl_const_diffuse;
-			opengl_constant		_gl_const_specular;
+			opengl_constant_old		_gl_const_diffuse;
+			opengl_constant_old		_gl_const_specular;
 
 		public:
 			

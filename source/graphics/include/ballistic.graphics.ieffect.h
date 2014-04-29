@@ -22,8 +22,21 @@ namespace ballistic {
 	namespace graphics {
 
 		class idevice;
+		class imaterial_property;
 
-		class iuniform : public iproperty {
+		class iconstant {
+		public:
+
+			virtual void set_value (uint32_t v) = 0;
+			virtual void set_value (int32_t v) = 0;
+			virtual void set_value (real v) = 0;
+			virtual void set_value (const vec2 & v) = 0;
+			virtual void set_value (const vec3 & v) = 0;
+			virtual void set_value (const vec4 & v) = 0;
+			virtual void set_value (const mat4 & v) = 0;
+			virtual void set_value (const color & v) = 0;
+
+			virtual imaterial_property * create_property () = 0;
 
 		};
 
@@ -41,7 +54,7 @@ namespace ballistic {
 
 			virtual void apply (idevice * device) = 0;
 
-			//containers::property_container < iuniform > uniforms;
+			virtual const vector < iconstant * > & constants () const = 0;
 
 		};
 
