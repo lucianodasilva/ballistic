@@ -61,10 +61,25 @@ namespace ballistic {
 		namespace containers {
 
 			class material_property_container : public ballistic::containers::base_property_container < imaterial_property, material_property > {
+			public:
+				inline void clear () {
+					for (auto it : data)
+						delete it.second;
+
+					data.clear ();
+				}
 
 				inline void apply () {
 					for (auto it : data)
 						it.second->apply ();
+				}
+
+				inline void bind (ieffect * effect) {
+					clear ();
+
+					auto constants = effect->constants ();
+					for (auto c : constants)
+						insert (c->create_property ());
 				}
 
 			};

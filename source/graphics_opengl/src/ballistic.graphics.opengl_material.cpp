@@ -19,6 +19,8 @@ namespace ballistic {
 				return;
 			}
 
+			properties.bind (effect);
+
 			_diffuse_constant = _effect->constant (id::graphics::effect::diffuse);
 			_specular_constant = _effect->constant (id::graphics::effect::specular);
 		}
@@ -64,6 +66,8 @@ namespace ballistic {
 				debug_error ("GL material has no bound effect");
 				return;
 			}
+
+			properties.apply ();
 
 			// apply material
 			_effect->constant (_diffuse_constant, _diffuse);

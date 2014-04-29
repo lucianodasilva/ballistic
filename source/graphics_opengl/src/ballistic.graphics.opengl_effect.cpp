@@ -45,21 +45,27 @@ namespace ballistic {
 
 		iconstant * opengl_effect::create_constant (GLuint location, const id_t & id, GLuint type) {
 			switch (type) {
-			case (GL_INT) :
+			case (GL_UNSIGNED_INT):
 				return new opengl_constant < uint32_t > (location, id);
 				break;
-			case (GL_FLOAT) :
+			case (GL_INT):
+				return new opengl_constant < int32_t > (location, id);
+				break;
+			case (GL_FLOAT):
 				return new opengl_constant < real > (location, id);
 				break;
-				//case (GL_matrix) :
-				//	return new opengl_constant < uint32_t > (location, id);
-				//	break;
-				//case (GL_INT) :
-				//	return new opengl_constant < uint32_t > (location, id);
-				//	break;
-				//case (GL_INT) :
-				//	return new opengl_constant < uint32_t > (location, id);
-				//	break;
+			case (GL_FLOAT_VEC2):
+				return new opengl_constant < vec2 > (location, id);
+				break;
+			case (GL_FLOAT_VEC3):
+				return new opengl_constant < vec3 > (location, id);
+				break;
+			case (GL_FLOAT_VEC4):
+				return new opengl_constant < vec4 > (location, id);
+				break;
+			case (GL_FLOAT_MAT4):
+				return new opengl_constant < mat4 > (location, id);
+				break;
 			}
 
 			return nullptr;
@@ -125,7 +131,6 @@ namespace ballistic {
 				char name [100];
 				glGetActiveUniform (_shader_program_id, GLuint (i), sizeof(name)-1,
 									&name_len, &num, &type, name);
-
 				name [name_len] = 0;
 				GLuint location = glGetUniformLocation (_shader_program_id, name);
 
