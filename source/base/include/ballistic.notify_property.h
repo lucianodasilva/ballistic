@@ -23,8 +23,6 @@ namespace ballistic {
 	protected:
 		
 		entity * _parent;
-		
-		typedef property < value_t > base_t;
 
 	public:
 
@@ -34,23 +32,41 @@ namespace ballistic {
 		inline notify_property (const id_t & id_v, const value_t & v)
 			: property < value_t > (id_v, v) {}
 
-		inline virtual void operator = (const value_t & v) override {
-			this->_value = v;
+		inline virtual void operator = (const value_t & v) override;
 
-			message m (id::message::property_changed);
-			m.require (id::id, this->_id);
-
-			_parent->local_notifier.notify (_parent, m);
-		}
-
-		inline virtual iproperty * clone () const override {
-			auto p = new notify_property < value_t > (_id, _value);
-			p->_parent = _parent;
-			return p;
-		}
+		inline virtual iproperty * clone () const override;
 
 	};
-
+	
 }
+
+#ifndef _ballistic_entity_h_
+#include "ballistic.entity.h"
+
+namespace ballistic {
+	
+	// special case include to avoid circular dependencies
+
+	template < class value_t >
+	void notify_property < value_t >::operator = (const value_t & v) {
+		this->_value = v;
+	
+		message m (id::message::property_changed);
+		m.require (id::id, this->_id);
+	
+		_parent->local_notifier.notify (_parent, m);
+	}
+
+	template < class value_t >
+	iproperty * notify_property < value_t >::clone () const {
+		auto p = new notify_property < value_t > (this->_id, this->_value);
+		p->_parent = _parent;
+		return p;
+	}
+}
+
+#endif
+
+	// -------------------------------
 
 #endif

@@ -7,6 +7,7 @@
 #include "ballistic.iresource.h"
 
 #include <vector>
+#include <cmath>
 
 namespace ballistic {
 	namespace animation {

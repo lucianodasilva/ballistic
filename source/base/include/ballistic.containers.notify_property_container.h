@@ -20,8 +20,8 @@ namespace ballistic {
 			entity * _parent;
 		public:
 
-			template < class >
-			friend class notify_property_definition;
+			template < class value_t >
+			friend class notify_property_definition < value_t >;
 
 			inline notify_property_container (entity * parent) : _parent (parent) {}
 

@@ -55,20 +55,20 @@ namespace ballistic {
 			: property_definition < value_t > (id_v, v) {}
 
 		inline virtual iproperty * clone () const override {
-			return new notify_property_definition < value_t > (_id, _value);
+			return new notify_property_definition < value_t > (this->_id, this->_value);
 		}
 
 		inline virtual void insert_property (containers::iproperty_container < iproperty > & container) {
-			auto notify_container = dynamic_cast <containers::notify_property_container *> (&container);
+			auto notify_c = dynamic_cast <containers::notify_property_container *> (&container);
 
-			if (!notify_container) {
-				debug_print ("container cannot support notifications for property " << _id);
-				container.insert (new property < value_t > (_id, _value));
+			if (!notify_c) {
+				debug_print ("container cannot support notifications for property " << this->_id);
+				container.insert (new property < value_t > (this->_id, this->_value));
 			} else {
-				auto p = new notify_property < value_t > (_id, _value);
-				p->_parent = notify_container->_parent;
+				auto p = new notify_property < value_t > (this->_id, this->_value);
+				p->_parent = notify_c->_parent;
 
-				notify_container->insert (p);
+				notify_c->insert (p);
 			}
 		}
 
