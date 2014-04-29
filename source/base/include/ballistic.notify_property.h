@@ -23,6 +23,8 @@ namespace ballistic {
 	protected:
 		
 		entity * _parent;
+		
+		typedef property < value_t > base_t;
 
 	public:
 
@@ -30,13 +32,13 @@ namespace ballistic {
 		friend class notify_property_definition < value_t >;
 
 		inline notify_property (const id_t & id_v, const value_t & v)
-			: property (id_v, v) {}
+			: property < value_t > (id_v, v) {}
 
 		inline virtual void operator = (const value_t & v) override {
-			_value = v;
+			this->_value = v;
 
 			message m (id::message::property_changed);
-			m.require (id::id, _id);
+			m.require (id::id, this->_id);
 
 			_parent->local_notifier.notify (_parent, m);
 		}

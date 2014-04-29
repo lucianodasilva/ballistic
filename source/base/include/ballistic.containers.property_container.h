@@ -10,33 +10,35 @@ namespace ballistic {
 	namespace containers {
 
 		template < class base_property_t = iproperty >
-		class iproperty_container : public icontainer < std::map < id_t, typename base_property_t * > > {
+		class iproperty_container : public icontainer < std::map < id_t, base_property_t * > > {
 		public:
+			
+			typedef icontainer < std::map < id_t, base_property_t * > > base_t;
 
 			inline virtual ~iproperty_container () {
-				for (auto & pair : data) {
+				for (auto & pair : base_t::data) {
 					if (pair.second)
 						delete pair.second;
 				}
 			}
 
 			inline void remove (const id_t & id) {
-				auto it = data.find (id);
+				auto it = base_t::data.find (id);
 
-				if (it != data.end ()) {
+				if (it != base_t::data.end ()) {
 					delete it->second;
-					data.erase (it);
+					base_t::data.erase (it);
 				}
 			}
 
 			inline bool contains (const id_t & id) const {
-				return data.find (id) != data.end ();
+				return base_t::data.find (id) != base_t::data.end ();
 			}
 
 			inline base_property_t * find (const id_t & id) const {
-				auto it = data.find (id);
+				auto it = base_t::data.find (id);
 
-				if (it != data.end ())
+				if (it != base_t::data.end ())
 					return it->second;
 				else
 					return nullptr;
@@ -44,11 +46,11 @@ namespace ballistic {
 
 			inline void insert (base_property_t * p) {
 				// TODO: can cause a memory leak
-				data [p->id ()] = p;
+				base_t::data [p->id ()] = p;
 			}
 
 			inline virtual void copy_to (iproperty_container < base_property_t > & dest) const {
-				for (auto it : data) {
+				for (auto it : base_t::data) {
 
 					auto new_item = it.second->clone ();
 					auto typed_item = dynamic_cast <base_property_t *> (new_item);
@@ -93,7 +95,7 @@ namespace ballistic {
 						delete p;
 
 						typed_p = new default_property_t < value_t > (id, default_value);
-						insert (typed_p);
+						this->insert (typed_p);
 					}
 
 					return typed_p;
@@ -125,7 +127,7 @@ namespace ballistic {
 			}
 
 			inline details::property_accessor < base_property_t, default_property_t > operator [](id_t id) {
-				auto p = find (id);
+				auto p = this->find (id);
 
 				if (!p) {
 					debug_print ("property " << id << " not found!");
