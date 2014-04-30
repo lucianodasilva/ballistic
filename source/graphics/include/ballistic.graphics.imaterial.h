@@ -89,6 +89,8 @@ namespace ballistic {
 		class imaterial : public ballistic::iresource {
 		public:
 
+			static void setup_defaults (imaterial * m);
+
 			imaterial (const id_t & id);
 
 			virtual void		effect (ieffect * effect) = 0;

@@ -66,6 +66,9 @@ namespace ballistic {
 			case (GL_FLOAT_MAT4):
 				return new opengl_constant < mat4 > (location, id);
 				break;
+			case (GL_SAMPLER_2D):
+				return new opengl_constant < uint32_t > (location, id);
+				break;
 			}
 
 			return nullptr;
