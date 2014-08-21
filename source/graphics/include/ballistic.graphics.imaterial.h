@@ -29,8 +29,11 @@ namespace ballistic {
 			iconstant * _constant;
 		public:
 
-			inline material_property (const id_t & id_v, const value_t & v, iconstant * constant)
-				: imaterial_property (id_v), _value (v), _constant (constant) {}
+			inline material_property (const id_t & id_v, const value_t & v)
+				: imaterial_property (id_v), _value (v), _constant (nullptr) {}
+
+			inline iconstant * constant() const { return _constant; }
+			inline iconstant * constant (iconstant * value) { _constant = value; return _constant; }
 
 			inline void operator = (const value_t & v) {
 				_value = v;
@@ -50,7 +53,10 @@ namespace ballistic {
 			}
 
 			inline virtual iproperty * clone () const override {
-				return new material_property < value_t > (imaterial_property::_id, _value, _constant);
+				auto new_prop = new material_property < value_t >(imaterial_property::_id, _value);
+				new_prop->constant(_constant);
+
+				return new_prop;
 			}
 
 			inline virtual void apply () override {

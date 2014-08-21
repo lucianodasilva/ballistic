@@ -53,7 +53,10 @@ namespace ballistic {
 			}
 
 			inline virtual imaterial_property * create_property () override {
-				return new material_property < value_t > (id, value_t (), this);
+				auto new_prop = new material_property < value_t >(id, value_t());
+				new_prop->constant(this);
+
+				return new_prop;
 			}
 		
 		};

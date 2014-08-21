@@ -80,11 +80,11 @@ namespace ballistic {
 			base_property_container & operator = (const base_property_container < iproperty, default_property_t > & o) = delete;
 
 			template < class value_t >
-			inline default_property_t < value_t > * require (const id_t & id, const value_t & default_value) {
+			inline default_property_t < value_t > * require (const id_t & id, const value_t & default_value ) {
 				auto p = this->find (id);
 
 				if (!p) {
-					auto new_p = new default_property_t < value_t > (id, default_value);
+					auto new_p = new default_property_t < value_t > (id, default_value );
 					this->insert (new_p);
 					return new_p;
 				} else {
@@ -94,7 +94,7 @@ namespace ballistic {
 						debug_print ("property " << id << " already exists with different type. property overriden.");
 						delete p;
 
-						typed_p = new default_property_t < value_t > (id, default_value);
+						typed_p = new default_property_t < value_t > (id, default_value );
 						this->insert (typed_p);
 					}
 
