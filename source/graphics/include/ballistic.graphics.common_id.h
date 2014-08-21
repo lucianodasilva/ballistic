@@ -51,6 +51,12 @@ namespace ballistic {
 			define_id_ext (mesh_id, graphics.mesh.id);
 
 			define_id (material);
+
+			namespace material_types {
+				define_id_ext (default, material_type.default);
+				define_id_ext (rig, material_type.rig);
+			}
+
 			define_id (mesh);
 
 			namespace text {

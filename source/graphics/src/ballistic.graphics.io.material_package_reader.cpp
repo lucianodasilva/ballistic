@@ -1,5 +1,6 @@
 #include "ballistic.graphics.io.material_package_reader.h"
 
+#include "ballistic.graphics.common_id.h"
 #include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.itexture.h"
@@ -20,8 +21,10 @@ namespace ballistic {
 
 				const char * name = element->Attribute ("name");
 				const char * effect_name = element->Attribute ("effect");
+
+				id_t type_id = text_to_id(element->Attribute("type"));
 				
-				imaterial * material = _device->create_material (text_to_id (name));
+				imaterial * material = material = _device->create_material (text_to_id (name), type_id);
 
 				if (effect_name) {
 					ieffect * effect = container [text_to_id (effect_name)];

@@ -95,8 +95,6 @@ namespace ballistic {
 		class imaterial : public ballistic::iresource {
 		public:
 
-			static void setup_defaults (imaterial * m);
-
 			imaterial (const id_t & id);
 
 			virtual void		effect (ieffect * effect) = 0;
@@ -105,14 +103,8 @@ namespace ballistic {
 			virtual void		diffuse (const color & v) = 0;
 			virtual color		diffuse () = 0;
 
-			virtual void		specular (const color & v) = 0;
-			virtual color		specular () = 0;
-
 			virtual void		opaque (bool v) = 0;
 			virtual bool		opaque () = 0;
-
-			virtual void		texture (itexture * v) = 0;
-			virtual itexture *	texture () = 0;
 
 			containers::material_property_container properties;
 

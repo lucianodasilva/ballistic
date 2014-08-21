@@ -19,7 +19,7 @@ namespace ballistic {
 
 			// Resources ----------------
 			virtual ieffect *	create_effect (const id_t & id) = 0;
-			virtual imaterial * create_material (const id_t & id) = 0;
+			virtual imaterial * create_material (const id_t & id, const id_t & type_id) = 0;
 			virtual imesh *		create_mesh (const id_t & id) = 0;
 			virtual itexture *	create_texture (const id_t & id) = 0;
 			// ---------------------------

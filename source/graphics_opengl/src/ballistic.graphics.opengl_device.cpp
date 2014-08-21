@@ -60,8 +60,17 @@ namespace ballistic {
 			return new opengl_effect (id, ++_effect_run_id);
 		}
 
-		imaterial * opengl_device::create_material (const id_t & id) {
-			return new opengl_material (id);
+		imaterial * opengl_device::create_material (const id_t & id, const id_t & type_id) {
+
+			if (type_id == id::graphics::material_types::default) {
+				return new opengl_material(id);
+			}
+			else if (type_id == id::graphics::material_types::rig) {
+				debug_error("rig materials not yet implemented");
+				return nullptr;
+			}
+			
+			return nullptr;
 		}
 		
 		imesh *	opengl_device::create_mesh (const id_t & id)
