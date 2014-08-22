@@ -24,7 +24,7 @@ namespace ballistic {
 
 		virtual void require_properties (entity_type * new_entity_type, component_info & info) = 0;
 
-		virtual icomponent * create (entity * parent, property_container & parameters ) = 0;
+		virtual icomponent * create (entity * parent, containers::property_container & parameters ) = 0;
 
 	};
 
@@ -69,7 +69,7 @@ namespace ballistic {
 			details::component_require_properties < component_t >::require (new_entity_type, info);
 		}
 
-		inline virtual icomponent * create (entity * parent, property_container & parameters)
+		inline virtual icomponent * create (entity * parent, containers::property_container & parameters)
 		{
 			icomponent * new_comp = new component_t ();
 			new_comp->setup (parent, parameters);

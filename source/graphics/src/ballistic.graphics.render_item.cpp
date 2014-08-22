@@ -3,6 +3,7 @@
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.imesh.h"
+#include "ballistic.graphics.itexture.h"
 
 #include <limits>
 
@@ -47,8 +48,8 @@ namespace ballistic {
 				if (item.material->opaque ()) {
 
 					byte_handler.b0 = 0;
-					byte_handler.b1 = item.material->run_id ();
-					byte_handler.b2 = item.material->effect ()->run_id ();
+					byte_handler.b1 = item.material->effect ()->run_id ();
+					byte_handler.b2 = item.material->texture ()->run_id ();
 					byte_handler.b3 = item.mesh->run_id ();
 
 				} else {

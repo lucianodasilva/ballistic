@@ -13,29 +13,6 @@
 
 namespace ballistic {
 
-	class entity;
-
-	class iproperty {
-	protected:
-
-		id_t							p_id = 0;
-		entity *						p_container;
-
-	public:
-
-		id_t							id () const;
-		entity *						container () const;
-
-		iproperty ();
-		iproperty (id_t id_v, entity * container_v);
-
-		virtual							~iproperty ();
-		virtual void					raise_event () const;
-
-		virtual bool					parse (const tinyxml2::XMLAttribute * value) = 0;
-		virtual iproperty *				clone () const = 0;
-	};
-
 	namespace details {
 
 		template < 
@@ -97,66 +74,73 @@ namespace ballistic {
 
 	}
 
+	class iproperty {
+	protected:
+		id_t							_id;
+	public:
+		id_t							id () const;
+		iproperty (id_t id_v);
+		virtual							~iproperty ();
+		virtual bool					parse (const tinyxml2::XMLAttribute * value) = 0;
+		virtual iproperty *				clone () const = 0;
+	};
+
 	template < class value_t >
-	class property : public iproperty {
-	protected:		
-		value_t					p_value;
+	class property : public iproperty{
+	protected:
+		value_t					_value;
 	public:
 
-		inline property (const id_t & id_v, const value_t & v, entity * ctner)
-			: iproperty (id_v, ctner), p_value (v)
-		{}
+		inline property (const id_t & id_v, const value_t & v)
+			: iproperty (id_v), _value (v) {}
 
-		inline void operator = (const value_t & v) {
-			p_value = v;
-
-			if (iproperty::p_container)
-				iproperty::raise_event ();
+		inline virtual void operator = (const value_t & v) {
+			_value = v;
 		}
 
 		inline operator value_t () const {
-			return p_value;
+			return _value;
 		}
 
 		inline virtual bool parse (const tinyxml2::XMLAttribute * config_value) override {
-			bool ret = details::property_parser < value_t >::parse (config_value, p_value);
+			bool ret = details::property_parser < value_t >::parse (config_value, _value);
 
 			if (!ret)
-				debug_print ("unexpected data type for property " << p_id);
+				debug_print ("unexpected data type for property " << _id);
 
 			return ret;
 		}
 
 		inline virtual iproperty * clone () const override {
-			return new property < value_t > (iproperty::p_id, p_value, iproperty::p_container);
+			return new property < value_t > (iproperty::_id, _value);
 		}
 
 	};
 
 	namespace details {
 
+		template < class base_property_t, template < class > class default_property_t >
 		struct property_accessor {
 
-			id_t			id;
-			iproperty *		prop;
+			base_property_t *		property;
 
-			inline property_accessor (const id_t & id_v, iproperty * p) : id (id_v), prop (p) {}
+			inline property_accessor (base_property_t * p) : property (p) {}
 
 			template < class value_t >
 			inline void operator = (const value_t & v) {
 #ifdef BALLISTIC_DEBUG
-				auto p = dynamic_cast <property < value_t > *> (prop);
+				auto p = dynamic_cast <default_property_t < value_t > *> (property);
 #else
-				auto p = static_cast <property < value_t > *> (prop);
+				auto p = static_cast <default_property_t < value_t > *> (property);
 #endif
 				if (p) {
 					*p = v;
 				} else {
 					debug_run (
-						if (prop) {
-							debug_print ("wrong type property assign for" << id);
+						if (property) {
+							debug_print ("wrong type property assign for" << property->id ());
 						} else {
-							debug_print ("property " << id << " not found");
+							debug_print ("property not found");
 						}
 					);
 				}
@@ -165,18 +149,16 @@ namespace ballistic {
 			template < class value_t >
 			inline value_t as () const {
 #ifdef BALLISTIC_DEBUG
-				auto p = dynamic_cast < property < value_t > * > (prop);
+				auto p = dynamic_cast < default_property_t < value_t > * > (property);
 #else
-				auto p = static_cast < property < value_t > * > (prop);
+				auto p = static_cast < default_property_t < value_t > * > (property);
 #endif
 				if (p)
 					return *p;
 				else {
 					debug_run (
-						if (prop) {
-							debug_print ("wrong type property access for" << id);
-						} else {
-							debug_print ("property " << id << " not found");
+						if (property) {
+							debug_print ("wrong type property access for" << property->id ());
 						}
 					);
 					return value_t ();

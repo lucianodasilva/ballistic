@@ -56,13 +56,14 @@ public:
 	box_brain () : _start_time (-1) {}
 
 	static void require_properties (entity_type * new_type, component_info & info) {
-		new_type->properties.require_silent < vec3 > (text_to_id ("bounce"), vec3 ());
-		new_type->properties.require_silent < vec3 > (text_to_id ("start_pos"), vec3 ());
-		new_type->properties.require_silent < real > (text_to_id ("life_time"), 1.0);
+		new_type->properties.require < vec3 > (text_to_id ("bounce"), vec3 ());
+		new_type->properties.require < vec3 > (text_to_id ("start_pos"), vec3 ());
+		new_type->properties.require < real > (text_to_id ("life_time"), 1.0);
 	}
 
-	virtual void setup (ballistic::entity * parent, ballistic::property_container & parameters) {
+	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 		component::setup (parent, parameters);
+
 		game::instance.global_notifier.attach (id::message::update, this);
 
 		_bounce = parent->properties.aquire < vec3 > (text_to_id ("bounce"));
@@ -104,12 +105,12 @@ public:
 	}
 
 };
- 
+
 int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{800, 800});
+	_frontend = create_frontend (point{400, 400});
 	_frontend->create ();
 	_frontend->show ();
 

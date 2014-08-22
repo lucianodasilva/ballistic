@@ -17,7 +17,7 @@ namespace ballistic {
 
 		component ();
 
-		virtual void setup (ballistic::entity * parent_v, property_container & parameters);
+		virtual void setup (ballistic::entity * parent_v, containers::property_container & parameters);
 		
 		virtual void terminate ();
 

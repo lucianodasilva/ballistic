@@ -7,7 +7,7 @@
 namespace ballistic {
 	namespace animation {
 
-		void storyboard::action::require_parameters (property_container & parameters) {
+		void storyboard::action::require_parameters (containers::property_container & parameters) {
 			parameters.require < real > (id::start_time, 0);
 			parameters.require < real > (id::duration, 0);
 			parameters.require < id_t > (id::target_id, id::null);
@@ -33,7 +33,7 @@ namespace ballistic {
 		}
 
 		void storyboard::add_action (
-			property_container & parameters,
+			containers::property_container & parameters,
 			ifunction * func
 		){
 			repeat_mode mode;

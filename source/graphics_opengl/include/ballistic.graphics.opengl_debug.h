@@ -66,7 +66,7 @@ namespace ballistic {
 		private:
 			
 			static ballistic::graphics::opengl_effect	_effect;
-			static ballistic::graphics::opengl_constant _color_uniform;
+			static ballistic::graphics::iconstant *		_color_uniform;
 
 			static string _vs_source;
 			static string _fs_source;

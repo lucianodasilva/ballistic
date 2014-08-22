@@ -24,7 +24,7 @@ namespace ballistic {
 				return;
 			}
 
-			property_container parameters;
+			containers::property_container parameters;
 
 
 			func_type->require_parameters (parameters);
@@ -37,7 +37,7 @@ namespace ballistic {
 				id_t property_id = text_to_id (prop_cursor->Name ());
 				
 				if (parameters.contains (property_id)) {
-					parameters [property_id].prop->parse (prop_cursor);
+					parameters [property_id].property->parse (prop_cursor);
 				} else {
 					debug_print ("unrequested entity property \"" << prop_cursor->Name () << "\". value not set");
 				}

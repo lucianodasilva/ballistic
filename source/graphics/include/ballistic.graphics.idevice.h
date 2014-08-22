@@ -35,18 +35,17 @@ namespace ballistic {
 			virtual void		alpha_blend (const bool & v) = 0;
 
 			virtual void		clear_color ( const color & cr ) = 0;
+			virtual color		clear_color() const = 0;
 
-			virtual void 		view (const mat4 & view) = 0;
-			virtual const mat4 & view () const = 0;
+			virtual void 		set_view (const mat4 & view) = 0;
 
-			virtual void		model (const mat4 & model) = 0;
-			virtual const mat4 & model () const = 0;
+			virtual void		set_model (const mat4 & model) = 0;
 
-			virtual void		proj (const mat4 & proj) = 0;
-			virtual const mat4 & proj () const = 0;
+			virtual void		set_proj (const mat4 & proj) = 0;
+
+			virtual void		set_mvp(const mat4 & mvp) = 0;
 			
-			virtual void		normal (const mat4 & norm) = 0;
-			virtual const mat4 & normal () const = 0;
+			virtual void		set_normal (const mat4 & norm) = 0;
 
 			virtual void		clear () = 0;
 

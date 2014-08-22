@@ -12,55 +12,71 @@ using namespace std;
 namespace ballistic {
 	namespace graphics {
 
-		struct opengl_constant {
+		// would be fun if in debug had 
+		// type validation... just saying
+		struct opengl_constant : public iconstant {
+
 			GLuint	location;
 			id_t	id;
 
-			inline opengl_constant () : location (std::numeric_limits < GLuint >::max ()), id (0) {}
-			inline opengl_constant (const opengl_constant & c) : location (c.location), id (c.id) {}
-			inline opengl_constant (GLuint location_v, id_t id_v) : location (location_v), id (id_v) {}
+			inline opengl_constant (GLuint location_v, const id_t & id_v) : location (location_v), id (id_v) {}
 
-			inline bool is_defined () const {
-				return location != std::numeric_limits < GLuint >::max ();
+			inline void set_value (uint32_t v) override {
+				glUniform1ui (location, v);
 			}
 
-			inline opengl_constant & operator = ( opengl_constant v ) {
-				location = v.location;
-				id = v.id;
-
-				return *this;
+			inline void set_value (int32_t v) override {
+				glUniform1i (location, v);
 			}
 
+			inline void set_value (real v) override {
+				glUniform1f (location, v);
+			}
+
+			inline void set_value (const vec2 & v) override {
+				glUniform2f (location, v.x, v.y);
+			}
+
+			inline void set_value (const vec3 & v) override {
+				glUniform3f (location, v.x, v.y, v.z);
+			}
+
+			inline void set_value (const vec4 & v) override {
+				glUniform4f (location, v.x, v.y, v.z, v.w);
+			}
+
+			inline void set_value (const color & v) override {
+				glUniform4f (location, v.r, v.g, v.b, v.a);
+			}
+
+			inline void set_value (const mat4 & v) override {
+				glUniformMatrix4fv (location, 1, false, (GLfloat *)&v);
+			}
+		
 		};
 
 		class opengl_effect : public ballistic::graphics::ieffect {
 		private:
+
+			map < id_t, iconstant * > _constants;
 			
 			GLint _shader_program_id;
 
 			uint8_t _run_id;
-
-			// -
-
-			typedef map < id_t, opengl_constant > constant_map_t;
-
-			constant_map_t _constants;
-
-			// -
 			
-			bool is_shader_ok (GLint shader_id);
-			bool is_link_ok (GLint program_id);
+			static bool is_shader_ok (GLint shader_id);
+			static bool is_link_ok (GLint program_id);
 			
-			void load_gl_shader (GLint shader_id, const string & source);
+			static void load_gl_shader (GLint shader_id, const string & source);
+
+			static iconstant * create_constant (GLuint location, const id_t & id, GLuint type);
 
 		public:
 			
 			opengl_effect (const id_t & id, uint8_t run_id);
-			~opengl_effect ();
+			virtual ~opengl_effect ();
 
 			virtual uint8_t run_id ();
-
-			virtual opengl_constant constant (id_t id) const;
 			
 			virtual void load (
 				const string & vs_shader_source,
@@ -69,13 +85,8 @@ namespace ballistic {
 			
 			virtual void apply (idevice * device);
 
-			void constant (opengl_constant & u, int32_t v);
-			void constant (opengl_constant & u, real v);
-			void constant (opengl_constant & u, const vec2 & v);
-			void constant (opengl_constant & u, const vec3 & v);
-			void constant (opengl_constant & u, const vec4 & v);
-			void constant (opengl_constant & u, const mat4 & v);
-			void constant (opengl_constant & u, const color & v);
+			virtual iconstant * constant(const id_t & id);
+			virtual const map < id_t, iconstant * > & constants () const override;
 
 		};
 

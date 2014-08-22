@@ -2,8 +2,8 @@
 #define _ballistic_entity_h_
 
 #include "ballistic.id.h"
-#include "ballistic.property_container.h"
-#include "ballistic.component_container.h"
+#include "ballistic.containers.notify_property_container.h"
+#include "ballistic.containers.component_container.h"
 #include "ballistic.message_notifier.h"
 
 using namespace std;
@@ -28,9 +28,8 @@ namespace ballistic {
 
 		message_notifier local_notifier;
 
-		property_container properties;
-
-		component_container components;
+		containers::notify_property_container properties;
+		containers::component_container components;
 
 		id_t id ();
 

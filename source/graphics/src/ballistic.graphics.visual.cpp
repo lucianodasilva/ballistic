@@ -18,12 +18,12 @@ namespace ballistic {
 			new_type->properties.require < imaterial * > (id::graphics::material, nullptr);
 			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
 
-			new_type->properties.require_silent < uint8_t > (id::graphics::layer, 0);
+			new_type->properties.require < uint8_t > (id::graphics::layer, 0);
 
-			new_type->properties.require_silent < mat4 > (id::transform, mat4 ());
+			new_type->properties.require < mat4 > (id::transform, mat4 ());
 		}
 
-		void visual::setup (entity * parent, property_container & parameters)
+		void visual::setup (entity * parent, ballistic::containers::property_container & parameters)
 		{
 			component::setup (parent, parameters);
 

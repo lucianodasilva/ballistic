@@ -22,7 +22,7 @@ namespace ballistic {
 			info.properties.require < id_t > (id::storyboard_id, id::null);
 		}
 
-		void component::setup (ballistic::entity * parent, ballistic::property_container & parameters) {
+		void component::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 			ballistic::component::setup (parent, parameters);
 			
 			id_t storyboard_id = parameters [id::storyboard_id];

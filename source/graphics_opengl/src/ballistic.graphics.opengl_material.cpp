@@ -4,15 +4,12 @@
 namespace ballistic {
 	namespace graphics {
 
-		opengl_material::opengl_material (const id_t & id, uint8_t run_id) :
+		opengl_material::opengl_material (const id_t & id) :
 			imaterial (id),
 			_opaque (false),
 			_texture (nullptr),
-			_effect (nullptr),
-			_run_id (run_id)
+			_effect (nullptr)
 		{}
-
-		uint8_t opengl_material::run_id () { return _run_id; }
 
 		void opengl_material::effect (ieffect * effect) {
 			_effect = dynamic_cast <opengl_effect *> (effect);
@@ -23,10 +20,9 @@ namespace ballistic {
 			}
 
 			_diffuse_constant = _effect->constant (id::graphics::effect::diffuse);
-			_specular_constant = _effect->constant (id::graphics::effect::specular);
 		}
 
-		ieffect * opengl_material::effect () {
+		ieffect * opengl_material::effect () const {
 			return _effect;
 		}
 
@@ -34,23 +30,16 @@ namespace ballistic {
 			_diffuse = v;
 		}
 
-		color opengl_material::diffuse () {
+		color opengl_material::diffuse () const {
 			return _diffuse;
 		}
 
-		void opengl_material::specular (const color & v) {
-			_specular = v;
-		}
-
-		color opengl_material::specular () {
-			return _specular;
-		}
 
 		void opengl_material::opaque (bool v) {
 			_opaque = v;
 		}
 
-		bool opengl_material::opaque () {
+		bool opengl_material::opaque () const {
 			return _opaque;
 		}
 
@@ -58,7 +47,7 @@ namespace ballistic {
 			_texture = v;
 		}
 
-		itexture * opengl_material::texture () {
+		itexture * opengl_material::texture () const {
 			return _texture;
 		}
 
@@ -69,8 +58,8 @@ namespace ballistic {
 			}
 
 			// apply material
-			_effect->constant (_diffuse_constant, _diffuse);
-			_effect->constant (_specular_constant, _specular);
+			if (_diffuse_constant)
+				_diffuse_constant->set_value(_diffuse);
 		}
 
 	}

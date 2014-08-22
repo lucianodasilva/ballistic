@@ -38,7 +38,7 @@ namespace ballistic {
 					id_t property_id = text_to_id (prop_cursor->Name ());
 
 					if (new_info.properties.contains (property_id)) {
-						new_info.properties [property_id].prop->parse (prop_cursor);
+						new_info.properties [property_id].property->parse (prop_cursor);
 					} else {
 						debug_print ("unrequested entity property \"" << prop_cursor->Name () << "\". value not set");
 					}
@@ -73,7 +73,7 @@ namespace ballistic {
 					id_t property_id = text_to_id (prop_cursor->Name ());
 
 					if (new_type->properties.contains (property_id)) {
-						new_type->properties [property_id].prop->parse (prop_cursor);
+						new_type->properties [property_id].property->parse (prop_cursor);
 					} else {
 						debug_print ("unrequested entity property \"" << prop_cursor->Name () << "\". value not set");
 					}

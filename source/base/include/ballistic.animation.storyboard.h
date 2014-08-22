@@ -2,10 +2,12 @@
 #define _ballistic_animation_storyboard_h_
 
 #include "ballistic.config.h"
+#include "ballistic.containers.property_container.h"
+#include "ballistic.entity.h"
 #include "ballistic.iresource.h"
-#include "ballistic.property_container.h"
 
 #include <vector>
+#include <cmath>
 
 namespace ballistic {
 	namespace animation {
@@ -36,7 +38,7 @@ namespace ballistic {
 
 			public:
 
-				static void require_parameters (property_container & parameters);
+				static void require_parameters (containers::property_container & parameters);
 
 				action (
 					real start_time,
@@ -58,7 +60,7 @@ namespace ballistic {
 
 		public:
 
-			void add_action (property_container & parameters, ifunction * func);
+			void add_action (containers::property_container & parameters, ifunction * func);
 
 			void create_drivers (component * instance);
 

@@ -5,7 +5,7 @@
 #include "ballistic.config.h"
 #include "ballistic.debug.h"
 
-#include "ballistic.property_container.h"
+#include "ballistic.containers.property_container.h"
 
 
 namespace ballistic {
@@ -25,7 +25,7 @@ namespace ballistic {
 		icomponent_constructor * ctor ();
 		void ctor (icomponent_constructor * ctor_v);
 
-		property_container properties;
+		containers::property_container properties;
 
 		icomponent * create (entity * parent);
 	};
