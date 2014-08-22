@@ -21,10 +21,8 @@ namespace ballistic {
 
 				const char * name = element->Attribute ("name");
 				const char * effect_name = element->Attribute ("effect");
-
-				id_t type_id = text_to_id(element->Attribute("type"));
 				
-				imaterial * material = material = _device->create_material (text_to_id (name), type_id);
+				imaterial * material = material = _device->create_material (text_to_id (name));
 
 				if (effect_name) {
 					ieffect * effect = container [text_to_id (effect_name)];
@@ -35,37 +33,21 @@ namespace ballistic {
 				
 				while (cursor) {
 
-					if (strcmp (cursor->Name (), "texture") == 0) {
+					if (strcmp (cursor->Name (), "diffuse") == 0) {
+						color tmp;
+						color::parse (cursor, tmp);
+						material->diffuse (tmp);
+					} else if (strcmp (cursor->Name (), "opaque") == 0) {
+						material->opaque (convert_to < bool > (cursor->Value()));
+					} else if (strcmp (cursor->Name (), "effect") == 0) {
+						ieffect * effect = container [text_to_id (cursor->Value ())];
+						material->effect (effect);
+					} else if (strcmp (cursor->Name (), "texture") == 0) {
 						itexture * texture = container [text_to_id (cursor->Value ())];
 						material->texture (texture);
 					} else {
-						id_t property_id = text_to_id (cursor->Name ());
-
-						if (material->properties.contains (property_id))
-							material->properties [property_id].property->parse (cursor);
-						else {
-							debug_print ("unrequested graphics material property \"" << cursor->Name () << "\". value not set");
-						}
-
+						debug_print("unknown material property \"" << cursor->Name () << "\"");
 					}
-
-					//if (strcmp (cursor->Name (), "diffuse") == 0) {
-					//	color tmp;
-					//	color::parse (cursor, tmp);
-					//	material->diffuse (tmp);
-					//} else if (strcmp (cursor->Name (), "specular") == 0) {
-					//	color tmp;
-					//	color::parse (cursor, tmp);
-					//	material->specular (tmp);
-					//} else if (strcmp (cursor->Name (), "opaque") == 0) {
-					//	material->opaque (convert_to < bool > (cursor->Value()));
-					//} else if (strcmp (cursor->Name (), "effect") == 0) {
-					//	ieffect * effect = container [text_to_id (cursor->Value ())];
-					//	material->effect (effect);
-					//} else if (strcmp (cursor->Name (), "texture") == 0) {
-					//	itexture * texture = container [text_to_id (cursor->Value ())];
-					//	material->texture (texture);
-					//}
 				
 					cursor = cursor->Next ();
 				}

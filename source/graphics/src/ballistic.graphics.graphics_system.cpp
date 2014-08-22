@@ -38,6 +38,7 @@ namespace ballistic {
 			
 			mat4
 				current_view,
+				view_projection,
 				normal_matrix;
 
 			if (!_device) {
@@ -51,9 +52,7 @@ namespace ballistic {
 			}
 			
 			current_view = _camera->view ();
-
-			_device->view (current_view);
-			_device->proj (_camera->proj ());
+			view_projection = current_view * _camera->proj();
 
 			// notify entities with visuals
 			game::instance.global_notifier.notify(_render_message);
@@ -80,6 +79,10 @@ namespace ballistic {
 				if (item.material->effect () != effect) {
 					effect = item.material->effect ();
 					_device->activate (effect);
+
+					// least changing properties
+					_device->set_view(current_view);
+					_device->set_proj(_camera->proj());
 				}
 
 				if (item.material != material) {
@@ -102,12 +105,14 @@ namespace ballistic {
 					_device->activate (mesh);
 				}
 
-				// update model matrices
+				// update model / normal matrices
 				mat4 mv = current_view * item.transform;
 				normal_matrix = mv.transpose ().invert ();
 				
-				_device->normal (normal_matrix);
-				_device->model (item.transform);
+				_device->set_normal (normal_matrix);
+
+				_device->set_model (item.transform);
+				_device->set_mvp(item.transform * view_projection);
 				
 				// render the stuffs
 				_device->draw_active_mesh ();

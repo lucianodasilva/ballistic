@@ -84,7 +84,7 @@ namespace math {
 				ret.data [i] = value_t ();
 
 				for (int j = 0; j < data_t::size; ++j)
-					ret.data [i] += (v.data [j] * data_sqr [j, i]);
+					ret.data[i] += (data_sqr[j, i] * v.data[j]);
 			}
 
 			return ret;

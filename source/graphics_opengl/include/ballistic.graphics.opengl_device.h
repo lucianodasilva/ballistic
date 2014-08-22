@@ -28,33 +28,26 @@ namespace ballistic {
 			atomic <unsigned char> _mesh_run_id;
 			atomic <unsigned char> _texture_run_id;
 
-			mat4
-				_view,
-				_model,
-				_proj,
-				_normal;
-
-
 			opengl_effect *		_effect;
 			opengl_material *	_material;
 			opengl_mesh *		_mesh;
 			opengl_texture *	_texture;
 
 			// constants
-			opengl_constant_old		_gl_const_model;
-			opengl_constant_old		_gl_const_view;
-			opengl_constant_old		_gl_const_proj;
-			opengl_constant_old		_gl_const_normal;
+			iconstant *		_gl_const_model;
+			iconstant *		_gl_const_view;
+			iconstant *		_gl_const_proj;
+			iconstant *		_gl_const_mvp;
+			iconstant *		_gl_const_normal;
 
-			opengl_constant_old		_gl_const_diffuse;
-			opengl_constant_old		_gl_const_specular;
+			iconstant *		_gl_const_diffuse;
 
 		public:
 			
 			opengl_device ();
 			
 			virtual ieffect *	create_effect (const id_t & id);
-			virtual imaterial * create_material(const id_t & id, const id_t & type_id);
+			virtual imaterial * create_material(const id_t & id);
 			virtual imesh *		create_mesh (const id_t & id);
 			virtual itexture *	create_texture (const id_t & id);
 
@@ -67,18 +60,17 @@ namespace ballistic {
 			virtual void		alpha_blend (const bool & v);
 			
 			virtual void		clear_color ( const color & cr );
+			virtual color		clear_color() const;
 
-			virtual void 		view (const mat4 & view);
-			virtual const mat4 & view () const;
+			virtual void 		set_view (const mat4 & view);
 
-			virtual void		model (const mat4 & model);
-			virtual const mat4 & model () const;
+			virtual void		set_model (const mat4 & model);
 
-			virtual void		proj (const mat4 & proj);
-			virtual const mat4 & proj () const;
+			virtual void		set_proj (const mat4 & proj);
+
+			virtual void		set_mvp(const mat4 & mvp);
 			
-			virtual void		normal (const mat4 & norm);
-			virtual const mat4 & normal () const;
+			virtual void		set_normal (const mat4 & norm);
 
 			virtual void		clear ();
 

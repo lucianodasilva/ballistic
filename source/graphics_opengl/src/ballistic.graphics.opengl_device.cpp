@@ -60,17 +60,8 @@ namespace ballistic {
 			return new opengl_effect (id, ++_effect_run_id);
 		}
 
-		imaterial * opengl_device::create_material (const id_t & id, const id_t & type_id) {
-
-			if (type_id == id::graphics::material_types::default) {
-				return new opengl_material(id);
-			}
-			else if (type_id == id::graphics::material_types::rig) {
-				debug_error("rig materials not yet implemented");
-				return nullptr;
-			}
-			
-			return nullptr;
+		imaterial * opengl_device::create_material (const id_t & id) {
+			return new opengl_material(id);
 		}
 		
 		imesh *	opengl_device::create_mesh (const id_t & id)
@@ -85,7 +76,7 @@ namespace ballistic {
 
 		void opengl_device::activate (ieffect * effect) {
 			if (!effect) {
-				debug_error ("[opengl_device::activate] Cannot set uninstantiated effect.");
+				debug_error ("cannot set uninstantiated effect.");
 				return;
 			}
 
@@ -96,16 +87,10 @@ namespace ballistic {
 			_gl_const_model = _effect->constant (id::graphics::effect::t_model);
 			_gl_const_view = _effect->constant (id::graphics::effect::t_view);
 			_gl_const_proj = _effect->constant (id::graphics::effect::t_proj);
+			_gl_const_mvp = _effect->constant (id::graphics::effect::t_mvp);
 			_gl_const_normal = _effect->constant (id::graphics::effect::t_normal);
 			
 			_gl_const_diffuse = _effect->constant (id::graphics::effect::diffuse);
-			_gl_const_specular = _effect->constant (id::graphics::effect::specular);
-
-			// set least changing constants
-			// TODO: replace by uniform block
-			_effect->constant (_gl_const_view, _view);
-			//_effect->set_constant (_gl_const_model, _model);
-			_effect->constant (_gl_const_proj, _proj);
 		}
 
 		void opengl_device::activate (imaterial * material) {
@@ -142,46 +127,33 @@ namespace ballistic {
 			_clear_color = cr;
 		}
 
-		void opengl_device::view (const mat4 & view) {
-			_view = view;
-			if (_effect)
-				_effect->constant (_gl_const_view, _view);
+		color opengl_device::clear_color() const {
+			return _clear_color;
 		}
 
-		const mat4 & opengl_device::view () const {
-			return _view;
+		void opengl_device::set_view (const mat4 & view) {
+			if (_gl_const_view)
+				_gl_const_view->set_value(view);
 		}
 
-		void opengl_device::model (const mat4 & model) {
-			_model = model;
-			if (_effect)
-				_effect->constant (_gl_const_model, _model);
+		void opengl_device::set_model (const mat4 & model) {
+			if (_gl_const_model)
+				_gl_const_model->set_value(model);
 		}
 
-		const mat4 & opengl_device::model () const {
-			return _model;
+		void opengl_device::set_proj (const mat4 & proj) {
+			if (_gl_const_proj)
+				_gl_const_proj->set_value(proj);
 		}
 
-		void opengl_device::proj (const mat4 & proj) {
-			_proj = proj;
-
-			if (_effect)
-				_effect->constant (_gl_const_proj, _proj);
-		}
-
-		const mat4 & opengl_device::proj () const {
-			return _proj;
+		void opengl_device::set_mvp(const mat4 & mvp) {
+			if (_gl_const_mvp)
+				_gl_const_mvp->set_value(mvp);
 		}
 		
-		void opengl_device::normal (const mat4 & norm) {
-			_normal = norm;
-			
-			if (_effect)
-				_effect->constant (_gl_const_normal, _normal);
-		}
-		
-		const mat4 & opengl_device::normal () const {
-			return _normal;
+		void opengl_device::set_normal (const mat4 & norm) {
+			if (_gl_const_normal)
+				_gl_const_normal->set_value(norm);
 		}
 
 		void opengl_device::clear () {

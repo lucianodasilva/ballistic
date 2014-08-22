@@ -38,24 +38,27 @@ namespace ballistic {
 
 			// effect 
 			namespace effect {
+
 				define_id_ext (diffuse, effect_diffuse);
-				define_id_ext (specular, effect_specular);
 				define_id_ext (texture, effect_texture);
+
 				define_id_ext (t_model, effect_t_model);
 				define_id_ext (t_view, effect_t_view);
 				define_id_ext (t_normal, effect_t_normal);
 				define_id_ext (t_proj, effect_t_proj);
+				define_id_ext(t_mvp, effect_t_mvp);
+
+				namespace type {
+					define_id_ext(basic, effect_type.basic);
+					define_id_ext(rigged, effect_type.rigged);
+				}
+
 			}
 
 			define_id_ext (material_id, graphics.material.id);
 			define_id_ext (mesh_id, graphics.mesh.id);
 
 			define_id (material);
-
-			namespace material_types {
-				define_id_ext (default, material_type.default);
-				define_id_ext (rig, material_type.rig);
-			}
 
 			define_id (mesh);
 

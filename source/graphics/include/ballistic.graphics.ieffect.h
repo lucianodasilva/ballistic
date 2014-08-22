@@ -36,8 +36,6 @@ namespace ballistic {
 			virtual void set_value (const mat4 & v) = 0;
 			virtual void set_value (const color & v) = 0;
 
-			virtual imaterial_property * create_property () = 0;
-
 		};
 
 		class ieffect : public ballistic::iresource {
@@ -54,7 +52,8 @@ namespace ballistic {
 
 			virtual void apply (idevice * device) = 0;
 
-			virtual const vector < iconstant * > & constants () const = 0;
+			virtual iconstant * constant(const id_t & id) = 0;
+			virtual const map < id_t, iconstant * > & constants () const = 0;
 
 		};
 
