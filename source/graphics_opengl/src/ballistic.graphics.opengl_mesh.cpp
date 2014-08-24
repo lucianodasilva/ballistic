@@ -66,7 +66,7 @@ namespace ballistic {
 				type,         // type
 				GL_FALSE,     // normalized?
 				stride,
-				(GLvoid*)offset // array buffer offset in bytes
+				reinterpret_cast < GLvoid* > (offset) // array buffer offset in bytes
 				);
 
 			glEnableVertexAttribArray (id);

@@ -20,11 +20,9 @@ namespace ballistic {
 
 	template < class value_t >
 	class notify_property : public property < value_t > {
-	protected:
-		
-		entity * _parent;
-
 	public:
+		
+		entity * parent;
 
 		friend class containers::notify_property_container;
 		friend class notify_property_definition < value_t >;
@@ -54,13 +52,13 @@ namespace ballistic {
 		message m (id::message::property_changed);
 		m.require (id::id, this->_id);
 	
-		_parent->local_notifier.notify (_parent, m);
+		parent->local_notifier.notify (parent, m);
 	}
 
 	template < class value_t >
 	iproperty * notify_property < value_t >::clone () const {
 		auto p = new notify_property < value_t > (this->_id, this->_value);
-		p->_parent = _parent;
+		p->parent = parent;
 		return p;
 	}
 }

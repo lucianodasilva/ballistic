@@ -66,7 +66,7 @@ namespace ballistic {
 				container.insert (new property < value_t > (this->_id, this->_value));
 			} else {
 				auto p = new notify_property < value_t > (this->_id, this->_value);
-				p->_parent = notify_c->_parent;
+				p->parent = notify_c->parent;
 
 				notify_c->insert (p);
 			}

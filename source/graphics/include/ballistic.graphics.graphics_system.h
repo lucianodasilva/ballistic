@@ -14,11 +14,10 @@ namespace ballistic {
 
 		class graphics_system : public ballistic::isystem {
 		private:
+			message		_render_message;
 
 			idevice *	_device;
 			camera	*	_camera;
-
-			message		_render_message;
 
 			render_list _render_list;
 

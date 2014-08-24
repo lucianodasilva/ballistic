@@ -16,33 +16,33 @@ namespace ballistic {
 	namespace containers {
 
 		class notify_property_container : public property_container {
-		private:
-			entity * _parent;
 		public:
+			
+			entity * parent;
 
 			template < class >
 			friend class notify_property_definition;
 
-			inline notify_property_container (entity * parent) : _parent (parent) {}
+			inline notify_property_container (entity * p) : parent (p) {}
 
 			template < class value_t >
 			inline property < value_t > * require_notify (const id_t & id, const value_t & default_value) {
-				auto p = this->find (id);
+				auto prop = this->find (id);
 
-				if (!p) {
+				if (!prop) {
 					auto new_p = new notify_property < value_t > (id, default_value);
-					new_p->_parent = _parent;
+					new_p->parent = parent;
 					this->insert (new_p);
 					return new_p;
 				} else {
-					auto typed_p = dynamic_cast < property < value_t > *> (p);
+					auto typed_p = dynamic_cast < property < value_t > *> (prop);
 
 					if (!typed_p) {
 						debug_print ("property " << id << " already exists with different type. property overriden.");
-						delete p;
+						delete prop;
 
 						typed_p = new notify_property < value_t > (id, default_value);
-						typed_p->_parent = _parent;
+						typed_p->parent = parent;
 						insert (typed_p);
 					}
 

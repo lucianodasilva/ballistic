@@ -31,15 +31,6 @@ namespace ballistic {
 			opengl_mesh *		_mesh;
 			opengl_texture *	_texture;
 
-			// constants
-			iconstant *		_gl_const_model;
-			iconstant *		_gl_const_view;
-			iconstant *		_gl_const_proj;
-			iconstant *		_gl_const_mvp;
-			iconstant *		_gl_const_normal;
-
-			iconstant *		_gl_const_diffuse;
-
 		public:
 			
 			opengl_device ();

@@ -37,6 +37,8 @@ namespace ballistic {
 			virtual void set_value (const color & v) = 0;
 
 			virtual bool is_null ();
+			
+			virtual ~iconstant ();
 
 		};
 

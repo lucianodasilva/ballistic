@@ -13,10 +13,12 @@ namespace ballistic {
 		}
 
 		graphics_system::graphics_system () :
+			_render_message (id::message::render),
+		
 			_device (nullptr),
 			_camera (nullptr),
 			_material_effect (nullptr),
-
+		
 			_c_effect_diffuse (&null_constant::instance),
 			_c_effect_texture (&null_constant::instance),
 			_c_effect_t_model (&null_constant::instance),
@@ -24,10 +26,8 @@ namespace ballistic {
 			_c_effect_t_proj (&null_constant::instance),
 			_c_effect_t_normal (&null_constant::instance),
 			_c_effect_t_mvp (&null_constant::instance),
-			_overlay_effect (nullptr),
 
-			_render_message (id::message::render)
-
+			_overlay_effect (nullptr)
 		{}
 
 		void graphics_system::device ( idevice * dev ) {

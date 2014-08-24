@@ -6,6 +6,7 @@ namespace ballistic {
 	namespace graphics {
 
 		bool iconstant::is_null () { return false; }
+		iconstant::~iconstant () {}
 
 		null_constant null_constant::instance;
 

@@ -11,7 +11,7 @@ namespace ballistic {
 	namespace graphics {
 		namespace io {
 
-			material_package_reader::material_package_reader (idevice * device) : _device (device) {}
+			material_package_reader::material_package_reader () {}
 
 			const char * material_package_reader::type () const {
 				return "material";

@@ -74,11 +74,14 @@ namespace ballistic {
 
 			_min_filter = convert_filter_to_gl (min_filter_v);
 			_mag_filter = convert_filter_to_gl (mag_filter_v);
+			
+			_wrap_s = convert_wrap_to_gl (wrap_s_v);
+			_wrap_t = convert_wrap_to_gl (wrap_t_v);
 
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _mag_filter);
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);//convert_wrap_to_gl (wrap_s_v));
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);//convert_wrap_to_gl (wrap_t_v));
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrap_s);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrap_t);
 
 			// offset for better quality
 			glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -1.0F);
@@ -106,11 +109,6 @@ namespace ballistic {
 		void opengl_texture::apply (idevice * device) {
 			glActiveTexture (GL_TEXTURE0);
 			glBindTexture (GL_TEXTURE_2D, _texture_id);
-
-			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _mag_filter);
-			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _min_filter);
-			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);//convert_wrap_to_gl (wrap_s_v));
-			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);//convert_wrap_to_gl (wrap_t_v));
 		}
 
 	}

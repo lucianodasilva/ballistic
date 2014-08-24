@@ -16,6 +16,8 @@ namespace ballistic {
 			virtual iproperty * target () = 0;
 
 			virtual void update (real animation_time) = 0;
+			
+			virtual ~idriver () {};
 
 		};
 
@@ -35,8 +37,8 @@ namespace ballistic {
 				property < value_t > * target,
 				function < value_t > * function
 			):
-				_action (act_ref),
 				_target (target),
+				_action (act_ref),
 				_function (function)
 			{}
 

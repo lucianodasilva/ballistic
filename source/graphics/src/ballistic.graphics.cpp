@@ -29,7 +29,7 @@ namespace ballistic {
 			g.resources.register_loader (new graphics::io::effect_loader (device));
 
 			g.resources.package_loader ()->register_reader (
-				new graphics::io::material_package_reader (device)
+				new graphics::io::material_package_reader ()
 			);
 
 			g.resources.package_loader ()->register_reader (

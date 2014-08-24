@@ -9,13 +9,9 @@ namespace ballistic {
 		namespace io {
 
 			class material_package_reader : public ballistic::io::ipackage_group_reader {
-			private:
-
-				idevice * _device;
-
 			public:
 
-				material_package_reader (idevice * device);
+				material_package_reader ();
 
 				virtual const char * type () const;
 
