@@ -30,7 +30,7 @@ namespace ballistic {
 			virtual ~istorage () {};
 
 			virtual bool contains (const string & path) = 0;
-			virtual bool load (iloader * loader, const string & path, ballistic::resource_container & stack) = 0;
+			virtual bool load (iloader * loader, const string & path, ballistic::resource_container & stack, const id_t & id) = 0;
 
 		};
 	}

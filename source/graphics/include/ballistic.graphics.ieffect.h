@@ -5,10 +5,10 @@
 	Supported shader keywords
 
 	effect_diffuse
-	effect_specular
 	effect_t_model
 	effect_t_view
 	effect_t_proj
+	effect_t_mvp
 
 
 */
@@ -36,6 +36,26 @@ namespace ballistic {
 			virtual void set_value (const mat4 & v) = 0;
 			virtual void set_value (const color & v) = 0;
 
+			virtual bool is_null ();
+
+		};
+
+		class null_constant : public iconstant {
+		public:
+
+			static null_constant instance;
+
+			virtual void set_value (uint32_t v) override;
+			virtual void set_value (int32_t v) override;
+			virtual void set_value (real v) override;
+			virtual void set_value (const vec2 & v) override;
+			virtual void set_value (const vec3 & v) override;
+			virtual void set_value (const vec4 & v) override;
+			virtual void set_value (const mat4 & v) override;
+			virtual void set_value (const color & v) override;
+
+			virtual bool is_null () override;
+
 		};
 
 		class ieffect : public ballistic::iresource {
@@ -46,8 +66,8 @@ namespace ballistic {
 			virtual uint8_t run_id () = 0;
 
 			virtual void load (
-				const string & vs_shader_source,
-				const string & fs_shader_source
+				const char * buffer,
+				uint32_t length
 			) = 0;
 
 			virtual void apply (idevice * device) = 0;

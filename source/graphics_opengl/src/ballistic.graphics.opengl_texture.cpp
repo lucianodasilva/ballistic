@@ -69,10 +69,26 @@ namespace ballistic {
 				data
 			);
 
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, convert_filter_to_gl (mag_filter_v));
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, convert_filter_to_gl (min_filter_v));
+			glEnable (GL_TEXTURE_2D);
+			glGenerateMipmap (GL_TEXTURE_2D);
+
+			_min_filter = convert_filter_to_gl (min_filter_v);
+			_mag_filter = convert_filter_to_gl (mag_filter_v);
+
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _mag_filter);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);//convert_wrap_to_gl (wrap_s_v));
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);//convert_wrap_to_gl (wrap_t_v));
+
+			// offset for better quality
+			glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -1.0F);
+			//float an = 0.0f;
+			//glGetFloatv (GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &an);
+
+			//glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, an);
+			
+			//gluBuild2DMipmaps (GL_TEXTURE_2D, 2, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			
 		}
 
 		//void opengl_texture::update_data (
@@ -90,6 +106,11 @@ namespace ballistic {
 		void opengl_texture::apply (idevice * device) {
 			glActiveTexture (GL_TEXTURE0);
 			glBindTexture (GL_TEXTURE_2D, _texture_id);
+
+			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _mag_filter);
+			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _min_filter);
+			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);//convert_wrap_to_gl (wrap_s_v));
+			//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);//convert_wrap_to_gl (wrap_t_v));
 		}
 
 	}

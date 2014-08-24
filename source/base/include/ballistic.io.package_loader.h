@@ -47,7 +47,7 @@ namespace ballistic {
 
 			virtual bool handles (const string & name);
 
-			virtual bool load (istream & source, uint32_t length, ballistic::resource_container & container);
+			virtual bool load (istream & source, uint32_t length, ballistic::resource_container & container, const id_t & id);
 
 			static istream & get_line (istream & stream, string & trim, char delimiter);
 

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "ballistic.graphics.idevice.h"
+#include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.camera.h"
 #include "ballistic.graphics.render_list.h"
 
@@ -21,6 +22,20 @@ namespace ballistic {
 
 			render_list _render_list;
 
+			ieffect *	_material_effect;
+
+			// effect constants
+			iconstant
+				* _c_effect_diffuse,
+				* _c_effect_texture,
+				* _c_effect_t_model,
+				* _c_effect_t_view,
+				* _c_effect_t_proj,
+				* _c_effect_t_normal,
+				* _c_effect_t_mvp;
+
+			ieffect *	_overlay_effect;
+
 		public:
 
 			graphics_system ();
@@ -28,10 +43,16 @@ namespace ballistic {
 			virtual id_t id ();
 
 			void device (idevice * dev);
-			idevice * device ();
+			idevice * device () const;
 
 			void camera (ballistic::graphics::camera * cam);
-			const ballistic::graphics::camera * camera ();
+			const ballistic::graphics::camera * camera () const ;
+
+			void material_effect (ieffect * effect);
+			ieffect * material_effect () const;
+
+			void overlay_effect (ieffect * effect);
+			ieffect * overlay_effect () const;
 
 			void render ();
 
@@ -41,7 +62,7 @@ namespace ballistic {
 			virtual void detach ();
 
 			// methods
-			virtual void push_item (imaterial * material, imesh * mesh, uint8_t layer, const mat4 & transform);
+			virtual void push_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
 
 		};
 				  

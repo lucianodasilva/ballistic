@@ -1,9 +1,9 @@
 #include "ballistic.graphics.render_item.h"
 
 #include "ballistic.graphics.ieffect.h"
-#include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.imesh.h"
 #include "ballistic.graphics.itexture.h"
+#include "ballistic.graphics.material.h"
 
 #include <limits>
 
@@ -45,11 +45,11 @@ namespace ballistic {
 			} byte_handler;
 
 			try {
-				if (item.material->opaque ()) {
+				if (item.material->opaque) {
 
 					byte_handler.b0 = 0;
-					byte_handler.b1 = item.material->effect ()->run_id ();
-					byte_handler.b2 = item.material->texture ()->run_id ();
+					byte_handler.b1 = 0;
+					byte_handler.b2 = item.material->texture->run_id ();
 					byte_handler.b3 = item.mesh->run_id ();
 
 				} else {
@@ -59,8 +59,7 @@ namespace ballistic {
 					uint16_t depth = camera->depth (item.transform);
 					*((uint16_t *)&byte_handler.b1) = depth;
 
-					byte_handler.b3 =
-						item.material->effect ()->run_id ();
+					byte_handler.b3 = 0;
 
 				}
 

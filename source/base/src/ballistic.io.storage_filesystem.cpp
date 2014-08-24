@@ -13,13 +13,13 @@ namespace ballistic {
 			return !ifstream (path).fail ();
 		}
 
-		bool storage_filesystem::load (iloader * loader, const string & path, ballistic::resource_container & container) {
+		bool storage_filesystem::load (iloader * loader, const string & path, ballistic::resource_container & container, const id_t & id) {
 			ifstream file_stream (path, ios::in | ios::binary | ios::ate);
 
 			uint32_t length = file_stream.tellg ();
 			file_stream.seekg (ios::beg);
 
-			return loader->load (file_stream, length, container);
+			return loader->load (file_stream, length, container, id);
 		}
 	}
 }

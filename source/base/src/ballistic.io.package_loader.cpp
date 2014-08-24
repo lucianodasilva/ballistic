@@ -33,7 +33,7 @@ namespace ballistic {
 			_registered_types [reader->type ()] = reader;
 		}
 
-		bool package_loader::load (istream & source, uint32_t length, ballistic::resource_container & container)
+		bool package_loader::load (istream & source, uint32_t length, ballistic::resource_container & container, const id_t & id)
 		{
 			XMLDocument document;
 

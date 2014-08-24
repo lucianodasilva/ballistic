@@ -2,8 +2,8 @@
 #include "ballistic.graphics.common_id.h"
 #include "ballistic.graphics.graphics_system.h"
 
-#include "ballistic.graphics.imaterial.h"
 #include "ballistic.graphics.imesh.h"
+#include "ballistic.graphics.material.h"
 
 #include "ballistic.graphics.iraster_font.h"
 

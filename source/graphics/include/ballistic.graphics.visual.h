@@ -17,7 +17,7 @@ namespace ballistic {
 
 			property < mat4 > *			_transform;
 
-			property < imaterial * > *	_material;
+			property < material * > *	_material;
 			property < imesh * > *		_mesh;
 
 			property < uint8_t > *		_layer;

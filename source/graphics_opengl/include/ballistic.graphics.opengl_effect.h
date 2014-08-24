@@ -79,8 +79,8 @@ namespace ballistic {
 			virtual uint8_t run_id ();
 			
 			virtual void load (
-				const string & vs_shader_source,
-				const string & fs_shader_source
+				const char * buffer,
+				uint32_t length
 			);
 			
 			virtual void apply (idevice * device);

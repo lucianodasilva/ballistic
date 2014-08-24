@@ -24,7 +24,7 @@ namespace ballistic {
 
 			virtual bool handles (const string & name) = 0;
 
-			virtual bool load (istream & source, uint32_t length, ballistic::resource_container & container) = 0;
+			virtual bool load (istream & source, uint32_t length, ballistic::resource_container & container, const id_t & id) = 0;
 
 			virtual ~iloader () {};
 

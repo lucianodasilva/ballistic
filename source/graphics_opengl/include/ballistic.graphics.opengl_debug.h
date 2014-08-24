@@ -13,9 +13,15 @@ using namespace std;
 namespace ballistic {
 	namespace graphics {
 
-#		define gl_shader_source(x) \
-			"#version 330 core\n" \
-			#x
+#		define gl_vshader_source(vertex) \
+			"#ifdef VERTEX_SHADER\n"\
+			#vertex\
+			"\n#endif\n"
+
+#		define gl_fshader_source(fragment) \
+			"#ifdef FRAGMENT_SHADER\n"\
+			#fragment\
+			"\n#endif\n"
 
 #ifdef BALLISTIC_DEBUG
 
@@ -68,8 +74,7 @@ namespace ballistic {
 			static ballistic::graphics::opengl_effect	_effect;
 			static ballistic::graphics::iconstant *		_color_uniform;
 
-			static string _vs_source;
-			static string _fs_source;
+			static const char * _shader_source;
 
 			static GLuint
 				_vao_id,

@@ -13,7 +13,6 @@ namespace ballistic {
 	namespace graphics {
 
 		class opengl_effect;
-		class opengl_material;
 		class opengl_mesh;
 		class opengl_texture;
 		
@@ -29,7 +28,6 @@ namespace ballistic {
 			atomic <unsigned char> _texture_run_id;
 
 			opengl_effect *		_effect;
-			opengl_material *	_material;
 			opengl_mesh *		_mesh;
 			opengl_texture *	_texture;
 
@@ -47,12 +45,10 @@ namespace ballistic {
 			opengl_device ();
 			
 			virtual ieffect *	create_effect (const id_t & id);
-			virtual imaterial * create_material(const id_t & id);
 			virtual imesh *		create_mesh (const id_t & id);
 			virtual itexture *	create_texture (const id_t & id);
 
 			virtual void		activate (ieffect * effect);
-			virtual void		activate (imaterial * material);
 			virtual void		activate (imesh * mesh);
 			virtual void		activate (itexture * texture);
 
@@ -61,16 +57,6 @@ namespace ballistic {
 			
 			virtual void		clear_color ( const color & cr );
 			virtual color		clear_color() const;
-
-			virtual void 		set_view (const mat4 & view);
-
-			virtual void		set_model (const mat4 & model);
-
-			virtual void		set_proj (const mat4 & proj);
-
-			virtual void		set_mvp(const mat4 & mvp);
-			
-			virtual void		set_normal (const mat4 & norm);
 
 			virtual void		clear ();
 

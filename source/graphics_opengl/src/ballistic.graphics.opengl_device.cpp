@@ -3,7 +3,6 @@
 #include <GL/glew.h>
 #include "ballistic.graphics.opengl_debug.h"
 #include "ballistic.graphics.opengl_effect.h"
-#include "ballistic.graphics.opengl_material.h"
 #include "ballistic.graphics.opengl_mesh.h"
 #include "ballistic.graphics.opengl_texture.h"
 
@@ -16,7 +15,6 @@ namespace ballistic {
 			_effect_run_id (0),
 			_mesh_run_id (0),
 			_effect (nullptr),
-			_material (nullptr),
 			_mesh (nullptr)
 		{
 
@@ -59,10 +57,6 @@ namespace ballistic {
 		ieffect * opengl_device::create_effect (const id_t & id) {
 			return new opengl_effect (id, ++_effect_run_id);
 		}
-
-		imaterial * opengl_device::create_material (const id_t & id) {
-			return new opengl_material(id);
-		}
 		
 		imesh *	opengl_device::create_mesh (const id_t & id)
 		{
@@ -82,20 +76,6 @@ namespace ballistic {
 
 			_effect = reinterpret_cast <opengl_effect *> (effect);
 			_effect->apply (this);
-
-			// get constants
-			_gl_const_model = _effect->constant (id::graphics::effect::t_model);
-			_gl_const_view = _effect->constant (id::graphics::effect::t_view);
-			_gl_const_proj = _effect->constant (id::graphics::effect::t_proj);
-			_gl_const_mvp = _effect->constant (id::graphics::effect::t_mvp);
-			_gl_const_normal = _effect->constant (id::graphics::effect::t_normal);
-			
-			_gl_const_diffuse = _effect->constant (id::graphics::effect::diffuse);
-		}
-
-		void opengl_device::activate (imaterial * material) {
-			_material = reinterpret_cast <opengl_material *>(material);
-			_material->apply (this);
 		}
 
 		void opengl_device::activate (imesh * mesh) {
@@ -131,31 +111,6 @@ namespace ballistic {
 			return _clear_color;
 		}
 
-		void opengl_device::set_view (const mat4 & view) {
-			if (_gl_const_view)
-				_gl_const_view->set_value(view);
-		}
-
-		void opengl_device::set_model (const mat4 & model) {
-			if (_gl_const_model)
-				_gl_const_model->set_value(model);
-		}
-
-		void opengl_device::set_proj (const mat4 & proj) {
-			if (_gl_const_proj)
-				_gl_const_proj->set_value(proj);
-		}
-
-		void opengl_device::set_mvp(const mat4 & mvp) {
-			if (_gl_const_mvp)
-				_gl_const_mvp->set_value(mvp);
-		}
-		
-		void opengl_device::set_normal (const mat4 & norm) {
-			if (_gl_const_normal)
-				_gl_const_normal->set_value(norm);
-		}
-
 		void opengl_device::clear () {
 			glClearColor (
 				_clear_color.r,
@@ -188,10 +143,6 @@ namespace ballistic {
 		}
 
 		void opengl_device::draw_active_mesh () {
-			if (!_material) {
-				debug_error ("draw_active_mesh: No active instance of material set.");
-				return;
-			}
 
 			if (!_effect) {
 				debug_error ("render_mesh: No active instance of effect set.");
@@ -202,6 +153,7 @@ namespace ballistic {
 				debug_error ("render_mesh: No active instance of mesh set.");
 				return;
 			}
+
 			_mesh->render ();
 		}
 

@@ -18,7 +18,7 @@ namespace ballistic {
 			
 			if (storage) {
 				package_loader loader;
-				storage->load (&loader, source, container);
+				storage->load (&loader, source, container, id::null);
 			}
 
 		}

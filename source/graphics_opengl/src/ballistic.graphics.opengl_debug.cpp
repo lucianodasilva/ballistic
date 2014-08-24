@@ -79,7 +79,8 @@ namespace ballistic {
 
 		// ------------------------------------------------
 
-		string opengl_debug::_vs_source = gl_shader_source (
+		const char * opengl_debug::_shader_source = 
+		gl_vshader_source (
 			layout (location = 0) in vec3	in_position;
 			uniform vec4					in_color;
 
@@ -90,12 +91,11 @@ namespace ballistic {
 				gl_Position.w = 1.0;
 				var_color = in_color;
 			}
-		);
-
-		string opengl_debug::_fs_source = gl_shader_source (
+		)
+		gl_fshader_source (
 			in vec4 var_color;
 			out vec4 out_color;
-			
+
 			void main () {
 				out_color = var_color;
 			}
@@ -110,7 +110,7 @@ namespace ballistic {
 		void opengl_debug::initialize () {
 			gl_eval_scope(opengl_debug::initialize);
 			
-			_effect.load (_vs_source, _fs_source);
+			_effect.load (_shader_source, strlen (_shader_source));
 			_color_uniform = _effect.constant(text_to_id("in_color"));
 
 			// --- create vector array

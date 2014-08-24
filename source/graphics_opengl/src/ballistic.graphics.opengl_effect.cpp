@@ -77,12 +77,18 @@ namespace ballistic {
 		uint8_t opengl_effect::run_id () { return _run_id; }
 		
 		void opengl_effect::load (
-			const string & vs_shader_source,
-			const string & fs_shader_source
+			const char * buffer, uint32_t length
 		){
 			gl_eval_scope(opengl_effect::load);
 			
 			_shader_program_id = glCreateProgram ();
+
+			std::string
+				vs_shader_source = "#version 330 core\n#define VERTEX_SHADER 1\n",
+				fs_shader_source = "#version 330 core\n#define FRAGMENT_SHADER 1\n";
+
+			vs_shader_source.append (buffer, length);
+			fs_shader_source.append (buffer, length);
 			
 			GLint
 				_vs_shader_id = glCreateShader (GL_VERTEX_SHADER),
@@ -114,7 +120,6 @@ namespace ballistic {
 				_shader_program_id = -1;
 			}
 			
-			// TODO: rebuild discoverability
 			// Discover uniforms
 			int total = -1;
 			glGetProgramiv (_shader_program_id, GL_ACTIVE_UNIFORMS, &total);
@@ -148,10 +153,10 @@ namespace ballistic {
 
 		iconstant * opengl_effect::constant(const id_t & id) {
 			auto it = _constants.find(id);
-			if (it != _constants.end())
+			if (it != _constants.end ())
 				return it->second;
 			else
-				return nullptr;
+				return &null_constant::instance;
 		}
 
 		const map < id_t, iconstant * > & opengl_effect::constants () const {

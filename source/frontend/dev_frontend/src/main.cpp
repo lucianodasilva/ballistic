@@ -41,6 +41,8 @@ ballistic::graphics::idevice * create_device () {
 ballistic::res_id_t res_cube ("cube.entity", "resources/test_anim.xml");
 ballistic::res_id_t res_camera ("camera.entity", "resources/test_anim.xml");
 
+ballistic::res_id_t res_default_material ("default_material.effect", "resources/default_material.fx");
+
 // -----------
 class box_brain : public ballistic::component {
 private:
@@ -110,7 +112,7 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{400, 400});
+	_frontend = create_frontend (point{800, 800});
 	_frontend->create ();
 	_frontend->show ();
 
@@ -130,6 +132,7 @@ int main ( int argc, char ** argv) {
 
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->device (_device);
+	graphics->material_effect (g.resources [res_default_material]);
 
 	g.systems.attach (graphics);
 

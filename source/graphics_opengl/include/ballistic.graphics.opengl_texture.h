@@ -15,11 +15,11 @@ namespace ballistic {
 
 			uint8_t _run_id;
 
-			texture_wrap
+			GLint
 				_wrap_s,
 				_wrap_t;
 
-			texture_filter
+			GLint
 				_mag_filter,
 				_min_filter;
 

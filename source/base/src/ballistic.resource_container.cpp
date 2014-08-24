@@ -134,7 +134,7 @@ namespace ballistic {
 		// search for container
 		for (io::istorage * storage : _storage_handlers) {
 			if (storage->contains(res_id.source ())) {
-				if (storage->load (loader, res_id.source (), *this))     {
+				if (storage->load (loader, res_id.source (), *this, res_id.id ()))     {
 					return get_resource(res_id.id ());
 				}
 			}

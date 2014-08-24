@@ -2,7 +2,7 @@
 #include "ballistic.graphics.common_id.h"
 #include "ballistic.graphics.graphics_system.h"
 
-#include "ballistic.graphics.imaterial.h"
+#include "ballistic.graphics.material.h"
 #include "ballistic.graphics.imesh.h"
 
 namespace ballistic {
@@ -15,7 +15,7 @@ namespace ballistic {
 			new_type->properties.require < id_t > (id::graphics::material_id, id::null);
 			new_type->properties.require < id_t > (id::graphics::mesh_id, id::null);
 
-			new_type->properties.require < imaterial * > (id::graphics::material, nullptr);
+			new_type->properties.require < material * > (id::graphics::material, nullptr);
 			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
 
 			new_type->properties.require < uint8_t > (id::graphics::layer, 0);
@@ -31,7 +31,7 @@ namespace ballistic {
 
 			_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
 
-			_material = parent->properties.aquire < imaterial * > (
+			_material = parent->properties.aquire < material * > (
 				id::graphics::material
 			);
 
@@ -44,7 +44,7 @@ namespace ballistic {
 			if (!*_material)
 				*_material = game::instance.resources [
 					parent->properties [id::graphics::material_id].as < id_t >()
-				].as < imaterial > () ;
+				].as < material > () ;
 
 			if (!*_mesh)
 				*_mesh = game::instance.resources [
@@ -67,23 +67,20 @@ namespace ballistic {
 
 		void visual::notify ( entity * sender, ballistic::message & message ) {
 
-			imaterial * material = *_material;
+			material * mat = *_material;
 			imesh * mesh = *_mesh;
 
-
-
-			if (!material) {
+			if (!mat) {
 				debug_print ("missing material instance. will not render");
 				return;
 			}
 
 			if (
 				_system &&
-				material &&
-				material->effect () &&
+				mat &&
 				mesh
 			){
-				_system->push_item (material, mesh, *_layer, *_transform);
+				_system->push_item (mat, mesh, *_layer, *_transform);
 			} else {
 				debug_print ("incomplete visual component. will not render!");
 			}
