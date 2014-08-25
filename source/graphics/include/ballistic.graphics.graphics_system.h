@@ -14,7 +14,8 @@ namespace ballistic {
 
 		class graphics_system : public ballistic::isystem {
 		private:
-			message		_render_message;
+			message
+				_render_message;
 
 			idevice *	_device;
 			camera	*	_camera;
@@ -53,7 +54,7 @@ namespace ballistic {
 			void overlay_effect (ieffect * effect);
 			ieffect * overlay_effect () const;
 
-			void render ();
+			void render();
 
 			virtual void notify ( entity * sender, ballistic::message & message );
 

@@ -31,6 +31,17 @@ namespace ballistic {
 			//	_b3 = material;
 			//}
 
+			/*
+			
+			change to:
+
+			0 - 0			| 1 ( default = 0, overlays = 1)
+			1 - layers		| 128 + layers ( 128 = 1 bit for transparent )
+			2 - texture id	| Distance from
+			3 - mesh id		| Camera
+			
+			*/
+
 			union {
 
 				uint32_t uint_value;
@@ -41,7 +52,6 @@ namespace ballistic {
 					uint8_t b2;
 					uint8_t b3;
 				};
-
 			} byte_handler;
 
 			try {
@@ -54,7 +64,7 @@ namespace ballistic {
 
 				} else {
 
-					byte_handler.b0 = 1;
+					byte_handler.b0 = 128; // binary mask - 1000 0000
 
 					uint16_t depth = camera->depth (item.transform);
 					*((uint16_t *)&byte_handler.b1) = depth;
@@ -66,6 +76,7 @@ namespace ballistic {
 				byte_handler.b0 += item.layer;
 
 				item.bucket = byte_handler.uint_value;
+
 			} catch (...) {
 				debug_error ("render_item::set_render_bucket unable to properly calculate render bucket id.");
 				item.bucket = 0;

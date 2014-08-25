@@ -75,6 +75,7 @@ namespace ballistic {
 
 		namespace message {
 			define_id_ext (render, message.render);
+			define_id_ext (render_overlay, message.render_overlay);
 		}
 
 	}

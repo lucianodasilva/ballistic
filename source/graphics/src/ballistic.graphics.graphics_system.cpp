@@ -162,8 +162,8 @@ namespace ballistic {
 
 			}
 
-			// TODO: Have similar loop for overlays (2D stuffs)
-			// TODO: And text
+			// render overlays
+			_render_list.clear();
 
 			_device->end_frame ();
 			_device->present ();
