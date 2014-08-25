@@ -39,9 +39,11 @@ ballistic::graphics::idevice * create_device () {
 #endif
 
 ballistic::res_id_t res_cube ("cube.entity", "resources/test_anim.xml");
+ballistic::res_id_t res_overlay ("overlay.entity", "resources/test_anim.xml");
 ballistic::res_id_t res_camera ("camera.entity", "resources/test_anim.xml");
 
 ballistic::res_id_t res_default_material ("default_material.effect", "resources/default_material.fx");
+ballistic::res_id_t res_overlay_material ("overlay_material.effect", "resources/overlay_material.fx");
 
 // -----------
 class box_brain : public ballistic::component {
@@ -133,12 +135,14 @@ int main ( int argc, char ** argv) {
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->device (_device);
 	graphics->material_effect (g.resources [res_default_material]);
+	graphics->overlay_effect (g.resources [res_overlay_material]);
 
 	g.systems.attach (graphics);
 
 	// create entities
 	g.entities.create (res_camera);
 	game::instance.entities.create (res_cube);
+	game::instance.entities.create (res_overlay);
 
 	// initialize
 	g.initialize ();

@@ -14,6 +14,9 @@ namespace ballistic {
 
 		class graphics_system : public ballistic::isystem {
 		private:
+
+			static const uint32_t overlay_offset;
+
 			message
 				_render_message;
 
@@ -35,6 +38,18 @@ namespace ballistic {
 				* _c_effect_t_mvp;
 
 			ieffect *	_overlay_effect;
+
+			// overlay constants
+			iconstant
+				* _c_overlay_diffuse,
+				* _c_overlay_texture,
+				* _c_overlay_t_model;
+
+			bool _can_render;
+
+			void evaluate_render ();
+
+			void report_render_fail ();
 
 		public:
 
@@ -63,6 +78,7 @@ namespace ballistic {
 
 			// methods
 			virtual void push_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
+			virtual void push_overlay_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
 
 		};
 				  

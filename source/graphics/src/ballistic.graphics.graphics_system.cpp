@@ -8,6 +8,31 @@
 namespace ballistic {
 	namespace graphics {
 
+		const uint32_t graphics_system::overlay_offset = 0x01000000;
+
+		void graphics_system::evaluate_render () {
+			_can_render =
+				_device &&
+				_camera &&
+				_material_effect &&
+				_overlay_effect;
+		}
+
+		void graphics_system::report_render_fail () {
+			if (!_device)
+				debug_error ("graphics device not set! will not render");
+
+			if (!_camera) 
+				debug_error ("active camera not set! will not render");
+
+			if (!_material_effect)
+				debug_error ("no active material effect! will not render");
+
+			if (!_overlay_effect)
+				debug_error ("no active overlay effect! will not render");
+
+		}
+
 		id_t graphics_system::id () {
 			return ballistic::id::graphics::system;
 		}
@@ -27,11 +52,18 @@ namespace ballistic {
 			_c_effect_t_normal (&null_constant::instance),
 			_c_effect_t_mvp (&null_constant::instance),
 
-			_overlay_effect (nullptr)
+			_overlay_effect (nullptr),
+
+			_c_overlay_diffuse (&null_constant::instance),
+			_c_overlay_texture (&null_constant::instance),
+			_c_overlay_t_model (&null_constant::instance),
+
+			_can_render (false)
 		{}
 
 		void graphics_system::device ( idevice * dev ) {
 			_device = dev;
+			evaluate_render ();
 		}
 
 		idevice * graphics_system::device () const {
@@ -40,6 +72,7 @@ namespace ballistic {
 
 		void graphics_system::camera (ballistic::graphics::camera * cam) {
 			_camera = cam;
+			evaluate_render ();
 		}
 
 		const ballistic::graphics::camera * graphics_system::camera () const {
@@ -59,6 +92,8 @@ namespace ballistic {
 			_c_effect_t_proj = _material_effect->constant (id::graphics::effect::t_proj);
 			_c_effect_t_normal = _material_effect->constant (id::graphics::effect::t_normal);
 			_c_effect_t_mvp = _material_effect->constant (id::graphics::effect::t_mvp);
+
+			evaluate_render ();
 		}
 
 		ieffect * graphics_system::material_effect () const {
@@ -67,6 +102,15 @@ namespace ballistic {
 
 		void graphics_system::overlay_effect (ieffect * effect) {
 			_overlay_effect = effect;
+
+			if (!_material_effect)
+				return;
+
+			_c_overlay_diffuse = _overlay_effect->constant (id::graphics::effect::diffuse);
+			_c_overlay_texture = _overlay_effect->constant (id::graphics::effect::texture);
+			_c_overlay_t_model = _overlay_effect->constant (id::graphics::effect::t_model);
+
+			evaluate_render ();
 		}
 
 		ieffect * graphics_system::overlay_effect () const {
@@ -75,6 +119,11 @@ namespace ballistic {
 
 		void graphics_system::render () {
 			
+			if (!_can_render) {
+				report_render_fail ();
+				return;
+			}
+
 			mat4
 				m_v,
 				m_vp,
@@ -82,21 +131,6 @@ namespace ballistic {
 				m_mvp,
 				m_n;
 
-			if (!_device) {
-				debug_error ("graphics device not set! will not render");
-				return;
-			}
-
-			if (!_camera) {
-				debug_error ("active camera not set! will not render");
-				return;
-			}
-
-			if (!_material_effect) {
-				debug_error ("no active material effect! will not render");
-				return;
-			}
-			
 			m_v = _camera->view ();
 			m_vp = m_v * _camera->proj();
 
@@ -111,7 +145,6 @@ namespace ballistic {
 			_device->begin_frame ();
 
 			// render loop ---------------------------
-			uint32_t render_count = _render_list.size ();
 			material * material = nullptr;
 			imesh * mesh = nullptr;
 			itexture * texture = nullptr;
@@ -124,9 +157,16 @@ namespace ballistic {
 			// least changing properties
 			_c_effect_t_view->set_value (m_v);
 			_c_effect_t_proj->set_value (_camera->proj ());
-
-			for (uint32_t i = 0; i < render_count; ++i) {
-				render_item & item = _render_list [i];
+				   
+			uint32_t render_count = _render_list.size ();
+			uint32_t render_index = 0;
+			uint32_t render_bucket = 0;
+			
+			// material loop
+			while (render_index < render_count && render_bucket < overlay_offset)
+			{
+				render_item & item = _render_list [render_index];
+				render_bucket = item.bucket;
 
 				if (item.material != material) {
 					material = item.material;
@@ -160,9 +200,53 @@ namespace ballistic {
 				// render the stuffs
 				_device->draw_active_mesh ();
 
+				++render_index;
 			}
 
-			// render overlays
+			// overlay render setup
+			material = nullptr;
+			mesh = nullptr;
+			texture = nullptr;
+
+			alpha_blend = false;
+
+			// activate material effect
+			_device->activate (_overlay_effect);
+
+			// overlay loop
+			while (render_index < render_count) {
+				render_item & item = _render_list [render_index];
+
+				if (item.material != material) {
+					material = item.material;
+					_c_overlay_diffuse->set_value (material->diffuse);
+				}
+
+				if (item.material->texture != texture) {
+					texture = item.material->texture;
+					_device->activate (texture);
+				}
+
+				if (item.material->opaque != alpha_blend) {
+					alpha_blend = true;
+					_device->alpha_blend (true);
+				}
+
+				if (item.mesh != mesh) {
+					mesh = item.mesh;
+					_device->activate (mesh);
+				}
+
+				// update model
+				_c_overlay_t_model->set_value (item.transform);
+
+				// render the stuffs
+				_device->draw_active_mesh ();
+
+				++render_index;
+			}
+
+			// r-----------------------
 			_render_list.clear();
 
 			_device->end_frame ();
@@ -191,7 +275,19 @@ namespace ballistic {
 			item.transform = transform;
 			item.layer = layer;
 
-			render_item::set_render_bucket (item, _camera);
+			render_item::set_render_bucket (item, _camera, 0x0);
+		}
+
+		void graphics_system::push_overlay_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform) {
+			render_item & item = _render_list.reserve_item ();
+
+			item.material = material;
+			item.mesh = mesh;
+			item.transform = transform;
+			item.layer = layer;
+
+			// 0x01000000 - overlay offset
+			render_item::set_render_bucket (item, _camera, overlay_offset);
 		}
 
 	}

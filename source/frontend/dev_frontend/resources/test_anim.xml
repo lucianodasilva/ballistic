@@ -30,7 +30,6 @@
   -->
   
   <texture name="cube.texture" min_filter="linear" mag_filter="linear" file="resources/box.png"/>
-
 	<material name="cube.material" diffuse="0.800000,0.800000,0.800000,1." opaque="false" texture="cube.texture" />
 	
    <mesh name="cube.mesh">
@@ -145,6 +144,16 @@
     <graphics.visual/>
     <animation storyboard_id="cube.animation"/>
     <box_brain/>
+  </entity_type>
+  
+  <entity_type name="overlay.entity"
+               transform.position="0.1, 0.1, 0.1"
+               transform.scale="1, 1, 1"
+               graphics.material.id="cube.material"
+               graphics.mesh.id="graphics.mesh_quad_one"
+  >
+    <transform/>
+    <graphics.overlay/>
   </entity_type>
 
 </package>

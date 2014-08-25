@@ -13,7 +13,7 @@ namespace ballistic {
 		class graphics_system;
 
 		class visual : public ballistic::component {
-		private:
+		protected:
 
 			property < mat4 > *			_transform;
 

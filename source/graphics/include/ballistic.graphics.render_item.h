@@ -25,7 +25,7 @@ namespace ballistic {
 
 			render_item ();
 
-			static void set_render_bucket (render_item & item, camera * camera);
+			static void set_render_bucket (render_item & item, camera * camera, uint32_t offset );
 
 		};
 

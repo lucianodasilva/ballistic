@@ -16,7 +16,7 @@ namespace ballistic {
 			bucket (std::numeric_limits < render_bucket >::max ())
 		{}
 
-		void render_item::set_render_bucket (render_item & item, camera * camera) {
+		void render_item::set_render_bucket (render_item & item, camera * camera, uint32_t offset) {
 
 			//// set layer
 			//_b0 = (layer << 1);
@@ -64,18 +64,17 @@ namespace ballistic {
 
 				} else {
 
-					byte_handler.b0 = 128; // binary mask - 1000 0000
+					byte_handler.b0 = 0;
+					byte_handler.b1 = 128; // binary mask - 1000 0000
 
 					uint16_t depth = camera->depth (item.transform);
-					*((uint16_t *)&byte_handler.b1) = depth;
-
-					byte_handler.b3 = 0;
+					*((uint16_t *)&byte_handler.b2) = depth;
 
 				}
 
-				byte_handler.b0 += item.layer;
+				byte_handler.b1 += item.layer;
 
-				item.bucket = byte_handler.uint_value;
+				item.bucket = byte_handler.uint_value + offset;
 
 			} catch (...) {
 				debug_error ("render_item::set_render_bucket unable to properly calculate render bucket id.");
