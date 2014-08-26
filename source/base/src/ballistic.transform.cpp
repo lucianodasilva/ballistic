@@ -33,8 +33,11 @@ namespace ballistic {
 
 	void transform::notify (ballistic::entity * sender, ballistic::message & message) {
 		*_transform =
-			mat4::make_translation (*_position)	*
-			((quat)*_rotation).to_matrix ()	*
-			mat4::make_scale (*_scale);
+			//mat4::make_translation (*_position)	*
+			//((quat)*_rotation).to_matrix ()	*
+			//mat4::make_scale (*_scale);
+
+			mat4::make_scale(*_scale) *
+			mat4::make_translation(*_position);
 	}
 }

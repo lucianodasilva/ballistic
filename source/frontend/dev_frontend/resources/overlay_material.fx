@@ -11,10 +11,7 @@ out vec2            var_uv;
 void main () {
 
 	var_uv = in_uv;
-	// opengl invert texture
-	var_uv.y = 1.0 - var_uv.y;
 
-	// invert position
 	vec4 pos = effect_t_model * vec4 (in_position.xyz, 1.0);
 
 	gl_Position = pos;

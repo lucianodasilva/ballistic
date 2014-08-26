@@ -160,13 +160,14 @@ namespace ballistic {
 				   
 			uint32_t render_count = _render_list.size ();
 			uint32_t render_index = 0;
-			uint32_t render_bucket = 0;
-			
+
 			// material loop
-			while (render_index < render_count && render_bucket < overlay_offset)
+			while (render_index < render_count)
 			{
+
 				render_item & item = _render_list [render_index];
-				render_bucket = item.bucket;
+				if (item.bucket > overlay_offset)
+					break;
 
 				if (item.material != material) {
 					material = item.material;
@@ -176,6 +177,7 @@ namespace ballistic {
 				if (item.material->texture != texture) {
 					texture = item.material->texture;
 					_device->activate (texture);
+					_c_effect_texture->set_value(0);
 				}
 
 				if (item.material->opaque != alpha_blend) {
@@ -209,6 +211,7 @@ namespace ballistic {
 			texture = nullptr;
 
 			alpha_blend = false;
+			_device->alpha_blend(false);
 
 			// activate material effect
 			_device->activate (_overlay_effect);
@@ -225,6 +228,7 @@ namespace ballistic {
 				if (item.material->texture != texture) {
 					texture = item.material->texture;
 					_device->activate (texture);
+					_c_overlay_texture->set_value(0);
 				}
 
 				if (item.material->opaque != alpha_blend) {

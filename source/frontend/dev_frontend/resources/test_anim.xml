@@ -147,8 +147,8 @@
   </entity_type>
   
   <entity_type name="overlay.entity"
-               transform.position="0.1, 0.1, 0.1"
-               transform.scale="1, 1, 1"
+               transform.position="0.25, 0.25, 0.25"
+               transform.scale="0.75, 0.75, 0.75"
                graphics.material.id="cube.material"
                graphics.mesh.id="graphics.mesh_quad_one"
   >

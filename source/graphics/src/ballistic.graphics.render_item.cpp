@@ -35,10 +35,10 @@ namespace ballistic {
 			
 			change to:
 
-			0 - 0			| 1 ( default = 0, overlays = 1)
-			1 - layers		| 128 + layers ( 128 = 1 bit for transparent )
-			2 - texture id	| Distance from
-			3 - mesh id		| Camera
+			3 - 0			| 1 ( default = 0, overlays = 1)
+			2 - layers		| 128 + layers ( 128 = 1 bit for transparent )
+			1 - texture id	| Distance from
+			0 - mesh id		| Camera
 			
 			*/
 
@@ -57,22 +57,22 @@ namespace ballistic {
 			try {
 				if (item.material->opaque) {
 
-					byte_handler.b0 = 0;
-					byte_handler.b1 = 0;
-					byte_handler.b2 = item.material->texture->run_id ();
-					byte_handler.b3 = item.mesh->run_id ();
+					byte_handler.b3 = 0;
+					byte_handler.b2 = 0;
+					byte_handler.b1 = item.material->texture->run_id ();
+					byte_handler.b0 = item.mesh->run_id ();
 
 				} else {
 
-					byte_handler.b0 = 0;
-					byte_handler.b1 = 128; // binary mask - 1000 0000
+					byte_handler.b3 = 0;
+					byte_handler.b2 = 128; // binary mask - 1000 0000
 
 					uint16_t depth = camera->depth (item.transform);
-					*((uint16_t *)&byte_handler.b2) = depth;
+					*((uint16_t *)&byte_handler.b1) = depth;
 
 				}
 
-				byte_handler.b1 += item.layer;
+				byte_handler.b2 += item.layer;
 
 				item.bucket = byte_handler.uint_value + offset;
 
