@@ -17,7 +17,9 @@ namespace ballistic {
 
 		enum texture_filter {
 			texture_filter_nearest,
-			texture_filter_linear
+			texture_filter_linear,
+			texture_filter_linear_mipmap_nearest,
+			texture_filter_linear_mipmap_linear
 		};
 
 		enum texture_format {

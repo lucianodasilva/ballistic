@@ -17,7 +17,7 @@ namespace ballistic {
 			new_type->properties.require_notify < std::string > (id::graphics::graphics_text, "");
 		}
 
-		const id_t overlay_text::component_id = ballistic::id::graphics::overlay;
+		const id_t overlay_text::component_id = ballistic::id::graphics::overlay_text;
 
 		overlay_text::overlay_text ()
 			:

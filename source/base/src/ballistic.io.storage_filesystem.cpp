@@ -3,6 +3,10 @@
 
 #include <fstream>
 
+#ifdef BALLISTIC_OS_DARWIN
+#	include <sys/stat.h>
+#endif
+
 namespace ballistic {
 	namespace io {
 

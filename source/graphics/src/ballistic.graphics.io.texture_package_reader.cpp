@@ -28,6 +28,10 @@ namespace ballistic {
 					return texture_filter_nearest;
 				else if (strcmp (value, "linear") == 0)
 					return texture_filter_linear;
+				else if (strcmp (value, "linear_mipmap_nearest") == 0)
+					return texture_filter_linear_mipmap_nearest;
+				else if (strcmp (value, "linear_mipmap_linear") == 0)
+					return texture_filter_linear_mipmap_linear;
 				else {
 					debug_print ("unknown texture filter value \"" << value << "\". defaulted to nearest");
 					return texture_filter_nearest;

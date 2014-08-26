@@ -5,7 +5,11 @@ namespace ballistic {
 	namespace graphics {
 
 		GLint opengl_texture::convert_filter_to_gl (const texture_filter & v) {
-			if ( v == texture_filter_nearest )
+			if ( v == texture_filter_linear_mipmap_linear)
+				return GL_LINEAR_MIPMAP_LINEAR;
+			else if ( v == texture_filter_linear_mipmap_nearest)
+				return GL_LINEAR_MIPMAP_NEAREST;
+			else if ( v == texture_filter_nearest )
 				return GL_NEAREST;
 			else
 				return GL_LINEAR;
@@ -56,7 +60,7 @@ namespace ballistic {
 			
 			// activate texture
 			glBindTexture (GL_TEXTURE_2D, _texture_id);
-
+		 
 			glTexImage2D (
 				GL_TEXTURE_2D,
 				0,
@@ -69,7 +73,7 @@ namespace ballistic {
 				data
 			);
 
-			glEnable (GL_TEXTURE_2D);
+			//glEnable (GL_TEXTURE_2D);
 			glGenerateMipmap (GL_TEXTURE_2D);
 
 			_min_filter = convert_filter_to_gl (min_filter_v);
@@ -77,21 +81,15 @@ namespace ballistic {
 			
 			_wrap_s = convert_wrap_to_gl (wrap_s_v);
 			_wrap_t = convert_wrap_to_gl (wrap_t_v);
-
+		 
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _mag_filter);
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _min_filter);
+
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrap_s);
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrap_t);
 
 			// offset for better quality
 			glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -1.0F);
-			//float an = 0.0f;
-			//glGetFloatv (GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &an);
-
-			//glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, an);
-			
-			//gluBuild2DMipmaps (GL_TEXTURE_2D, 2, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-			
 		}
 
 		//void opengl_texture::update_data (

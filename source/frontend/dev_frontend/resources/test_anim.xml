@@ -29,9 +29,11 @@
   </trigger_storyboard>
   -->
   
-  <texture name="cube.texture" min_filter="linear" mag_filter="linear" file="resources/box.png"/>
+	<texture name="cube.texture" min_filter="linear_mipmap_linear" mag_filter="linear" file="resources/box.png"/>
 	<material name="cube.material" diffuse="0.800000,0.800000,0.800000,1." opaque="false" texture="cube.texture" />
-	
+	<texture name="evil.texture" min_filter="linear_mipmap_linear" mag_filter="linear" file="resources/evil_monkey.png"/>
+	<material name="evil.material" diffuse="0.800000,0.800000,0.800000,1." opaque="true" texture="evil.texture" />
+
    <mesh name="cube.mesh">
 		<position>
       1.000000,1.000000,-1.000000,
@@ -149,7 +151,7 @@
   <entity_type name="overlay.entity"
                transform.position="0.25, 0.25, 0.25"
                transform.scale="0.75, 0.75, 0.75"
-               graphics.material.id="cube.material"
+               graphics.material.id="evil.material"
                graphics.mesh.id="graphics.mesh_quad_one"
   >
     <transform/>
