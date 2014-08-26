@@ -5,6 +5,7 @@
 #include "ballistic.graphics.graphics_system.h"
 #include "ballistic.graphics.visual.h"
 #include "ballistic.graphics.overlay.h"
+#include "ballistic.graphics.overlay_text.h"
 
 #include "ballistic.graphics.io.effect_loader.h"
 #include "ballistic.graphics.io.material_package_reader.h"
@@ -24,6 +25,7 @@ namespace ballistic {
 
 			component::declare < visual > ();
 			component::declare < overlay > ();
+			component::declare < overlay_text > ();
 			component::declare < camera > ();
 
 			game & g = game::instance;

@@ -31,7 +31,10 @@ namespace ballistic {
 			define_id_ext (font_renderer, font_renderer);
 
 			define_id_ext (visual, graphics.visual);
+
 			define_id_ext (overlay, graphics.overlay);
+			define_id_ext (overlay_text, graphics.overlay_text);
+
 			define_id_ext (camera, graphics.camera);
 			define_id_ext (raster_text, graphics.raster_text);
 
@@ -58,6 +61,7 @@ namespace ballistic {
 
 			define_id_ext (material_id, graphics.material.id);
 			define_id_ext (mesh_id, graphics.mesh.id);
+			define_id_ext (graphics_text, graphics.text);
 
 			define_id (material);
 

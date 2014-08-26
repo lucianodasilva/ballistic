@@ -14,6 +14,8 @@
 #include "ballistic.graphics.io.mesh_package_reader.h"
 #include "ballistic.graphics.io.texture_package_reader.h"
 #include "ballistic.graphics.itexture.h"
+#include "ballistic.graphics.overlay.h"
+#include "ballistic.graphics.overlay_text.h"
 #include "ballistic.graphics.material.h"
 #include "ballistic.graphics.render_item.h"
 #include "ballistic.graphics.render_list.h"
