@@ -1,6 +1,6 @@
 ﻿namespace NFontGen
 {
-    partial class Form1
+    partial class frmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,6 @@
             this.cmbTextureSize = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtMetrics = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.chkBold = new System.Windows.Forms.CheckBox();
             this.chkItalic = new System.Windows.Forms.CheckBox();
@@ -82,23 +81,12 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Texture Size";
             // 
-            // txtMetrics
-            // 
-            this.txtMetrics.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMetrics.Location = new System.Drawing.Point(12, 52);
-            this.txtMetrics.Multiline = true;
-            this.txtMetrics.Name = "txtMetrics";
-            this.txtMetrics.Size = new System.Drawing.Size(793, 308);
-            this.txtMetrics.TabIndex = 4;
-            // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(682, 9);
+            this.button1.Location = new System.Drawing.Point(435, 52);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(123, 33);
+            this.button1.Size = new System.Drawing.Size(112, 33);
             this.button1.TabIndex = 5;
             this.button1.Text = "Generate";
             this.button1.UseVisualStyleBackColor = true;
@@ -163,22 +151,24 @@
             this.label3.TabIndex = 9;
             this.label3.Text = "Font Size";
             // 
-            // Form1
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(817, 372);
+            this.ClientSize = new System.Drawing.Size(559, 97);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cmbFontSize);
             this.Controls.Add(this.chkItalic);
             this.Controls.Add(this.chkBold);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.txtMetrics);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbTextureSize);
             this.Controls.Add(this.cmbFonts);
-            this.Name = "Form1";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "frmMain";
             this.Text = "NFontGen";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
@@ -192,7 +182,6 @@
         private System.Windows.Forms.ComboBox cmbTextureSize;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtMetrics;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox chkBold;
         private System.Windows.Forms.CheckBox chkItalic;

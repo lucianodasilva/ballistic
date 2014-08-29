@@ -28,5 +28,17 @@ namespace NFontGen
         {
 
         }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var saveDialog = new SaveFileDialog();
+            saveDialog.CheckPathExists = true;
+            saveDialog.Filter = "*.*|(*.*)";
+
+            if (saveDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            _bitmap.Save(saveDialog.FileName);
+        }
     }
 }

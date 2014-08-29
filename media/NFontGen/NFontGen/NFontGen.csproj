@@ -44,6 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FontView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FontView.Designer.cs">
+      <DependentUpon>FontView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +64,9 @@
     <Compile Include="TextureView.Designer.cs">
       <DependentUpon>TextureView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FontView.resx">
+      <DependentUpon>FontView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

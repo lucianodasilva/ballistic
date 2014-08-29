@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,9 @@ using System.Windows.Forms;
 
 namespace NFontGen
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
 
@@ -28,7 +29,9 @@ namespace NFontGen
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            cmbFonts.Text = cmbFonts.Items[0].ToString ();
+            cmbFontSize.Text = "12";
+            cmbTextureSize.Text = "128";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -49,9 +52,15 @@ namespace NFontGen
 
             int stride = texture_res / 16;
 
+            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
             g.Clear (Color.Transparent);
 
-            string metrics = "";
+            string font_name = cmbFonts.Text.ToLower().Replace(' ', '_') + "_" + cmbFontSize.Text;
+
+            string metrics = "<font name=\"" + font_name + "\" texture=\"<replace with texture id>\" metrics=\"";
+            NumberFormatInfo format = new NumberFormatInfo();
+            format.NumberDecimalSeparator = ".";
+            format.NumberDecimalDigits = 3;
 
             for (int y = 0; y < 16; ++y) {
                 for (int x = 0; x < 16; ++x)
@@ -63,17 +72,21 @@ namespace NFontGen
 
                     var size = g.MeasureString(vs, font);
 
-                    if (x != 0 && y != 0)
+                    if (!(x == 0 && y == 0))
                         metrics += ",";
 
-                    metrics += size.Width.ToString() + "," + size.Height.ToString();
+                    metrics += (size.Width / (float)texture_res).ToString("F", format) + "," +
+                               (size.Height / (float)texture_res).ToString("F", format);
                 }
             }
 
-            txtMetrics.Text = metrics;
+            metrics += "\"/>";
 
             var new_texture_view = new TextureView(buffer);
             new_texture_view.Show();
+
+            var new_font_view = new FontView(metrics);
+            new_font_view.Show();
             
         }
 
