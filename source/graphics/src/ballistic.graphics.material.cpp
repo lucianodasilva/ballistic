@@ -5,7 +5,10 @@
 namespace ballistic {
 	namespace graphics {
 
-		material::material (const id_t & id) : iresource (id) {}
+		material::material (const id_t & id) : 
+			iresource (id),
+			diffuse({ real(1), real(1), real(1), real(1) })
+		{}
 
 		material::~material() {}
 	}
