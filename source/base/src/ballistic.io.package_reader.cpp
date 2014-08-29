@@ -17,8 +17,7 @@ namespace ballistic {
 			istorage * storage = container.find_storage (source);
 			
 			if (storage) {
-				package_loader loader;
-				storage->load (&loader, source, container, id::null);
+				storage->load (container.package_loader (), source, container, id::null);
 			}
 
 		}

@@ -37,14 +37,14 @@ namespace ballistic {
 		return stream;
 	}
 
-	template < class src_t, class dst_t > 
-	inline void convert ( src_t & src, dst_t & dst ){
-		// Compile time type conversion errors
-		static_assert (std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC);
-		static_assert (std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST);
-
-		dst = (dst_t)src;
-	}
+	//template < class src_t, class dst_t > 
+	//inline void convert ( const src_t & src, dst_t & dst ){
+	//	// Compile time type conversion errors
+	//	static_assert (std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC);
+	//	static_assert (std::is_fundamental < dst_t >::value, MSG_NOT_FUNDAMENTAL_DST);
+	//
+	//	dst = (dst_t)src;
+	//}
 
 	// Same type
 	template < class t >
@@ -97,7 +97,7 @@ namespace ballistic {
 	}
 
 	template < class src_t >
-	inline void convert ( src_t & src, std::string & dst ) {
+	inline void convert ( const src_t & src, std::string & dst ) {
 		// Compile time type conversion errors
 		static_assert ( std::is_fundamental < src_t >::value, MSG_NOT_FUNDAMENTAL_SRC );
 		dst = std::to_string (src);
@@ -133,7 +133,7 @@ namespace ballistic {
 	}
 
 	template < class dst_t, class src_t >
-	inline dst_t convert_to ( src_t src ) {
+	inline dst_t convert_to ( const src_t & src ) {
 		dst_t tmp_value;
 		convert (src, tmp_value);
 		return tmp_value;

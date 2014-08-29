@@ -1,0 +1,30 @@
+<package>
+  
+  <package source="resources/animation.xml"/>
+  <package source="resources/cube.xml"/>
+  <package source="resources/consolas_16.xml"/>
+
+  <entity_type name="camera.entity"
+        position="0,0,5"
+        target="0,0,0"
+        up="0,1,0"
+	>
+    <graphics.camera projection="perspective" fov="45" near="0.1" far="100"/>
+    <animation storyboard_id="camera.animation"/>
+  </entity_type>
+
+  <entity_type name="cube_count.entity"
+             transform.position="-0.99, 0.9, 0.0"
+             transform.scale="0.05, 0.05, 0.05"
+             text.font.id="consolas_16.font"
+             text.text="XXXXX"
+               >
+    <transform/>
+    <graphics.overlay_text/>
+  </entity_type>
+
+  <entity_type name="cube_manager.entity">
+    <box_manager/>
+  </entity_type>
+  
+</package>

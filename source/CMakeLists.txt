@@ -49,6 +49,7 @@ endif()
 
 # development frontend
 include ( ${proj_dir}/frontend/dev_frontend/CMakeLists.txt )
+include ( ${proj_dir}/frontend/perf_test/CMakeLists.txt )
 
 # -----------------------------
 

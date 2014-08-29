@@ -1,5 +1,5 @@
 <package>
-
+  
 	<storyboard name="camera.animation">
 		<vec3_bezier start_time="0"
 								 duration="6"
