@@ -4,6 +4,8 @@
 #include <ballistic.base.h>
 #include <vector>
 
+#include "ballistic.graphics.font.h"
+#include "ballistic.graphics.imesh.h"
 #include "ballistic.graphics.overlay.h"
 
 namespace ballistic {
@@ -14,7 +16,10 @@ namespace ballistic {
 		class overlay_text : public overlay {
 		protected:
 
+			property < font * > *	_overlay_font;
 			property < string >	*	_overlay_text;
+
+			imesh * _mesh;
 
 			void generate_mesh ();
 
@@ -23,6 +28,7 @@ namespace ballistic {
 			static const id_t component_id;
 
 			overlay_text ();
+			virtual ~overlay_text();
 
 			virtual void notify (entity * sender, ballistic::message & message) override;
 

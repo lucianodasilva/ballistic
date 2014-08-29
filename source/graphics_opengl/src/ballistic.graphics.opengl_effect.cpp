@@ -148,7 +148,9 @@ namespace ballistic {
 			glUseProgram (_shader_program_id);
 
 			// reset texture unit
-			_constants[id::graphics::effect::texture]->set_value (0);
+			auto texture_unit = _constants[id::graphics::effect::texture];
+			if (texture_unit)
+				texture_unit->set_value (0);
 		}
 
 		iconstant * opengl_effect::constant(const id_t & id) {

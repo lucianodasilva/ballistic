@@ -8,15 +8,16 @@
 #include "ballistic.graphics.overlay_text.h"
 
 #include "ballistic.graphics.io.effect_loader.h"
+#include "ballistic.graphics.io.font_package_reader.h"
 #include "ballistic.graphics.io.material_package_reader.h"
 #include "ballistic.graphics.io.mesh_package_reader.h"
 #include "ballistic.graphics.io.texture_package_reader.h"
 
+#include "ballistic.graphics.font.h"
 #include "ballistic.graphics.ieffect.h"
-#include "ballistic.graphics.material.h"
 #include "ballistic.graphics.imesh.h"
-#include "ballistic.graphics.iraster_font.h"
 #include "ballistic.graphics.itexture.h"
+#include "ballistic.graphics.material.h"
 
 namespace ballistic {
 	namespace graphics {
@@ -34,6 +35,10 @@ namespace ballistic {
 
 			g.resources.package_loader ()->register_reader (
 				new graphics::io::material_package_reader ()
+			);
+
+			g.resources.package_loader()->register_reader(
+				new graphics::io::font_package_reader()
 			);
 
 			g.resources.package_loader ()->register_reader (
@@ -78,8 +83,6 @@ namespace ballistic {
 		imesh::imesh (const id_t & id) : iresource (id) {}
 
 		itexture::itexture (const id_t & id) : iresource (id) {}
-
-		//iraster_font::iraster_font (const id_t & id) : imaterial (id) {}
 
 	}
 }

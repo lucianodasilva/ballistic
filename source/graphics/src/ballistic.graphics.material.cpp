@@ -7,5 +7,6 @@ namespace ballistic {
 
 		material::material (const id_t & id) : iresource (id) {}
 
+		material::~material() {}
 	}
 }

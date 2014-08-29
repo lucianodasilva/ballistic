@@ -40,6 +40,7 @@ ballistic::graphics::idevice * create_device () {
 
 ballistic::res_id_t res_cube ("cube.entity", "resources/test_anim.xml");
 ballistic::res_id_t res_overlay ("overlay.entity", "resources/test_anim.xml");
+ballistic::res_id_t res_overlay_text("overlay_text.entity", "resources/test_anim.xml");
 ballistic::res_id_t res_camera ("camera.entity", "resources/test_anim.xml");
 
 ballistic::res_id_t res_default_material ("default_material.effect", "resources/default_material.fx");
@@ -114,7 +115,7 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{800, 800});
+	_frontend = create_frontend (point{600, 600});
 	_frontend->create ();
 	_frontend->show ();
 
@@ -140,9 +141,10 @@ int main ( int argc, char ** argv) {
 	g.systems.attach (graphics);
 
 	// create entities
-	g.entities.create (res_camera);
+	game::instance.entities.create (res_camera);
 	game::instance.entities.create (res_cube);
 	game::instance.entities.create (res_overlay);
+	game::instance.entities.create(res_overlay_text);
 
 	// initialize
 	g.initialize ();

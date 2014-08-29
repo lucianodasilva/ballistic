@@ -36,8 +36,9 @@ namespace ballistic {
 			//mat4::make_translation (*_position)	*
 			//((quat)*_rotation).to_matrix ()	*
 			//mat4::make_scale (*_scale);
-
 			mat4::make_scale(*_scale) *
-			mat4::make_translation(*_position);
+			mat4::make_translation(*_position)
+			
+			;
 	}
 }

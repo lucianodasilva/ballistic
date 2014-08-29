@@ -53,6 +53,7 @@ namespace NFontGen
             int stride = texture_res / 16;
 
             g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             g.Clear (Color.Transparent);
 
             string font_name = cmbFonts.Text.ToLower().Replace(' ', '_') + "_" + cmbFontSize.Text;
@@ -77,6 +78,22 @@ namespace NFontGen
 
                     metrics += (size.Width / (float)texture_res).ToString("F", format) + "," +
                                (size.Height / (float)texture_res).ToString("F", format);
+                }
+            }
+
+            for (int x = 0; x < texture_res; ++x)
+            {
+                for (int y = 0; y < texture_res; ++y)
+                {
+                    Color c = buffer.GetPixel(x, y);
+                    Color w = Color.FromArgb (
+                        (int)(c.GetBrightness () * 255),
+                        255,
+                        255,
+                        255
+                    );
+
+                    buffer.SetPixel(x, y, w);
                 }
             }
 

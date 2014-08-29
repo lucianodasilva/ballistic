@@ -263,7 +263,6 @@ namespace math {
 			};
 		}
 
-
 		inline static this_type make_translation (const vec4_t < value_t > & p) {
 			return{
 				value_t (1), value_t (0), value_t (0), value_t (0),

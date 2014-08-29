@@ -17,6 +17,7 @@ namespace ballistic {
 		public:
 
 			material (const id_t & id);
+			virtual ~material();
 
 			color		diffuse;
 			itexture *	texture;
