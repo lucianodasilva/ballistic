@@ -30,6 +30,8 @@ namespace ballistic {
 		virtual void terminate ();
 
 		virtual void notify (ballistic::entity * sender, ballistic::message & message);
+		
+		virtual void update_transform ();
 
 	};
 

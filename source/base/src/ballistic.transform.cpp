@@ -25,6 +25,7 @@ namespace ballistic {
 		_scale = parent->properties.aquire < vec3 > (id::transform_scale);
 
 		_transform = parent->properties.aquire < mat4 > (id::transform);
+		update_transform();
 	}
 
 	void transform::terminate () {
@@ -32,13 +33,17 @@ namespace ballistic {
 	}
 
 	void transform::notify (ballistic::entity * sender, ballistic::message & message) {
+		update_transform();
+	}
+	
+	void transform::update_transform(){
 		*_transform =
-			//mat4::make_translation (*_position)	*
-			//((quat)*_rotation).to_matrix ()	*
-			//mat4::make_scale (*_scale);
-			mat4::make_scale(*_scale) *
-			mat4::make_translation(*_position)
-			
-			;
+		//mat4::make_translation (*_position)	*
+		//((quat)*_rotation).to_matrix ()	*
+		//mat4::make_scale (*_scale);
+		mat4::make_scale(*_scale) *
+		mat4::make_translation(*_position)
+		
+		;
 	}
 }
