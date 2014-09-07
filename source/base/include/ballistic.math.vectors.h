@@ -99,6 +99,15 @@ namespace math {
 	typedef math::vec3_t < real > vec3;
 	typedef math::vec4_t < real > vec4;
 
+	typedef math::vec2_t < int32_t > ivec2;
+	typedef math::vec3_t < int32_t > ivec3;
+	typedef math::vec4_t < int32_t > ivec4;
+
+
+	typedef math::vec2_t < uint32_t > uvec2;
+	typedef math::vec3_t < uint32_t > uvec3;
+	typedef math::vec4_t < uint32_t > uvec4;
+
 	typedef details::color_t < real > color;
 
 }

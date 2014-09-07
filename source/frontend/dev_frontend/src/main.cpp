@@ -38,75 +38,99 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-ballistic::res_id_t res_cube ("cube.entity", "resources/test_anim.xml");
-ballistic::res_id_t res_overlay ("overlay.entity", "resources/test_anim.xml");
-ballistic::res_id_t res_overlay_text("overlay_text.entity", "resources/test_anim.xml");
-ballistic::res_id_t res_camera ("camera.entity", "resources/test_anim.xml");
+ballistic::res_id_t res_rig ("rigged.entity", "resources/rigging.xml");
+ballistic::res_id_t res_overlay_text ("overlay_text.entity", "resources/rigging.xml");
+ballistic::res_id_t res_camera ("camera.entity", "resources/rigging.xml");
 
 ballistic::res_id_t res_default_material ("default_material.effect", "resources/default_material.fx");
 ballistic::res_id_t res_overlay_material ("overlay_material.effect", "resources/overlay_material.fx");
 
 // -----------
-class box_brain : public ballistic::component {
+class rigged : public ballistic::component {
 private:
 
-	real _start_time;
+	struct bone {
+		vec3 location;
+		quat rotation;
 
-	property < vec3 > * _bounce;
-	property < vec3 > * _start_pos;
-	property < real > * _life_time;
+		inline bone to_world ( const bone & parent ) {
+			return bone {
+				parent.location + (parent.rotation * location),
+				parent.rotation * rotation
+			};
+		}
+	};
+
+	inline void draw_bones (const bone & parent, const bone & child ) {
+		ballistic::graphics::opengl_debug::draw_line (parent.location, child.location, color{1., .0, .0, 1.});
+		
+		ballistic::graphics::opengl_debug::draw_line (parent.location + vec3{-0.01F, .0, .0}, parent.location + vec3 {.01F, .0, .0}, color {.0, 1., .0, 1.});
+		ballistic::graphics::opengl_debug::draw_line (parent.location + vec3{0, -.01F, .0}, parent.location + vec3 {.0, .01F, .0}, color {.0, 1., .0, 1.});
+	}
 
 public:
+	
+	bone b1 = bone {
+		{-1., .0, .0},
+		quat ()
+	};
+		
+	bone b2 = bone {
+		{.5, .0, .0},
+		quat ()
+	};
+		
+	bone b3 = bone {
+		{.5, .0, .0},
+		quat ()
+	};
 
-	box_brain () : _start_time (-1) {}
+	real
+		mult = 1.,
+		angle = 0.;
+
+	rigged () {
+	
+	}
 
 	static void require_properties (entity_type * new_type, component_info & info) {
-		new_type->properties.require < vec3 > (text_to_id ("bounce"), vec3 ());
-		new_type->properties.require < vec3 > (text_to_id ("start_pos"), vec3 ());
-		new_type->properties.require < real > (text_to_id ("life_time"), 1.0);
 	}
 
 	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 		component::setup (parent, parameters);
 
+		game::instance.global_notifier.attach (id::message::render, this);
 		game::instance.global_notifier.attach (id::message::update, this);
-
-		_bounce = parent->properties.aquire < vec3 > (text_to_id ("bounce"));
-		_start_pos = parent->properties.aquire < vec3 > (text_to_id ("start_pos"));
-		_life_time = parent->properties.aquire < real > (text_to_id ("life_time"));
 	}
 
 	virtual void terminate () {
+		game::instance.global_notifier.detach (id::message::render, this);
 		game::instance.global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
+		using namespace ballistic::graphics;
 
-		real game_time = message [id::game_time];
+		if (message.id () == id::message::update) {
 
-		if (_start_time < real (0))
-			_start_time = game_time;
+			real time = message [id::frame_time];
+			angle += (0.01F * mult);
 
-		if (game_time - _start_time > *_life_time) {
-			int c = std::rand () % 5 + 1;
+			if (angle > 1.0)
+				mult = -1.;
+			else if (angle < -1.0)
+				mult = 1.;
 
-			for (int i = 0; i < c; ++i) {
-				entity * new_entity = game::instance.entities.create (res_cube);
-				new_entity->properties [text_to_id ("start_pos")] = vec3 ({
-					real ((std::rand () % 100) - 50),
-					real (0),
-					real ((std::rand () % 100) - 50)
-				});
-				new_entity->properties [text_to_id ("life_time")] = (real (std::rand () % 100) / real (25) + real (3));
-			}
-
-			parent ()->kill ();
 			return;
-		}
+		} else if (message.id () == id::message::render) {
 
-		// update position with animation
-		parent ()->properties [id::transform_position] = vec3(*_start_pos) + vec3(*_bounce);
-																	 
+			bone t_b1 = b1;
+			bone t_b2 = bone{vec3{.5, .0, .0}, quat::from_axis (vec3{1.0, .0, .0}, angle)};
+			bone t_b3 = b3.to_world (b2);
+
+			draw_bones (b1, b2);
+			draw_bones (b2, b3);
+		}
 	}
 
 };
@@ -115,7 +139,7 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{600, 600});
+	_frontend = create_frontend (point{800, 800});
 	_frontend->create ();
 	_frontend->show ();
 
@@ -123,15 +147,14 @@ int main ( int argc, char ** argv) {
 	_device->clear_color (color{.0F, .6F, 1.F, 1.F});
 	
 	game & g = game::instance;
-
+	// initialize
 	g.initialize ();
-
 	g.frontend (_frontend);
 
 	// setup game stuffs
 	ballistic::graphics::define_resources (_device);
 
-	component::declare < box_brain > (text_to_id ("box_brain"));
+	ballistic::component::declare < rigged > (text_to_id ("rigged"));
 
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->device (_device);
@@ -141,13 +164,13 @@ int main ( int argc, char ** argv) {
 	g.systems.attach (graphics);
 
 	// create entities
-	game::instance.entities.create (res_camera);
-	game::instance.entities.create (res_cube);
-	game::instance.entities.create (res_overlay);
-	game::instance.entities.create(res_overlay_text);
+	g.entities.create (res_camera);
+	g.entities.create (res_rig);
+	g.entities.create(res_overlay_text);
 
-	// initialize
-	g.initialize ();
+	glDisable (GL_CULL_FACE);
+
+	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 
 	_frontend->do_event_loop ();
 

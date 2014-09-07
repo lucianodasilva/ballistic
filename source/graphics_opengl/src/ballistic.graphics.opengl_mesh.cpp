@@ -14,8 +14,12 @@ namespace ballistic {
 				stride += sizeof (vec3);
 			if (attributes & mesh_attribute_uv)
 				stride += sizeof (vec2);
-			if (attributes & mesh_attribute_normal)
-				stride += sizeof (vec3);
+			//if (attributes & mesh_attribute_normal)
+			//	stride += sizeof (vec3);
+			if (attributes & mesh_attribute_bone_index)
+				stride += sizeof (uvec2);
+			if (attributes & mesh_attribute_bone_weight)
+				stride += sizeof (real);
 
 			return stride;
 		}
@@ -47,11 +51,33 @@ namespace ballistic {
 					);
 			}
 
-			if (attributes & mesh_attribute_normal) {
-				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_normal);
+			//if (attributes & mesh_attribute_normal) {
+			//	gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_normal);
+			//	attribute_offset = add_attribute (
+			//		3,
+			//		3,
+			//		GL_FLOAT,
+			//		attribute_stride,
+			//		attribute_offset
+			//		);
+			//}
+
+			if (attributes & mesh_attribute_bone_index) {
+				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_bone_index);
 				attribute_offset = add_attribute (
 					3,
-					3,
+					2,
+					GL_UNSIGNED_INT,
+					attribute_stride,
+					attribute_offset
+					);
+			}
+
+			if (attributes & mesh_attribute_bone_weight) {
+				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_bone_weight);
+				attribute_offset = add_attribute (
+					4,
+					1,
 					GL_FLOAT,
 					attribute_stride,
 					attribute_offset
@@ -59,11 +85,11 @@ namespace ballistic {
 			}
 		}
 
-		GLint opengl_mesh::add_attribute (GLint id, GLint size, GLenum type, GLint stride, GLint offset) {
+		GLint opengl_mesh::add_attribute (GLint id, GLint size, GLenum gl_type, GLint stride, GLint offset) {
 			glVertexAttribPointer (
 				id,
 				size,         // number of elements
-				type,         // type
+				gl_type,         // type
 				GL_FALSE,     // normalized?
 				stride,
 				reinterpret_cast < GLvoid* > (offset) // array buffer offset in bytes
@@ -71,7 +97,7 @@ namespace ballistic {
 
 			glEnableVertexAttribArray (id);
 	
-			return offset + size * sizeof (GL_FLOAT);
+			return offset + size * 4; // 4 = size of float or int
 		}
 		
 		opengl_mesh::opengl_mesh ( const id_t & id, uint8_t run_id ) :

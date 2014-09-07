@@ -134,6 +134,11 @@ namespace ballistic {
 			m_v = _camera->view ();
 			m_vp = m_v * _camera->proj();
 
+			// clear before render message to allow for 
+			// debug rendering
+			_device->clear ();
+			_device->begin_frame ();
+
 			// notify entities with visuals
 			game::instance.global_notifier.notify(_render_message);
 
@@ -141,8 +146,6 @@ namespace ballistic {
 			_render_list.sort ();
 
 			_device->alpha_blend (false);
-			_device->clear ();
-			_device->begin_frame ();
 
 			// render loop ---------------------------
 			material * material = nullptr;

@@ -114,11 +114,28 @@ namespace ballistic {
 			_color_uniform = _effect.constant(text_to_id("in_color"));
 
 			// --- create vector array
-			glGenVertexArrays (1, &_vao_id);
-			glBindVertexArray (_vao_id);
+
+			// create vertex buffer
 			glGenBuffers (1, &_vbo_id);
 			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id);
+
+			// set buffer data
 			glBufferData (GL_ARRAY_BUFFER, 4 * 3 * 2, NULL, GL_DYNAMIC_DRAW);
+
+			glGenVertexArrays (1, &_vao_id);
+			glBindVertexArray (_vao_id);
+
+			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id);
+
+			glVertexAttribPointer (
+				0,
+				3,
+				GL_FLOAT,
+				GL_FALSE,
+				0,
+				(GLvoid *)0
+			);
+
 			glEnableVertexAttribArray (0);
 
 			// clear binding
@@ -135,21 +152,16 @@ namespace ballistic {
 			vec3 buffer [2] = { p1, p2 };
 
 			glBindVertexArray (_vao_id);
+			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id);
+
+			gl_eval (
 			glBufferData (
 				GL_ARRAY_BUFFER,
 				4 * 3 * 2,
 				(GLvoid *)&buffer [0],
 				GL_DYNAMIC_DRAW
 			);
-
-			glVertexAttribPointer (
-				0,
-				3,
-				GL_FLOAT,
-				GL_FALSE,
-				0,
-				(GLvoid *)0
-			);
+			)
 
 			glDrawArrays (GL_LINES, 0, 2);
 
@@ -179,15 +191,6 @@ namespace ballistic {
 				4 * 3 * 8,
 				(GLvoid *)&buffer [0],
 				GL_DYNAMIC_DRAW
-			);
-
-			glVertexAttribPointer (
-				0,
-				3,
-				GL_FLOAT,
-				GL_FALSE,
-				0,
-				(GLvoid *)0
 			);
 
 			glDrawArrays (GL_LINES, 0, 8);

@@ -44,7 +44,9 @@ namespace ballistic {
 				
 				vector < real >		position;
 				vector < real >		uv;
-				vector < real >		normal;
+				//vector < real >		normal;
+				vector < uint32_t >		bone_index;
+				vector < real >		bone_weight;
 				vector < uint16_t >	index;
 				
 				auto * cursor = element->FirstChildElement ();
@@ -87,7 +89,7 @@ namespace ballistic {
 							delete mesh;
 							return;
 						}
-					} else if (strcmp (cursor->Name (), "normal") == 0) {
+					/*} else if (strcmp (cursor->Name (), "normal") == 0) {
 						m_attribute = (mesh_attribute)(m_attribute | mesh_attribute_normal);
 				
 						stringstream ss (cursor->GetText ());
@@ -105,6 +107,43 @@ namespace ballistic {
 				
 						if (normal.size () / 3 != position.size () / 3) {
 							debug_error ("mesh normal vector size does not match the size of the position vector!");
+							delete mesh;
+							return;
+						}*/
+					} else if (strcmp (cursor->Name (), "bone_index") == 0) {
+						m_attribute = (mesh_attribute)(m_attribute | mesh_attribute_bone_index);
+
+						stringstream ss (cursor->GetText ());
+						string value;
+
+						while (get_line (ss, value, ',')) {
+							bone_index.push_back (convert_to < uint32_t > (value));
+						}
+
+						if (bone_index.size () % 2 != 0) {
+							debug_error ("mesh bone index vector not multiple of 2!");
+							delete mesh;
+							return;
+						}
+
+						if (bone_index.size () / 2 != position.size () / 3) {
+							debug_error ("mesh bone index vector size does not match the size of the position vector!");
+							delete mesh;
+							return;
+						}
+
+					} else if (strcmp (cursor->Name (), "bone_weight") == 0) {
+						m_attribute = (mesh_attribute)(m_attribute | mesh_attribute_bone_weight);
+
+						stringstream ss (cursor->GetText ());
+						string value;
+
+						while (get_line (ss, value, ',')) {
+							bone_weight.push_back (convert_to < real > (value));
+						}
+
+						if (bone_weight.size () != position.size () / 3) {
+							debug_error ("mesh bone_weight size does not match the size of the position vector!");
 							delete mesh;
 							return;
 						}
@@ -126,33 +165,56 @@ namespace ballistic {
 				uint32_t buffer_size =
 					(m_attribute & mesh_attribute_position ? position.size () * sizeof (real) : 0) +
 					(m_attribute & mesh_attribute_uv ? uv.size () * sizeof (real) : 0) +
-					(m_attribute & mesh_attribute_normal ? normal.size () * sizeof (real) : 0 )
+					(m_attribute & mesh_attribute_bone_index ? bone_index.size () * sizeof (uint32_t) : 0 ) +
+					(m_attribute & mesh_attribute_bone_weight ? bone_weight.size () * sizeof (real) : 0)
 				;
 				
 				
 				uint8_t * data_buffer = new uint8_t [buffer_size];
-				real * data_cursor = (real *)data_buffer;
+				//real * data_cursor = (real *)data_buffer;
+				uint8_t * data_cursor = data_buffer;
 				for (uint32_t i = 0; i < position.size () / 3; ++i) {
 				
 					if (m_attribute & mesh_attribute_position) {
 						uint32_t offset = i * 3;
 				
-						for (uint32_t j = 0; j < 3; ++j)
-							*data_cursor++ = position [offset++];
+						for (uint32_t j = 0; j < 3; ++j) {
+							*((real *)data_cursor) = position [offset++];
+							data_cursor += sizeof (real);
+						}
 					}
 					
 					if (m_attribute & mesh_attribute_uv) {
 						uint32_t offset = i * 2;
 				
-						for (uint32_t j = 0; j < 2; ++j)
-							*data_cursor++ = uv [offset++];
+						for (uint32_t j = 0; j < 2; ++j) {
+							*((real *)data_cursor) = uv [offset++];
+							data_cursor += sizeof (real);
+						}
 					}
 				
-					if (m_attribute & mesh_attribute_normal) {
-						uint32_t offset = i * 3;
-				
-						for (uint32_t j = 0; j < 3; ++j)
-							*data_cursor++ = normal [offset++];
+					//if (m_attribute & mesh_attribute_normal) {
+					//	uint32_t offset = i * 3;
+					//
+					//	for (uint32_t j = 0; j < 3; ++j)
+					//		*data_cursor++ = normal [offset++];
+					//}
+
+					if (m_attribute & mesh_attribute_bone_index) {
+						uint32_t offset = i * 2;
+
+						for (uint32_t j = 0; j < 2; ++j) {
+							*((uint32_t *)data_cursor) = bone_index [offset++];
+							data_cursor += sizeof (uint32_t);
+						}
+					}
+
+					if (m_attribute & mesh_attribute_bone_weight) {
+						uint32_t offset = i;
+
+						*((real *)data_cursor) = bone_weight [offset++];
+						data_cursor += sizeof (real);
+
 					}
 				
 				}

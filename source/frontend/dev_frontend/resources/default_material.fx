@@ -9,16 +9,18 @@ uniform mat4        effect_t_mvp;
 
 layout (location = 1) in vec3 in_position;
 layout (location = 2) in vec2 in_uv;
-layout (location = 3) in vec3 in_normal;
+layout (location = 3) in uvec2 in_bone_index;
+layout (location = 4) in float in_bone_weight;
+//layout (location = 3) in vec3 in_normal;
 
-out vec3            var_normal;
+//out vec3            var_normal;
 out vec2            var_uv;
 
 void main () {
 
 	vec4 pos = effect_t_mvp * vec4 (in_position, 1.0);
 
-	var_normal = (effect_t_normal * vec4 (in_normal, 1.0)).xyz;
+	//var_normal = (effect_t_normal * vec4 (in_normal, 1.0)).xyz;
 
 	var_uv = in_uv;
 	// opengl invert texture

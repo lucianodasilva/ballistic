@@ -7,6 +7,7 @@ namespace ballistic {
 
 		material::material (const id_t & id) : 
 			iresource (id),
+			texture (nullptr),
 			diffuse({ real(1), real(1), real(1), real(1) })
 		{}
 

@@ -1,8 +1,8 @@
 bl_info = {
     "name":         "Ballistic XML",
     "author":       "Luciano da Silva",
-    "blender":      (2,6,9),
-    "version":      (0,0,1),
+    "blender":      (2,7,4),
+    "version":      (0,0,2),
     "location":     "File > Import-Export",
     "description":  "Export custom data format",
     "category":     "Import-Export"
@@ -45,18 +45,35 @@ class vec2:
     def print_out (self, output_file):
         output_file.write ("%f,%f" % (self.x, self.y))
 
+class ivec2:
+    x = 0
+    y = 0
+
+    def __init__ (self, vlist):
+        self.x = vlist [0]
+        self.y = vlist [1]
+
+    def __eq__(self, other):
+        return (self.x == other.x) and (self.y == other.y)
+
+    def print_out (self, output_file):
+        output_file.write ("%i,%i" % (self.x, self.y))
+
 class vector:
     position = vec3 ([.0,.0,.0])
     normal = vec3 ([.0, .0, .0])
     uv = vec2 ([.0, .0])
+    bone_index = ivec2([0,0])
+    bone_weight = .0
 
-    def __init__ (self, posv, normv, uvv):
+    def __init__ (self, posv, uvv, bone_index_v, bone_weight_v):
         self.position = posv
-        self.normal = normv
         self.uv = uvv
+        self.bone_index = bone_index_v
+        self.bone_weight = bone_weight_v
 
     def __eq__ (self, other):
-        return (self.position == other.position) and (self.normal == other.normal) and (self.uv == other.uv)
+        return (self.position == other.position) and (self.uv == other.uv) and (self.bone_index == other.bone_index) and (self.bone_weight == other.bone_weight)
 
 class color:
     r = .0

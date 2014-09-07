@@ -26,6 +26,14 @@ namespace math {
 		inline quat_t ();
 		inline quat_t (T vx, T vy, T vz, T vw);
 		inline quat_t (const vec3_t < T > & vl, T vw);
+		inline quat_t (const std::initializer_list < T > & init) {
+			if (init.size () != 4) {
+				debug_print ("[vecn_t::init_list_ctor] init list size invalid for used vector type");
+				return;
+			}
+
+			std::copy (init.begin (), init.end (), +data);
+		}
 		
 		// copy
 		inline quat_t ( const quat_t < T >  & vl );
@@ -60,7 +68,7 @@ namespace math {
 	quat_t < T >::quat_t () : w (T ()) {}
 
 	template < class T >
-	quat_t < T >::quat_t (T vx, T vy, T vz, T vw) : v (vx, vy, vz), w (vw) {}
+	quat_t < T >::quat_t (T vx, T vy, T vz, T vw) : v ({vx, vy, vz}), w (vw) {}
 
 	template < class T >
 	quat_t < T >::quat_t (const vec3_t < T > & vl, T vw) : v (vl), w (vw) {}

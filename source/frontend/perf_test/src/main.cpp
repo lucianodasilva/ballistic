@@ -93,12 +93,32 @@ private:
 	vector < entity * > _entity_list;
 	entity *			_cube_count;
 
+	vector < int > _random_numbers;
+
 public:
+
+	void generate_rand () {
+		int nums = _random_numbers.capacity ();
+		for (int i = 0; i < nums; ++i)
+			_random_numbers.push_back (std::rand ());
+	}
+
+	int pop_rand () {
+
+		if (_random_numbers.size () == 0)
+			generate_rand ();
+
+		int num = _random_numbers.back ();
+		_random_numbers.pop_back ();
+
+		return num;
+	}
 
 	box_manager () :
 		_cube_count (nullptr)
 	{
 		_entity_list.reserve (100000);
+		_random_numbers.reserve (200000);
 	}
 
 	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
@@ -119,14 +139,16 @@ public:
 
 		if (frame_time < 0.017) {
 
-			entity * new_entity = game::instance.entities.create (res_cube);
-			new_entity->properties [text_to_id ("start_pos")] = vec3 ({
-				real ((std::rand () % 100) - 50),
-				real (0),
-				real ((std::rand () % 100) - 50)
-			});
-
-			_entity_list.push_back (new_entity);
+			for (int i = 0; i < 10; ++i) {
+				entity * new_entity = game::instance.entities.create (res_cube);
+				new_entity->properties [text_to_id ("start_pos")] = vec3 ({
+					real ((pop_rand () % 100) - 50),
+					real (0),
+					real ((pop_rand () % 100) - 50)
+				});
+				
+				_entity_list.push_back (new_entity);
+			}
 
 			_cube_count->properties [id::graphics::text::text] = convert_to < std::string > (_entity_list.size ());
 		} else if (frame_time > 0.020 ) {
@@ -148,7 +170,7 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{600, 600});
+	_frontend = create_frontend (point{800, 800});
 	_frontend->create ();
 	_frontend->show ();
 

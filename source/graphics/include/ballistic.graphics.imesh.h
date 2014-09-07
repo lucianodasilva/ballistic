@@ -9,7 +9,9 @@ namespace ballistic {
 		enum mesh_attribute : uint32_t {
 			mesh_attribute_position = 1U,
 			mesh_attribute_uv		= 2U,
-			mesh_attribute_normal	= 4U
+			mesh_attribute_bone_index = 4U,
+			mesh_attribute_bone_weight = 8U
+			//mesh_attribute_normal	= 4U
 		};
 
 		class idevice;
