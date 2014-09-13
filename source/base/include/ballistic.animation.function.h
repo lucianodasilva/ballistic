@@ -7,7 +7,6 @@
 #include "ballistic.entity.h"
 #include "ballistic.id.h"
 #include "ballistic.iresource.h"
-#include "ballistic.math.vecn_t.h"
 #include "ballistic.math.vectors.h"
 #include "ballistic.property.h"
 

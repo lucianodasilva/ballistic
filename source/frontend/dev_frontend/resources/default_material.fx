@@ -5,6 +5,8 @@ uniform mat4        effect_t_proj;
 uniform mat4        effect_t_normal;
 uniform mat4        effect_t_mvp;
 
+uniform mat4		bones [32];
+
 #ifdef VERTEX_SHADER
 
 layout (location = 1) in vec3 in_position;

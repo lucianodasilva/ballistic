@@ -15,9 +15,9 @@ namespace math {
 	template < class T >
 	struct aabox_t {
 
-		vec3_t < T > v_min, v_max;
+		vectors::vec3_t < T > v_min, v_max;
 		
-		inline aabox_t ( const vec3_t < T > & v_min, const vec3_t < T > & v_max );
+		inline aabox_t ( const vectors::vec3_t < T > & v_min, const vectors::vec3_t < T > & v_max );
 		inline aabox_t ( const aabox_t < T > & v );
 
 		inline aabox_t < T > & operator = ( const aabox_t < T > & v );
@@ -31,13 +31,13 @@ namespace math {
 		inline intersection_type intersect_z_aligned ( const aabox_t < T > & box ) const;
 
 		// Transform operators
-		inline aabox_t < T > operator + ( const vec3_t < T > & v ) const;
-		inline aabox_t < T > operator - ( const vec3_t < T > & v ) const;
+		inline aabox_t < T > operator + ( const vectors::vec3_t < T > & v ) const;
+		inline aabox_t < T > operator - ( const vectors::vec3_t < T > & v ) const;
 
 	};
 
 	template < class T >
-	aabox_t < T >::aabox_t (const vec3_t < T > & v_min, const vec3_t < T > & v_max) : v_min (v_min), v_max (v_max) {}
+	aabox_t < T >::aabox_t (const vectors::vec3_t < T > & v_min, const vectors::vec3_t < T > & v_max) : v_min (v_min), v_max (v_max) {}
 
 	template < class T >
 	aabox_t < T >::aabox_t (const aabox_t < T > & v) : v_min (v.v_min), v_max (v.v_max) {}
@@ -117,13 +117,13 @@ namespace math {
 	}
 
 	template < class T >
-	aabox_t < T > aabox_t < T >::operator + (const vec3_t < T > & v) const {
+	aabox_t < T > aabox_t < T >::operator + (const vectors::vec3_t < T > & v) const {
 		return
 			aabox_t (v_min + v, v_max + v);
 	}
 
 	template < class T >
-	aabox_t < T > aabox_t < T >::operator - (const vec3_t < T > & v) const {
+	aabox_t < T > aabox_t < T >::operator - (const vectors::vec3_t < T > & v) const {
 		return
 			aabox_t (v_min - v, v_max + v);
 	}

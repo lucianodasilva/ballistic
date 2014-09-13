@@ -17,7 +17,6 @@ namespace ballistic {
 		void null_constant::set_value (const vec3 & v) {}
 		void null_constant::set_value (const vec4 & v) {}
 		void null_constant::set_value (const mat4 & v) {}
-		void null_constant::set_value (const color & v) {}
 
 		bool null_constant::is_null () { return true; }
 

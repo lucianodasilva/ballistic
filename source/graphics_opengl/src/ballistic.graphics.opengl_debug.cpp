@@ -82,50 +82,42 @@ namespace ballistic {
 		const char * opengl_debug::_shader_source = 
 		gl_vshader_source (
 			layout (location = 0) in vec3	in_position;
-			uniform vec4					in_color;
-
-			out vec4						var_color;
 
 			void main () {
-				gl_Position.xyz = in_position;
-				gl_Position.w = 1.0;
-				var_color = in_color;
+				gl_Position = vec4 (
+					in_position,
+					1.
+				);
 			}
 		)
 		gl_fshader_source (
-			in vec4 var_color;
+			uniform vec4					in_color;
 			out vec4 out_color;
 
 			void main () {
-				out_color = var_color;
+				out_color = in_color;
 			}
 		);
 
-		GLuint opengl_debug::_vao_id = 0;
-		GLuint opengl_debug::_vbo_id = 0;
+		GLuint opengl_debug::_vao_id_line = 0;
+		GLuint opengl_debug::_vbo_id_line = 0;
+		GLuint opengl_debug::_vao_id_quad = 0;
+		GLuint opengl_debug::_vbo_id_quad = 0;
 		
 		graphics::opengl_effect		opengl_debug::_effect (0, 0);
 		graphics::iconstant *	opengl_debug::_color_uniform;
 
-		void opengl_debug::initialize () {
-			gl_eval_scope(opengl_debug::initialize);
-			
-			_effect.load (_shader_source, strlen (_shader_source));
-			_color_uniform = _effect.constant(text_to_id("in_color"));
-
-			// --- create vector array
-
-			// create vertex buffer
-			glGenBuffers (1, &_vbo_id);
-			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id);
+		void opengl_debug::create_vertex_array (GLuint & vao_id, GLuint & vbo_id, uint32_t size_in_bytes) {
+			glGenBuffers (1, &vbo_id);
+			glBindBuffer (GL_ARRAY_BUFFER, vbo_id);
 
 			// set buffer data
-			glBufferData (GL_ARRAY_BUFFER, 4 * 3 * 2, NULL, GL_DYNAMIC_DRAW);
+			glBufferData (GL_ARRAY_BUFFER, size_in_bytes, NULL, GL_DYNAMIC_DRAW);
 
-			glGenVertexArrays (1, &_vao_id);
-			glBindVertexArray (_vao_id);
+			glGenVertexArrays (1, &vao_id);
+			glBindVertexArray (vao_id);
 
-			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id);
+			glBindBuffer (GL_ARRAY_BUFFER, vbo_id);
 
 			glVertexAttribPointer (
 				0,
@@ -134,9 +126,20 @@ namespace ballistic {
 				GL_FALSE,
 				0,
 				(GLvoid *)0
-			);
+				);
 
 			glEnableVertexAttribArray (0);
+		}
+
+		void opengl_debug::initialize () {
+			gl_eval_scope(opengl_debug::initialize);
+			
+			_effect.load (_shader_source, strlen (_shader_source));
+			_color_uniform = _effect.constant(text_to_id("in_color"));
+
+			// --- create vector array
+			create_vertex_array (_vao_id_line, _vbo_id_line, 4 * 3 * 2);
+			create_vertex_array (_vao_id_quad, _vbo_id_quad, 4 * 3 * 8);
 
 			// clear binding
 			glBindVertexArray (0);
@@ -151,26 +154,23 @@ namespace ballistic {
 
 			vec3 buffer [2] = { p1, p2 };
 
-			glBindVertexArray (_vao_id);
-			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id);
-
-			gl_eval (
-			glBufferData (
+			glBindVertexArray (_vao_id_line);
+			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id_line);
+			
+			glBufferSubData (
 				GL_ARRAY_BUFFER,
+				0,
 				4 * 3 * 2,
-				(GLvoid *)&buffer [0],
-				GL_DYNAMIC_DRAW
-			);
-			)
+				(GLvoid *)+buffer
+				);
 
 			glDrawArrays (GL_LINES, 0, 2);
 
 			glBindVertexArray (0);
-			glUseProgram (0);
 		}
 
 		void opengl_debug::draw_rect (const vec3 & p1, const vec3 & p2, const color & col ) {
-			gl_eval_scope (opengl_debug::draw_line);
+			gl_eval_scope (opengl_debug::draw_rect);
 
 			_effect.apply (nullptr);
 			_color_uniform->set_value(col);
@@ -185,18 +185,18 @@ namespace ballistic {
 				p1, bc
 			};
 
-			glBindVertexArray (_vao_id);
-			glBufferData (
+			glBindVertexArray (_vao_id_quad);
+			glBindBuffer (GL_ARRAY_BUFFER, _vbo_id_quad);
+			glBufferSubData (
 				GL_ARRAY_BUFFER,
+				0,
 				4 * 3 * 8,
-				(GLvoid *)&buffer [0],
-				GL_DYNAMIC_DRAW
+				(GLvoid *)+buffer
 			);
 
 			glDrawArrays (GL_LINES, 0, 8);
 
 			glBindVertexArray (0);
-			glUseProgram (0);
 		}
 
 		void opengl_debug::draw_text (const vec3 & pos, const color & col, const char message []) {

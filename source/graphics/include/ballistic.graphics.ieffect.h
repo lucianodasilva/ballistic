@@ -34,7 +34,6 @@ namespace ballistic {
 			virtual void set_value (const vec3 & v) = 0;
 			virtual void set_value (const vec4 & v) = 0;
 			virtual void set_value (const mat4 & v) = 0;
-			virtual void set_value (const color & v) = 0;
 
 			virtual bool is_null ();
 			
@@ -54,7 +53,6 @@ namespace ballistic {
 			virtual void set_value (const vec3 & v) override;
 			virtual void set_value (const vec4 & v) override;
 			virtual void set_value (const mat4 & v) override;
-			virtual void set_value (const color & v) override;
 
 			virtual bool is_null () override;
 

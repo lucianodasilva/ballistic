@@ -45,10 +45,6 @@ namespace ballistic {
 				glUniform4f (location, v.x, v.y, v.z, v.w);
 			}
 
-			inline void set_value (const color & v) override {
-				glUniform4f (location, v.r, v.g, v.b, v.a);
-			}
-
 			inline void set_value (const mat4 & v) override {
 				glUniformMatrix4fv (location, 1, false, (GLfloat *)&v);
 			}

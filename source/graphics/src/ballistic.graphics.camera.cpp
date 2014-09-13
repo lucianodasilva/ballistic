@@ -11,6 +11,8 @@ namespace ballistic {
 			new_type->properties.require (id::position, vec3 ({.0, .0, .0}));
 			new_type->properties.require (id::target, vec3 ({.0, .0, .0}));
 			new_type->properties.require (id::up, vec3 ({.0, 1.0, .0}));
+			new_type->properties.require (id::graphics::camera_proj, mat4 ());
+			new_type->properties.require (id::graphics::camera_view, mat4 ());
 
 			// component arguments
 			info.properties.require < string > (id::graphics::projection, "ortho");
@@ -52,6 +54,8 @@ namespace ballistic {
 		}
 
 		mat4 camera::view () const {
+
+			using namespace ballistic::math;
 
 			vec3
 				target = *_p_target,
@@ -130,6 +134,8 @@ namespace ballistic {
 				debug_print ("graphics system not set!");
 			);
 
+			*_p_view = view ();
+
 		}
 
 		void camera::setup (entity * parent, containers::property_container & parameters) {
@@ -185,6 +191,10 @@ namespace ballistic {
 			_p_position = parent->properties.aquire < vec3 > (id::position);
 			_p_target = parent->properties.aquire < vec3 > (id::target);
 			_p_up = parent->properties.aquire < vec3 > (id::up);
+
+			_p_view = parent->properties.aquire < mat4 > (id::graphics::camera_view);
+			_p_proj = parent->properties.aquire < mat4 > (id::graphics::camera_proj);
+			*_p_proj = _proj;
 		}
 
 		void camera::terminate () {

@@ -11,12 +11,12 @@ namespace ballistic {
 
 			union {
 				struct { T x, y, width, height; };
-				struct { vec2_t < T > position, size; };
+				struct { vectors::vec2_t < T > position, size; };
 			};
 
 			inline rect_t ();
 			inline rect_t ( T x, T y, T width, T height );
-			inline rect_t ( vec2_t < T > position, vec2_t < T > size );
+			inline rect_t ( vectors::vec2_t < T > position, vectors::vec2_t < T > size );
 
 			inline rect_t ( const rect_t < T > & v );
 			inline rect_t < T > & operator = ( const rect_t < T > & v );
@@ -32,7 +32,7 @@ namespace ballistic {
 			: x (x), y (y), width (width), height (height) {}
 
 		template < class T >
-		rect_t < T >::rect_t (vec2_t < T > position, vec2_t < T > size)
+		rect_t < T >::rect_t (vectors::vec2_t < T > position, vectors::vec2_t < T > size)
 			: position (position), size (size) {}
 
 		template < class T >

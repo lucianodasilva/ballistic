@@ -64,6 +64,8 @@ namespace ballistic {
 
 			static void eval_program_link (GLint program_id);
 
+			static void create_vertex_array (GLuint & vao_id, GLuint & vbo_id, uint32_t size_in_bytes);
+
 			struct eval_scope {
 				string method_name;
 				~eval_scope ();
@@ -77,8 +79,10 @@ namespace ballistic {
 			static const char * _shader_source;
 
 			static GLuint
-				_vao_id,
-				_vbo_id
+				_vao_id_line,
+				_vbo_id_line,
+				_vao_id_quad,
+				_vbo_id_quad
 				;
 
 		public:

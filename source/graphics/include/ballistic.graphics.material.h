@@ -23,6 +23,8 @@ namespace ballistic {
 			itexture *	texture;
 			bool		opaque;
 
+			
+
 		};
 
 	}

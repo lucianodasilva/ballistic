@@ -9,7 +9,7 @@ namespace ballistic {
 
 		real get_elapsed_seconds ( ballistic_time_t & t ) {
 			auto t_now = std::chrono::high_resolution_clock::now ();
-			return real (std::chrono::duration_cast <std::chrono::milliseconds> (t_now - t).count () / 1000.0);
+			return real (std::chrono::duration_cast <std::chrono::nanoseconds > (t_now - t).count () / 1000000000.0);
 		}
 
 	}

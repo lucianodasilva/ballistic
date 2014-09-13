@@ -42,7 +42,6 @@
 #include "ballistic.math.matrixes.h"
 #include "ballistic.math.quat.h"
 #include "ballistic.math.rect.h"
-#include "ballistic.math.vecn_t.h"
 #include "ballistic.math.vectors.h"
 #include "ballistic.message.h"
 #include "ballistic.message_notifier.h"

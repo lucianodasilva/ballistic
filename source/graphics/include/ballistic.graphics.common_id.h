@@ -36,6 +36,9 @@ namespace ballistic {
 
 			define_id_ext (camera, graphics.camera);
 
+			define_id_ext (camera_view, graphics.camera_view);
+			define_id_ext (camera_proj, graphics.camera_proj);
+
 			define_id_ext (layer, graphics.layer);
 
 			// effect 

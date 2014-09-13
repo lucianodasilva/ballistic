@@ -5,7 +5,6 @@
 #include "ballistic.animation.function.h"
 #include "ballistic.animation.driver.h"
 #include "ballistic.animation.storyboard.h"
-#include "ballistic.math.vecn_t.h"
 
 namespace ballistic {
 	namespace animation {
@@ -47,16 +46,16 @@ namespace ballistic {
 				return start + (end - start) * t;
 			}
 
-			template < class value_t, class data_t >
-			inline math::vecn_t < value_t, data_t > blend (
+			template < class value_t, template < class > class struct_t >
+			inline struct_t < value_t > blend (
 				real t,
-				math::vecn_t < value_t, data_t > & start,
-				math::vecn_t < value_t, data_t > & end
+				struct_t < value_t > & start,
+				struct_t < value_t > & end
 				) {
 
-				math::vecn_t < value_t, data_t > res;
+				struct_t < value_t > res;
 
-				for (int i = 0; i < data_t::size; ++i) {
+				for (int i = 0; i < struct_t < value_t >::size; ++i) {
 					res.data [i] = blend < value_t > (t, start.data [i], end.data [i]);
 				}
 
@@ -104,17 +103,17 @@ namespace ballistic {
 					std::pow (t, value_t (3)) * end;
 			}
 
-			template < class value_t, class data_t >
-			inline math::vecn_t < value_t, data_t > blend (
+			template < class value_t, template < class > class struct_t >
+			inline struct_t < value_t > blend (
 				real t,
-				math::vecn_t < value_t, data_t > & start,
-				math::vecn_t < value_t, data_t > & cp1,
-				math::vecn_t < value_t, data_t > & cp2,
-				math::vecn_t < value_t, data_t > & end
+				struct_t < value_t > & start,
+				struct_t < value_t > & cp1,
+				struct_t < value_t > & cp2,
+				struct_t < value_t > & end
 				) {
-				math::vecn_t < value_t, data_t > res;
+				struct_t < value_t > res;
 
-				for (int i = 0; i < data_t::size; ++i) {
+				for (int i = 0; i < struct_t < value_t >::size; ++i) {
 					res.data [i] = blend < value_t > (t, start.data [i], cp1.data [i], cp2.data [i], end.data [i]);
 				}
 

@@ -2,7 +2,6 @@
 #define _ballistic_math_matrixes_h_
 
 #include "ballistic.config.h"
-#include "ballistic.math.vecn_t.h"
 #include "ballistic.math.vectors.h"
 
 namespace ballistic {
@@ -65,29 +64,32 @@ namespace math {
 		inline this_type operator * (const this_type & v) const {
 			this_type ret;
 
-			for (int i = 0; i < squared_dim; i++) {
-				for (int j = 0; j < squared_dim; j++) {
+			for (int i = 0; i < squared_dim; ++i) {
+				for (int j = 0; j < squared_dim; ++j) {
 					ret.data_sqr [i][j] = value_t ();
-					for (int k = 0; k < squared_dim; k++)
-						ret.data_sqr [i][j] += data_sqr [i][k] * v.data_sqr [k][j];
+					for (int k = 0; k < squared_dim; ++k)
+						ret.data_sqr [i] [j] += (data_sqr [i] [k] * v.data_sqr [k] [j]);
 				}
 			}
 
 			return ret;
 		}
 
-		template < class data_t >
-		inline vecn_t < value_t, data_t > operator * (const vecn_t < value_t, data_t > & v) const {
-			vecn_t < value_t, data_t > ret;
+		inline vectors::vec3_t < value_t > operator * (const vectors::vec3_t < value_t > & v) const {
+			return {
+				(v.data [0] * data [0]) + (v.data [1] * data [4]) + (v.data [2] * data [8]) + (data [12]),
+				(v.data [0] * data [1]) + (v.data [1] * data [5]) + (v.data [2] * data [9]) + (data [13]),
+				(v.data [0] * data [2]) + (v.data [1] * data [6]) + (v.data [2] * data [10]) + (data [14])
+			};
+		}
 
-			for (int i = 0; i < data_t::size; ++i) {
-				ret.data [i] = value_t ();
-
-				for (int j = 0; j < data_t::size; ++j)
-					ret.data[i] += (data_sqr[j, i] * v.data[j]);
-			}
-
-			return ret;
+		inline vectors::vec4_t < value_t > operator * (const vectors::vec4_t < value_t > & v) const {
+			return {
+				(v.data [0] * data [0]) + (v.data [1] * data [4]) + (v.data [2] * data [8]) + (v.data [3] * data [12]),
+				(v.data [0] * data [1]) + (v.data [1] * data [5]) + (v.data [2] * data [9]) + (v.data [3] * data [13]),
+				(v.data [0] * data [2]) + (v.data [1] * data [6]) + (v.data [2] * data [10]) + (v.data [3] * data [14]),
+				(v.data [0] * data [3]) + (v.data [1] * data [7]) + (v.data [2] * data [11]) + (v.data [3] * data [15])
+			};
 		}
 
 		inline this_type transpose () const {
@@ -254,7 +256,7 @@ namespace math {
 			};
 		}
 
-		inline static this_type make_translation (const vec3_t < value_t > & p) {
+		inline static this_type make_translation (const vectors::vec3_t < value_t > & p) {
 			return{
 				value_t (1), value_t (0), value_t (0), value_t (0),
 				value_t (0), value_t (1), value_t (0), value_t (0),
@@ -263,7 +265,7 @@ namespace math {
 			};
 		}
 
-		inline static this_type make_translation (const vec4_t < value_t > & p) {
+		inline static this_type make_translation (const vectors::vec4_t < value_t > & p) {
 			return{
 				value_t (1), value_t (0), value_t (0), value_t (0),
 				value_t (0), value_t (1), value_t (0), value_t (0),
@@ -311,7 +313,7 @@ namespace math {
 			};
 		}
 		
-		inline static this_type make_scale (const vec3_t < value_t > & p) {
+		inline static this_type make_scale (const vectors::vec3_t < value_t > & p) {
 			return{
 				p.x, value_t (0), value_t (0), value_t (0),
 				value_t (0), p.y, value_t (0), value_t (0),
@@ -320,7 +322,7 @@ namespace math {
 			};
 		}
 
-		inline static this_type make_scale (const vec4_t < value_t > & p) {
+		inline static this_type make_scale (const vectors::vec4_t < value_t > & p) {
 			return{
 				p.x, value_t (0), value_t (0), value_t (0),
 				value_t (0), p.y, value_t (0), value_t (0),

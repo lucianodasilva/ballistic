@@ -198,7 +198,7 @@ int main ( int argc, char ** argv) {
 
 	// create entities
 	game::instance.entities.create (res_camera);
-	game::instance.entities.create (text_to_id ("cube_count"), res_cube_count);
+	game::instance.entities.create (res_cube_count);
 	game::instance.entities.create (res_cube_manager);
 
 	// initialize

@@ -24,6 +24,9 @@ namespace ballistic {
 			property < vec3 > * _p_position;
 			property < vec3 > * _p_up;
 
+			property < mat4 > * _p_proj;
+			property < mat4 > * _p_view;
+
 		public:
 
 			static void require_properties (entity_type * new_type, component_info & info);
