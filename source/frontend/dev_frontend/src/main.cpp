@@ -311,7 +311,7 @@ public:
 
 
 
-				if (v.pos.x == 0.0)
+				//if (v.pos.x == 0.0)
 				{
 					vec3 dtv = q.transform (v.pos);
 					dtv = transform_to_screen (m_vp, dtv);

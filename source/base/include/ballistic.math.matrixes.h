@@ -12,12 +12,14 @@ namespace math {
 
 		typedef mat4_t < value_t > this_type;
 
+		static const mat4_t < value_t > identity;
+
 		static const uint32_t size = 16;
-		static const uint32_t squared_dim = 4;
+		static const uint32_t stride = 4;
 
 		union {
 			value_t data [size];
-			value_t data_sqr [squared_dim][squared_dim];
+			value_t data_sqr [stride] [stride];
 
 			struct {
 				value_t m00, m01, m02, m03;
@@ -26,40 +28,6 @@ namespace math {
 				value_t m12, m13, m14, m15;
 			};
 		};
-
-		inline mat4_t () :
-			m00 (real (1)), m01 (real (0)), m02 (real (0)), m03 (real (0)),
-			m04 (real (0)), m05 (real (1)), m06 (real (0)), m07 (real (0)),
-			m08 (real (0)), m09 (real (0)), m10 (real (1)), m11 (real (0)),
-			m12 (real (0)), m13 (real (0)), m14 (real (0)), m15 (real (1))
-		
-		{}
-
-		inline mat4_t (const std::initializer_list < value_t > & init) {
-			if (init.size () != size) {
-				debug_print ("[vecn_t::init_list_ctor] init list size invalid for used vector type");
-				return;
-			}
-			std::copy (init.begin (), init.end (), +data);
-		}
-
-		inline mat4_t (this_type && v) {
-			std::copy (std::begin (v.data), std::end (v.data), +data);
-		}
-		
-		inline mat4_t (const this_type & v) {
-			std::copy (std::begin (v.data), std::end (v.data), +data);
-		}
-
-		inline this_type & operator = (this_type && v) {
-			std::copy (std::begin (v.data), std::end (v.data), +data);
-			return *this;
-		}
-		
-		inline this_type & operator = (const this_type & v) {
-			std::copy (std::begin (v.data), std::end (v.data), +data);
-			return *this;
-		}
 
 		inline this_type operator * (const value_t & v) const {
 			this_type ret;
@@ -73,10 +41,10 @@ namespace math {
 		inline this_type operator * (const this_type & v) const {
 			this_type ret;
 
-			for (int i = 0; i < squared_dim; ++i) {
-				for (int j = 0; j < squared_dim; ++j) {
+			for (int i = 0; i < stride; ++i) {
+				for (int j = 0; j < stride; ++j) {
 					ret.data_sqr [i][j] = value_t ();
-					for (int k = 0; k < squared_dim; ++k)
+					for (int k = 0; k < stride; ++k)
 						ret.data_sqr [i] [j] += (data_sqr [i] [k] * v.data_sqr [k] [j]);
 				}
 			}
@@ -353,6 +321,14 @@ namespace math {
 			return convert_vectors < value_t, size > (config_value->Value (), ret.data);
 		}
 
+	};
+
+	template < class value_t >
+	const mat4_t < value_t > mat4_t < value_t >::identity = {
+		value_t (1), value_t (0), value_t (0), value_t (0),
+		value_t (0), value_t (1), value_t (0), value_t (0),
+		value_t (0), value_t (0), value_t (1), value_t (0),
+		value_t (0), value_t (0), value_t (0), value_t (1)
 	};
 }
 
