@@ -61,6 +61,15 @@ namespace math {
 			return *this;
 		}
 
+		inline this_type operator * (const value_t & v) const {
+			this_type ret;
+
+			for (int i = 0; i < size; ++i)
+				ret.data [i] = data [i] * v;
+
+			return ret;
+		}
+
 		inline this_type operator * (const this_type & v) const {
 			this_type ret;
 
@@ -90,6 +99,15 @@ namespace math {
 				(v.data [0] * data [2]) + (v.data [1] * data [6]) + (v.data [2] * data [10]) + (v.data [3] * data [14]),
 				(v.data [0] * data [3]) + (v.data [1] * data [7]) + (v.data [2] * data [11]) + (v.data [3] * data [15])
 			};
+		}
+
+		inline this_type operator + (const this_type & v) const {
+			this_type ret;
+
+			for (int i = 0; i < size; ++i)
+				ret.data [i] = data [i] + v.data [i];
+
+			return ret;
 		}
 
 		inline this_type transpose () const {

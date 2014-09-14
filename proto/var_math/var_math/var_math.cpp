@@ -15,316 +15,205 @@
 
 #include "calc_time.h"
 
+	namespace math {
 
-//namespace math {
-//
-//	template < int index, int length >
-//	struct for_op {
-//
-//		template < class oper_t >
-//		inline static void run (oper_t & op) {
-//			op (index);
-//			for_op < index + 1, length >::run (op);
-//		}
-//
-//	};
-//
-//	template < int length >
-//	struct for_op < length, length > {
-//
-//		template < class oper_t >
-//		inline static void run (oper_t & op) {}
-//
-//	};
-//
-//	template < class value_t, class data_t >
-//	struct vecn_t : public data_t {
-//
-//		typedef vecn_t < value_t, data_t > this_type;
-//
-//		inline void swap (this_type & right) {
-//			std::swap (data, right.data);
-//		}
-//
-//		inline void clear () {
-//			for (value_t & v : this->data)
-//				v = value_t (); // zero
-//		}
-//
-//		inline vecn_t () {
-//			clear ();
-//		}
-//		
-//		inline this_type & operator = (this_type v) {
-//			swap (v);
-//			return *this;
-//		}
-//
-//	};
-//
-//	template < class value_t, class data_t >
-//	inline vecn_t < value_t, data_t > operator * (
-//		const vecn_t < value_t, data_t > & va,
-//		float vb) {
-//		vecn_t r;
-//
-//		for_op < 0, data_t::size >::run (
-//			[&](int i) {r.data [i] = va.data [i] * vb; }
-//		);
-//
-//		return r;
-//	}
-//
-//	template < class value_t, class data_t, class this_type = vecn_t < value_t, data_t >>
-//	inline this_type operator * (
-//		const this_type & v1, 
-//		const this_type & v2) 
-//	{
-//		vecn_t < value_t, data_t > r;
-//
-//		for_op < 0, data_t::size >::run (
-//			[&](int i) { r.data [i] = v1.data [i] * v2.data [i]; }
-//		);
-//
-//		return r;
-//	}
-//
-//	template < class value_t, class data_t >
-//	inline vecn_t < value_t, data_t > operator - (
-//		const vecn_t < value_t, data_t > & v1,
-//		const vecn_t < value_t, data_t > & v2) {
-//		vecn_t < value_t, data_t > r;
-//
-//		for_op < 0, data_t::size >::run (
-//			[&](int i) { r.data [i] = v1.data [i] - v2.data [i]; }
-//		);
-//
-//		return r;
-//	}
-//
-//	template < class value_t >
-//	struct vec2_data {
-//		static const uint32_t size = 2;
-//
-//		union {
-//			value_t data [size];
-//			struct {
-//				value_t x, y;
-//			};
-//		};
-//	};
-//
-//	template < class value_t >
-//	using vec2_t = vecn_t < value_t, vec2_data < value_t > >;
-//
-//	template < class value_t >
-//	struct vec3_data {
-//		static const uint32_t size = 3;
-//
-//		union {
-//			value_t data [size];
-//			struct {
-//				value_t x, y, z;
-//			};
-//		};
-//	};
-//
-//	template < class value_t >
-//	using vec3_t = vecn_t < value_t, vec3_data < value_t > > ;
-//
-//	template< class value_t >
-//	struct vec4_data {
-//
-//		static const uint32_t size = 4;
-//
-//		union {
-//			value_t data [size];
-//			struct { value_t x, y, z, w; };
-//			struct { value_t r, g, b, a; };
-//		};
-//	};
-//
-//
-//	template < class value_t, class data_t, class this_type = vecn_t < value_t, data_t > >
-//	inline value_t sqr_length (const this_type & v) {
-//		return dot (v, v);
-//	}
-//
-//	template < class value_t, class data_t, class this_type = vecn_t < value_t, data_t > >
-//	inline value_t sqr_length (const this_type & v1, const this_type & v2) {
-//		return sqr_lenght (v2 - v1);
-//	}
-//
-//	template < class value_t, class data_t, class this_type = vecn_t < value_t, data_t > >
-//	inline value_t length (const this_type & v) {
-//		return sqrtf (sqr_length (v));
-//	}
-//
-//	template < class value_t, class data_t, class this_type = vecn_t < value_t, data_t > >
-//	inline value_t length (const this_type & v1, const this_type & v2) {
-//		return sqrtf (sqr_length (v1, v2));
-//	}
-//
-//}
+		template < class value_t >
+		struct mat4_t {
 
-namespace math {
+			typedef mat4_t < value_t > this_type;
 
-	template < class T >
-	struct vec2_t {
+			static const uint32_t size = 16;
+			static const uint32_t squared_dim = 4;
 
-		static const uint32_t size = 2;
+			union {
+				value_t data [size];
+				value_t data_sqr [squared_dim] [squared_dim];
+
+				struct {
+					value_t m00, m01, m02, m03;
+					value_t m04, m05, m06, m07;
+					value_t m08, m09, m10, m11;
+					value_t m12, m13, m14, m15;
+				};
+			};
+
+			inline mat4_t () :
+				m00 (value_t(1)), m01 (value_t(0)), m02 (value_t(0)), m03 (value_t(0)),
+				m04 (value_t(0)), m05 (value_t(1)), m06 (value_t(0)), m07 (value_t(0)),
+				m08 (value_t(0)), m09 (value_t(0)), m10 (value_t(1)), m11 (value_t(0)),
+				m12 (value_t(0)), m13 (value_t(0)), m14 (value_t(0)), m15 (value_t(1))
+
+			{}
+
+			inline mat4_t (this_type && v) {
+				std::copy (std::begin (v.data), std::end (v.data), +data);
+			}
+
+			inline mat4_t (const this_type & v) {
+				std::copy (std::begin (v.data), std::end (v.data), +data);
+			}
+
+			inline this_type & operator = (this_type && v) {
+				std::copy (std::begin (v.data), std::end (v.data), +data);
+				return *this;
+			}
+
+			inline this_type & operator = (const this_type & v) {
+				std::copy (std::begin (v.data), std::end (v.data), +data);
+				return *this;
+			}
+
+			inline this_type operator * (const value_t & v) const {
+				this_type ret;
+
+				for (int i = 0; i < size; ++i)
+					ret.data [i] = data [i] * v;
+
+				return ret;
+			}
+
+			inline this_type operator * (const this_type & v) const {
+				//this_type ret;
+				//
+				//for (int i = 0; i < squared_dim; ++i) {
+				//	for (int j = 0; j < squared_dim; ++j) {
+				//		ret.data_sqr [i] [j] = value_t ();
+				//		for (int k = 0; k < squared_dim; ++k)
+				//			ret.data_sqr [i] [j] += (data_sqr [i] [k] * v.data_sqr [k] [j]);
+				//	}
+				//}
+				//
+				//return ret;
+
+				this_type ret;
+				int i, j, k;
+
+				for (i = 0; i < squared_dim; ++i) {
+					for (j = 0; j < squared_dim; ++j) {
+						for (k = 0; k < squared_dim; ++k) {
+							ret.data [squared_dim * i + k] += data [squared_dim * i + j] * v.data [squared_dim * j + k];
+						}
+					}
+				}
+
+				return ret;
+			}
+
+			inline this_type operator + (const this_type & v) const {
+				this_type ret;
+
+				for (int i = 0; i < size; ++i)
+					ret.data [i] = data [i] + v.data [i];
+
+				return ret;
+			}
+
+		};
+
+	template < class value_t >
+	struct mat4_t_nv {
+
+		typedef mat4_t_nv < value_t > this_type;
+
+		static const uint32_t size = 16;
+		static const uint32_t squared_dim = 4;
 
 		union {
-			T data [size];
-			struct { T x, y; };
+			value_t data [size];
+			value_t data_sqr [squared_dim] [squared_dim];
+
+			struct {
+				value_t m00, m01, m02, m03;
+				value_t m04, m05, m06, m07;
+				value_t m08, m09, m10, m11;
+				value_t m12, m13, m14, m15;
+			};
 		};
+
+		inline mat4_t_nv () :
+			m00 (value_t(1)), m01 (value_t(0)), m02 (value_t(0)), m03 (value_t(0)),
+			m04 (value_t(0)), m05 (value_t(1)), m06 (value_t(0)), m07 (value_t(0)),
+			m08 (value_t(0)), m09 (value_t(0)), m10 (value_t(1)), m11 (value_t(0)),
+			m12 (value_t(0)), m13 (value_t(0)), m14 (value_t(0)), m15 (value_t(1))
+
+		{}
+
+		inline mat4_t_nv (this_type && v) {
+			std::copy (std::begin (v.data), std::end (v.data), +data);
+		}
+
+		inline mat4_t_nv (const this_type & v) {
+			std::copy (std::begin (v.data), std::end (v.data), +data);
+		}
+
+		inline this_type & operator = (this_type && v) {
+			std::copy (std::begin (v.data), std::end (v.data), +data);
+			return *this;
+		}
+
+		inline this_type & operator = (const this_type & v) {
+			std::copy (std::begin (v.data), std::end (v.data), +data);
+			return *this;
+		}
+
+		inline this_type operator * (const value_t & v) const {
+			this_type ret;
+
+#pragma loop (no_vector)
+			for (int i = 0; i < size; ++i)
+				ret.data [i] = data [i] * v;
+
+			return ret;
+		}
+
+		inline this_type operator * (const this_type & v) const {
+			this_type ret;
+
+#pragma loop (no_vector)
+			for (int i = 0; i < squared_dim; ++i) {
+#pragma loop (no_vector)
+				for (int j = 0; j < squared_dim; ++j) {
+					ret.data_sqr [i] [j] = value_t ();
+#pragma loop (no_vector)
+					for (int k = 0; k < squared_dim; ++k)
+						ret.data_sqr [i] [j] += (data_sqr [i] [k] * v.data_sqr [k] [j]);
+				}
+			}
+
+			return ret;
+		}
+
+		inline this_type operator + (const this_type & v) const {
+			this_type ret;
+
+#pragma loop (no_vector)
+			for (int i = 0; i < size; ++i)
+				ret.data [i] = data [i] + v.data [i];
+
+			return ret;
+		}
 
 	};
 
-	template < class T >
-	struct vec3_t {
-
-		static const uint32_t size = 3;
-
-		union {
-			T data [size];
-
-			struct { T x, y, z; };
-			struct { T r, g, b; };
-
-			// shortcuts
-			vec2_t < T > xy;
-		};
-
-	};
-
-	template < class T >
-	struct vec4_t {
-
-		static const uint32_t size = 4;
-
-		union {
-			T data [size];
-
-			struct { T x, y, z, w; };
-			struct { T r, g, b, a; };
-
-			// shortcuts
-			vec2_t < T > xy;
-			vec3_t < T > xyz;
-		};
-
-	};
-
-	template < class T, template < class > class sT >
-	inline sT < T > operator * (const sT < T > & v1, const sT < T > & v2) {
-		sT < T > r;
-		
-		for (int i = 0; i < sT < T >::size; ++i)
-			r.data [i] = v1.data [i] * v2.data [i];
-		
-		return r;
 	}
 
-	template < class T, template < class > class sT >
-	inline sT < T > operator * (const sT < T > & v1, const T & s) {
-		sT < T > r;
+	using mat4_v = math::mat4_t < float >;
+	using mat4_nv = math::mat4_t_nv < float > ;
 
-		for (int i = 0; i < sT < T >::size; ++i)
-			r.data [i] = v1.data [i] * s;
 
-		return r;
-	}
-}
+#define MAX_TURNS 100000
 
-struct A {
-
-	union {
-		struct {
-			double data [3];
-		};
-		struct {
-			double X;
-			double Y;
-			double Z;
-		};
-	};
-
-	inline A () {}
-	inline A (const std::initializer_list < double > & l) {
-		std::copy (l.begin (), l.end (), +data);
-	}
-
-	inline A (A && v) { 
-		std::copy (std::begin (v.data), std::end (v.data), +data);
-	}
-
-	inline A operator * (A v) {
-		A tmp;
-
-		tmp.X = X * v.X;
-		tmp.Y = Y * v.Y;
-		tmp.Z = Z * v.Z;
-
-		return tmp;
-	}
-
-	inline A & operator = (A && v) {
-		X = v.X;
-		Y = v.Y;
-		Z = v.Z;
-
-		return *this;
-	}
-
-};
-
-struct B {
-
-	double X;
-	double Y;
-	double Z;
-
-	inline B () {}
-	inline B (std::initializer_list < double > args) {
-		const double * V = args.begin ();
-
-		X = V [0];
-		Y = V [1];
-		Z = V [2];
-	}
-
-	inline B operator * (B v) const {
-		B tmp;
-
-		tmp.X = X * v.X;
-		tmp.Y = Y * v.Y;
-		tmp.Z = Z * v.Z;
-
-		return tmp;
-	}
-
-	inline B & operator *= (const B & v) {
-		X *= v.X;
-		Y *= v.Y;
-		Z *= v.Z;
-
-		return *this;
-	}
-
-};
-
-#define MAX_TURNS 1000000
-
-#pragma optimize ("", off)
+//#pragma optimize ("", off)
 void calculate_A () {
 
-	math::vec3_t < float > x = {13.0, 12.0, 11.0}, y = {13.0, 12.0, 11.0}, z = {13.0, 12.0, 11.0};
-
-	z = x;
+	mat4_v
+		x,
+		y,
+		z;
 
 	for (int i = 0; i < MAX_TURNS; ++i) {
 		z = x * y;
+		z = z + x;
 	}
 }
 
@@ -334,10 +223,11 @@ void test_a () {
 
 void calculate_B () {
 
-	B x = {13.0, 12.0, 11.0}, y = {13.0, 12.0, 11.0}, z = {13.0, 12.0, 11.0};
+	mat4_nv x, y, z;
 
 	for (int i = 0; i < MAX_TURNS; ++i) {
 		z = x * y;
+		z = z + x;
 	}
 }
 
@@ -345,39 +235,17 @@ void test_b () {
 	calculate_B ();
 }
 
-#pragma optimize ("", on)
+//#pragma optimize ("", on)
 
-struct test3 {
-
-	union {
-		float data [3];
-		struct { float x, y, z; };
-	};
-
-};
-
-struct test4 {
-
-	union {
-		float data [4];
-		struct { float x, y, z, w; };
-		test3 xyz;
-	};
-
-};
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	test3 t3 = {2., 2., 2.};
-	test4 t4 = {{ t3.x, t3.y, t3.z, 1.}};
-
-	t4 = {t3.data, 1.};
 
 	double seconds = diag::timed_avg_call (100, test_a) ();
-	std::cout << std::endl << "NEW multiply and copy average: " << seconds << std::endl;
+	std::cout << std::endl << "auto vectorizer average: " << seconds << std::endl;
 
 	seconds = diag::timed_avg_call (100, test_b) ();
-	std::cout << std::endl << "Normal multiply and copy average: " << seconds;
+	std::cout << std::endl << "no auto vectorizer average: " << seconds;
 
 	std::cin >> seconds;
 

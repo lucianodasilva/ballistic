@@ -45,115 +45,6 @@ ballistic::res_id_t res_camera ("camera.entity", "resources/rigging.xml");
 ballistic::res_id_t res_default_material ("default_material.effect", "resources/default_material.fx");
 ballistic::res_id_t res_overlay_material ("overlay_material.effect", "resources/overlay_material.fx");
 
-//struct dual_quat {
-//
-//	vec4 l;
-//	quat r;
-//
-//	inline static vec4 epsilon_half (const vec4 & a, const vec4 & b) {
-//		return{
-//			real (.5) * ( a.x * b.w + a.w * b.x - a.z * b.y + a.y * b.z ),
-//			real (.5) * ( a.y * b.w + a.z * b.x + a.w * b.y - a.x * b.z ),
-//			real (.5) * ( a.z * b.w - a.y * b.x + a.x * b.y + a.w * b.z ),
-//
-//			real (.5) * ( a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z )
-//		};
-//	}
-//
-//	static dual_quat from_tq (const vec3 & t, const quat & q) {
-//		return{
-//				{
-//					//real (.5) * (t_v.x * r_v.w + t_v.y * r_v.v.z - t_v.z * r_v.v.y),
-//					//real (.5) * (-t_v.x * r_v.v.z + t_v.y * r_v.w + t_v.z * r_v.v.x),
-//					//real (.5) * (t_v.x * r_v.v.y - t_v.y * r_v.v.x + t_v.z * r_v.w),
-//					//real (-.5) * (t_v.x * r_v.v.x + t_v.y * r_v.v.y + t_v.z * r_v.v.z)
-//					real (-0.5) * (+t.x * q.x + t.y * q.y + t.z * q.z ),
-//					real (+0.5) * (+t.x * q.w + t.y * q.z - t.z * q.y ),
-//					real (+0.5) * (-t.x * q.z + t.y * q.w + t.z * q.x ),
-//					real (+0.5) * (+t.x * q.y - t.y * q.x + t.z * q.w )
-//				},
-//				q
-//		};
-//	}
-//
-//	static dual_quat pure_t (const vec3 & t) {
-//		return{
-//				{
-//					real (.5) * t.x,
-//					real (.5) * t.y,
-//					real (.5) * t.z,
-//					real (.5)
-//				},
-//				{ .0, .0, .0, 1.0}
-//		};
-//	}
-//
-//	static dual_quat rot_point (const vec3 & t, const quat & r) {
-//		quat hr;
-//		vec4 tt;
-//
-//		tt.xyz = t;
-//		tt.w = 1.0;
-//
-//		hr.xyzw = epsilon_half (r.xyzw, tt);
-//
-//		return{
-//			epsilon_half (tt, r.xyzw),
-//			r - hr
-//		};
-//	}
-//
-//	inline vec3 transform (const vec3 & v) const {
-//		return
-//			(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w + l.xyz) + l.xyz * r.w - r.xyz * l.w) * real (2) + v;
-//			//v +
-//			//(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w) * real (2)) +
-//			//((l.xyz * r.w) - (r.xyz * l.w) + (math::cross (r.xyz, l.xyz)) * real (2));
-//	}
-//
-//	inline dual_quat normalize () const {
-//
-//		vec4 n = math::normalize (r.xyzw);
-//		vec4 d = l - n * math::dot (n, l);
-//		quat q;
-//
-//		q.xyzw = n;
-//
-//		return {
-//			d,
-//			q
-//		};
-//	}
-//
-//	inline dual_quat conj () const {
-//		return{
-//				{ -l.x, -l.y, -l.z, l.w },
-//				{ -r.x, -r.y, -r.z, r.w}
-//		};
-//	}
-//
-//	inline dual_quat operator * (const dual_quat & q) const {
-//		dual_quat t;
-//
-//		t.r = r * q.r;
-//		t.l = r.xyzw * q.l + q.l * r.xyzw;
-//
-//		return t;
-//	}
-//
-//	inline vec3 operator * (const vec3 & v) const {
-//
-//	}
-//
-//	//inline static dual_quat blend (const dual_quat & q1, const dual_quat & q2, real weight) {
-//	//	return {
-//	//		(q1.l * (real (1) - weight)) + (q2.l * weight),
-//	//		(q1.r * (real (1) - weight)) + (q2.r * weight)
-//	//	};
-//	//}
-//
-//};
-
 struct dual_quat {
 
 	vec4 d;
@@ -161,10 +52,10 @@ struct dual_quat {
 
 	inline vec3 transform (const vec3 & v) const {
 		return
-		//	(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w + l.xyz) + l.xyz * r.w - r.xyz * l.w) * real (2) + v;
-		v +
-		(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w) * real (2)) +
-		((d.xyz * r.w) - (r.xyz * d.w) + (math::cross (r.xyz, d.xyz)) * real (2));
+		(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w + d.xyz) + d.xyz * r.w - r.xyz * d.w) * real (2) + v;
+		//v +
+		//(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w) * real (2)) +
+		//((d.xyz * r.w) - (r.xyz * d.w) + (math::cross (r.xyz, d.xyz)) * real (2));
 	}
 
 	inline static dual_quat blend (const dual_quat & q1, const dual_quat & q2, real weight) {
@@ -236,6 +127,15 @@ struct tbone {
 
 		return inv_pose * pose;
 	}
+
+	inline tbone transform (const tbone & b) {
+		return tbone{
+			b.ot + (b.or * ot),
+			b.or,
+			b.t + (b.r * t),
+			b.r * r
+		};
+	}
 };
 
 struct bone {
@@ -244,8 +144,8 @@ struct bone {
 
 	inline tbone transform (const tbone & b) {
 		return tbone {
-			b.ot + t,
-			b.or * r,
+			t, 
+			r,
 			b.t + (b.r * t),
 			b.r * r
 		};
@@ -254,7 +154,6 @@ struct bone {
 
 bone bones [] = {
 		{{-1, .0, .0}, {1.0, .0, .0, .0}},
-		{{1, .0, .0}, {1.0, .0, .0, .0}},
 		{{1, .0, .0}, {1.0, .0, .0, .0}}
 };
 
@@ -273,10 +172,10 @@ skinned_vert vert_data [] = {
 	{{.0, -.5, .5}, {0, 1}, 0.5},
 	{{.0, .5, -.5}, {0, 1}, 0.5},
 	{{.0, .5, .5},  {0, 1}, 0.5},
-	{{1, -.5, -.5}, {2, 2}, 0.},
-	{{1, -.5, .5},  {2, 2}, 0.},
-	{{1, .5, -.5},  {2, 2}, 0.},
-	{{1, .5, .5},   {2, 2}, 0.}
+	{{1, -.5, -.5}, {1, 1}, 0.},
+	{{1, -.5, .5},  {1, 1}, 0.},
+	{{1, .5, -.5},  {1, 1}, 0.},
+	{{1, .5, .5},   {1, 1}, 0.}
 };
 
 inline vec3 transform_to_screen (const mat4 & vp_matrix, const vec3 & v) {
@@ -343,22 +242,21 @@ public:
 			real time = message [id::frame_time];
 			angle += (0.5F * mult) * time;
 
-			if (angle > .5) {
+			if (angle > 1.5) {
 				mult = -1.;
-				angle = .5;
-			} else if (angle < -.5) {
+				angle = 1.5;
+			} else if (angle < -1.5) {
 				mult = 1.;
-				angle = -.5;
+				angle = -1.5;
 			}
 
 			return;
 		} else if (message.id () == id::message::render) {
 
 			// update bone animation
-			bone temp_bones [3];
-			temp_bones [0] = bone{{-1., .0, .0}, quat::from_axis ({.5, 1.0, 1.0}, angle)};
-			temp_bones [1] = bone{{1, .0, .0}, quat::from_axis ({.0, .0, 1.0}, angle)};
-			temp_bones [2] = bones [2];
+			tbone temp_bones [2];
+			temp_bones [0] = tbone{bones [0].t, bones [0].r, {-1., .0, .0}, quat::from_axis ({.0, .0, 1.0}, angle)};
+			temp_bones [1] = tbone{bones [1].t, bones [1].r, {1, .0, .0}, quat::from_axis (math::normalize (vec3 {1.0, .0, 1.0}), angle)};
 
 			const mat4 & view = _camera->properties [id::graphics::camera_view];
 			const mat4 & proj = _camera->properties [id::graphics::camera_proj];
@@ -366,7 +264,7 @@ public:
 			// project
 			mat4 m_vp = view * proj;
 
-			tbone t_bones [3];
+			tbone t_bones [2];
 			t_bones [0] = {
 				bones [0].t,
 				bones [0].r,
@@ -374,17 +272,15 @@ public:
 				temp_bones [0].r
 			};
 
-			for (int i = 1; i < 3; ++i) {
+			for (int i = 1; i < 2; ++i) {
 				t_bones [i] = temp_bones [i].transform (t_bones [i - 1]);
 			}
 
-			vec3 t_screen_bones [3];
-			for (int i = 0; i < 3; ++i) {
-				t_screen_bones [i] = transform_to_screen (m_vp, t_bones [i].t);
-			}
+			for (int i = 0; i < 2; ++i) {
+				vec3 b_center = transform_to_screen (m_vp, t_bones [i].t);
+				vec3 b_vector = transform_to_screen (m_vp, t_bones [i].t + (t_bones [i].r * vec3 {.5, .0, .0}));
 
-			for (int i = 1; i < 3; ++i) {
-				draw_bones (t_screen_bones [i - 1], t_screen_bones [i]);
+				draw_bones (b_center, b_vector);
 			}
 
 			// transform and render (software) verts
@@ -393,16 +289,40 @@ public:
 				tbone b1 = t_bones [v.bones.x];
 				tbone b2 = t_bones [v.bones.y];
 
-				auto q1 = dual_quat::from_matrix (b1.bone_matrix ());
-				auto q2 = dual_quat::from_matrix (b2.bone_matrix ());
+				dual_quat q;
 
-				auto q = dual_quat::blend (q1, q2, v.weight);
+				mat4 m;
 
-				vec3 tv = q.transform (v.pos);
-				tv = transform_to_screen (m_vp, tv);
+				if (v.weight == 0) {
+					m = b1.bone_matrix ();
+					q = dual_quat::from_matrix (b1.bone_matrix ());
+				} else {
 
-				//if (v.pos.x == 0.0)
-					draw_rect (tv, 0.01F, {1.0, .0, .0, 1.});
+					mat4 m1 = b1.bone_matrix ();
+					mat4 m2 = b2.bone_matrix ();
+
+					auto q1 = dual_quat::from_matrix (b1.bone_matrix ());
+					auto q2 = dual_quat::from_matrix (b2.bone_matrix ());
+
+					q = dual_quat::blend (q1, q2, v.weight);
+
+					m = (m1 * (real (1) - v.weight)) + (m2 * v.weight);
+				}
+
+
+
+				if (v.pos.x == 0.0)
+				{
+					vec3 dtv = q.transform (v.pos);
+					dtv = transform_to_screen (m_vp, dtv);
+
+					draw_rect (dtv, 0.01F, {1.0, .0, .0, 1.});
+
+					vec3 mtv = m * v.pos;
+					mtv = transform_to_screen (m_vp, mtv);
+
+					draw_rect (mtv, 0.01F, {.0, .0, 1.0, 1.});
+				}
 			}
 			
 		}
