@@ -44,7 +44,7 @@ namespace ballistic {
 		}
 
 		template < class value_t >
-		inline vectors::vec3_t < value_t > cross (const vectors::vec3_t < value_t > & v1, const vectors::vec3_t < value_t > & v2) {
+		inline details::vec3_t < value_t > cross (const details::vec3_t < value_t > & v1, const details::vec3_t < value_t > & v2) {
 			return {
 				v1.y * v2.z - v1.z * v2.y,
 				v1.z * v2.x - v1.x * v2.z,

@@ -52,7 +52,7 @@ namespace math {
 			return ret;
 		}
 
-		inline vectors::vec3_t < value_t > operator * (const vectors::vec3_t < value_t > & v) const {
+		inline details::vec3_t < value_t > operator * (const details::vec3_t < value_t > & v) const {
 			return {
 				(v.data [0] * data [0]) + (v.data [1] * data [4]) + (v.data [2] * data [8]) + (data [12]),
 				(v.data [0] * data [1]) + (v.data [1] * data [5]) + (v.data [2] * data [9]) + (data [13]),
@@ -60,7 +60,7 @@ namespace math {
 			};
 		}
 
-		inline vectors::vec4_t < value_t > operator * (const vectors::vec4_t < value_t > & v) const {
+		inline details::vec4_t < value_t > operator * (const details::vec4_t < value_t > & v) const {
 			return {
 				(v.data [0] * data [0]) + (v.data [1] * data [4]) + (v.data [2] * data [8]) + (v.data [3] * data [12]),
 				(v.data [0] * data [1]) + (v.data [1] * data [5]) + (v.data [2] * data [9]) + (v.data [3] * data [13]),
@@ -242,7 +242,7 @@ namespace math {
 			};
 		}
 
-		inline static this_type make_translation (const vectors::vec3_t < value_t > & p) {
+		inline static this_type make_translation (const details::vec3_t < value_t > & p) {
 			return{
 				value_t (1), value_t (0), value_t (0), value_t (0),
 				value_t (0), value_t (1), value_t (0), value_t (0),
@@ -251,7 +251,7 @@ namespace math {
 			};
 		}
 
-		inline static this_type make_translation (const vectors::vec4_t < value_t > & p) {
+		inline static this_type make_translation (const details::vec4_t < value_t > & p) {
 			return{
 				value_t (1), value_t (0), value_t (0), value_t (0),
 				value_t (0), value_t (1), value_t (0), value_t (0),
@@ -299,7 +299,7 @@ namespace math {
 			};
 		}
 		
-		inline static this_type make_scale (const vectors::vec3_t < value_t > & p) {
+		inline static this_type make_scale (const details::vec3_t < value_t > & p) {
 			return{
 				p.x, value_t (0), value_t (0), value_t (0),
 				value_t (0), p.y, value_t (0), value_t (0),
@@ -308,7 +308,7 @@ namespace math {
 			};
 		}
 
-		inline static this_type make_scale (const vectors::vec4_t < value_t > & p) {
+		inline static this_type make_scale (const details::vec4_t < value_t > & p) {
 			return{
 				p.x, value_t (0), value_t (0), value_t (0),
 				value_t (0), p.y, value_t (0), value_t (0),

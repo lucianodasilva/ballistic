@@ -45,75 +45,6 @@ ballistic::res_id_t res_camera ("camera.entity", "resources/rigging.xml");
 ballistic::res_id_t res_default_material ("default_material.effect", "resources/default_material.fx");
 ballistic::res_id_t res_overlay_material ("overlay_material.effect", "resources/overlay_material.fx");
 
-struct dual_quat {
-
-	vec4 d;
-	quat r;
-
-	inline vec3 transform (const vec3 & v) const {
-		return
-		(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w + d.xyz) + d.xyz * r.w - r.xyz * d.w) * real (2) + v;
-		//v +
-		//(math::cross (r.xyz, math::cross (r.xyz, v) + v * r.w) * real (2)) +
-		//((d.xyz * r.w) - (r.xyz * d.w) + (math::cross (r.xyz, d.xyz)) * real (2));
-	}
-
-	inline static dual_quat blend (const dual_quat & q1, const dual_quat & q2, real weight) {
-		return {
-			math::lerp (q1.d, q2.d, weight),
-			math::lerp (q1.r, q2.r, weight)
-		};
-	}
-
-	inline static dual_quat from_matrix (const mat4 & m ) {
-
-		quat real_q;
-
-		real const trace = m.m00 + m.m05 + m.m10;
-
-		if (trace > real (0)) {
-			real const r = std::sqrt (real (1) + trace);
-			real const invr = real (0.5) / r;
-			real_q.w = real (0.5) * r;
-			real_q.x = (m.m06 - m.m09) * invr;
-			real_q.y = (m.m08 - m.m02) * invr;
-			real_q.z = (m.m01 - m.m04) * invr;
-		} else if (m.m00 > m.m05 && m.m00 > m.m10 ) {
-			real const r = std::sqrt (real (1) + m.m00 - m.m05 - m.m10);
-			real const invr = real (0.5) / r;
-			real_q.x = real (0.5) * r;
-			real_q.y = (m.m01 + m.m04) * invr;
-			real_q.z = (m.m08 + m.m02) * invr;
-			real_q.w = (m.m06 - m.m09) * invr;
-		} else if (m.m05 > m.m10) {
-			real const r = std::sqrt (real (1) + m.m05 - m.m00 - m.m10);
-			real const invr = real (0.5) / r;
-			real_q.x = (m.m01 + m.m04) * invr;
-			real_q.y = real (0.5) * r;
-			real_q.z = (m.m06 + m.m09) * invr;
-			real_q.w = (m.m08 - m.m02) * invr;
-		} else {
-			real const r = std::sqrt (real (1) + m.m10 - m.m00 - m.m05);
-			real const invr = real (0.5) / r;
-			real_q.x = (m.m08 + m.m02) * invr;
-			real_q.y = (m.m06 + m.m09) * invr;
-			real_q.z = real (0.5) * r;
-			real_q.w = (m.m01 - m.m04) * invr;
-		}
-
-		vec4 dual;
-		dual.x =  real (0.5) * ( m.m12 * real_q.w + m.m13 * real_q.z - m.m14 * real_q.y);
-		dual.y =  real (0.5) * (-m.m12 * real_q.z + m.m13 * real_q.w + m.m14 * real_q.x);
-		dual.z =  real (0.5) * ( m.m12 * real_q.y - m.m13 * real_q.x + m.m14 * real_q.w);
-		dual.w = -real (0.5) * ( m.m12 * real_q.x + m.m13 * real_q.y + m.m14 * real_q.z);
-		return {
-			dual,
-			real_q
-		};
-	}
-
-};
-
 struct tbone {
 	vec3 ot;
 	quat or;
@@ -289,22 +220,22 @@ public:
 				tbone b1 = t_bones [v.bones.x];
 				tbone b2 = t_bones [v.bones.y];
 
-				dual_quat q;
+				//dual_quat q;
 
 				mat4 m;
 
 				if (v.weight == 0) {
 					m = b1.bone_matrix ();
-					q = dual_quat::from_matrix (b1.bone_matrix ());
+					//q = dual_quat::from_matrix (b1.bone_matrix ());
 				} else {
 
 					mat4 m1 = b1.bone_matrix ();
 					mat4 m2 = b2.bone_matrix ();
 
-					auto q1 = dual_quat::from_matrix (b1.bone_matrix ());
-					auto q2 = dual_quat::from_matrix (b2.bone_matrix ());
-
-					q = dual_quat::blend (q1, q2, v.weight);
+					//auto q1 = dual_quat::from_matrix (b1.bone_matrix ());
+					//auto q2 = dual_quat::from_matrix (b2.bone_matrix ());
+					//
+					//q = dual_quat::blend (q1, q2, v.weight);
 
 					m = (m1 * (real (1) - v.weight)) + (m2 * v.weight);
 				}
@@ -313,10 +244,10 @@ public:
 
 				//if (v.pos.x == 0.0)
 				{
-					vec3 dtv = q.transform (v.pos);
-					dtv = transform_to_screen (m_vp, dtv);
-
-					draw_rect (dtv, 0.01F, {1.0, .0, .0, 1.});
+					//vec3 dtv = q.transform (v.pos);
+					//dtv = transform_to_screen (m_vp, dtv);
+					//
+					//draw_rect (dtv, 0.01F, {1.0, .0, .0, 1.});
 
 					vec3 mtv = m * v.pos;
 					mtv = transform_to_screen (m_vp, mtv);

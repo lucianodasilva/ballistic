@@ -8,118 +8,79 @@
 #include "ballistic.math.matrixes.h"
 
 namespace ballistic {
-namespace math {
+	namespace math {
+		namespace details {
 
-	template < class T >
-	struct quat_t {
-		
-		static const uint32_t size = 4;
-		
-		union {
-			T data [4];
+			template < class value_t >
+			struct quat_t {
 
-			struct { T x, y, z, w; };
+				static const uint32_t size = 4;
 
-			vectors::vec3_t < T > xyz;
-			vectors::vec4_t < T > xyzw;
-		};
-		
-		// arithmetics
-		
-		inline quat_t < T > operator + ( const quat_t < T > & vl ) const;
-		inline quat_t < T > operator - (const quat_t < T > & vl) const;
-		inline quat_t < T > operator * ( const quat_t < T > & vl ) const;
-		inline vectors::vec3_t < T > operator * ( const vectors::vec3_t < T > & vl ) const;
-		
-		inline mat4_t < T > to_matrix () const;
-		inline quat_t < T > uconj () const;
+				union {
+					value_t data [4];
 
-		static inline quat_t < T > from_axis (const vectors::vec3_t < T > & axis, T angle);
+					struct { value_t x, y, z, w; };
 
-		inline static bool parse (const tinyxml2::XMLAttribute * config_value, quat_t < T > & ret);
-		
-	};
+					vec3_t < value_t > xyz;
+					vec4_t < value_t > xyzw;
+				};
 
-	template < class T >
-	quat_t < T > quat_t < T >::operator + (const quat_t < T > & vl) const {
-		quat_t < T > r;
-		r.xyzw = xyzw + vl.xyzw;
-		return r;
+				inline mat4_t < value_t > to_matrix () const {
+					return {
+						(value_t (1) - (value_t (2) * ((y * y) + (z * z)))), (value_t (2) * ((x * y) + (z * w))), (value_t (2) * ((x * z) - (y * w))), value_t (0),
+						(value_t (2) * ((x * y) - (z * w))), (value_t (1) - (value_t (2) * ((x * x) + (z * z)))), (value_t (2) * ((y * z) + (x * w))), value_t (0),
+						(value_t (2) * ((x * z) + (y * w))), (value_t (2) * ((y * z) - (x * w))), (value_t (1) - (value_t (2) * ((x * x) + (y * y)))), value_t (0),
+						value_t (0), value_t (0), value_t (0), value_t (1)
+					};
+				}
+
+				inline quat_t < value_t > uconj () const {
+					return{
+						-x,
+						-y,
+						-z,
+						w
+					};
+				}
+
+				static inline quat_t < value_t > from_axis (const vec3_t < value_t > & axis, value_t angle) {
+					value_t half_angle = value_t (0.5) * angle;
+					value_t sn = sin (half_angle);
+
+					quat_t < value_t > q;
+
+					q.xyz = axis * sn;
+					q.w = value_t (cos (half_angle));
+
+					return q;
+				}
+
+				inline static bool parse (const tinyxml2::XMLAttribute * config_value, quat_t < value_t > & ret) {
+					return convert_vectors < value_t, 4 > (config_value->Value (), ret.data);
+				}
+
+			};
+
+			template < class value_t >
+			inline quat_t < value_t > operator * (const quat_t < value_t > & v1, const quat_t < value_t > & v2) {
+				return{
+					v1.w * v2.x + v1.x * v2.w + v1.y * v2.z - v1.z * v2.y,
+					v1.w * v2.y - v1.x * v2.z + v1.y * v2.w + v1.z * v2.x,
+					v1.w * v2.z + v1.x * v2.y - v1.y * v2.x + v1.z * v2.w,
+					v1.w * v2.w - v1.x * v2.x - v1.y * v2.y - v1.z * v2.z
+				};
+			}
+
+			template < class value_t >
+			inline vec3_t < value_t > operator * (const quat_t < value_t > & q, const vec3_t < value_t > & v) {
+				vec3_t < value_t > r = math::cross (q.xyz, v) * value_t (2);
+				return v + (r * q.w + math::cross (q.xyz, r));
+			}
+
+		}
 	}
 
-	template < class T >
-	quat_t < T > quat_t < T >::operator - (const quat_t < T > & vl) const {
-		quat_t < T > r;
-		r.xyzw = xyzw - vl.xyzw;
-		return r;
-	}
-
-	//template < class T >
-	//quat_t < T > quat_t < T >::operator * (T vl) const {
-	//	quat_t < T > r;
-	//	r.xyzw = xyzw * vl.xyzw;
-	//	return r;
-	//}
-
-	template < class T >
-	quat_t < T > quat_t < T >::operator * (const quat_t < T > & vl) const {
-		return{
-			w * vl.x + x * vl.w + y * vl.z - z * vl.y,
-			w * vl.y - x * vl.z + y * vl.w + z * vl.x,
-			w * vl.z + x * vl.y - y * vl.x + z * vl.w,
-			w * vl.w - x * vl.x - y * vl.y - z * vl.z
-		};
-	}
-
-	template < class T >
-	vectors::vec3_t < T > quat_t < T >::operator * (const vectors::vec3_t < T > & vl) const {
-		vectors::vec3_t < T > t = math::cross (xyz, vl) * T (2);
-		return vl + (t * w + math::cross (xyz, t));
-	}
-
-	template < class T >
-	mat4_t < T > quat_t < T >::to_matrix () const {
-
-		return mat4_t < T > ({
-			(T (1) - (T (2) * ((y * y) + (z * z)))), (T (2) * ((x * y) + (z * w))), (T (2) * ((x * z) - (y * w))), T (0),
-			(T (2) * ((x * y) - (z * w))), (T (1) - (T (2) * ((x * x) + (z * z)))), (T (2) * ((y * z) + (x * w))), T (0),
-			(T (2) * ((x * z) + (y * w))), (T (2) * ((y * z) - (x * w))), (T (1) - (T (2) * ((x * x) + (y * y)))), T (0),
-			T (0), T (0), T (0), T (1)
-		});
-	}
-
-	template < class T >
-	quat_t < T > quat_t < T >::uconj () const {
-		return{
-			-x,
-			-y,
-			-z,
-			w
-		};
-	}
-
-	template < class T >
-	quat_t < T > quat_t < T >::from_axis (const vectors::vec3_t < T > & axis, T angle) {
-
-		T half_angle = T (0.5) * angle;
-		T sn = sin (half_angle);
-
-		quat_t < T > q;
-
-		q.xyz = axis * sn;
-		q.w = T (cos (half_angle));
-
-		return q;
-	}
-
-	template < class T >
-	bool quat_t < T >::parse (const tinyxml2::XMLAttribute * config_value, quat_t < T > & ret) {
-		return convert_vectors < T, 4 > (config_value->Value (), ret.data);
-	}
-	
+	typedef ballistic::math::details::quat_t < real > quat;
 }
-}
-
-typedef ballistic::math::quat_t < real > quat;
 
 #endif
