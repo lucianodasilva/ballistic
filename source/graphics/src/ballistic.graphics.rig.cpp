@@ -5,9 +5,17 @@
 namespace ballistic {
 	namespace graphics {
 
-		const id_t & rig_animation::id () const {
-			return _id;
-		}
+		const rig_frame_tween rig_frame_tween::null_frame_tween = {
+			std::vector < mat4 > (0),
+			rig_animation::null_animation
+		};
+
+		const rig_animation rig_animation::null_animation = {
+			0,
+			0,
+			0,
+			std::vector < rig_frame > (0)
+		};
 
 		rig::rig (const id_t & id, uint32_t bone_count) : 
 			iresource (id),
@@ -25,27 +33,42 @@ namespace ballistic {
 			real duration
 		) {
 
-			//auto it = _animations.find (id_v);
-			//
-			//if (it != _animations.end ()) {
-			//	debug_error ("animation id " << id_v << " already exists");
-			//	return;
-			//}
-			//
-			//if (bone_data_size % frame_count != _bone_count) {
-			//	debug_error ("animation " << id_v << " data does not match expected bone count for available frames");
-			//	return;
-			//}
-			//
-			//rig_animation & anim = _animations [id_v];
-			//
-			//anim._frames.resize (frame_count);
-			//mat4 * bones = bone_data;
-			//
-			//for (auto f : anim._frames) {
-			//	std::copy (bones, bones + _bone_count, f._bones);
-			//	bones += _bone_count;
-			//}
+			auto it = _animations.find (id_v);
+			
+			if (it != _animations.end ()) {
+				debug_error ("animation id " << id_v << " already exists");
+				return;
+			}
+			
+			if (bone_data_size % frame_count != _bone_count) {
+				debug_error ("animation " << id_v << " data does not match expected bone count for available frames");
+				return;
+			}
+			
+			rig_animation & anim = _animations [id_v];
+			
+			anim.frames.resize (frame_count);
+			mat4 * bones = bone_data;
+			
+			for (auto f : anim.frames) {
+				std::copy (bones, bones + _bone_count, f.bones.begin ());
+				bones += _bone_count;
+			}
+
+			anim.duration = duration;
+			anim.frame_duration = duration / _bone_count;
+			anim.bone_count = _bone_count;
+		}
+
+		rig_frame_tween rig::create_frame_tween (const id_t & animation_id, real time) {
+			auto it = _animations.find (animation_id);
+
+			if (it == _animations.end ()) {
+				debug_error ("rig " << id () << " animation " << animation_id << " was not found");
+				return rig_frame_tween::null_frame_tween;
+			}
+
+			return it->second.create_frame_tween (time);
 		}
 
 	}

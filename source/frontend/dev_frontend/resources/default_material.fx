@@ -5,7 +5,8 @@ uniform mat4        effect_t_proj;
 uniform mat4        effect_t_normal;
 uniform mat4        effect_t_mvp;
 
-uniform mat4		bones [32];
+uniform	bool		effect_has_bones;
+uniform mat4		effect_t_bones [32];
 
 #ifdef VERTEX_SHADER
 
@@ -20,7 +21,20 @@ out vec2            var_uv;
 
 void main () {
 
-	vec4 pos = effect_t_mvp * vec4 (in_position, 1.0);
+	vec4 pos = vec4 (in_position, 1.0);
+
+	if (effect_has_bones) {
+		mat4 A = effect_t_bones [in_bone_index.x];
+		mat4 B = effect_t_bones [in_bone_index.y];
+
+		pos = mix (
+			effect_t_bones [in_bone_index.x], 
+			effect_t_bones [in_bone_index.y], 
+			in_bone_weight
+		) * pos;
+	}
+
+	pos = effect_t_mvp * pos;
 
 	//var_normal = (effect_t_normal * vec4 (in_normal, 1.0)).xyz;
 

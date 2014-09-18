@@ -19,6 +19,7 @@
 #include "ballistic.graphics.material.h"
 #include "ballistic.graphics.render_item.h"
 #include "ballistic.graphics.render_list.h"
+#include "ballistic.graphics.rig.h"
 #include "ballistic.graphics.visual.h"
 
 namespace ballistic {

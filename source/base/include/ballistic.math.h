@@ -72,6 +72,12 @@ namespace ballistic {
 			return v;
 		}
 
+		template < class value_t, template < class > class struct_t >
+		inline void lerp (const struct_t < value_t > & v1, const struct_t < value_t > & v2, real alpha, struct_t < value_t > & r) {
+			for (int i = 0; i < struct_t < value_t >::size; ++i)
+				r.data [i] = lerp (v1.data [i], v2.data [i], alpha);
+		}
+
 	};
 }
 
