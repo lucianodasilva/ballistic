@@ -25,27 +25,27 @@ namespace ballistic {
 			real duration
 		) {
 
-			auto it = _animations.find (id_v);
-
-			if (it != _animations.end ()) {
-				debug_error ("animation id " << id_v << " already exists");
-				return;
-			}
-
-			if (bone_data_size % frame_count != _bone_count) {
-				debug_error ("animation " << id_v << " data does not match expected bone count for available frames");
-				return;
-			}
-
-			rig_animation & anim = _animations [id_v];
-
-			anim._frames.resize (frame_count);
-			mat4 * bones = bone_data;
-
-			for (auto f : anim._frames) {
-				std::copy (bones, bones + _bone_count, f._bones);
-				bones += _bone_count;
-			}
+			//auto it = _animations.find (id_v);
+			//
+			//if (it != _animations.end ()) {
+			//	debug_error ("animation id " << id_v << " already exists");
+			//	return;
+			//}
+			//
+			//if (bone_data_size % frame_count != _bone_count) {
+			//	debug_error ("animation " << id_v << " data does not match expected bone count for available frames");
+			//	return;
+			//}
+			//
+			//rig_animation & anim = _animations [id_v];
+			//
+			//anim._frames.resize (frame_count);
+			//mat4 * bones = bone_data;
+			//
+			//for (auto f : anim._frames) {
+			//	std::copy (bones, bones + _bone_count, f._bones);
+			//	bones += _bone_count;
+			//}
 		}
 
 	}

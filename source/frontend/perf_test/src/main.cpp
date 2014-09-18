@@ -170,7 +170,7 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{800, 800});
+	_frontend = create_frontend (point{600, 600});
 	_frontend->create ();
 	_frontend->show ();
 
@@ -198,7 +198,7 @@ int main ( int argc, char ** argv) {
 
 	// create entities
 	game::instance.entities.create (res_camera);
-	game::instance.entities.create (res_cube_count);
+	game::instance.entities.create (res_cube_count, text_to_id ("cube_count"));
 	game::instance.entities.create (res_cube_manager);
 
 	// initialize
