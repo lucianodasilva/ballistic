@@ -10,14 +10,16 @@ namespace ballistic {
 
 		class imesh;
 		class material;
+		struct rig_frame_tween;
 
 		typedef uint32_t render_bucket;
 
 		struct render_item {
 
-			imesh *			mesh;
-			material *		material;
-			mat4			transform;
+			imesh *				mesh;
+			material *			material;
+			mat4				transform;
+			rig_frame_tween *	rig;
 
 			uint8_t			layer;
 

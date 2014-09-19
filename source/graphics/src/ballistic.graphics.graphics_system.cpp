@@ -4,6 +4,7 @@
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.imesh.h"
 #include "ballistic.graphics.material.h"
+#include "ballistic.graphics.rig.h"
 
 namespace ballistic {
 	namespace graphics {
@@ -39,11 +40,11 @@ namespace ballistic {
 
 		graphics_system::graphics_system () :
 			_render_message (id::message::render),
-		
+
 			_device (nullptr),
 			_camera (nullptr),
 			_material_effect (nullptr),
-		
+
 			_c_effect_diffuse (&null_constant::instance),
 			_c_effect_texture (&null_constant::instance),
 			_c_effect_t_model (&null_constant::instance),
@@ -51,6 +52,8 @@ namespace ballistic {
 			_c_effect_t_proj (&null_constant::instance),
 			_c_effect_t_normal (&null_constant::instance),
 			_c_effect_t_mvp (&null_constant::instance),
+			_c_effect_bone_count (&null_constant::instance),
+			_c_effect_t_bones (&null_constant::instance),
 
 			_overlay_effect (nullptr),
 
@@ -92,6 +95,8 @@ namespace ballistic {
 			_c_effect_t_proj = _material_effect->constant (id::graphics::effect::t_proj);
 			_c_effect_t_normal = _material_effect->constant (id::graphics::effect::t_normal);
 			_c_effect_t_mvp = _material_effect->constant (id::graphics::effect::t_mvp);
+			_c_effect_bone_count = _material_effect->constant (id::graphics::effect::bone_count);
+			_c_effect_t_bones = _material_effect->constant (id::graphics::effect::t_bones);
 
 			evaluate_render ();
 		}
@@ -165,8 +170,7 @@ namespace ballistic {
 			uint32_t render_index = 0;
 
 			// material loop
-			while (render_index < render_count)
-			{
+			while (render_index < render_count) {
 
 				render_item & item = _render_list [render_index];
 				if (item.bucket > overlay_offset)
@@ -180,7 +184,7 @@ namespace ballistic {
 				if (item.material->texture != texture) {
 					texture = item.material->texture;
 					_device->activate (texture);
-					_c_effect_texture->set_value(0);
+					_c_effect_texture->set_value (0);
 				}
 
 				if (item.material->opaque != alpha_blend) {
@@ -197,10 +201,21 @@ namespace ballistic {
 				m_mv = m_v * item.transform;
 				m_n = m_mv.transpose ().invert ();
 				m_mvp = item.transform * m_vp;
-				
+
 				_c_effect_t_normal->set_value (m_n);
 				_c_effect_t_model->set_value (item.transform);
 				_c_effect_t_mvp->set_value (m_mvp);
+
+				if (item.rig->bones.size () == 0) {
+					_c_effect_bone_count->set_value (1);
+					_c_effect_t_bones->set_value (item.rig->bones);
+				} else {
+					_c_effect_bone_count->set_value (0);
+				}
+
+				// update rig
+				_c_effect_bone_count->set_value (item.rig->bones.size ());
+				_c_effect_t_bones->set_value (item.rig->bones);
 				
 				// render the stuffs
 				_device->draw_active_mesh ();
@@ -274,11 +289,12 @@ namespace ballistic {
 			game::instance.global_notifier.detach (id::message::update, this);
 		}
 
-		void graphics_system::push_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform) {
+		void graphics_system::push_item (material * material, imesh * mesh, rig_frame_tween * rig, uint8_t layer, const mat4 & transform) {
 			render_item & item = _render_list.reserve_item ();
 
 			item.material = material;
 			item.mesh = mesh;
+			item.rig = rig;
 			item.transform = transform;
 			item.layer = layer;
 

@@ -5,7 +5,7 @@ uniform mat4        effect_t_proj;
 uniform mat4        effect_t_normal;
 uniform mat4        effect_t_mvp;
 
-uniform	bool		effect_has_bones;
+uniform	int			effect_bone_count;
 uniform mat4		effect_t_bones [32];
 
 #ifdef VERTEX_SHADER
@@ -23,7 +23,7 @@ void main () {
 
 	vec4 pos = vec4 (in_position, 1.0);
 
-	if (effect_has_bones) {
+	if (effect_bone_count > 0) {
 		mat4 A = effect_t_bones [in_bone_index.x];
 		mat4 B = effect_t_bones [in_bone_index.y];
 

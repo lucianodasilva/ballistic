@@ -60,7 +60,14 @@ namespace ballistic {
 			anim.bone_count = _bone_count;
 		}
 
-		rig_frame_tween rig::create_frame_tween (const id_t & animation_id, real time) {
+		rig_frame_tween rig::create_frame_tween () const {
+			return{
+				std::vector < mat4 > (_bone_count),
+				rig_animation::null_animation
+			};
+		}
+
+		rig_frame_tween rig::create_frame_tween (const id_t & animation_id, real time) const {
 			auto it = _animations.find (animation_id);
 
 			if (it == _animations.end ()) {
@@ -69,6 +76,36 @@ namespace ballistic {
 			}
 
 			return it->second.create_frame_tween (time);
+		}
+
+
+		rigged::rigged () :
+			_rig (nullptr),
+			_rig_tween (nullptr)
+		{}
+
+		void rigged::require_properties (entity_type * new_type, component_info & info) {
+			new_type->properties.require < graphics::material * > (id::graphics::material);
+		}
+
+		void rigged::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
+			component::setup (parent, parameters);
+
+			_material = parent->properties.aquire < graphics::material * > (id::graphics::material);
+
+			_camera = game::instance.entities [text_to_id ("mah_camerah")];
+
+			game::instance.global_notifier.attach (id::message::render, this);
+			game::instance.global_notifier.attach (id::message::update, this);
+		}
+
+		void rigged::terminate () {
+			game::instance.global_notifier.detach (id::message::render, this);
+			game::instance.global_notifier.detach (id::message::update, this);
+		}
+
+		void rigged::notify (ballistic::entity * sender, ballistic::message & message) {
+
 		}
 
 	}

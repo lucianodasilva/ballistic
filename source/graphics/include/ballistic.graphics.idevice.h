@@ -10,7 +10,6 @@ namespace ballistic {
 	namespace graphics {
 
 		class ieffect;
-		class material;
 		class imesh;
 		class itexture;
 

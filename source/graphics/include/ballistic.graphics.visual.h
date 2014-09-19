@@ -7,10 +7,14 @@
 #include "ballistic.graphics.idevice.h"
 #include "ballistic.graphics.camera.h"
 
+#include "ballistic.graphics.rig.h"
+
 namespace ballistic {
 	namespace graphics {
 
 		class graphics_system;
+
+		class material;
 
 		class visual : public ballistic::component {
 		protected:
@@ -18,6 +22,10 @@ namespace ballistic {
 			property < mat4 > *			_transform;
 
 			property < material * > *	_material;
+
+			property < rig * > *		_rig;
+			rig_frame_tween				_rig_tween;
+
 			property < imesh * > *		_mesh;
 
 			property < uint8_t > *		_layer;

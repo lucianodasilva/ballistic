@@ -51,7 +51,10 @@ namespace ballistic {
 				define_id_ext (t_view, effect_t_view);
 				define_id_ext (t_normal, effect_t_normal);
 				define_id_ext (t_proj, effect_t_proj);
-				define_id_ext(t_mvp, effect_t_mvp);
+				define_id_ext (t_mvp, effect_t_mvp);
+
+				define_id_ext (bone_count, effect_bone_count);
+				define_id_ext (t_bones, effect_t_bones);
 
 				namespace type {
 					define_id_ext(basic, effect_type.basic);

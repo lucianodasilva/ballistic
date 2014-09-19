@@ -12,6 +12,8 @@
 namespace ballistic {
 	namespace graphics {
 
+		class rig;
+
 		class graphics_system : public ballistic::isystem {
 		private:
 
@@ -35,7 +37,9 @@ namespace ballistic {
 				* _c_effect_t_view,
 				* _c_effect_t_proj,
 				* _c_effect_t_normal,
-				* _c_effect_t_mvp;
+				* _c_effect_t_mvp,
+				* _c_effect_bone_count,
+				* _c_effect_t_bones;
 
 			ieffect *	_overlay_effect;
 
@@ -77,7 +81,7 @@ namespace ballistic {
 			virtual void detach ();
 
 			// methods
-			virtual void push_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
+			virtual void push_item (material * material, imesh * mesh, rig_frame_tween * rig, uint8_t layer, const mat4 & transform);
 			virtual void push_overlay_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
 
 		};

@@ -90,7 +90,32 @@ namespace ballistic {
 
 			void			create_animation (const id_t & id_v, mat4 * bone_data, uint32_t bone_data_size, uint32_t frame_count, real duration);
 			
-			rig_frame_tween create_frame_tween (const id_t & animation_id, real time);
+			rig_frame_tween create_frame_tween () const;
+			rig_frame_tween create_frame_tween (const id_t & animation_id, real time) const;
+
+		};
+
+		class rigged : public ballistic::component {
+		private:
+
+			property < rig * > *			_rig;
+			property < rig_frame_tween * >	_rig_tween_p;
+
+			real
+				_animation_start;
+
+			rig_frame_tween _
+
+		public:
+
+			rigged ();
+
+			static void require_properties (entity_type * new_type, component_info & info);
+
+			virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters);
+
+			virtual void terminate ();
+			virtual void notify (ballistic::entity * sender, ballistic::message & message);
 
 		};
 
