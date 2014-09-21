@@ -38,12 +38,12 @@ ballistic::graphics::idevice * create_device () {
 
 #endif
 
-ballistic::res_id_t res_rig ("rigged.entity", "resources/rigging.xml");
-ballistic::res_id_t res_overlay_text ("overlay_text.entity", "resources/rigging.xml");
-ballistic::res_id_t res_camera ("camera.entity", "resources/rigging.xml");
-
-ballistic::res_id_t res_default_material ("default_material.effect", "resources/default_material.fx");
-ballistic::res_id_t res_overlay_material ("overlay_material.effect", "resources/overlay_material.fx");
+ballistic::res_id_t 
+	res_rig ("rigged.entity", "resources/rigging.xml"),
+	res_overlay_text ("overlay_text.entity", "resources/rigging.xml"),
+	res_camera ("camera.entity", "resources/rigging.xml"),
+	res_default_material ("default_material.effect", "resources/default_material.fx"),
+	res_overlay_material ("overlay_material.effect", "resources/overlay_material.fx");
 
 struct tbone {
 	vec3 ot;
@@ -129,7 +129,7 @@ inline void draw_bones (const vec3 & parent, const vec3 & child) {
 }
 
 // -----------
-class rigged : public ballistic::component {
+class rigged_demo : public ballistic::component {
 private:
 
 	property < graphics::material * > * _material;
@@ -141,7 +141,7 @@ public:
 		mult = 1.,
 		angle = 0.;
 
-	rigged () : _camera (nullptr) {
+	rigged_demo () : _camera (nullptr) {
 	
 	}
 
@@ -261,6 +261,16 @@ public:
 
 };
 
+void generate_rig () {
+
+	real		duration = 2.0; // seconds
+	uint32_t 	fps = 6; // why not
+	uint32_t	bone_count = 2;
+
+
+
+}
+
 int main ( int argc, char ** argv) {
 
 	debug_init();
@@ -280,7 +290,7 @@ int main ( int argc, char ** argv) {
 	// setup game stuffs
 	ballistic::graphics::define_resources (_device);
 
-	ballistic::component::declare < rigged > (text_to_id ("rigged"));
+	ballistic::component::declare < rigged_demo > (text_to_id ("rigged_demo"));
 
 	auto graphics = new ballistic::graphics::graphics_system ();
 	graphics->device (_device);

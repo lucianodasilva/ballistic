@@ -66,10 +66,14 @@ namespace ballistic {
 			define_id_ext (material_id, graphics.material.id);
 			define_id_ext (mesh_id, graphics.mesh.id);
 			define_id_ext (rig_id, graphics.rig.id);
+			define_id_ext (rig_animation_id, graphics.rig_animation.id);
 
 			define_id (material);
 			define_id (mesh);
 			define_id (rig);
+			define_id (rigged);
+
+			define_id (rig_tween);
 
 			namespace text {
 
@@ -85,6 +89,8 @@ namespace ballistic {
 		namespace message {
 			define_id_ext (render, message.render);
 			define_id_ext (render_overlay, message.render_overlay);
+			define_id_ext (start_rig_animation, message.start_rig_animation);
+			define_id_ext (stop_rig_animation, message.stop_rig_animation);
 		}
 
 	}

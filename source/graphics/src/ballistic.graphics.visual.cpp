@@ -19,7 +19,7 @@ namespace ballistic {
 
 			new_type->properties.require < material * > (id::graphics::material, nullptr);
 			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
-			new_type->properties.require < rig * > (id::graphics::rig, nullptr);
+			new_type->properties.require < rig_frame_tween * > (id::graphics::rig_tween, &rig_frame_tween::null_frame_tween);
 
 			new_type->properties.require < uint8_t > (id::graphics::layer, 0);
 
@@ -54,15 +54,7 @@ namespace ballistic {
 					parent->properties [id::graphics::mesh_id].as < id_t > ()
 				].as < imesh > ();
 
-			if (!*_rig)
-				*_rig = game::instance.resources [
-					parent->properties [id::graphics::rig_id].as < id_t > ()
-				].as < rig > ();
-
-			rig * rig_instance = *_rig;
-			if (rig_instance) {
-				_rig_tween = rig_instance->create_frame_tween ();
-			}
+			_rig_tween = parent->properties.aquire < rig_frame_tween * > (id::graphics::rig_tween);
 
 			_layer = parent->properties.aquire < uint8_t > (id::graphics::layer);
 		}
@@ -76,14 +68,13 @@ namespace ballistic {
 			_material (nullptr),
 			_mesh (nullptr),
 			_system (nullptr),
-			_rig_tween (rig_frame_tween::null_frame_tween)
+			_rig_tween (nullptr)
 		{}
 
 		void visual::notify ( entity * sender, ballistic::message & message ) {
 
 			material * mat = *_material;
 			imesh * mesh = *_mesh;
-			rig * rig = *_rig;
 
 			if (!mat) {
 				debug_print ("missing material instance. will not render");
@@ -95,13 +86,7 @@ namespace ballistic {
 				mat &&
 				mesh
 			){
-
-				// TODO: evaluate if "on screen" here
-				if (rig) {
-					
-				}
-
-				_system->push_item (mat, mesh, &_rig_tween, *_layer, *_transform);
+				_system->push_item (mat, mesh, *_rig_tween, *_layer, *_transform);
 			} else {
 				debug_print ("incomplete visual component. will not render!");
 			}

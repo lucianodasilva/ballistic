@@ -206,12 +206,8 @@ namespace ballistic {
 				_c_effect_t_model->set_value (item.transform);
 				_c_effect_t_mvp->set_value (m_mvp);
 
-				if (item.rig->bones.size () == 0) {
-					_c_effect_bone_count->set_value (1);
-					_c_effect_t_bones->set_value (item.rig->bones);
-				} else {
-					_c_effect_bone_count->set_value (0);
-				}
+				_c_effect_bone_count->set_value (item.rig->bones.size());
+				_c_effect_t_bones->set_value (item.rig->bones);
 
 				// update rig
 				_c_effect_bone_count->set_value (item.rig->bones.size ());

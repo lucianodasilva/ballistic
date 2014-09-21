@@ -44,6 +44,10 @@ namespace ballistic {
 
 	public:
 
+		inline real game_time () const { return *_m_update_game_time; }
+		inline real frame_time () const { return *_m_update_frame_time; }
+		inline uint32_t frame_count () const { return *_m_update_frame_count; }
+
 		static game instance;
 
 		message_notifier global_notifier;

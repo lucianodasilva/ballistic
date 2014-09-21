@@ -51,7 +51,7 @@ namespace ballistic {
 		}
 
 		void component::notify (ballistic::entity * sender, ballistic::message & message) {
-			
+
 			real game_time = message [id::game_time];
 
 			if (_start_time < 0)

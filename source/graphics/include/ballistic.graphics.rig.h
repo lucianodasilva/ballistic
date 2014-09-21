@@ -6,15 +6,16 @@
 namespace ballistic {
 	namespace graphics {
 
+		class graphics_system;
 		class rig;
 		struct rig_animation;
 
 		struct rig_frame_tween {
 
-			static const rig_frame_tween null_frame_tween;
+			static rig_frame_tween null_frame_tween;
 
 			std::vector < mat4 >	bones;
-			const rig_animation &	animation;
+			rig_animation &	animation;
 
 			inline void update (real time);
 		};
@@ -26,7 +27,7 @@ namespace ballistic {
 		struct rig_animation {
 		public:
 
-			const static rig_animation null_animation;
+			static rig_animation null_animation;
 
 			uint32_t	bone_count;
 			real		duration;
@@ -35,7 +36,7 @@ namespace ballistic {
 			std::vector < rig_frame >
 						frames;
 
-			inline void update_frame_tween (real time, rig_frame_tween & tween) const {
+			inline void update_frame_tween (rig_frame_tween & tween, real time) const {
 
 				if (bone_count == 0)
 					return;
@@ -55,23 +56,12 @@ namespace ballistic {
 					math::lerp (frame_a.bones [i], frame_b.bones [i], a, tween.bones [i]);
 				}
 			}
-				
-			inline rig_frame_tween create_frame_tween (real time) const {
-
-				rig_frame_tween new_tween = {
-					std::vector < mat4 > (bone_count),
-					*this
-				};
-
-				update_frame_tween (time, new_tween);
-				return new_tween;
-			}
 
 		};
 
 		// avoid issues with circular dependencies
 		void rig_frame_tween::update (real time) {
-			animation.update_frame_tween (time, *this);
+			animation.update_frame_tween (*this, time);
 		}
 
 		class rig : public ballistic::iresource {
@@ -90,23 +80,32 @@ namespace ballistic {
 
 			void			create_animation (const id_t & id_v, mat4 * bone_data, uint32_t bone_data_size, uint32_t frame_count, real duration);
 			
-			rig_frame_tween create_frame_tween () const;
-			rig_frame_tween create_frame_tween (const id_t & animation_id, real time) const;
+			void			set_frame_tween (rig_frame_tween & tween) const;
+			void			set_frame_tween (rig_frame_tween & tween, const id_t & animation_id, real time) const;
 
+		};
+
+		enum rig_state {
+			rig_state_stopped,
+			rig_state_running,
+			rig_state_looping
 		};
 
 		class rigged : public ballistic::component {
 		private:
 
-			property < rig * > *			_rig;
-			property < rig_frame_tween * >	_rig_tween_p;
+			rig_state						_state;
+			graphics_system					* _system;
 
-			real
-				_animation_start;
+			property < rig * >				* _p_rig;
+			property < rig_frame_tween * >	* _p_rig_tween;
 
-			rig_frame_tween _
+			real							_animation_start;
+			rig_frame_tween					_rig_tween;
 
 		public:
+
+			static const id_t component_id;
 
 			rigged ();
 

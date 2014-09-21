@@ -23,8 +23,7 @@ namespace ballistic {
 
 			property < material * > *	_material;
 
-			property < rig * > *		_rig;
-			rig_frame_tween				_rig_tween;
+			property < rig_frame_tween * > * _rig_tween;
 
 			property < imesh * > *		_mesh;
 

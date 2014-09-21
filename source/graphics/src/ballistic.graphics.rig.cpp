@@ -1,16 +1,17 @@
 #include "ballistic.graphics.rig.h"
 #include "ballistic.graphics.common_id.h"
+#include "ballistic.graphics.graphics_system.h"
 
 
 namespace ballistic {
 	namespace graphics {
 
-		const rig_frame_tween rig_frame_tween::null_frame_tween = {
+		rig_frame_tween rig_frame_tween::null_frame_tween = {
 			std::vector < mat4 > (0),
 			rig_animation::null_animation
 		};
 
-		const rig_animation rig_animation::null_animation = {
+		rig_animation rig_animation::null_animation = {
 			0,
 			0,
 			0,
@@ -60,51 +61,109 @@ namespace ballistic {
 			anim.bone_count = _bone_count;
 		}
 
-		rig_frame_tween rig::create_frame_tween () const {
-			return{
-				std::vector < mat4 > (_bone_count),
-				rig_animation::null_animation
-			};
+		void rig::set_frame_tween (rig_frame_tween & tween) const {
+			tween.animation = rig_animation::null_animation;
+			tween.bones.resize (_bone_count);
 		}
 
-		rig_frame_tween rig::create_frame_tween (const id_t & animation_id, real time) const {
+		void rig::set_frame_tween (rig_frame_tween & tween, const id_t & animation_id, real time) const {
+
 			auto it = _animations.find (animation_id);
 
 			if (it == _animations.end ()) {
 				debug_error ("rig " << id () << " animation " << animation_id << " was not found");
-				return rig_frame_tween::null_frame_tween;
+				tween.animation = rig_animation::null_animation;
+				tween.bones.resize (0);
 			}
 
-			return it->second.create_frame_tween (time);
+			tween.animation = it->second;
+			tween.bones.resize (_bone_count);
+			
+			it->second.update_frame_tween (tween, time);
 		}
 
+		const id_t rigged::component_id = id::graphics::rigged;
 
 		rigged::rigged () :
-			_rig (nullptr),
-			_rig_tween (nullptr)
+			_state (rig_state_stopped),
+			_p_rig (nullptr),
+			_p_rig_tween (nullptr),
+			_rig_tween (rig_frame_tween::null_frame_tween)
 		{}
 
 		void rigged::require_properties (entity_type * new_type, component_info & info) {
-			new_type->properties.require < graphics::material * > (id::graphics::material);
+			new_type->properties.require < id_t > (id::graphics::rig_id, id::null);
+			new_type->properties.require < rig * > (id::graphics::rig, nullptr);
+			new_type->properties.require < rig_frame_tween * > (id::graphics::rig_tween, &rig_frame_tween::null_frame_tween);
 		}
 
 		void rigged::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 			component::setup (parent, parameters);
 
-			_material = parent->properties.aquire < graphics::material * > (id::graphics::material);
+			_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
 
-			_camera = game::instance.entities [text_to_id ("mah_camerah")];
+			if (!*_p_rig)
+				*_p_rig = game::instance.resources [
+					parent->properties [id::graphics::rig_id].as < id_t > ()
+				].as < rig > ();
 
-			game::instance.global_notifier.attach (id::message::render, this);
+			if (*_p_rig) {
+				rig * rig_inst = *_p_rig;
+				rig_inst->set_frame_tween (_rig_tween);
+				*_p_rig_tween = &_rig_tween;
+			}
+
 			game::instance.global_notifier.attach (id::message::update, this);
+			parent->local_notifier.attach (id::message::start_rig_animation, this);
+			parent->local_notifier.attach (id::message::stop_rig_animation, this);
 		}
 
 		void rigged::terminate () {
-			game::instance.global_notifier.detach (id::message::render, this);
 			game::instance.global_notifier.detach (id::message::update, this);
+			this->parent ()->local_notifier.detach (id::message::start_rig_animation, this);
+			this->parent ()->local_notifier.detach (id::message::stop_rig_animation, this);
 		}
 
 		void rigged::notify (ballistic::entity * sender, ballistic::message & message) {
+			
+			id_t message_id = message.id ();
+
+			if (message_id == id::message::update) {
+
+				if (_state == rig_state_stopped)
+					return;
+
+				//TODO: check if object "in" camera... if not, don't update
+
+				real game_time = message [id::game_time];
+				real elapsed = game_time - _animation_start;
+
+				real lapse = elapsed;
+
+				if (_state != rig_state_looping && elapsed > _rig_tween.animation.duration) {
+					lapse = _rig_tween.animation.duration;
+					_state = rig_state_stopped;
+				}
+
+				_rig_tween.update (lapse);
+
+			} else {
+
+				if (message_id == id::message::start_rig_animation) {
+
+					rig * rig_inst = *_p_rig;
+
+					_animation_start = game::instance.game_time ();
+					rig_inst->set_frame_tween (
+						_rig_tween,
+						message [id::graphics::rig_animation_id].as < id_t > (),
+						0
+					);
+				} else if (message_id == id::message::stop_rig_animation) {
+					_state = rig_state_stopped;
+				}
+
+			}
 
 		}
 
