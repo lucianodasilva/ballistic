@@ -47,7 +47,7 @@ ballistic::res_id_t res_overlay_material ("overlay_material.effect", "resources/
 
 struct dual_quat {
 
-	vec4 d;
+	quat d;
 	quat r;
 
 	inline vec3 transform (const vec3 & v) const {
@@ -101,7 +101,7 @@ struct dual_quat {
 			real_q.w = (m.m01 - m.m04) * invr;
 		}
 
-		vec4 dual;
+		quat dual;
 		dual.x =  real (0.5) * ( m.m12 * real_q.w + m.m13 * real_q.z - m.m14 * real_q.y);
 		dual.y =  real (0.5) * (-m.m12 * real_q.z + m.m13 * real_q.w + m.m14 * real_q.x);
 		dual.z =  real (0.5) * ( m.m12 * real_q.y - m.m13 * real_q.x + m.m14 * real_q.w);
@@ -109,6 +109,30 @@ struct dual_quat {
 		return {
 			dual,
 			real_q
+		};
+	}
+
+	inline static dual_quat from_bone (const vec3 & p, const quat & q) {
+
+		const float qx = q.x, qy = q.y, qz = q.z, qw = q.w;
+
+		const float tx = p.x, ty = p.y, tz = p.z;
+
+		return{
+				{
+					0.5f*(tx*qw + ty*qz - tz*qy),
+					0.5f*(-tx*qz + ty*qw + tz*qx),
+					0.5f*(tx*qy - ty*qx + tz*qw),
+					-0.5f*(tx*qx + ty*qy + tz*qz)
+				},
+				{qx, qy, qz, qw}
+		};
+	}
+
+	inline dual_quat operator * (const dual_quat & v) {
+		return{
+			r * v.d + d * v.r,
+			r * v.r
 		};
 	}
 
@@ -126,6 +150,13 @@ struct tbone {
 		mat4 pose = r.to_matrix () * mat4::make_translation (t);
 
 		return inv_pose * pose;
+	}
+
+	dual_quat bone_quat () {
+		dual_quat inv = dual_quat::from_bone (-ot, or);
+		dual_quat pose = dual_quat::from_bone (t, r);
+
+		return pose * inv;
 	}
 
 	inline tbone transform (const tbone & b) {
@@ -255,8 +286,8 @@ public:
 
 			// update bone animation
 			tbone temp_bones [2];
-			temp_bones [0] = tbone{bones [0].t, bones [0].r, {-1., .0, .0}, quat::from_axis ({.0, .0, 1.0}, angle)};
-			temp_bones [1] = tbone{bones [1].t, bones [1].r, {1, .0, .0}, quat::from_axis (math::normalize (vec3 {1.0, .0, 1.0}), angle)};
+			temp_bones [0] = tbone{bones [0].t, bones [0].r, {-1., .0, 1.0}, quat::from_axis ({.0, .0, 1.0}, angle)};
+			temp_bones [1] = tbone{bones [1].t, bones [1].r, {1, .0, .0}, quat::from_axis (math::normalize (vec3 {1.5, .0, 2.0}), angle * 1.5)};
 
 			const mat4 & view = _camera->properties [id::graphics::camera_view];
 			const mat4 & proj = _camera->properties [id::graphics::camera_proj];
@@ -295,14 +326,14 @@ public:
 
 				if (v.weight == 0) {
 					m = b1.bone_matrix ();
-					q = dual_quat::from_matrix (b1.bone_matrix ());
+					q = b1.bone_quat ();//dual_quat::from_matrix (b1.bone_matrix ());
 				} else {
 
 					mat4 m1 = b1.bone_matrix ();
 					mat4 m2 = b2.bone_matrix ();
 
-					auto q1 = dual_quat::from_matrix (b1.bone_matrix ());
-					auto q2 = dual_quat::from_matrix (b2.bone_matrix ());
+					auto q1 = b1.bone_quat ();//dual_quat::from_matrix (b1.bone_matrix ());
+					auto q2 = b2.bone_quat ();//dual_quat::from_matrix (b2.bone_matrix ());
 
 					q = dual_quat::blend (q1, q2, v.weight);
 
@@ -311,7 +342,7 @@ public:
 
 
 
-				if (v.pos.x == 0.0)
+				//if (v.pos.x == 0.0)
 				{
 					vec3 dtv = q.transform (v.pos);
 					dtv = transform_to_screen (m_vp, dtv);
