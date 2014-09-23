@@ -25,6 +25,8 @@ namespace ballistic {
 
 			static LRESULT CALLBACK message_proc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
+			void on_resize ();
+
 		public:
 
 			virtual point get_client_size ();

@@ -1,5 +1,6 @@
 #include "ballistic.entity_type.h"
 #include "ballistic.entity.h"
+#include "ballistic.game.h"
 
 namespace ballistic {
 
@@ -18,6 +19,11 @@ namespace ballistic {
 
 		return instance;
 	}
-		
+
+	entity_type * entity_type::create_instance (const id_t & id) {
+		entity_type * instance = new entity_type (id);
+		game::instance.resources.add_to_global (instance);
+		return instance;
+	}	
 		
 }

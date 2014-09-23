@@ -1,7 +1,7 @@
 
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
-#include <ballistic.graphics.render_list.h>
+#include <ballistic.frontend.h>
 
 #include <map>
 #include <chrono>
@@ -14,15 +14,15 @@ ballistic::graphics::idevice *	_device;
 
 ballistic::graphics::imesh *	_mesh;
 
+
+
 #ifdef BALLISTIC_OS_WINDOWS
-#	include "ballistic.win_frontend.h"
 
 ballistic::ifrontend * create_frontend ( const point & size ) {
 	return new ballistic::win_desktop::frontend (size);
 }
 
 #elif defined (BALLISTIC_OS_DARWIN)
-#	include "ballistic.mac_frontend.h"
 #	include <GLUT/GLUT.h>
 ballistic::ifrontend * create_frontend (const point & size) {
 	return new ballistic::mac_desktop::frontend (size);

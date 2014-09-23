@@ -48,8 +48,10 @@ endif()
 # --------- frontends ---------
 
 # development frontend
+include ( ${proj_dir}/frontend/frontend/CMakeLists.txt )
 include ( ${proj_dir}/frontend/dev_frontend/CMakeLists.txt )
 include ( ${proj_dir}/frontend/perf_test/CMakeLists.txt )
+include ( ${proj_dir}/frontend/model_viewer/CMakeLists.txt )
 
 # -----------------------------
 

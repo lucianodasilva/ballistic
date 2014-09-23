@@ -44,15 +44,15 @@ if (build_ballistic_opengl3)
 		)
 
 		set (BALLISTIC_MAC_GL_LIB ${COCOA_LIBRARY} ${GLUT_LIBRARY} ${BALLISTIC_GL_LIBRARIES})
-		target_link_libraries ( dev_gl base graphics_opengl ${BALLISTIC_MAC_GL_LIB} glew)
+		target_link_libraries ( dev_gl base graphics_opengl ${BALLISTIC_MAC_GL_LIB} glew frontend)
 	else ()
-		target_link_libraries ( dev_gl base graphics_opengl ${BALLISTIC_GL_LIBRARIES} glew)
+		target_link_libraries ( dev_gl base graphics_opengl ${BALLISTIC_GL_LIBRARIES} glew frontend)
 	endif ()
 
 	
 
 	set_property (TARGET dev_gl PROPERTY COMPILE_DEFINITIONS BALLISTIC_DESKTOP_GL )
-	set_property (TARGET dev_gl PROPERTY FOLDER "frontend")
-	set_property (TARGET dev_gl_resources PROPERTY FOLDER "frontend")
+	set_property (TARGET dev_gl PROPERTY FOLDER "frontend/dev_gl")
+	set_property (TARGET dev_gl_resources PROPERTY FOLDER "frontend/dev_gl")
 endif ()
 
