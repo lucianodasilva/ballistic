@@ -3,6 +3,10 @@
 #include <ballistic.graphics.h>
 #include <ballistic.frontend.h>
 
+#undef far
+#undef near
+
+#include "entities.h"
 #include "resources.h"
 
 using namespace ballistic;
@@ -32,16 +36,19 @@ ballistic::graphics::idevice *	_device;
 void initialize_defaults () {
 
 	game & g = game::instance;
+	g.initialize ();
 
 	_frontend = create_frontend ({300, 300});
 	_frontend->create ();
 	_frontend->show ();
 
-	g.initialize ();
-	g.frontend (_frontend);
-
 	// setup graphics stuffs
 	_device = create_device ();
+	_device->clear_color ({.0F, .6F, 1.F, 1.F});
+
+	g.frontend (_frontend);
+
+
 	ballistic::graphics::define_resources (_device);
 
 	auto graphics = new ballistic::graphics::graphics_system ();
@@ -57,12 +64,11 @@ int main ( int argc, char ** argv) {
 	debug_init();
 
 	initialize_defaults ();
-	_frontend->do_event_loop ();
 
-	entity_type::declare <
-		ballistic::transform,
-		ballistic::graphics::camera
-	> (text_to_id ("camera.entity_type"))->properties [id::graphics::projection] = "perspective";
+	define_internals ();
+
+	game::instance.initialize ();
+	_frontend->do_event_loop ();
 
 	return 0;
 }

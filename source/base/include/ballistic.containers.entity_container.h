@@ -37,6 +37,9 @@ namespace ballistic {
 			entity * create (const res_id_t & entity_type_id);
 			entity * create (const res_id_t & entity_type_id, const id_t & id);
 
+			entity * create (const id_t & entity_type_id);
+			entity * create (const id_t & entity_type_id, const id_t & id);
+
 			void kill (entity * inst);
 
 			void execute_creates ();

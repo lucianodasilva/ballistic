@@ -53,6 +53,30 @@ namespace ballistic {
 			return ent;
 		}
 
+		entity * entity_container::create (const id_t & entity_type_id) {
+			return create (entity_type_id, reserve_id ());
+		}
+
+		entity * entity_container::create (const id_t & entity_type_id, const id_t & id) {
+
+			entity_type * type = game::instance.resources.get_resource < entity_type > (entity_type_id);
+
+			if (!type) {
+				debug_print ("entity type \"" << entity_type_id << "\" not found. no entity created");
+				return nullptr;
+			}
+
+			if (contains_id (id)) {
+				debug_print ("entity with id \"" << id << "\" already exists");
+				return nullptr;
+			}
+
+			entity * ent = type->create (id);
+			_new_entities.push_back (ent);
+
+			return ent;
+		}
+
 		void entity_container::kill (entity * instance) {
 			_death_row.push_back (instance);
 		}

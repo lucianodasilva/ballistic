@@ -28,6 +28,14 @@ namespace ballistic {
 		inline property_definition (const id_t & id_v, const value_t & v)
 			: iproperty_definition (id_v), _value (v) {}
 
+		inline virtual void operator = (const value_t & v) {
+			_value = v;
+		}
+
+		inline operator value_t () const {
+			return _value;
+		}
+
 		inline virtual bool parse (const tinyxml2::XMLAttribute * config_value) override {
 			bool ret = details::property_parser < value_t >::parse (config_value, _value);
 

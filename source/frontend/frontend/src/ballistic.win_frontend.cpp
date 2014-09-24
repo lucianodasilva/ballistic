@@ -1,4 +1,5 @@
 #include "ballistic.win_frontend.h"
+#include "ballistic.frontend.defines.h"
 
 #ifdef BALLISTIC_OS_WINDOWS
 
@@ -25,6 +26,41 @@ namespace ballistic {
 				instance->on_resize ();
 				return 0;
 			}
+			case WM_MOUSEMOVE:
+			{
+				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
+				instance->on_mouse_move (pos);
+				return 0;
+			}
+			case WM_LBUTTONDOWN:
+			{
+				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
+				instance->on_mouse_down (pos, 1);
+				return 0;
+			}
+			case WM_LBUTTONUP:
+			{
+				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
+				instance->on_mouse_up (pos, 1);
+				return 0;
+			}
+			case WM_RBUTTONDOWN:
+			{
+				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
+				instance->on_mouse_down (pos, 2);
+				return 0;
+			}
+			case WM_RBUTTONUP:
+			{
+				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
+				instance->on_mouse_up (pos, 2);
+				return 0;
+			}
 			default:
 				return DefWindowProc (hWnd, msg, wParam, lParam);
 			}
@@ -42,9 +78,39 @@ namespace ballistic {
 			glViewport (0, 0, _window_client_size.x, _window_client_size.y);
 		}
 
+		void frontend::on_mouse_move (const point & p) {
+			_on_mouse_move_message [id::frontend::mouse_position] = p;
+			game::instance.global_notifier.notify (_on_mouse_move_message);
+		}
+
+		void frontend::on_mouse_down (const point & p, int button) {
+			_on_mouse_down_message [id::frontend::mouse_position] = p;
+			_on_mouse_down_message [id::frontend::mouse_button] = button;
+			game::instance.global_notifier.notify (_on_mouse_down_message);
+		}
+
+		void frontend::on_mouse_up (const point & p, int button) {
+			_on_mouse_up_message [id::frontend::mouse_position] = p;
+			_on_mouse_up_message [id::frontend::mouse_button] = button;
+			game::instance.global_notifier.notify (_on_mouse_up_message);
+		}
+
 		point frontend::get_client_size () { return _window_client_size; }
 
-		frontend::frontend (const point & client_size) : _window_client_size (client_size) {}
+		frontend::frontend (const point & client_size) : 
+			_window_client_size (client_size),
+			_on_mouse_up_message (id::frontend::on_mouse_up),
+			_on_mouse_down_message (id::frontend::on_mouse_down),
+			_on_mouse_move_message (id::frontend::on_mouse_move)
+		{
+			_on_mouse_down_message.require < point > (id::frontend::mouse_position);
+			_on_mouse_down_message.require < int > (id::frontend::mouse_button);
+
+			_on_mouse_up_message.require < point > (id::frontend::mouse_position);
+			_on_mouse_up_message.require < int > (id::frontend::mouse_button);
+
+			_on_mouse_move_message.require < point > (id::frontend::mouse_position);
+		}
 
 		frontend::~frontend () {}
 

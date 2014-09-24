@@ -20,7 +20,7 @@ namespace ballistic {
 			icomponent_constructor * ctor = container [text_to_id (element->Name ())];
 
 			if (!ctor) {
-				debug_error ("component constructor " << element->Name () << "not defined");
+				debug_error ("component constructor \"" << element->Name () << "\" not defined");
 				return;
 			}
 

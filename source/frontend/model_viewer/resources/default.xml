@@ -1,0 +1,6 @@
+<package>
+  
+  <package source="model_viewer_res/cube.xml"/>
+  <package source="model_viewer_res/consolas_16.xml"/>
+  
+</package>
