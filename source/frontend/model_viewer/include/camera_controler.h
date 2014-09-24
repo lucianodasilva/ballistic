@@ -16,7 +16,12 @@ private:
 		_pitch;
 
 	bool _mouse_is_down;
+
 	point _mouse_start;
+
+	real
+		_start_yaw,
+		_start_pitch;
 
 
 public:

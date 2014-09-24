@@ -58,7 +58,7 @@ namespace ballistic {
 	}
 	
 	void resource_container::push_level () {
-		_stacked_resources.push_front(resource_id_vector_t ());
+		_stacked_resources.push_back(resource_id_vector_t ());
 	}
 	
 	bool resource_container::pop_level () {
@@ -71,7 +71,7 @@ namespace ballistic {
 					delete res_it->second;
 			}
 			
-			_stacked_resources.pop_front ();
+			_stacked_resources.pop_back ();
 			return true;
 		} else
 			return false;

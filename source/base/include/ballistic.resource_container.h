@@ -102,7 +102,7 @@ namespace ballistic {
 		resource_map_t
 			_resources;
 		
-		list < resource_id_vector_t >
+		vector < resource_id_vector_t >
 			_stacked_resources;
 			
 		io::package_loader * _package_loader;
@@ -117,8 +117,6 @@ namespace ballistic {
 		void register_storage ( io::istorage * storage );
 			
 		io::istorage * find_storage ( const string & source );
-			
-		
 		
 		void register_loader ( io::iloader * loader );
 		

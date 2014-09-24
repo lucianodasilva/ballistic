@@ -20,11 +20,15 @@ namespace ballistic {
 				_vertex_buffer_id,
 				_index_buffer_id,
 				_index_buffer_size;
+
+			aabox _bounding_box;
 			
 			static GLint calc_stride (mesh_attribute attributes);
 			
-			static void  set_attributes (mesh_attribute attributes);
+			static uint32_t set_attributes (mesh_attribute attributes);
 			static GLint add_attribute (GLint id, GLint size, GLenum type, GLint stride, GLint offset);
+
+			static aabox calc_aabox (uint8_t * data_buffer, int32_t data_buffer_size, uint32_t offset);
 
 		public:
 			
@@ -55,6 +59,8 @@ namespace ballistic {
 			
 			virtual void apply (idevice * device);
 			virtual void render ();
+
+			virtual aabox bounding_box () const;
 			
 		};
 		

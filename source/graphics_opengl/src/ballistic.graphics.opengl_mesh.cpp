@@ -24,7 +24,18 @@ namespace ballistic {
 			return stride;
 		}
 
-		void opengl_mesh::set_attributes (mesh_attribute attributes) {
+		aabox opengl_mesh::calc_aabox (uint8_t * data_buffer, int32_t data_buffer_size, uint32_t offset) {
+			aabox box = {0};
+
+			for (uint32_t i = 0; i < data_buffer_size; i += offset) {
+				vec3 & position = *reinterpret_cast < vec3 * > (data_buffer + i);
+				box.wrap (position);
+			}
+
+			return box;
+		}
+
+		uint32_t opengl_mesh::set_attributes (mesh_attribute attributes) {
 			//GLint attribute_id = 0;
 			GLint attribute_offset = 0;
 			GLint attribute_stride = calc_stride (attributes);
@@ -83,6 +94,8 @@ namespace ballistic {
 					attribute_offset
 					);
 			}
+
+			return attribute_offset;
 		}
 
 		GLint opengl_mesh::add_attribute (GLint id, GLint size, GLenum gl_type, GLint stride, GLint offset) {
@@ -154,7 +167,8 @@ namespace ballistic {
 			// Setup vertex array object
 			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
 
-			set_attributes (attributes);
+			uint32_t offset = set_attributes (attributes);
+			_bounding_box = calc_aabox (data_buffer, data_buffer_size, offset);
 
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
 
@@ -220,6 +234,10 @@ namespace ballistic {
 		void opengl_mesh::render () {
 			gl_eval_scope (ballistic::graphics::opengl_mesh::render);
 			glDrawElements (GL_TRIANGLES, _index_buffer_size / sizeof (uint16_t), GL_UNSIGNED_SHORT, 0);
+		}
+
+		aabox opengl_mesh::bounding_box () const {
+			return _bounding_box;
 		}
 
 	}

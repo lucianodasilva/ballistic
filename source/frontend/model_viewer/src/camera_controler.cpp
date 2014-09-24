@@ -37,23 +37,30 @@ void camera_controler::notify (ballistic::entity * sender, ballistic::message & 
 
 	id_t message_id = message.id ();
 
-	real move_mult = 0.001;
+	real move_mult = 0.01;
 
 	if (message_id == id::frontend::on_mouse_down) {
+
 		_mouse_is_down = true;
 		_mouse_start = message [id::frontend::mouse_position];
+		_start_yaw = _yaw;
+		_start_pitch = _pitch;
+
 	} else if (message_id == id::frontend::on_mouse_up) {
+
 		_mouse_is_down = false;
 		point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
-		_yaw += real (dif.x) * move_mult;
-		_pitch -= real (dif.y) * move_mult;
+		_yaw = _start_yaw + real (dif.x) * move_mult;
+		_pitch = _start_pitch - real (dif.y) * move_mult;
+
 	} else if (message_id == id::frontend::on_mouse_move && _mouse_is_down) {
 
 		point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
-		_yaw += real (dif.x) * move_mult;
-		_pitch -= real (dif.y) * move_mult;
+		_yaw = _start_yaw + real (dif.x) * move_mult;
+		_pitch = _start_pitch - real (dif.y) * move_mult;
 
 	} else if (message_id == id::message::update) {
+
 		vec3 pos = {
 			(std::cos (_yaw) * std::cos (_pitch)) * _radius,
 			std::sin (_pitch) * _radius,
@@ -61,6 +68,7 @@ void camera_controler::notify (ballistic::entity * sender, ballistic::message & 
 		};
 
 		*_cam_position = pos;
+
 	}
 
 }

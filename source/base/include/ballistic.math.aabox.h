@@ -78,6 +78,15 @@ namespace math {
 				);
 			}
 
+			inline void wrap (const vec3 & p) {
+				if (p.x < v_min.x) v_min.x = p.x;
+				if (p.y < v_min.y) v_min.y = p.y;
+				if (p.z < v_min.z) v_min.z = p.z;
+				if (p.x > v_max.x) v_max.x = p.x;
+				if (p.y > v_max.y) v_max.y = p.y;
+				if (p.z > v_max.z) v_max.z = p.z;
+			}
+
 		};
 
 		template < class value_t >
@@ -92,7 +101,7 @@ namespace math {
 		aabox_t < value_t > operator - (const aabox_t < value_t > & b, const vec3_t < value_t > & v) {
 			return {
 				b.v_min - v, 
-				b.v_max + v
+				b.v_max - v
 			};
 		}
 
@@ -114,7 +123,7 @@ namespace math {
 	}
 
 }
-	typedef ballistic::math::details::aabox_t < real > aabox;
+	using aabox = ballistic::math::details::aabox_t < real >;
 }
 
 

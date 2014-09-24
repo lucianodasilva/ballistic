@@ -45,6 +45,9 @@ namespace ballistic {
 
 			virtual void apply (idevice * device) = 0;
 			virtual void render () = 0;
+
+			virtual aabox bounding_box () const = 0;
+
 		};
 
 	}
