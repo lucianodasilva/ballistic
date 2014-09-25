@@ -11,6 +11,11 @@ namespace ballistic {
 	void message_notifier::attach (id_t message_id, imessage_listener * listener) {
 		_listeners [message_id].push_back (listener);
 	}
+
+	void message_notifier::attach (const vector < id_t > & message_ids, imessage_listener * listener) {
+		for (auto message_id : message_ids)
+			attach (message_id, listener);
+	}
 	
 	void message_notifier::detach (id_t message_id, imessage_listener * listener) {
 		vector < imessage_listener * > & listener_list = _listeners [message_id];
@@ -23,6 +28,11 @@ namespace ballistic {
 		
 		if (it != listener_list.end ())
 			listener_list.erase (it);
+	}
+
+	void message_notifier::detach (const vector < id_t > & message_ids, imessage_listener * listener) {
+		for (auto message_id : message_ids)
+			detach (message_id, listener);
 	}
 
 	void message_notifier::notify (message & m) {

@@ -22,19 +22,29 @@ void camera_controler::setup (ballistic::entity * parent, ballistic::containers:
 	_pitch = real (.0);
 	_radius = parent->properties [starting_radius];
 
-	game::instance.global_notifier.attach (id::message::update, this);
-	game::instance.global_notifier.attach (id::frontend::on_mouse_up, this);
-	game::instance.global_notifier.attach (id::frontend::on_mouse_move, this);
-	game::instance.global_notifier.attach (id::frontend::on_mouse_down, this);
-	game::instance.global_notifier.attach (id::frontend::on_mouse_wheel, this);
+	game::instance.global_notifier.attach (
+		{
+			id::message::update,
+			id::frontend::on_mouse_up,
+			id::frontend::on_mouse_move,
+			id::frontend::on_mouse_down,
+			id::frontend::on_mouse_wheel
+		},
+			this
+	);
 }
 
 void camera_controler::terminate () {
-	game::instance.global_notifier.detach (id::message::update, this);
-	game::instance.global_notifier.detach (id::frontend::on_mouse_up, this);
-	game::instance.global_notifier.detach (id::frontend::on_mouse_move, this);
-	game::instance.global_notifier.detach (id::frontend::on_mouse_down, this);
-	game::instance.global_notifier.detach (id::frontend::on_mouse_wheel, this);
+	game::instance.global_notifier.detach (
+		{
+			id::message::update,
+			id::frontend::on_mouse_up,
+			id::frontend::on_mouse_move,
+			id::frontend::on_mouse_down,
+			id::frontend::on_mouse_wheel
+		},
+			this
+	);
 }
 
 void camera_controler::notify (ballistic::entity * sender, ballistic::message & message) {

@@ -34,7 +34,9 @@ namespace ballistic {
 		virtual ~message_notifier ();
 
 		void attach (id_t message_id, imessage_listener * listener);
+		void attach (const vector < id_t > & message_ids, imessage_listener * listener);
 		void detach (id_t message_id, imessage_listener * listener);
+		void detach (const vector < id_t > & message_ids, imessage_listener * listener);
 
 		virtual void notify (message & m);
 		virtual void notify (entity * sender, message & m);
