@@ -61,6 +61,14 @@ namespace ballistic {
 				instance->on_mouse_up (pos, 2);
 				return 0;
 			}
+			case WM_MOUSEWHEEL:
+			{
+				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+				int delta = GET_WHEEL_DELTA_WPARAM (wParam);
+				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
+				instance->on_mouse_wheel (pos, delta);
+				return 0;
+			}
 			default:
 				return DefWindowProc (hWnd, msg, wParam, lParam);
 			}
@@ -95,13 +103,20 @@ namespace ballistic {
 			game::instance.global_notifier.notify (_on_mouse_up_message);
 		}
 
+		void frontend::on_mouse_wheel (const point & p, int delta) {
+			_on_mouse_wheel_message [id::frontend::mouse_position] = p;
+			_on_mouse_wheel_message [id::frontend::mouse_wheel_delta] = delta;
+			game::instance.global_notifier.notify (_on_mouse_wheel_message);
+		}
+
 		point frontend::get_client_size () { return _window_client_size; }
 
-		frontend::frontend (const point & client_size) : 
+		frontend::frontend (const point & client_size) :
 			_window_client_size (client_size),
 			_on_mouse_up_message (id::frontend::on_mouse_up),
 			_on_mouse_down_message (id::frontend::on_mouse_down),
-			_on_mouse_move_message (id::frontend::on_mouse_move)
+			_on_mouse_move_message (id::frontend::on_mouse_move),
+			_on_mouse_wheel_message (id::frontend::on_mouse_wheel)
 		{
 			_on_mouse_down_message.require < point > (id::frontend::mouse_position);
 			_on_mouse_down_message.require < int > (id::frontend::mouse_button);
@@ -110,6 +125,9 @@ namespace ballistic {
 			_on_mouse_up_message.require < int > (id::frontend::mouse_button);
 
 			_on_mouse_move_message.require < point > (id::frontend::mouse_position);
+
+			_on_mouse_wheel_message.require < point > (id::frontend::mouse_position);
+			_on_mouse_wheel_message.require < int > (id::frontend::mouse_wheel_delta);
 		}
 
 		frontend::~frontend () {}

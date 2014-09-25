@@ -22,7 +22,8 @@ namespace ballistic {
 			message
 				_on_mouse_up_message,
 				_on_mouse_down_message,
-				_on_mouse_move_message;
+				_on_mouse_move_message,
+				_on_mouse_wheel_message;
 
 			point	_window_client_size;
 			HWND	_window_handle;
@@ -38,6 +39,7 @@ namespace ballistic {
 			void on_mouse_move (const point & p);
 			void on_mouse_down (const point & p, int button);
 			void on_mouse_up (const point & p, int button);
+			void on_mouse_wheel (const point & p, int delta);
 
 		public:
 

@@ -59,6 +59,50 @@ void initialize_defaults () {
 	g.systems.attach (graphics);
 }
 
+bool load_instances (int argc, char ** argv) {
+
+	graphics::imesh *		mesh = nullptr;
+	graphics::material *	material = nullptr;
+	graphics::rig *			rig = nullptr;
+
+	switch (argc) {
+	case (4) :
+	{
+		res_id_t
+			mesh_id (argv [1], argv [3]),
+			material_id (argv [2], argv [3]);
+
+		mesh = game::instance.resources [mesh_id];
+		material = game::instance.resources [material_id];
+		break;
+	}
+	default:
+		std::cout << "Error. Invalid number of arguments." << std::endl;
+		std::cout << "Expected model_viewer [mesh_name] [material_name] [resource_file]" << std::endl;
+		return false;
+	}
+
+	if (mesh && material) {
+
+		entity * model = game::instance.entities.create (model_entity_type, model_entity);
+		model->properties [id::graphics::mesh] = mesh;
+		model->properties [id::graphics::material] = material;
+
+		auto bb = mesh->bounding_box ();
+		real camera_radius = (math::length (bb.v_max) / real (std::tan (45.0 / 2.0))) * real (1.5);
+
+		entity * camera = game::instance.entities.create (camera_entity_type, camera_entity);
+		camera->properties [camera_controler::starting_radius] = camera_radius;
+
+	} else {
+		std::cout << "Error. Resources Not Found." << std::endl;
+		std::cout << "Expected model_viewer [mesh_name] [material_name] [resource_file]" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
 int main ( int argc, char ** argv) {
 
 	debug_init();
@@ -66,6 +110,10 @@ int main ( int argc, char ** argv) {
 	initialize_defaults ();
 
 	define_internals ();
+
+	// load file
+	if (!load_instances (argc, argv))
+		return -1;
 
 	game::instance.initialize ();
 	_frontend->do_event_loop ();

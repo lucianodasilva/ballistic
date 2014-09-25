@@ -80,7 +80,7 @@ namespace ballistic {
 			base_property_container & operator = (const base_property_container < iproperty, default_property_t > & o) = delete;
 
 			template < class value_t >
-			inline default_property_t < value_t > * require (const id_t & id, const value_t & default_value ) {
+			inline default_property_t < value_t > * require (const id_t & id, const value_t & default_value) {
 				auto p = this->find (id);
 
 				if (!p) {

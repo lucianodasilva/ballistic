@@ -7,7 +7,6 @@
 #define default_res_file default_res_folder "default.xml"
 
 ballistic::res_id_t
-	res_cube_entity_type ("cube.entity_type", default_res_file),
 	res_default_material ("default_material.effect", default_res_folder "default_material.fx"),
 	res_overlay_material ("overlay_material.effect", default_res_folder "overlay_material.fx");
 

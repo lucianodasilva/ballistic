@@ -26,7 +26,9 @@ private:
 
 public:
 
-	static const id_t component_id;
+	static const id_t
+		component_id,
+		starting_radius;
 
 	static void require_properties (entity_type * new_type, component_info & info);
 

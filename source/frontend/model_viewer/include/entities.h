@@ -11,6 +11,8 @@ using namespace ballistic;
 
 define_id_ext (camera_entity_type, "camera.entity_type");
 define_id (camera_entity);
+define_id_ext (model_entity_type, "model.entity_type");
+define_id (model_entity);
 
 inline void define_internals () {
 	// define components
@@ -40,9 +42,13 @@ inline void define_internals () {
 		entity_props [id::up] = vec3 {.0, 1., .0};
 	}
 
-	//create entities
-	g.entities.create (camera_entity_type, camera_entity);
-	g.entities.create (res_cube_entity_type);
+	// create model
+	{
+		entity_type * model_type = entity_type::declare <
+			ballistic::transform,
+			graphics::visual
+		> (model_entity_type);
+	}
 }
 
 #endif
