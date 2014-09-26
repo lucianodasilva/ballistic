@@ -44,14 +44,25 @@ namespace ballistic {
 	entity_type * entity_type::declare (const id_t & id) {
 		auto instance = entity_type::create_instance (id);
 
-		vector < icomponent_constructor * > ctors = { game::instance.resources [component_types::component_id] ...};
+		struct constructor_handle {
+			icomponent_constructor * ctor;
+			id_t id;
+		};
 
-		for (auto ctor : ctors) {
+		vector < constructor_handle > ctors = {{game::instance.resources [component_types::component_id], component_types::component_id} ...};
+
+		for (auto handle : ctors) {
+			if (!handle.ctor) {
+				debug_error ("no constructor found for component " << handle.id);
+				continue;
+			}
+
+
 			instance->components.push_back (component_info ());
 			component_info & new_info = instance->components.back ();
 
-			ctor->require_properties (instance, new_info);
-			new_info.ctor (ctor);
+			handle.ctor->require_properties (instance, new_info);
+			new_info.ctor (handle.ctor);
 		}
 
 		return instance;

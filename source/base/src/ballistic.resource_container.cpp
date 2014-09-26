@@ -114,34 +114,45 @@ namespace ballistic {
 		
 		if (res)
 			return res;
-		
+
+		if (load (res_id.source (), res_id.id ()))
+			return get_resource (res_id.id ());
+		else
+			return nullptr;
+	}
+
+	bool resource_container::load (const string & source) {
+		id_t id = text_to_id (source.c_str ());
+		return load (source, id);
+	}
+
+	bool resource_container::load (const string & source, const id_t & id) {
 		// check for a loader capable of handling the file
 		io::iloader * loader = nullptr;
-		
-		for ( io::iloader * l_it : _loaders ) {
-			if (l_it->handles(res_id.source())) {
+
+		for (io::iloader * l_it : _loaders) {
+			if (l_it->handles (source)) {
 				loader = l_it;
 				break;
 			}
 		}
-		
+
 		// unable to handle resource type
 		if (!loader) {
-			debug_error ("unable to handle resource type: " << res_id.source ());
-			return nullptr;
+			debug_error ("unable to handle resource type: " << source);
+			return false;
 		}
-		
+
 		// search for container
 		for (io::istorage * storage : _storage_handlers) {
-			if (storage->contains(res_id.source ())) {
-				if (storage->load (loader, res_id.source (), *this, res_id.id ()))     {
-					return get_resource(res_id.id ());
-				}
+			if (storage->contains (source)) {
+				return storage->load (loader, source, *this, id);
 			}
 		}
-		
-		debug_error ("no appropriate storage container found for " << res_id.source ());
-		return nullptr;
+
+		debug_error ("no appropriate storage container found for " << source);
+
+		return false;
 	}
 	
 }

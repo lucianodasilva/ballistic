@@ -5,6 +5,7 @@
 #include <ballistic.graphics.h>
 
 #include "camera_controler.h"
+#include "fps_counter.h"
 #include "resources.h"
 
 using namespace ballistic;
@@ -13,13 +14,20 @@ define_id_ext (camera_entity_type, "camera.entity_type");
 define_id (camera_entity);
 define_id_ext (model_entity_type, "model.entity_type");
 define_id (model_entity);
+define_id_ext (fps_counter_entity_type, "fps_counter.entity_type");
+define_id (fps_counter_entity);
 
 inline void define_internals () {
+	game & g = game::instance;
+
+	// load resources
+	g.resources.load (default_res_file);
+
 	// define components
 	component::declare < camera_controler > ();
+	component::declare < fps_counter > ();
 
 	// define entity types
-	game & g = game::instance;
 
 	// create camera
 	{
@@ -42,6 +50,21 @@ inline void define_internals () {
 		entity_props [id::up] = vec3 {.0, 1., .0};
 	}
 
+	// create fps counter
+	{
+		auto fps_counter_type = entity_type::declare <
+			fps_counter,
+			ballistic::transform,
+			graphics::overlay_text
+		> (fps_counter_entity_type);
+
+		auto & fps_props = fps_counter_type->properties;
+
+		fps_props [id::transform_position] = vec3{-.9, .9, .0};
+		fps_props [id::transform_scale] = vec3{.05, .05, .05};
+		fps_props [id::graphics::text::font_id] = text_to_id ("consolas_16.font");
+	}
+
 	// create model
 	{
 		entity_type * model_type = entity_type::declare <
@@ -49,6 +72,9 @@ inline void define_internals () {
 			graphics::visual
 		> (model_entity_type);
 	}
+
+	// create entities
+	game::instance.entities.create (fps_counter_entity_type, fps_counter_entity);
 }
 
 #endif

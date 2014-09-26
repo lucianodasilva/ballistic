@@ -15,6 +15,11 @@ namespace ballistic {
 
 			font * font_inst = *_overlay_font;
 
+			if (!font_inst) {
+				debug_error ("can't generate text mesh without a defined font!");
+				return;
+			}
+
 			int char_count = text_value.size();
 
 			real * vertex_data = new real[
@@ -76,14 +81,12 @@ namespace ballistic {
 				pos.x += xwidth;
 			}
 
-			_mesh->set_data(
-				(uint8_t *)vertex_data,
-				20 * char_count * sizeof(real),
-				index_data,
-				6 * char_count * sizeof(uint16_t),
-				(mesh_attribute)(mesh_attribute_position | mesh_attribute_uv),
-				false
+			_mesh->update_data (
+				reinterpret_cast < uint8_t * > (vertex_data),
+				20 * char_count * sizeof(real)
 			);
+
+			_mesh->update_index (index_data, 6 * char_count);
 			
 			delete [] vertex_data;
 			delete [] index_data;
@@ -132,6 +135,8 @@ namespace ballistic {
 
 			_mesh = _system->device()->create_mesh(id::null);
 
+			// create default mesh
+			_mesh->set_data (nullptr, 256 * 20, nullptr, 256 * 6, (mesh_attribute)(mesh_attribute_position | mesh_attribute_uv), true);
 			generate_mesh ();
 		}
 
@@ -141,6 +146,7 @@ namespace ballistic {
 
 		void overlay_text::terminate () {
 			overlay::terminate ();
+			game::instance.global_notifier.detach (id::message::render, this);
 			this->parent ()->local_notifier.detach (id::message::render, this);
 		}
 

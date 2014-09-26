@@ -21,7 +21,10 @@ namespace ballistic {
 				_index_buffer_id,
 				_index_buffer_size;
 
+			uint32_t _attribute_offset;
+
 			aabox _bounding_box;
+
 			
 			static GLint calc_stride (mesh_attribute attributes);
 			
@@ -48,8 +51,7 @@ namespace ballistic {
 
 			virtual void update_data (
 				uint8_t *			data_buffer,
-				int32_t			data_buffer_size,
-				mesh_attribute	attributes
+				int32_t			data_buffer_size
 			);
 
 			virtual void update_index (

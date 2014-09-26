@@ -118,7 +118,8 @@ namespace ballistic {
 			_run_id (run_id), 
 			_vertex_array_id (0),
 			_vertex_buffer_id(0),
-			_index_buffer_id (0)
+			_index_buffer_id (0),
+			_attribute_offset (0)
 		{}
 		
 		opengl_mesh::~opengl_mesh() {
@@ -167,8 +168,12 @@ namespace ballistic {
 			// Setup vertex array object
 			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
 
-			uint32_t offset = set_attributes (attributes);
-			_bounding_box = calc_aabox (data_buffer, data_buffer_size, offset);
+			_attribute_offset = set_attributes (attributes);
+
+			if (data_buffer)
+				_bounding_box = calc_aabox (data_buffer, data_buffer_size, _attribute_offset);
+			else
+				_bounding_box = {};
 
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
 
@@ -180,8 +185,7 @@ namespace ballistic {
 
 		void opengl_mesh::update_data (
 			uint8_t *			data_buffer,
-			int32_t			data_buffer_size,
-			mesh_attribute	attributes
+			int32_t			data_buffer_size
 		){
 			if (_vertex_array_id == 0) {
 				debug_error ("gL cannot update data from undefined mesh");
@@ -191,13 +195,20 @@ namespace ballistic {
 			gl_eval_scope (opengl_mesh::update_data);
 
 			glBindVertexArray (_vertex_array_id);
-			glBufferData (
-				GL_ARRAY_BUFFER,
-				data_buffer_size,
-				(GLvoid *)data_buffer,
-				GL_DYNAMIC_DRAW);
+			glBindBuffer (GL_ARRAY_BUFFER, _vertex_buffer_id);
 
-			set_attributes (attributes);
+			if (data_buffer_size > 0)
+				glBufferSubData (
+					GL_ARRAY_BUFFER,
+					0,
+					data_buffer_size,
+					(GLvoid *)data_buffer
+				);
+
+			if (data_buffer)
+				_bounding_box = calc_aabox (data_buffer, data_buffer_size, _attribute_offset);
+			else
+				_bounding_box = {};
 
 			// Reset state machine
 			glBindVertexArray (0);
@@ -218,7 +229,10 @@ namespace ballistic {
 
 			_index_buffer_size = index_buffer_size;
 			glBindVertexArray (_vertex_array_id);
-			glBufferData (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_size, (GLvoid *)index_buffer,GL_DYNAMIC_DRAW);
+			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
+
+			if (_index_buffer_size > 0)
+				glBufferSubData (GL_ELEMENT_ARRAY_BUFFER, 0, _index_buffer_size, (GLvoid *)index_buffer);
 
 			// Reset state machine
 			glBindVertexArray (0);

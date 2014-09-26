@@ -8,6 +8,7 @@
 
 ballistic::res_id_t
 	res_default_material ("default_material.effect", default_res_folder "default_material.fx"),
-	res_overlay_material ("overlay_material.effect", default_res_folder "overlay_material.fx");
+	res_overlay_material ("overlay_material.effect", default_res_folder "overlay_material.fx"),
+	res_overlay_font ("consolas_16.font", default_res_folder "consolas_16.xml");
 
 #endif

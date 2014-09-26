@@ -34,8 +34,7 @@ namespace ballistic {
 
 			virtual void update_data (
 				uint8_t *		data_buffer,
-				int32_t			data_buffer_size,
-				mesh_attribute	attributes
+				int32_t			data_buffer_size
 			) = 0;
 
 			virtual void update_index (

@@ -144,6 +144,9 @@ namespace ballistic {
 		inline details::resource_auto_caster operator [] ( const res_id_t & res_id );
 
 		inline details::resource_auto_caster operator [] (const id_t & id);
+
+		bool load (const string & source);
+		bool load (const string & source, const id_t & id);
 			
 	};
 		
