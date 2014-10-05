@@ -13,7 +13,7 @@ private:
 	uint32_t _last_frame;
 	real _last_time;
 
-	const real update_time = .025;
+	const real update_time = real (.025);
 
 public:
 

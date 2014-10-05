@@ -16,6 +16,8 @@
 #include <ballistic.base.h>
 #include <string>
 
+#include "ballistic.graphics.light.h"
+
 using namespace std;
 
 namespace ballistic {
@@ -35,6 +37,7 @@ namespace ballistic {
 			virtual void set_value (const vec4 & v) = 0;
 			virtual void set_value (const mat4 & v) = 0;
 			virtual void set_value (const std::vector < mat4 > & v) = 0;
+			virtual void set_value (const std::vector < light_info > & v) = 0;
 
 			virtual bool is_null ();
 			
@@ -55,6 +58,7 @@ namespace ballistic {
 			virtual void set_value (const vec4 & v) override;
 			virtual void set_value (const mat4 & v) override;
 			virtual void set_value (const std::vector < mat4 > & v) override;
+			virtual void set_value (const std::vector < light_info > & v) override;
 
 			virtual bool is_null () override;
 

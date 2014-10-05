@@ -14,8 +14,8 @@ namespace ballistic {
 				stride += sizeof (vec3);
 			if (attributes & mesh_attribute_uv)
 				stride += sizeof (vec2);
-			//if (attributes & mesh_attribute_normal)
-			//	stride += sizeof (vec3);
+			if (attributes & mesh_attribute_normal)
+				stride += sizeof (vec3);
 			if (attributes & mesh_attribute_bone_index)
 				stride += sizeof (uvec2);
 			if (attributes & mesh_attribute_bone_weight)
@@ -43,7 +43,7 @@ namespace ballistic {
 			if (attributes & mesh_attribute_position) {
 				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_position);
 				attribute_offset = add_attribute (
-					1,
+					attribute_location_position,
 					3,
 					GL_FLOAT,
 					attribute_stride,
@@ -54,7 +54,7 @@ namespace ballistic {
 			if (attributes & mesh_attribute_uv) {
 				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_uv);
 				attribute_offset = add_attribute (
-					2,
+					attribute_location_uv,
 					2,
 					GL_FLOAT,
 					attribute_stride,
@@ -62,21 +62,21 @@ namespace ballistic {
 					);
 			}
 
-			//if (attributes & mesh_attribute_normal) {
-			//	gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_normal);
-			//	attribute_offset = add_attribute (
-			//		3,
-			//		3,
-			//		GL_FLOAT,
-			//		attribute_stride,
-			//		attribute_offset
-			//		);
-			//}
+			if (attributes & mesh_attribute_normal) {
+				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_normal);
+				attribute_offset = add_attribute (
+					attribute_location_normal,
+					3,
+					GL_FLOAT,
+					attribute_stride,
+					attribute_offset
+					);
+			}
 
 			if (attributes & mesh_attribute_bone_index) {
 				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_bone_index);
 				attribute_offset = add_attribute (
-					3,
+					attribute_location_bone_index,
 					2,
 					GL_UNSIGNED_INT,
 					attribute_stride,
@@ -87,7 +87,7 @@ namespace ballistic {
 			if (attributes & mesh_attribute_bone_weight) {
 				gl_eval_scope ([ballistic::graphics::opengl_mesh::set_attributes] mesh_attribute_bone_weight);
 				attribute_offset = add_attribute (
-					4,
+					attribute_location_bone_weight,
 					1,
 					GL_FLOAT,
 					attribute_stride,

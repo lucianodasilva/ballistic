@@ -13,6 +13,14 @@ namespace ballistic {
 		{
 		private:
 
+			enum attribute_location : uint32_t {
+				attribute_location_position = 1,
+				attribute_location_uv = 2,
+				attribute_location_normal = 3,
+				attribute_location_bone_index = 4,
+				attribute_location_bone_weight = 5
+			};
+
 			uint8_t _run_id;
 			
 			GLuint
@@ -41,22 +49,22 @@ namespace ballistic {
 			virtual uint8_t run_id ();
 			
 			virtual void set_data (
-				uint8_t *			data_buffer,
+				uint8_t *		data_buffer,
 				int32_t			data_buffer_size,
 				uint16_t *		index_buffer,
-				uint32_t			index_buffer_size,
+				uint32_t		index_buffer_size,
 				mesh_attribute	attributes,
 				bool			dynamic = false
 			);
 
 			virtual void update_data (
-				uint8_t *			data_buffer,
+				uint8_t *		data_buffer,
 				int32_t			data_buffer_size
 			);
 
 			virtual void update_index (
 				uint16_t *		index_buffer,
-				uint32_t			index_buffer_size
+				uint32_t		index_buffer_size
 			);
 			
 			virtual void apply (idevice * device);

@@ -7,6 +7,7 @@
 #include "ballistic.graphics.idevice.h"
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.camera.h"
+#include "ballistic.graphics.light.h"
 #include "ballistic.graphics.render_list.h"
 
 namespace ballistic {
@@ -26,20 +27,24 @@ namespace ballistic {
 			camera	*	_camera;
 
 			render_list _render_list;
+			vector < light_info > _light_list;
 
 			ieffect *	_material_effect;
 
 			// effect constants
 			iconstant
-				* _c_effect_diffuse,
-				* _c_effect_texture,
-				* _c_effect_t_model,
-				* _c_effect_t_view,
-				* _c_effect_t_proj,
-				* _c_effect_t_normal,
-				* _c_effect_t_mvp,
-				* _c_effect_bone_count,
-				* _c_effect_t_bones;
+				*_c_effect_diffuse,
+				*_c_effect_texture,
+				*_c_effect_t_eye,
+				*_c_effect_t_model,
+				*_c_effect_t_view,
+				*_c_effect_t_proj,
+				*_c_effect_t_normal,
+				*_c_effect_t_mvp,
+				*_c_effect_bone_count,
+				*_c_effect_t_bones,
+				*_c_effect_light_count,
+				*_c_effect_lights;
 
 			ieffect *	_overlay_effect;
 
@@ -81,9 +86,9 @@ namespace ballistic {
 			virtual void detach ();
 
 			// methods
-			virtual void push_item (material * material, imesh * mesh, rig_frame_tween * rig, uint8_t layer, const mat4 & transform);
-			virtual void push_overlay_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
-
+			void push_item (material * material, imesh * mesh, rig_frame_tween * rig, uint8_t layer, const mat4 & transform);
+			void push_overlay_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
+			void push_light (const light_info & info);
 		};
 				  
 	}

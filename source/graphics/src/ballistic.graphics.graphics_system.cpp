@@ -47,6 +47,7 @@ namespace ballistic {
 
 			_c_effect_diffuse (&null_constant::instance),
 			_c_effect_texture (&null_constant::instance),
+			_c_effect_t_eye (&null_constant::instance),
 			_c_effect_t_model (&null_constant::instance),
 			_c_effect_t_view (&null_constant::instance),
 			_c_effect_t_proj (&null_constant::instance),
@@ -54,6 +55,8 @@ namespace ballistic {
 			_c_effect_t_mvp (&null_constant::instance),
 			_c_effect_bone_count (&null_constant::instance),
 			_c_effect_t_bones (&null_constant::instance),
+			_c_effect_light_count (&null_constant::instance),
+			_c_effect_lights (&null_constant::instance),
 
 			_overlay_effect (nullptr),
 
@@ -90,6 +93,7 @@ namespace ballistic {
 
 			_c_effect_diffuse = _material_effect->constant (id::graphics::effect::diffuse);
 			_c_effect_texture = _material_effect->constant (id::graphics::effect::texture);
+			_c_effect_t_eye = _material_effect->constant (id::graphics::effect::t_eye);
 			_c_effect_t_model = _material_effect->constant (id::graphics::effect::t_model);
 			_c_effect_t_view = _material_effect->constant (id::graphics::effect::t_view);
 			_c_effect_t_proj = _material_effect->constant (id::graphics::effect::t_proj);
@@ -97,6 +101,8 @@ namespace ballistic {
 			_c_effect_t_mvp = _material_effect->constant (id::graphics::effect::t_mvp);
 			_c_effect_bone_count = _material_effect->constant (id::graphics::effect::bone_count);
 			_c_effect_t_bones = _material_effect->constant (id::graphics::effect::t_bones);
+			_c_effect_light_count = _material_effect->constant (id::graphics::effect::light_count);
+			_c_effect_lights = _material_effect->constant (id::graphics::effect::lights);
 
 			evaluate_render ();
 		}
@@ -165,6 +171,11 @@ namespace ballistic {
 			// least changing properties
 			_c_effect_t_view->set_value (m_v);
 			_c_effect_t_proj->set_value (_camera->proj ());
+			_c_effect_t_eye->set_value (_camera->position ());
+
+			// bind lights
+			_c_effect_light_count->set_value (_light_list.size ());
+			_c_effect_lights->set_value (_light_list);
 				   
 			uint32_t render_count = _render_list.size ();
 			uint32_t render_index = 0;
@@ -199,7 +210,7 @@ namespace ballistic {
 
 				// update model / normal matrices
 				m_mv = m_v * item.transform;
-				m_n = m_mv.transpose ().invert ();
+				m_n = item.transform.transpose ().invert ();
 				m_mvp = item.transform * m_vp;
 
 				_c_effect_t_normal->set_value (m_n);
@@ -266,6 +277,7 @@ namespace ballistic {
 
 			// r-----------------------
 			_render_list.clear();
+			_light_list.clear ();
 
 			_device->end_frame ();
 			_device->present ();
@@ -307,6 +319,10 @@ namespace ballistic {
 
 			// 0x01000000 - overlay offset
 			render_item::set_render_bucket (item, _camera, overlay_offset);
+		}
+
+		void graphics_system::push_light (const light_info & info) {
+			_light_list.push_back (info);
 		}
 
 	}

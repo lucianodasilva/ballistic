@@ -44,8 +44,8 @@ namespace ballistic {
 				
 				vector < real >		position;
 				vector < real >		uv;
-				//vector < real >		normal;
-				vector < uint32_t >		bone_index;
+				vector < real >		normal;
+				vector < uint32_t >	bone_index;
 				vector < real >		bone_weight;
 				vector < uint16_t >	index;
 				
@@ -61,8 +61,7 @@ namespace ballistic {
 						while (get_line (ss, value, ',')) {
 							position.push_back (convert_to < real > (value));
 						}
-				
-				
+
 						if (position.size () % 3 != 0) {
 							debug_error ("mesh position vector not multiple of 3!");
 							delete mesh;
@@ -89,7 +88,7 @@ namespace ballistic {
 							delete mesh;
 							return;
 						}
-					/*} else if (strcmp (cursor->Name (), "normal") == 0) {
+					} else if (strcmp (cursor->Name (), "normal") == 0) {
 						m_attribute = (mesh_attribute)(m_attribute | mesh_attribute_normal);
 				
 						stringstream ss (cursor->GetText ());
@@ -109,7 +108,7 @@ namespace ballistic {
 							debug_error ("mesh normal vector size does not match the size of the position vector!");
 							delete mesh;
 							return;
-						}*/
+						}
 					} else if (strcmp (cursor->Name (), "bone_index") == 0) {
 						m_attribute = (mesh_attribute)(m_attribute | mesh_attribute_bone_index);
 
@@ -165,13 +164,13 @@ namespace ballistic {
 				uint32_t buffer_size =
 					(m_attribute & mesh_attribute_position ? position.size () * sizeof (real) : 0) +
 					(m_attribute & mesh_attribute_uv ? uv.size () * sizeof (real) : 0) +
+					(m_attribute & mesh_attribute_normal ? normal.size () * sizeof (real) : 0) +
 					(m_attribute & mesh_attribute_bone_index ? bone_index.size () * sizeof (uint32_t) : 0 ) +
 					(m_attribute & mesh_attribute_bone_weight ? bone_weight.size () * sizeof (real) : 0)
 				;
 				
 				
 				uint8_t * data_buffer = new uint8_t [buffer_size];
-				//real * data_cursor = (real *)data_buffer;
 				uint8_t * data_cursor = data_buffer;
 				for (uint32_t i = 0; i < position.size () / 3; ++i) {
 				
@@ -193,12 +192,14 @@ namespace ballistic {
 						}
 					}
 				
-					//if (m_attribute & mesh_attribute_normal) {
-					//	uint32_t offset = i * 3;
-					//
-					//	for (uint32_t j = 0; j < 3; ++j)
-					//		*data_cursor++ = normal [offset++];
-					//}
+					if (m_attribute & mesh_attribute_normal) {
+						uint32_t offset = i * 3;
+					
+						for (uint32_t j = 0; j < 3; ++j) {
+							*((real *)data_cursor) = normal [offset++];
+							data_cursor += sizeof (real);
+						}
+					}
 
 					if (m_attribute & mesh_attribute_bone_index) {
 						uint32_t offset = i * 2;

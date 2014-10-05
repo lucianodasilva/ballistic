@@ -52,6 +52,10 @@ namespace ballistic {
 			inline void set_value (const std::vector < mat4 > & v ) override {
 				glUniformMatrix4fv (location, v.size (), false, (GLfloat *)v.data ());
 			}
+
+			inline void set_value (const std::vector < light_info > & v) {
+				glUniformMatrix2x4fv (location, v.size (), false, (GLfloat *)v.data ());
+			}
 		
 		};
 

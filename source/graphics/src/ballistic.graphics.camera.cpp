@@ -79,6 +79,10 @@ namespace ballistic {
 			return _proj;
 		}
 
+		vec3 camera::position () const {
+			return *_p_position;
+		}
+
 		void camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
 
 			_proj = {

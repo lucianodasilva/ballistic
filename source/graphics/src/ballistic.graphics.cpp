@@ -17,6 +17,7 @@
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.imesh.h"
 #include "ballistic.graphics.itexture.h"
+#include "ballistic.graphics.light.h"
 #include "ballistic.graphics.material.h"
 
 namespace ballistic {
@@ -28,6 +29,7 @@ namespace ballistic {
 			component::declare < overlay > ();
 			component::declare < overlay_text > ();
 			component::declare < camera > ();
+			component::declare < light > ();
 
 			game & g = game::instance;
 

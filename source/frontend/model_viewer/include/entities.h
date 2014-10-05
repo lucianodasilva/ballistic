@@ -17,6 +17,8 @@ define_id (model_entity);
 define_id_ext (fps_counter_entity_type, "fps_counter.entity_type");
 define_id (fps_counter_entity);
 
+define_id_ext (light_entity_type, "light.entity_type");
+
 inline void define_internals () {
 	game & g = game::instance;
 
@@ -48,6 +50,13 @@ inline void define_internals () {
 		entity_props [id::position] = vec3{.0, .0, 50.};
 		entity_props [id::target] = vec3 {.0, .0, .0};
 		entity_props [id::up] = vec3 {.0, 1., .0};
+	}
+
+	// create light
+	{
+		entity_type::declare <
+			graphics::light
+		> (light_entity_type);
 	}
 
 	// create fps counter

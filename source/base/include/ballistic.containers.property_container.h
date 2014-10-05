@@ -66,6 +66,12 @@ namespace ballistic {
 
 		};
 
+		template < class value_t >
+		struct property_value_handle {
+			id_t id;
+			value_t value;
+		};
+
 		template <
 			class base_property_t,
 			template < class > class default_property_t

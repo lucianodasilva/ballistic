@@ -94,6 +94,24 @@ bool load_instances (int argc, char ** argv) {
 		entity * camera = game::instance.entities.create (camera_entity_type, camera_entity);
 		camera->properties [camera_controler::starting_radius] = camera_radius;
 
+		// lights
+		entity * light = nullptr;
+		
+		light = game::instance.entities.create (light_entity_type);
+		light->properties [id::position] = vec3{camera_radius, camera_radius, .0};
+		light->properties [id::graphics::light_color] = color {0.1, 0.5, 1., 1.};
+		light->properties [id::graphics::light_fallout] = real (camera_radius * 2.0);
+
+		light = game::instance.entities.create (light_entity_type);
+		light->properties [id::position] = vec3{camera_radius, .0, camera_radius};
+		light->properties [id::graphics::light_color] = color{1.0, 1.0, 1., 1.};
+		light->properties [id::graphics::light_fallout] = real (camera_radius * 2.0);
+
+		light = game::instance.entities.create (light_entity_type);
+		light->properties [id::position] = vec3{-camera_radius, -camera_radius, .0};
+		light->properties [id::graphics::light_color] = color{0.1, 0.1, 0.0, 0.25};
+		light->properties [id::graphics::light_fallout] = real (camera_radius * 2.0);
+
 	} else {
 		std::cout << "Error. Resources Not Found." << std::endl;
 		std::cout << "Expected model_viewer [mesh_name] [material_name] [resource_file]" << std::endl;

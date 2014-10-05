@@ -41,12 +41,22 @@ namespace ballistic {
 
 			define_id_ext (layer, graphics.layer);
 
+			define_id_ext (light, graphics.light);
+
+			define_id_ext (light_color, light.color);
+			define_id_ext (light_fallout, light.fallout);
+			define_id_ext (light_position, light.position);
+
 			// effect 
 			namespace effect {
 
 				define_id_ext (diffuse, effect_diffuse);
+				define_id_ext (specular, effect_specular);
+				define_id_ext (specular_intensity, effect_specular_intensity);
 				define_id_ext (texture, effect_texture);
+				define_id_ext (ambient, effect_ambient);
 
+				define_id_ext (t_eye, effect_t_eye);
 				define_id_ext (t_model, effect_t_model);
 				define_id_ext (t_view, effect_t_view);
 				define_id_ext (t_normal, effect_t_normal);
@@ -55,6 +65,9 @@ namespace ballistic {
 
 				define_id_ext (bone_count, effect_bone_count);
 				define_id_ext (t_bones, effect_t_bones);
+
+				define_id_ext (light_count, effect_light_count);
+				define_id_ext (lights, effect_lights[0]);
 
 				namespace type {
 					define_id_ext(basic, effect_type.basic);

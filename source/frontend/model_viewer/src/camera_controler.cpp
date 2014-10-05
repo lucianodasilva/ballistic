@@ -51,8 +51,8 @@ void camera_controler::notify (ballistic::entity * sender, ballistic::message & 
 
 	id_t message_id = message.id ();
 
-	real move_mult = 0.01;
-	real delta_mult = 0.02;
+	real move_mult = real(0.01);
+	real delta_mult = real (0.02);
 
 	if (message_id == id::frontend::on_mouse_down) {
 

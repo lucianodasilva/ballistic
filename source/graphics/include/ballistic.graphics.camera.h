@@ -43,6 +43,8 @@ namespace ballistic {
 			mat4 view () const;
 			const mat4 & proj () const;
 
+			vec3 position () const;
+
 			// utilities
 			void make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
 			void make_perspective_proj (real fov, real aspect, real near, real far );

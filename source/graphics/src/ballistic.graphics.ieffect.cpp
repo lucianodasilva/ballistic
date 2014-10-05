@@ -1,4 +1,5 @@
 #include "ballistic.graphics.ieffect.h"
+#include "ballistic.graphics.light.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ namespace ballistic {
 		void null_constant::set_value (const vec4 & v) {}
 		void null_constant::set_value (const mat4 & v) {}
 		void null_constant::set_value (const std::vector < mat4 > & v) {}
+		void null_constant::set_value (const std::vector < light_info > & v) {}
 
 		bool null_constant::is_null () { return true; }
 
