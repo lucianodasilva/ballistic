@@ -65,59 +65,72 @@ void main () {
 		light_vec,
 
 		light_col,
-		//ambi_col = vec4 (0.01, 0.01, 0.01, 1.0),//effect_ambient,
-		//diff_col = vec3 (0.124, 0.046, 0.011),//effect_diffuse,
-		diff_col = vec3 (1.0, .0, .0),//effect_diffuse,
+		skycol = vec3 (0.76, 0.83, 0.89),
+		gndcol = vec3 (0.07, 0.11, 0.13),
+		diff_col = vec3 (0.23, 0.14, 0.07),//effect_diffuse,
+		//diff_col = vec3 (1.0, .0, .0),//effect_diffuse,
 		spec_col = vec3 (1.0, 1.0, 1.0), //effect_specular;
 		temp_col = vec3 (.0, .0, .0);
 
 	float
+		ambient_int = 0.05,
 		light_fal,
 		light_dst,
 		light_int,
 		spec_hard = 100.0,// effect_specular_hardness,
 		spec_int = 0.8, // effect_specular_int
 		att = 0.0,
-		bgt = 0.0;
-	
-	//temp_col = diff_col; //ambi_col + diff_col;
+		bgt = 0.0,
+		sky_bgt = 0.0;
 
+	temp_col = diff_col;
+
+	vec3 normal = normalize (var_normal);
+
+	// --- sky color ---
+	vec3 up = vec3 (.0, 1.0, .0);
+	sky_bgt = 0.5 * (1.0 + dot (up, normal));
+
+	temp_col *= (sky_bgt * skycol + (1.0 - sky_bgt) * gndcol);
+	
+	// --- lights ---
 	for (int i = 0; i < effect_light_count; ++i) {
 		light_pos = effect_lights [i] [0].xyz;
 		light_fal = effect_lights [i] [0].w;
 		light_col = effect_lights [i] [1].xyz;
 		light_int = effect_lights [i] [1].w;
-
+	
+		// --- attenuation ---
 		// distance and normalize in one sqrt
 		light_vec = light_pos - var_position;
 		light_dst = max (length (light_vec), 0.0);
 		light_vec = light_vec / light_dst;
-
+	
 		vec3 normal = normalize (var_normal);
 		bgt = max (dot (normal, light_vec), 0.0);
-
+	
 		att = 0;
-
+	
 		if (light_dst < light_fal) {
 			att = light_dst / light_fal + 1;
 			att = 1.0 / (att * att);
 		}
-
-		light_col =  diff_col * bgt * att * light_col;
-
-		//if (spec_int > 0.0) {
-		//
-		//	vec3 eye_v = normalize (effect_t_eye - var_position);
-		//
-		//	float spec_bgt = dot (normal, light_vec);
-		//
-		//	if (spec_bgt > 0.0) {
-		//		spec_bgt = pow (max (0.0, dot (eye_v, reflect (-light_vec, normal))), spec_hard), 1.0;
-		//		light_col += spec_bgt * att * effect_lights [i] [1].xyz * spec_int;
-		//	}
-		//		//light_col += att * spec_col * pow (spec_bgt, spec_int);
-		//}
-
+	
+		light_col =  bgt * att * light_col * diff_col;
+	
+		if (spec_int > 0.0) {
+		
+			vec3 eye_v = normalize (effect_t_eye - var_position);
+		
+			float spec_bgt = dot (normal, light_vec);
+		
+			if (spec_bgt > 0.0) {
+				spec_bgt = pow (max (0.0, dot (eye_v, reflect (-light_vec, normal))), spec_hard), 1.0;
+				light_col += spec_bgt * att * effect_lights [i] [1].xyz * spec_int;
+			}
+				//light_col += att * spec_col * pow (spec_bgt, spec_int);
+		}
+	
 		temp_col += light_col;// *light_int;
 	}
 
