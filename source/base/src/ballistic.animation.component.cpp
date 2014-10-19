@@ -2,6 +2,7 @@
 
 #include "ballistic.common_id.h"
 #include "ballistic.animation.driver.h"
+#include "ballistic.game.h"
 
 namespace ballistic {
 	namespace animation {
@@ -28,7 +29,7 @@ namespace ballistic {
 			id_t storyboard_id = parameters [id::storyboard_id];
 
 			if (storyboard_id != id::null) {
-				_storyboard = game::instance.resources [storyboard_id];
+				_storyboard = parent->game ().resources [storyboard_id];
 				
 				if (!_storyboard) {
 					debug_print ("storyboard id \"" << storyboard_id << "\" does not evaluate to a loaded storyboard");
@@ -38,7 +39,7 @@ namespace ballistic {
 
 			// attach animation drivers
 			_storyboard->create_drivers (this);
-			game::instance.global_notifier.attach (id::message::update, this);
+			parent->game ().global_notifier.attach (id::message::update, this);
 		}
 
 		void component::terminate () {
@@ -47,7 +48,7 @@ namespace ballistic {
 			for (auto d : _drivers)
 				delete d;
 
-			game::instance.global_notifier.detach (id::message::update, this);
+			this->parent ()->game ().global_notifier.detach (id::message::update, this);
 		}
 
 		void component::notify (ballistic::entity * sender, ballistic::message & message) {

@@ -23,31 +23,29 @@
 namespace ballistic {
 	namespace graphics {
 
-		void define_resources (ballistic::graphics::idevice * device) {
+		void define_resources (ballistic::game & game_ref, ballistic::graphics::idevice * device) {
 
-			component::declare < visual > ();
-			component::declare < overlay > ();
-			component::declare < overlay_text > ();
-			component::declare < camera > ();
-			component::declare < light > ();
+			component::declare < visual > (game_ref);
+			component::declare < overlay > (game_ref);
+			component::declare < overlay_text > (game_ref);
+			component::declare < camera > (game_ref);
+			component::declare < light > (game_ref);
 
-			game & g = game::instance;
+			game_ref.resources.register_loader (new graphics::io::effect_loader (device));
 
-			g.resources.register_loader (new graphics::io::effect_loader (device));
-
-			g.resources.package_loader ()->register_reader (
+			game_ref.resources.package_loader ()->register_reader (
 				new graphics::io::material_package_reader ()
 			);
 
-			g.resources.package_loader()->register_reader(
+			game_ref.resources.package_loader ()->register_reader (
 				new graphics::io::font_package_reader()
 			);
 
-			g.resources.package_loader ()->register_reader (
+			game_ref.resources.package_loader ()->register_reader (
 				new graphics::io::mesh_package_reader (device)
 			);
 
-			g.resources.package_loader ()->register_reader (
+			game_ref.resources.package_loader ()->register_reader (
 				new graphics::io::texture_package_reader (device)
 			);
 
@@ -56,7 +54,7 @@ namespace ballistic {
 			// quad one
 			// create geometry
 			imesh * mesh_quad_one = device->create_mesh (id::graphics::mesh_quad_one);
-			ballistic::game::instance.resources.add_to_global (mesh_quad_one);
+			game_ref.resources.add_to_global (mesh_quad_one);
 
 			real vertex_data [] = {
 				real (-.5), real (-.5), real (0), real (0), real (0),

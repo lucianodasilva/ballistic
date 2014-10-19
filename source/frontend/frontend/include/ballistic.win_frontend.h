@@ -2,6 +2,7 @@
 #define _ballistic_win_frontend_h_
 
 #include <ballistic.base.h>
+#include "ballistic.frontend.defines.h"
 
 #ifdef BALLISTIC_OS_WINDOWS
 
@@ -19,11 +20,10 @@ namespace ballistic {
 		class frontend : public ballistic::ifrontend {
 		private:
 
+			game & _game;
+
 			message
-				_on_mouse_up_message,
-				_on_mouse_down_message,
-				_on_mouse_move_message,
-				_on_mouse_wheel_message;
+				_on_mouse_message;
 
 			point	_window_client_size;
 			HWND	_window_handle;
@@ -36,16 +36,20 @@ namespace ballistic {
 			static LRESULT CALLBACK message_proc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
 			void on_resize ();
-			void on_mouse_move (const point & p);
-			void on_mouse_down (const point & p, int button);
-			void on_mouse_up (const point & p, int button);
-			void on_mouse_wheel (const point & p, int delta);
+			void on_mouse_event (
+				mouse_event_type m_event,
+				const point & position,
+				mouse_button buttons,
+				int wheel_delta
+			);
+
+			static void send_mouse_message (mouse_event_type m_event, HWND hWnd, WPARAM wParam,LPARAM lParam);
 
 		public:
 
 			virtual point get_client_size ();
 
-			frontend (const point & client_size);
+			frontend (game & game_ref, const point & client_size);
 			virtual ~frontend ();
 
 			virtual bool create ();

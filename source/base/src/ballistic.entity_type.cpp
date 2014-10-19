@@ -6,8 +6,8 @@ namespace ballistic {
 
 	entity_type::entity_type (const id_t & id_v) : iresource (id_v) {}
 
-	entity * entity_type::create (const id_t & id) {
-		entity * instance = new entity (id, this);
+	entity * entity_type::create (game & game_ref, const id_t & id) {
+		entity * instance = new entity (game_ref, id, this);
 		properties.setup_container (instance->properties);
 
 		return instance;
@@ -20,9 +20,9 @@ namespace ballistic {
 		return instance;
 	}
 
-	entity_type * entity_type::create_instance (const id_t & id) {
+	entity_type * entity_type::create_instance (game & game_ref, const id_t & id) {
 		entity_type * instance = new entity_type (id);
-		game::instance.resources.add_to_global (instance);
+		game_ref.resources.add_to_global (instance);
 		return instance;
 	}	
 		

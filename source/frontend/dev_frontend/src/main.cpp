@@ -18,8 +18,8 @@ ballistic::graphics::imesh *	_mesh;
 
 #ifdef BALLISTIC_OS_WINDOWS
 
-ballistic::ifrontend * create_frontend ( const point & size ) {
-	return new ballistic::win_desktop::frontend (size);
+ballistic::ifrontend * create_frontend (game & game_ref, const point & size ) {
+	return new ballistic::win_desktop::frontend (game_ref, size);
 }
 
 #elif defined (BALLISTIC_OS_DARWIN)
@@ -154,15 +154,15 @@ public:
 
 		_material = parent->properties.aquire < graphics::material * > (id::graphics::material);
 
-		_camera = game::instance.entities [text_to_id ("mah_camerah")];
+		_camera = parent->game ().entities [text_to_id ("mah_camerah")];
 		
-		game::instance.global_notifier.attach (id::message::render, this);
-		game::instance.global_notifier.attach (id::message::update, this);
+		parent->game ().global_notifier.attach (id::message::render, this);
+		parent->game ().global_notifier.attach (id::message::update, this);
 	}
 
 	virtual void terminate () {
-		game::instance.global_notifier.detach (id::message::render, this);
-		game::instance.global_notifier.detach (id::message::update, this);
+		parent ()->game ().global_notifier.detach (id::message::render, this);
+		parent ()->game ().global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
@@ -275,24 +275,25 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend ({800, 800});
+	game g;
+
+	_frontend = create_frontend (g, {800, 800});
 	_frontend->create ();
 	_frontend->show ();
 
 	_device = create_device ();
 	_device->clear_color ({.0F, .6F, 1.F, 1.F});
-	
-	game & g = game::instance;
+
 	// initialize
 	g.initialize ();
 	g.frontend (_frontend);
 
 	// setup game stuffs
-	ballistic::graphics::define_resources (_device);
+	ballistic::graphics::define_resources (g, _device);
 
-	ballistic::component::declare < rigged_demo > (text_to_id ("rigged_demo"));
+	ballistic::component::declare < rigged_demo > (g, text_to_id ("rigged_demo"));
 
-	auto graphics = new ballistic::graphics::graphics_system ();
+	auto graphics = new ballistic::graphics::graphics_system (g);
 	graphics->device (_device);
 	graphics->material_effect (g.resources [res_default_material]);
 	graphics->overlay_effect (g.resources [res_overlay_material]);

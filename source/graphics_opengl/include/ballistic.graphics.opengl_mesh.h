@@ -39,7 +39,7 @@ namespace ballistic {
 			static uint32_t set_attributes (mesh_attribute attributes);
 			static GLint add_attribute (GLint id, GLint size, GLenum type, GLint stride, GLint offset);
 
-			static aabox calc_aabox (uint8_t * data_buffer, int32_t data_buffer_size, uint32_t offset);
+			static aabox calc_aabox (uint8_t * data_buffer, uint32_t data_buffer_size, uint32_t offset);
 
 		public:
 			

@@ -11,7 +11,6 @@ using namespace std;
 namespace ballistic {
 
 	class game;
-
 	class entity_type;
 
 	class entity {
@@ -19,6 +18,7 @@ namespace ballistic {
 
 		id_t					_id;
 		entity_type *			_type;
+		ballistic::game &		_game;
 
 	public:
 
@@ -32,10 +32,11 @@ namespace ballistic {
 		containers::component_container components;
 
 		id_t id ();
+		inline game & game () { return _game; }
 
 		entity_type * type ();
 			
-		entity ( id_t id_v, entity_type * type_v );
+		entity ( ballistic::game & game_inst, id_t id_v, entity_type * type_v );
 
 		void kill ();
 		

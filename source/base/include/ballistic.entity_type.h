@@ -16,13 +16,14 @@
 using namespace std;
 
 namespace ballistic {
-	
+
 	class entity;
-		
-	class entity_type : public iresource {	
+	class game;
+
+	class entity_type : public iresource {
 	private:
 
-		static entity_type * create_instance (const id_t & id);
+		static entity_type * create_instance (game & game_ref, const id_t & id);
 
 	public:
 
@@ -32,31 +33,34 @@ namespace ballistic {
 
 		containers::property_definition_container properties;
 
-		entity * create (const id_t & id);
+		entity * create (game & game_ref, const id_t & id);
 		entity * setup (entity * instance);
 
 		template < class ... component_types >
-		inline static entity_type * declare (const id_t & id);
+		inline static entity_type * declare (game & game_ref, const id_t & id);
 
 	};
 
+}
+
+namespace ballistic {
+
 	template < class ... component_types >
-	entity_type * entity_type::declare (const id_t & id) {
-		auto instance = entity_type::create_instance (id);
+	entity_type * entity_type::declare (game & game_ref, const id_t & id) {
+		auto instance = entity_type::create_instance (game_ref, id);
 
 		struct constructor_handle {
 			icomponent_constructor * ctor;
 			id_t id;
 		};
 
-		vector < constructor_handle > ctors = {{game::instance.resources [component_types::component_id], component_types::component_id} ...};
+		vector < constructor_handle > ctors = {{game_ref.resources [component_types::component_id], component_types::component_id} ...};
 
 		for (auto handle : ctors) {
 			if (!handle.ctor) {
 				debug_error ("no constructor found for component " << handle.id);
 				continue;
 			}
-
 
 			instance->components.push_back (component_info ());
 			component_info & new_info = instance->components.back ();

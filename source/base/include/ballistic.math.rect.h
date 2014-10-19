@@ -29,7 +29,8 @@ namespace ballistic {
 		}
 	}
 
-	typedef ballistic::math::details::rect_t < int32_t > rect;
+	typedef ballistic::math::details::rect_t < real > rect;
+	typedef ballistic::math::details::rect_t < int32_t > irect;
 
 }
 

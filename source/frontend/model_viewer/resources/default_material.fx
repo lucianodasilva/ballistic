@@ -10,7 +10,8 @@ uniform mat4        effect_t_mvp;
 /*
 	mat [0].xyz		= position
 	mat [0].w		= fallout
-	mat [1]			= color
+	mat [1].xyz		= color
+	mat [1].w		= intensity
 */
 uniform mat2x4		effect_lights [8];
 uniform uint		effect_light_count;
@@ -68,7 +69,6 @@ void main () {
 		skycol = vec3 (0.76, 0.83, 0.89),
 		gndcol = vec3 (0.07, 0.11, 0.13),
 		diff_col = vec3 (0.23, 0.14, 0.07),//effect_diffuse,
-		//diff_col = vec3 (1.0, .0, .0),//effect_diffuse,
 		spec_col = vec3 (1.0, 1.0, 1.0), //effect_specular;
 		temp_col = vec3 (.0, .0, .0);
 
@@ -90,7 +90,7 @@ void main () {
 	// --- sky color ---
 	vec3 up = vec3 (.0, 1.0, .0);
 	sky_bgt = 0.5 * (1.0 + dot (up, normal));
-
+	
 	temp_col *= (sky_bgt * skycol + (1.0 - sky_bgt) * gndcol);
 	
 	// --- lights ---
@@ -118,6 +118,7 @@ void main () {
 	
 		light_col =  bgt * att * light_col * diff_col;
 	
+		// --- specular ---
 		if (spec_int > 0.0) {
 		
 			vec3 eye_v = normalize (effect_t_eye - var_position);
@@ -128,14 +129,11 @@ void main () {
 				spec_bgt = pow (max (0.0, dot (eye_v, reflect (-light_vec, normal))), spec_hard), 1.0;
 				light_col += spec_bgt * att * effect_lights [i] [1].xyz * spec_int;
 			}
-				//light_col += att * spec_col * pow (spec_bgt, spec_int);
 		}
 	
-		temp_col += light_col;// *light_int;
+		temp_col += light_col;
 	}
 
-	//vec3 gamma = vec3 (1.0 / 2.2);
-	//out_color = vec4 (pow (temp_col, gamma), 1.0);
 	out_color = vec4 (temp_col, 1.0);
 }
 

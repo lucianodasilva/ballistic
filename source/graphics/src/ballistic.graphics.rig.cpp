@@ -100,10 +100,10 @@ namespace ballistic {
 		void rigged::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 			component::setup (parent, parameters);
 
-			_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
+			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
 
 			if (!*_p_rig)
-				*_p_rig = game::instance.resources [
+				*_p_rig = parent->game ().resources [
 					parent->properties [id::graphics::rig_id].as < id_t > ()
 				].as < rig > ();
 
@@ -113,13 +113,13 @@ namespace ballistic {
 				*_p_rig_tween = &_rig_tween;
 			}
 
-			game::instance.global_notifier.attach (id::message::update, this);
+			parent->game ().global_notifier.attach (id::message::update, this);
 			parent->local_notifier.attach (id::message::start_rig_animation, this);
 			parent->local_notifier.attach (id::message::stop_rig_animation, this);
 		}
 
 		void rigged::terminate () {
-			game::instance.global_notifier.detach (id::message::update, this);
+			parent ()->game ().global_notifier.detach (id::message::update, this);
 			this->parent ()->local_notifier.detach (id::message::start_rig_animation, this);
 			this->parent ()->local_notifier.detach (id::message::stop_rig_animation, this);
 		}
@@ -153,7 +153,7 @@ namespace ballistic {
 
 					rig * rig_inst = *_p_rig;
 
-					_animation_start = game::instance.game_time ();
+					_animation_start = parent ()->game ().game_time ();
 					rig_inst->set_frame_tween (
 						_rig_tween,
 						message [id::graphics::rig_animation_id].as < id_t > (),

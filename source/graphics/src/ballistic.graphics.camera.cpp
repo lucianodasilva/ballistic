@@ -146,10 +146,10 @@ namespace ballistic {
 			component::setup (parent, parameters);
 
 			// bind to global message notifier
-			game::instance.global_notifier.attach (id::message::update, this);
+			parent->game ().global_notifier.attach (id::message::update, this);
 
 			// get graphics system in use
-			_system = dynamic_cast <graphics_system *> (game::instance.systems [id::graphics::system]);
+			_system = dynamic_cast <graphics_system *> (parent->game ().systems [id::graphics::system]);
 			
 			real
 				left = 0,
@@ -188,7 +188,7 @@ namespace ballistic {
 			if (type == proj_type_ortho)
 				make_ortho_projection (left, right, bottom, top, near, far);
 			else if (type == proj_type_persp) {
-				point size = game::instance.frontend ()->get_client_size ();
+				point size = parent->game ().frontend ()->get_client_size ();
 				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
 
@@ -203,7 +203,7 @@ namespace ballistic {
 
 		void camera::terminate () {
 			// unbind to global message notifier
-			game::instance.global_notifier.detach (id::message::update, this);
+			parent ()->game ().global_notifier.detach (id::message::update, this);
 		}
 
 	}

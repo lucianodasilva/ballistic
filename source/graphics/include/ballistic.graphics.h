@@ -27,7 +27,7 @@ namespace ballistic {
 
 	namespace graphics {
 
-		void define_resources (ballistic::graphics::idevice * device);
+		void define_resources (ballistic::game & game_ref, ballistic::graphics::idevice * device);
 
 	}
 }

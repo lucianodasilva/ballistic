@@ -16,19 +16,25 @@ namespace ballistic {
 	class entity;
 	class game;
 
+#ifdef _ballistic_game_h_
+#define cenas
+#endif
+
 	namespace containers {
 
 		class entity_container : public icontainer < map < id_t, entity * > > {
 		private:
 
-			atomic<unsigned int> _id_key;
+			atomic<unsigned int>	_id_key;
 
 			vector < entity * >		_new_entities;
 			vector < entity * >		_death_row;
 
+			ballistic::game &		_container;
+
 		public:
 
-			entity_container (game * container);
+			entity_container (ballistic::game & container);
 
 			virtual ~entity_container ();
 

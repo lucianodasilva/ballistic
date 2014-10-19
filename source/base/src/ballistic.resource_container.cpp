@@ -11,7 +11,12 @@
 
 namespace ballistic {
 	
-	resource_container::resource_container () {
+	resource_container::resource_container () :
+		_storage_handlers (),
+		_loaders (),
+		_resources (),
+		_stacked_resources ()
+	{
 		// add default storage to list
 		_storage_handlers.push_back ( new io::storage_filesystem ());
 		

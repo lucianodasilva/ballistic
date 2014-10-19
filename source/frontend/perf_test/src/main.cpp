@@ -17,8 +17,8 @@ ballistic::graphics::imesh *	_mesh;
 #ifdef BALLISTIC_OS_WINDOWS
 #	include "ballistic.win_frontend.h"
 
-ballistic::ifrontend * create_frontend ( const point & size ) {
-	return new ballistic::win_desktop::frontend (size);
+ballistic::ifrontend * create_frontend (game & game_ref, const point & size ) {
+	return new ballistic::win_desktop::frontend (game_ref, size);
 }
 
 #elif defined (BALLISTIC_OS_DARWIN)
@@ -72,11 +72,11 @@ public:
 		_bounce = parent->properties.aquire < vec3 > (text_to_id ("bounce"));
 		_start_pos = parent->properties.aquire < vec3 > (text_to_id ("start_pos"));
 
-		game::instance.global_notifier.attach (id::message::update, this);
+		parent->game ().global_notifier.attach (id::message::update, this);
 	}
 
 	virtual void terminate () {
-		game::instance.global_notifier.detach (id::message::update, this);
+		parent ()->game ().global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
@@ -123,24 +123,24 @@ public:
 
 	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 		component::setup (parent, parameters);
-		game::instance.global_notifier.attach (id::message::update, this);
+		parent->game ().global_notifier.attach (id::message::update, this);
 	}
 
 	virtual void terminate () {
-		game::instance.global_notifier.detach (id::message::update, this);
+		parent ()->game ().global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
 
 		if (!_cube_count)
-			_cube_count = game::instance.entities [text_to_id ("cube_count")];
+			_cube_count = parent ()->game ().entities [text_to_id ("cube_count")];
 
 		real frame_time = message [id::frame_time];
 
 		if (frame_time < 0.017) {
 
 			for (int i = 0; i < 10; ++i) {
-				entity * new_entity = game::instance.entities.create (res_cube);
+				entity * new_entity = parent ()->game ().entities.create (res_cube);
 				new_entity->properties [text_to_id ("start_pos")] = vec3 ({
 					real ((pop_rand () % 100) - 50),
 					real (0),
@@ -170,26 +170,26 @@ int main ( int argc, char ** argv) {
 
 	debug_init();
 
-	_frontend = create_frontend (point{600, 600});
+	game g;
+
+	_frontend = create_frontend (g, point{600, 600});
 	_frontend->create ();
 	_frontend->show ();
 
 	_device = create_device ();
 	_device->clear_color (color{.0F, .6F, 1.F, 1.F});
-	
-	game & g = game::instance;
 
 	g.initialize ();
 
 	g.frontend (_frontend);
 
 	// setup game stuffs
-	ballistic::graphics::define_resources (_device);
+	ballistic::graphics::define_resources (g, _device);
 
-	component::declare < box_brain > (text_to_id ("box_brain"));
-	component::declare < box_manager > (text_to_id ("box_manager"));
+	component::declare < box_brain > (g, text_to_id ("box_brain"));
+	component::declare < box_manager > (g, text_to_id ("box_manager"));
 
-	auto graphics = new ballistic::graphics::graphics_system ();
+	auto graphics = new ballistic::graphics::graphics_system (g);
 	graphics->device (_device);
 	graphics->material_effect (g.resources [res_default_material]);
 	graphics->overlay_effect (g.resources [res_overlay_material]);
@@ -197,9 +197,9 @@ int main ( int argc, char ** argv) {
 	g.systems.attach (graphics);
 
 	// create entities
-	game::instance.entities.create (res_camera);
-	game::instance.entities.create (res_cube_count, text_to_id ("cube_count"));
-	game::instance.entities.create (res_cube_manager);
+	g.entities.create (res_camera);
+	g.entities.create (res_cube_count, text_to_id ("cube_count"));
+	g.entities.create (res_cube_manager);
 
 	// initialize
 	g.initialize ();

@@ -9,9 +9,9 @@
 namespace ballistic {
 	namespace animation {
 		
-		void define_resources () {
+		void define_resources (ballistic::game & game_ref) {
 
-			resource_container & container = game::instance.resources;
+			resource_container & container = game_ref.resources;
 
 			container
 				.add_to_global (new function_type < linear_function < vec2 > > (text_to_id ("vec2_linear")))
@@ -28,7 +28,7 @@ namespace ballistic {
 
 			;
 
-			ballistic::component::declare < animation::component > ();
+			ballistic::component::declare < animation::component > (game_ref);
 		}
 
 	}

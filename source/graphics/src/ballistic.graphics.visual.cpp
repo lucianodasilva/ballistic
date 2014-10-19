@@ -30,9 +30,9 @@ namespace ballistic {
 		{
 			component::setup (parent, parameters);
 
-			game::instance.global_notifier.attach (id::message::render, this);
+			parent->game ().global_notifier.attach (id::message::render, this);
 
-			_system = dynamic_cast <graphics_system *> (game::instance.systems [ballistic::id::graphics::system]);
+			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
 
 			_material = parent->properties.aquire < material * > (
 				id::graphics::material
@@ -45,12 +45,12 @@ namespace ballistic {
 			_transform = parent->properties.aquire < mat4 > (id::transform);
 
 			if (!*_material)
-				*_material = game::instance.resources [
+				*_material = parent->game ().resources [
 					parent->properties [id::graphics::material_id].as < id_t >()
 				].as < material > () ;
 
 			if (!*_mesh)
-				*_mesh = game::instance.resources [
+				*_mesh = parent->game ().resources [
 					parent->properties [id::graphics::mesh_id].as < id_t > ()
 				].as < imesh > ();
 
@@ -60,7 +60,7 @@ namespace ballistic {
 		}
 
 		void visual::terminate () {
-			game::instance.global_notifier.detach (id::message::render, this);
+			parent ()->game ().global_notifier.detach (id::message::render, this);
 		}
 
 		visual::visual ()

@@ -22,26 +22,20 @@ void camera_controler::setup (ballistic::entity * parent, ballistic::containers:
 	_pitch = real (.0);
 	_radius = parent->properties [starting_radius];
 
-	game::instance.global_notifier.attach (
+		parent ->game ().global_notifier.attach (
 		{
 			id::message::update,
-			id::frontend::on_mouse_up,
-			id::frontend::on_mouse_move,
-			id::frontend::on_mouse_down,
-			id::frontend::on_mouse_wheel
+			id::frontend::on_mouse_event
 		},
 			this
 	);
 }
 
 void camera_controler::terminate () {
-	game::instance.global_notifier.detach (
+	parent ()->game ().global_notifier.detach (
 		{
 			id::message::update,
-			id::frontend::on_mouse_up,
-			id::frontend::on_mouse_move,
-			id::frontend::on_mouse_down,
-			id::frontend::on_mouse_wheel
+			id::frontend::on_mouse_event
 		},
 			this
 	);
@@ -54,30 +48,38 @@ void camera_controler::notify (ballistic::entity * sender, ballistic::message & 
 	real move_mult = real(0.01);
 	real delta_mult = real (0.02);
 
-	if (message_id == id::frontend::on_mouse_down) {
-
-		_mouse_is_down = true;
-		_mouse_start = message [id::frontend::mouse_position];
-		_start_yaw = _yaw;
-		_start_pitch = _pitch;
-
-	} else if (message_id == id::frontend::on_mouse_up) {
-
-		_mouse_is_down = false;
-		point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
-		_yaw = _start_yaw + real (dif.x) * move_mult;
-		_pitch = _start_pitch - real (dif.y) * move_mult;
-
-	} else if (message_id == id::frontend::on_mouse_move && _mouse_is_down) {
-
-		point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
-		_yaw = _start_yaw + real (dif.x) * move_mult;
-		_pitch = _start_pitch - real (dif.y) * move_mult;
-
-	} else if (message_id == id::frontend::on_mouse_wheel) {
-
-		int delta = message [id::frontend::mouse_wheel_delta];
-		_radius -= (real (delta) * delta_mult);
+	if (message_id == id::frontend::on_mouse_event) {
+		switch (message [id::frontend::mouse_event_type].as < uint32_t > ()) {
+		case mouse_event_down:
+			if (message [id::frontend::mouse_buttons].as < uint32_t > () & mouse_button_left ) {
+				_mouse_is_down = true;
+				_mouse_start = message [id::frontend::mouse_position];
+				_start_yaw = _yaw;
+				_start_pitch = _pitch;
+			}
+			break;
+		case mouse_event_move:
+			if (_mouse_is_down && message [id::frontend::mouse_buttons].as < uint32_t > () & mouse_button_left) {
+				point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
+				_yaw = _start_yaw + real (dif.x) * move_mult;
+				_pitch = _start_pitch - real (dif.y) * move_mult;
+			}
+			break;
+		case mouse_event_up:
+			if (message [id::frontend::mouse_buttons].as < uint32_t > () & mouse_button_left) {
+				_mouse_is_down = false;
+				point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
+				_yaw = _start_yaw + real (dif.x) * move_mult;
+				_pitch = _start_pitch - real (dif.y) * move_mult;
+			}
+			break;
+		case mouse_event_wheel:
+			{
+				int delta = message [id::frontend::mouse_wheel_delta];
+				_radius -= (real (delta) * delta_mult);
+			}
+			break;
+		}
 		
 	} else if (message_id == id::message::update) {
 

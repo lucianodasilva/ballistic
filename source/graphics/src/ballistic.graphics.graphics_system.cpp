@@ -38,7 +38,8 @@ namespace ballistic {
 			return ballistic::id::graphics::system;
 		}
 
-		graphics_system::graphics_system () :
+		graphics_system::graphics_system (ballistic::game & game_ref) :
+			isystem (game_ref),
 			_render_message (id::message::render),
 
 			_device (nullptr),
@@ -151,7 +152,7 @@ namespace ballistic {
 			_device->begin_frame ();
 
 			// notify entities with visuals
-			game::instance.global_notifier.notify(_render_message);
+			this->game ().global_notifier.notify(_render_message);
 
 			// sort
 			_render_list.sort ();
@@ -290,11 +291,11 @@ namespace ballistic {
 		}
 
 		void graphics_system::attach () {
-			game::instance.global_notifier.attach (id::message::update, this);
+			this->game ().global_notifier.attach (id::message::update, this);
 		}
 
 		void graphics_system::detach () {
-			game::instance.global_notifier.detach (id::message::update, this);
+			this->game ().global_notifier.detach (id::message::update, this);
 		}
 
 		void graphics_system::push_item (material * material, imesh * mesh, rig_frame_tween * rig, uint8_t layer, const mat4 & transform) {

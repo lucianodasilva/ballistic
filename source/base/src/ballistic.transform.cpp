@@ -18,7 +18,7 @@ namespace ballistic {
 	void transform::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 		ballistic::component::setup (parent, parameters);
 			
-		game::instance.global_notifier.attach (id::message::update, this);
+		parent->game ().global_notifier.attach (id::message::update, this);
 
 		_position = parent->properties.aquire < vec3 > (id::transform_position);
 		_rotation = parent->properties.aquire < quat > (id::transform_rotation);
@@ -29,7 +29,7 @@ namespace ballistic {
 	}
 
 	void transform::terminate () {
-		game::instance.global_notifier.detach (id::message::update, this);
+		this->parent()->game ().global_notifier.detach (id::message::update, this);
 	}
 
 	void transform::notify (ballistic::entity * sender, ballistic::message & message) {

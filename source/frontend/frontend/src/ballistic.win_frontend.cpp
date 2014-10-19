@@ -8,7 +8,24 @@
 namespace ballistic {
 	namespace win_desktop {
 
+		void frontend::send_mouse_message (mouse_event_type m_event, HWND hWnd, WPARAM wParam, LPARAM lParam) {
+
+			point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+
+			mouse_button buttons = mouse_button_none;
+
+			buttons = mouse_button (buttons | (wParam & MK_LBUTTON ? mouse_button_left : mouse_button_none));
+			buttons = mouse_button (buttons | (wParam & MK_RBUTTON ? mouse_button_right : mouse_button_none));
+			buttons = mouse_button (buttons | (wParam & MK_MBUTTON ? mouse_button_middle : mouse_button_none));
+
+			int delta = GET_WHEEL_DELTA_WPARAM (wParam);
+
+			frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
+			instance->on_mouse_event (m_event, pos, buttons, delta);
+		}
+
 		LRESULT CALLBACK frontend::message_proc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+
 			switch (msg) {
 			case WM_CREATE:
 			{
@@ -28,45 +45,32 @@ namespace ballistic {
 			}
 			case WM_MOUSEMOVE:
 			{
-				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
-				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
-				instance->on_mouse_move (pos);
+				send_mouse_message (mouse_event_move, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_LBUTTONDOWN:
 			{
-				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
-				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
-				instance->on_mouse_down (pos, 1);
+				send_mouse_message (mouse_event_down, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_LBUTTONUP:
 			{
-				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
-				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
-				instance->on_mouse_up (pos, 1);
+				send_mouse_message (mouse_event_up, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_RBUTTONDOWN:
 			{
-				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
-				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
-				instance->on_mouse_down (pos, 2);
+				send_mouse_message (mouse_event_down, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_RBUTTONUP:
 			{
-				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
-				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
-				instance->on_mouse_up (pos, 2);
+				send_mouse_message (mouse_event_up, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_MOUSEWHEEL:
 			{
-				point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
-				int delta = GET_WHEEL_DELTA_WPARAM (wParam);
-				frontend * instance = reinterpret_cast <frontend *> (GetWindowLongPtr (hWnd, GWLP_USERDATA));
-				instance->on_mouse_wheel (pos, delta);
+				send_mouse_message (mouse_event_wheel, hWnd, wParam, lParam);
 				return 0;
 			}
 			default:
@@ -86,48 +90,31 @@ namespace ballistic {
 			glViewport (0, 0, _window_client_size.x, _window_client_size.y);
 		}
 
-		void frontend::on_mouse_move (const point & p) {
-			_on_mouse_move_message [id::frontend::mouse_position] = p;
-			game::instance.global_notifier.notify (_on_mouse_move_message);
-		}
+		void frontend::on_mouse_event (
+			mouse_event_type m_event,
+			const point & position,
+			mouse_button buttons,
+			int wheel_delta
+		) {
+			_on_mouse_message [id::frontend::mouse_event_type] = (uint32_t)m_event;
+			_on_mouse_message [id::frontend::mouse_position] = position;
+			_on_mouse_message [id::frontend::mouse_buttons] = (uint32_t)buttons;
+			_on_mouse_message [id::frontend::mouse_wheel_delta] = wheel_delta;
 
-		void frontend::on_mouse_down (const point & p, int button) {
-			_on_mouse_down_message [id::frontend::mouse_position] = p;
-			_on_mouse_down_message [id::frontend::mouse_button] = button;
-			game::instance.global_notifier.notify (_on_mouse_down_message);
-		}
-
-		void frontend::on_mouse_up (const point & p, int button) {
-			_on_mouse_up_message [id::frontend::mouse_position] = p;
-			_on_mouse_up_message [id::frontend::mouse_button] = button;
-			game::instance.global_notifier.notify (_on_mouse_up_message);
-		}
-
-		void frontend::on_mouse_wheel (const point & p, int delta) {
-			_on_mouse_wheel_message [id::frontend::mouse_position] = p;
-			_on_mouse_wheel_message [id::frontend::mouse_wheel_delta] = delta;
-			game::instance.global_notifier.notify (_on_mouse_wheel_message);
+			_game.global_notifier.notify (_on_mouse_message);
 		}
 
 		point frontend::get_client_size () { return _window_client_size; }
 
-		frontend::frontend (const point & client_size) :
+		frontend::frontend (game & game_ref, const point & client_size) :
+			_game (game_ref),
 			_window_client_size (client_size),
-			_on_mouse_up_message (id::frontend::on_mouse_up),
-			_on_mouse_down_message (id::frontend::on_mouse_down),
-			_on_mouse_move_message (id::frontend::on_mouse_move),
-			_on_mouse_wheel_message (id::frontend::on_mouse_wheel)
+			_on_mouse_message (id::frontend::on_mouse_event)
 		{
-			_on_mouse_down_message.require < point > (id::frontend::mouse_position);
-			_on_mouse_down_message.require < int > (id::frontend::mouse_button);
-
-			_on_mouse_up_message.require < point > (id::frontend::mouse_position);
-			_on_mouse_up_message.require < int > (id::frontend::mouse_button);
-
-			_on_mouse_move_message.require < point > (id::frontend::mouse_position);
-
-			_on_mouse_wheel_message.require < point > (id::frontend::mouse_position);
-			_on_mouse_wheel_message.require < int > (id::frontend::mouse_wheel_delta);
+			_on_mouse_message.require < point > (id::frontend::mouse_position);
+			_on_mouse_message.require < uint32_t > (id::frontend::mouse_buttons);
+			_on_mouse_message.require < int > (id::frontend::mouse_wheel_delta);
+			_on_mouse_message.require < uint32_t > (id::frontend::mouse_event_type);
 		}
 
 		frontend::~frontend () {}
@@ -249,7 +236,7 @@ namespace ballistic {
 		}
 
 		void frontend::do_event_loop () {
-			while (game::instance.frame ()) {
+			while (_game.frame ()) {
 				update ();
 			}
 		}

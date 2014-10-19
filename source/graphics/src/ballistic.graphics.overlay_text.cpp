@@ -115,15 +115,15 @@ namespace ballistic {
 		void overlay_text::setup (entity * parent, ballistic::containers::property_container & parameters) {
 			component::setup(parent, parameters);
 
-			game::instance.global_notifier.attach(id::message::render, this);
+			parent->game ().global_notifier.attach(id::message::render, this);
 
-			_system = dynamic_cast <graphics_system *> (game::instance.systems[ballistic::id::graphics::system]);
+			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
 
 			_overlay_font = parent->properties.aquire < font * >(id::graphics::text::font);
 			_transform = parent->properties.aquire < mat4 >(id::transform);
 
 			if (!*_overlay_font)
-				*_overlay_font = game::instance.resources[
+				*_overlay_font = parent->game ().resources [
 					parent->properties[id::graphics::text::font_id].as < id_t >()
 				].as < font >();
 
@@ -146,7 +146,7 @@ namespace ballistic {
 
 		void overlay_text::terminate () {
 			overlay::terminate ();
-			game::instance.global_notifier.detach (id::message::render, this);
+			parent ()->game ().global_notifier.detach (id::message::render, this);
 			this->parent ()->local_notifier.detach (id::message::render, this);
 		}
 

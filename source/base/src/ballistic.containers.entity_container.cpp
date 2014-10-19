@@ -8,8 +8,11 @@
 namespace ballistic {
 	namespace containers {
 
-		entity_container::entity_container (game * container) {
-			data [container->id ()] = container;
+		entity_container::entity_container (ballistic::game & container)
+			: 
+			_container (container)
+		{
+			data [_container.id ()] = &_container;
 		}
 
 		id_t entity_container::reserve_id () {
@@ -24,7 +27,7 @@ namespace ballistic {
 
 		entity_container::~entity_container () {
 			for (auto it_pair : data) {
-				if (it_pair.second != &game::instance)
+				if (it_pair.second != &_container)
 					delete it_pair.second;
 			}
 		}
@@ -35,7 +38,7 @@ namespace ballistic {
 
 		entity * entity_container::create (const res_id_t & entity_type_id, const id_t & id) {
 
-			entity_type * type = game::instance.resources.get_resource < entity_type > (entity_type_id);
+			entity_type * type = _container.resources.get_resource < entity_type > (entity_type_id);
 
 			if (!type) {
 				debug_print ("entity type \"" << entity_type_id.id () << "\" not found. no entity created");
@@ -47,7 +50,7 @@ namespace ballistic {
 				return nullptr;
 			}
 
-			entity * ent = type->create (id);
+			entity * ent = type->create (_container, id);
 			_new_entities.push_back (ent);
 
 			return ent;
@@ -59,7 +62,7 @@ namespace ballistic {
 
 		entity * entity_container::create (const id_t & entity_type_id, const id_t & id) {
 
-			entity_type * type = game::instance.resources.get_resource < entity_type > (entity_type_id);
+			entity_type * type = _container.resources.get_resource < entity_type > (entity_type_id);
 
 			if (!type) {
 				debug_print ("entity type \"" << entity_type_id << "\" not found. no entity created");
@@ -71,7 +74,7 @@ namespace ballistic {
 				return nullptr;
 			}
 
-			entity * ent = type->create (id);
+			entity * ent = type->create (_container, id);
 			_new_entities.push_back (ent);
 
 			return ent;

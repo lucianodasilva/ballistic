@@ -17,14 +17,14 @@ void fps_counter::setup (ballistic::entity * parent, ballistic::containers::prop
 
 	_text = parent->properties.aquire < string > (id::graphics::text::text);
 
-	game::instance.global_notifier.attach (
+	parent->game ().global_notifier.attach (
 		id::message::update,
 		this
 	);
 }
 
 void fps_counter::terminate () {
-	game::instance.global_notifier.detach (
+	parent ()->game ().global_notifier.detach (
 		id::message::update,
 		this
 	);
@@ -32,12 +32,12 @@ void fps_counter::terminate () {
 
 void fps_counter::notify (ballistic::entity * sender, ballistic::message & message) {
 
-	real current_time = game::instance.game_time ();
+	real current_time = parent ()->game ().game_time ();
 	real elapsed_time = current_time - _last_time;
 
 	if (elapsed_time > update_time) {
 
-		uint32_t frame = game::instance.frame_count ();
+		uint32_t frame = parent ()->game ().frame_count ();
 		real instant_fps = real (frame - _last_frame) / (elapsed_time);
 
 		*_text = convert_to < string > (instant_fps);

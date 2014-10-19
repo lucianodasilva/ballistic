@@ -9,6 +9,8 @@
 namespace ballistic {
 	namespace animation {
 
+		class game;
+
 		class component : public ballistic::component {
 		private:
 

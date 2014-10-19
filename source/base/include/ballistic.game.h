@@ -13,7 +13,6 @@
 #include <map>
 #include <queue>
 #include <string>
-#include <atomic>
 
 using namespace std;
 
@@ -48,12 +47,10 @@ namespace ballistic {
 		inline real frame_time () const { return *_m_update_frame_time; }
 		inline uint32_t frame_count () const { return *_m_update_frame_count; }
 
-		static game instance;
-
 		message_notifier global_notifier;
 
-		containers::entity_container entities;
-		containers::system_container systems;
+		ballistic::containers::entity_container entities;
+		ballistic::containers::system_container systems;
 
 		resource_container resources;
 
@@ -78,7 +75,5 @@ namespace ballistic {
 	};
 
 }
-
-#undef MSG_NOT_COMPONENT_TYPE
 
 #endif

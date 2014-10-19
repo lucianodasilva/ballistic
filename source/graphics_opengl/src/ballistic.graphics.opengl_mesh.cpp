@@ -24,7 +24,7 @@ namespace ballistic {
 			return stride;
 		}
 
-		aabox opengl_mesh::calc_aabox (uint8_t * data_buffer, int32_t data_buffer_size, uint32_t offset) {
+		aabox opengl_mesh::calc_aabox (uint8_t * data_buffer, uint32_t data_buffer_size, uint32_t offset) {
 			aabox box = {0};
 
 			for (uint32_t i = 0; i < data_buffer_size; i += offset) {

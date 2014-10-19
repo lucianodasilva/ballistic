@@ -19,15 +19,13 @@ define_id (fps_counter_entity);
 
 define_id_ext (light_entity_type, "light.entity_type");
 
-inline void define_internals () {
-	game & g = game::instance;
-
+inline void define_internals (game & g) {
 	// load resources
 	g.resources.load (default_res_file);
 
 	// define components
-	component::declare < camera_controler > ();
-	component::declare < fps_counter > ();
+	component::declare < camera_controler > (g);
+	component::declare < fps_counter > (g);
 
 	// define entity types
 
@@ -37,7 +35,7 @@ inline void define_internals () {
 			graphics::camera,
 			camera_controler
 		>
-		(camera_entity_type);
+		(g, camera_entity_type);
 
 		auto & cam_props = camera_type->components [0].properties;
 
@@ -56,7 +54,7 @@ inline void define_internals () {
 	{
 		entity_type::declare <
 			graphics::light
-		> (light_entity_type);
+		> (g, light_entity_type);
 	}
 
 	// create fps counter
@@ -65,7 +63,7 @@ inline void define_internals () {
 			fps_counter,
 			ballistic::transform,
 			graphics::overlay_text
-		> (fps_counter_entity_type);
+		> (g, fps_counter_entity_type);
 
 		auto & fps_props = fps_counter_type->properties;
 
@@ -79,11 +77,11 @@ inline void define_internals () {
 		entity_type * model_type = entity_type::declare <
 			ballistic::transform,
 			graphics::visual
-		> (model_entity_type);
+		> (g, model_entity_type);
 	}
 
 	// create entities
-	game::instance.entities.create (fps_counter_entity_type, fps_counter_entity);
+	g.entities.create (fps_counter_entity_type, fps_counter_entity);
 }
 
 #endif

@@ -8,7 +8,8 @@ namespace ballistic {
 
 	entity_type * entity::type () { return _type; }
 		
-	entity::entity (id_t id_v, entity_type * type_v ) : 
+	entity::entity (ballistic::game & game_ref, id_t id_v, entity_type * type_v ) : 
+		_game (game_ref),
 		_id (id_v),
 		_type (type_v),
 		local_notifier (this),
@@ -17,7 +18,7 @@ namespace ballistic {
 	{}
 
 	void entity::kill () {
-		game::instance.entities.kill (this);
+		_game.entities.kill (this);
 	}
 
 }

@@ -11,8 +11,6 @@
 
 namespace ballistic {
 
-	game game::instance;
-
 	void game::initialize () {
 		_frame_start = _game_start_time = system::get_time_now ();
 		_frame_id = 1;
@@ -23,10 +21,10 @@ namespace ballistic {
 		_m_update_frame_count = _m_update.require < uint32_t > (id::frame_count, 0);
 
 		// default resources and others
-		animation::define_resources ();
+		animation::define_resources (*this);
 
 		// define base components
-		ballistic::component::declare < transform > ();
+		ballistic::component::declare < transform > (*this);
 
 		message m (this, id::message::initialize);
 		global_notifier.notify (m);
@@ -81,11 +79,13 @@ namespace ballistic {
 	}
 
 	game::game () :
-		entity (0, nullptr), 
+		entity (*this, 0, nullptr), 
 		_m_update (this, id::message::update), 
 		_frontend (nullptr),
 		global_notifier (this),
-		entities (this)
+		entities (*this),
+		systems (),
+		resources ()
 	{}
 
 	game::~game () {}

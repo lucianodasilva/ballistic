@@ -62,7 +62,7 @@ namespace ballistic {
 
 		public:
 
-			graphics_system ();
+			graphics_system (ballistic::game & game_ref);
 
 			virtual id_t id ();
 

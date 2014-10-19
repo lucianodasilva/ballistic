@@ -94,8 +94,6 @@ namespace ballistic {
 			static void draw_line ( const vec3 & p1, const vec3 & p2, const color & col );
 			static void draw_rect ( const vec3 & p1, const vec3 & p2, const color & col );
 
-			static void draw_text (const vec3 & pos, const color & col, const char text []);
-
 		};
 
 	}
