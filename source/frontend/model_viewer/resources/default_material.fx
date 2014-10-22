@@ -14,7 +14,7 @@ uniform mat4        effect_t_mvp;
 	mat [1].w		= intensity
 */
 uniform mat2x4		effect_lights [8];
-uniform uint		effect_light_count;
+uniform int		effect_light_count;
 
 // material
 uniform vec4        effect_diffuse;

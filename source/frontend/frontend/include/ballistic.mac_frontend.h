@@ -14,9 +14,16 @@ namespace ballistic {
 		private:
 			
 			static game * _game;
+			static message _on_mouse_message;
+			
 			point _window_client_size;
 			
 			static void update_frame ();
+			
+			static void on_mouse_button (int button, int state,
+								  int x, int y);
+			
+			static void on_mouse_move (int x, int y);
 			
 		public:
 
