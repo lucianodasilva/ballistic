@@ -4,6 +4,10 @@
 #include "ballistic.config.h"
 #include "ballistic.math.vectors.h"
 
+#ifdef BALLISTIC_COMPILER_CLANG
+#	pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
+
 namespace ballistic {
 namespace math {
 

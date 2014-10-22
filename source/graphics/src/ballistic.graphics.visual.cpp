@@ -66,9 +66,9 @@ namespace ballistic {
 		visual::visual ()
 			:
 			_material (nullptr),
+			_rig_tween (nullptr),
 			_mesh (nullptr),
-			_system (nullptr),
-			_rig_tween (nullptr)
+			_system (nullptr)
 		{}
 
 		void visual::notify ( entity * sender, ballistic::message & message ) {

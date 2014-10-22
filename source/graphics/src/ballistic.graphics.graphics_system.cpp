@@ -175,7 +175,7 @@ namespace ballistic {
 			_c_effect_t_eye->set_value (_camera->position ());
 
 			// bind lights
-			_c_effect_light_count->set_value (_light_list.size ());
+			_c_effect_light_count->set_value ((int32_t)_light_list.size ());
 			_c_effect_lights->set_value (_light_list);
 				   
 			uint32_t render_count = _render_list.size ();
@@ -218,11 +218,11 @@ namespace ballistic {
 				_c_effect_t_model->set_value (item.transform);
 				_c_effect_t_mvp->set_value (m_mvp);
 
-				_c_effect_bone_count->set_value (item.rig->bones.size());
+				_c_effect_bone_count->set_value ((int32_t)item.rig->bones.size());
 				_c_effect_t_bones->set_value (item.rig->bones);
 
 				// update rig
-				_c_effect_bone_count->set_value (item.rig->bones.size ());
+				_c_effect_bone_count->set_value ((int32_t)item.rig->bones.size ());
 				_c_effect_t_bones->set_value (item.rig->bones);
 				
 				// render the stuffs

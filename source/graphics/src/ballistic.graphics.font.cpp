@@ -1,5 +1,8 @@
 #include "ballistic.graphics.font.h"
 
+#ifdef BALLISTIC_COMPILER_CLANG
+#	pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
 
 namespace ballistic {
 	namespace graphics {

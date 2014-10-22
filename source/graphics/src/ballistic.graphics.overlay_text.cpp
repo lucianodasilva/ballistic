@@ -37,7 +37,7 @@ namespace ballistic {
 
 			const real	ratio = 0.0625;
 
-			for (char c : text_value) {
+			for (unsigned char c : text_value) {
 				vec2 uv_pos = font::font_uv[c];
 				vec2 uv_size = font_inst->font_metrics[c];
 				real xwidth = uv_size.x / ratio;

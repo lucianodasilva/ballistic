@@ -7,15 +7,20 @@
 namespace ballistic {
 	namespace mac_desktop {
 		
+		game * frontend::_game = nullptr;
+		
 		void frontend::update_frame(){
-			game::instance.frame ();
+			_game->frame ();
 			glutSwapBuffers();
 			glutPostRedisplay ();
 		}
 
 		point frontend::get_client_size () { return _window_client_size; }
 
-		frontend::frontend (const point & client_size ) : _window_client_size (client_size) {
+		frontend::frontend (game & game_ref, const point & client_size ) :
+			_window_client_size (client_size)
+		{
+			_game = &game_ref;
 		}
 
 		frontend::~frontend () {}

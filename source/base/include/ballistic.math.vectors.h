@@ -2,6 +2,7 @@
 #define _ballistic_math_vectors_h_
 
 #include "ballistic.config.h"
+#include "ballistic.convert.h"
 
 #include <string>
 #include <tinyxml2.h>

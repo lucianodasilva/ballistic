@@ -3,7 +3,7 @@
 #include <ballistic.frontend.h>
 #include <ballistic.graphics.h>
 
-const id_t fps_counter::component_id = text_to_id ("fps_counter");
+const ballistic::id_t fps_counter::component_id = text_to_id ("fps_counter");
 
 void fps_counter::require_properties (entity_type * new_type, component_info & info) {
 	new_type->properties.require_notify < string > (id::graphics::text::text, "");

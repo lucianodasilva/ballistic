@@ -8,10 +8,10 @@ namespace ballistic {
 
 	entity_type * entity::type () { return _type; }
 		
-	entity::entity (ballistic::game & game_ref, id_t id_v, entity_type * type_v ) : 
-		_game (game_ref),
+	entity::entity (ballistic::game & game_ref, id_t id_v, entity_type * type_v ) :
 		_id (id_v),
 		_type (type_v),
+		_game (game_ref),
 		local_notifier (this),
 		properties (this),
 		components (this)

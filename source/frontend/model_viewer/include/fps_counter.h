@@ -17,7 +17,7 @@ private:
 
 public:
 
-	static const id_t
+	static const ballistic::id_t
 		component_id,
 		starting_radius;
 

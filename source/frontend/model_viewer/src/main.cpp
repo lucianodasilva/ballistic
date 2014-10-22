@@ -17,8 +17,8 @@ ballistic::ifrontend * create_frontend (game & game_ref, const point & size ) {
 }
 #elif defined (BALLISTIC_OS_DARWIN)
 #	include <GLUT/GLUT.h>
-ballistic::ifrontend * create_frontend (const point & size) {
-	return new ballistic::mac_desktop::frontend (size);
+ballistic::ifrontend * create_frontend (game & game_ref, const point & size) {
+	return new ballistic::mac_desktop::frontend (game_ref, size);
 }
 #endif
 

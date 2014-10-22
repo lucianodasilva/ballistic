@@ -25,6 +25,7 @@
 #include "ballistic.debug.h"
 #include "ballistic.entity.h"
 #include "ballistic.entity_type.h"
+#include "ballistic.entity_type.hpp"
 #include "ballistic.game.h"
 #include "ballistic.icomponent.h"
 #include "ballistic.id.h"

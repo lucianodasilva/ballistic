@@ -3,8 +3,8 @@
 #include <ballistic.frontend.h>
 #include <ballistic.graphics.h>
 
-const id_t camera_controler::component_id = text_to_id ("camera_controler");
-const id_t camera_controler::starting_radius = text_to_id ("camera_controller.starting_radius");
+const ballistic::id_t camera_controler::component_id = text_to_id ("camera_controler");
+const ballistic::id_t camera_controler::starting_radius = text_to_id ("camera_controller.starting_radius");
 
 void camera_controler::require_properties (entity_type * new_type, component_info & info) {
 	new_type->properties.require < vec3 > (id::position);
@@ -43,7 +43,7 @@ void camera_controler::terminate () {
 
 void camera_controler::notify (ballistic::entity * sender, ballistic::message & message) {
 
-	id_t message_id = message.id ();
+	ballistic::id_t message_id = message.id ();
 
 	real move_mult = real(0.01);
 	real delta_mult = real (0.02);
