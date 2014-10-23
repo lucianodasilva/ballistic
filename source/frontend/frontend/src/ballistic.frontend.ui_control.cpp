@@ -3,6 +3,56 @@
 namespace ballistic {
 	namespace frontend {
 
+		control * control::find_containing (const vec2 & p) {
+			for (control * c : _controls) {
+
+				if (c->bounds ().contains (p)) {
+					return c;
+				}
+			}
+
+			return nullptr;
+		}
+
+		void control::on_mouse_move (const vec2 & position) {
+			control * c = find_containing (position);
+
+			if (c) {
+				vec2 client_pos = position - c->location ();
+				c->on_mouse_move (client_pos);
+			} else {
+				on_mouse_move_event (this, position);
+			}
+		}
+
+		void control::on_mouse_down (const mouse_event_args & args) {
+			control * c = find_containing (args.position);
+
+			if (c) {
+				vec2 client_pos = args.position - c->location ();
+				c->on_mouse_move ({
+					client_pos,
+					args.buttons
+				});
+			} else {
+				on_mouse_down_event (this, args);
+			}
+		}
+
+		void control::on_mouse_up (const mouse_event_args & args) {
+			control * c = find_containing (args.position);
+
+			if (c) {
+				vec2 client_pos = args.position - c->location ();
+				c->on_mouse_move ({
+					client_pos,
+					args.buttons
+				});
+			} else {
+				on_mouse_up_event (this, args);
+			}
+		}
+
 		void control::on_draw (const draw & d) {
 			d.fill_rect (
 				_background_color,

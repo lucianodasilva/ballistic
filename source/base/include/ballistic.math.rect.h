@@ -24,6 +24,14 @@ namespace ballistic {
 					};
 				};
 
+				inline bool contains (const vec2_t < value_t > & v) const {
+					return
+						v.x >= x &&
+						v.y >= y &&
+						v.x <= x + width &&
+						v.y <= y + height;
+				}
+
 			};
 
 		}

@@ -5,6 +5,7 @@
 
 #include <ballistic.graphics.h>
 #include "ballistic.frontend.draw.h"
+#include "ballistic.frontend.defines.h"
 
 namespace ballistic {
 	namespace frontend {
@@ -47,9 +48,14 @@ namespace ballistic {
 
 		};
 
-		using on_draw_event_type = event < const draw & > ;
+		struct mouse_event_args {
+			vec2 position;
+			mouse_button buttons;
+		};
 
-		class ui;
+		using on_draw_event_type = event < const draw & > ;
+		using on_mouse_move_event_type = event < const vec2 & > ;
+		using on_mouse_event_type = event < const mouse_event_args & > ;
 
 		class control {
 		private:
@@ -63,15 +69,24 @@ namespace ballistic {
 
 			std::vector < control * > _controls;
 
+			control * find_containing (const vec2 & p);
+
 		protected:
 
-			friend class ui;
+			virtual void on_mouse_move (const vec2 & position);
+			virtual void on_mouse_down (const mouse_event_args & args);
+			virtual void on_mouse_up   (const mouse_event_args & args);
 
 			virtual void on_draw (const draw & d);
 
 		public:
 
 			on_draw_event_type on_draw_event;
+			on_mouse_move_event_type on_mouse_move_event;
+
+			on_mouse_event_type
+				on_mouse_down_event,
+				on_mouse_up_event;
 
 			control ();
 			virtual ~control ();
