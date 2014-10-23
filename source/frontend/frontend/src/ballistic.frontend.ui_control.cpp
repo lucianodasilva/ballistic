@@ -3,61 +3,101 @@
 namespace ballistic {
 	namespace frontend {
 
+		void control::on_draw (const draw & d) {
+			d.fill_rect (
+				_background_color,
+				to_absolute (_location),
+				to_absolute (_location + _size)
+			);
+			
+			on_draw_event (this, d);
+
+			for (control * c : _controls) {
+				c->on_draw (d);
+			}
+		}
+
 		control::control () :
 			_parent (nullptr),
-			bounds({0}),
-			location ({0})
+			_location (),
+			_size ()
 		{}
 
-		rect control::to_absolute (const rect & client_rect) {
+		control::~control () {}
+
+		control * control::parent () const { return _parent; }
+		control * control::parent (control * v) {
+			_parent = v;
+			return v;
+		}
+
+		std::vector < control * > & control::controls () {
+			return _controls;
+		}
+
+		vec2 control::location () const { return _location; }
+		vec2 control::location (const vec2 & v) {
+			_location = v;
+			return _location;
+		}
+
+		vec2 control::size () const { return _size; }
+		vec2 control::size (const vec2 & v) {
+			_size = v;
+			return v;
+		}
+
+		color control::background_color () const { return _background_color; }
+		color control::background_color (const color & v) {
+			_background_color = v;
+			return v;
+		}
+
+		rect control::bounds () const {
+			rect r;
+			r.position = _location;
+			r.size = _size;
+
+			return r;
+		}
+
+		rect control::to_absolute (const rect & client_rect) const{
 			if (!_parent)
 				return client_rect;
 
-			rect temp = {{
-				client_rect.position + location,
-				client_rect.size
-			}};
+			rect temp;
+
+			temp.position = client_rect.position + _location;
+			temp.size = client_rect.size;
 
 			return _parent->to_absolute (temp);
 		}
 
-		vec2 control::to_absolute (const vec2 & client_location) {
+		vec2 control::to_absolute (const vec2 & client_location) const {
 			if (!_parent)
 				return client_location;
 
-			vec2 temp = client_location + location;
+			vec2 temp = client_location + _location;
 
 			return _parent->to_absolute (temp);
 		}
 
-		rect control::to_parent (const rect & client_rect) {
-			return {
-				client_rect.position + location,
-				client_rect.size
-			};
-		}
-
-		vec2 control::to_parent (const vec2 & client_location) {
-			return client_location + location;
-		}
-
-		rect control::to_client (const rect & absolute_rect) {
+		rect control::to_client (const rect & absolute_rect) const {
 			if (!_parent)
 				return absolute_rect;
 
-			rect temp = to_absolute (bounds);
+			rect temp = to_absolute (bounds ());
 
-			return{
-				location - temp.position,
-				temp.size
-			};
+			temp.position = _location - temp.position;
+
+			return temp;
 		}
 
-		vec2 control::to_client (const vec2 & absolute_location) {
+		vec2 control::to_client (const vec2 & absolute_location) const {
 			if (!_parent)
 				return absolute_location;
 
-			return absolute_location - to_absolute (location);
+			return absolute_location - to_absolute (_location);
 		}
 
 	}

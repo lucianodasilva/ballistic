@@ -14,9 +14,7 @@ namespace ballistic {
 		template < class ... _param_tv >
 		struct event {
 
-			using target_type = void (control *, _param_tv...);
-
-			std::vector < std::function < target_type > > handlers;
+			std::vector < std::function < void (control *, _param_tv...) > > handlers;
 
 			inline void invoke (control * sender, _param_tv ... params) {
 				for (auto f : handlers) {
@@ -28,11 +26,11 @@ namespace ballistic {
 				invoke (sender, params ...);
 			}
 
-			inline void operator += (const std::function < target_type > & v) {
+			inline void operator += (const std::function < void (control *, _param_tv...) > & v) {
 				handlers.push_back (v);
 			}
 
-			inline void operator -= (const std::function < target_type > & v) {
+			inline void operator -= (const std::function < void (control *, _param_tv...) > & v) {
 				auto
 					it = handlers.begin (),
 					end = handlers.end ();
@@ -49,31 +47,57 @@ namespace ballistic {
 
 		};
 
+		using on_draw_event_type = event < const draw & > ;
+
+		class ui;
+
 		class control {
 		private:
 
 			control * _parent;
 
+			vec2	_location;
+			vec2	_size;
+
+			color	_background_color;
+
+			std::vector < control * > _controls;
+
+		protected:
+
+			friend class ui;
+
+			virtual void on_draw (const draw & d);
+
 		public:
 
-			control ();
+			on_draw_event_type on_draw_event;
 
-			control * parent ();
+			control ();
+			virtual ~control ();
+
+			control * parent () const;
 			control * parent (control * v);
 
-			rect bounds;
-			vec2 location;
+			std::vector < control * > & controls ();
+			 
+			vec2 location () const;
+			vec2 location (const vec2 & v);
+			 
+			vec2 size () const;
+			vec2 size (const vec2 & v);
 
-			virtual rect to_absolute (const rect & client_rect);
-			virtual vec2 to_absolute (const vec2 & client_location);
+			color background_color () const;
+			color background_color (const color & v);
 
-			virtual rect to_parent (const rect & client_rect);
-			virtual vec2 to_parent (const vec2 & client_location);
+			rect bounds () const;
 
-			virtual rect to_client (const rect & absolute_rect);
-			virtual vec2 to_client (const vec2 & absolute_location);
+			virtual rect to_absolute (const rect & client_rect) const;
+			virtual vec2 to_absolute (const vec2 & client_location) const;
 
-			virtual void on_paint (const draw & d);
+			virtual rect to_client (const rect & absolute_rect) const;
+			virtual vec2 to_client (const vec2 & absolute_location) const;
+
 
 		};
 
