@@ -31,7 +31,7 @@ namespace ballistic {
 			);
 		}
 
-		void ui::notify (entity * sender, ballistic::message & message) {
+		void ui::notify (entity * sender, ballistic::message & message){
 		
 			id_t message_id = message.id ();
 

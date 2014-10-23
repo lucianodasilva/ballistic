@@ -30,7 +30,7 @@ namespace ballistic {
 
 			if (c) {
 				vec2 client_pos = args.position - c->location ();
-				c->on_mouse_move ({
+				c->on_mouse_down ({
 					client_pos,
 					args.buttons
 				});
@@ -44,7 +44,7 @@ namespace ballistic {
 
 			if (c) {
 				vec2 client_pos = args.position - c->location ();
-				c->on_mouse_move ({
+				c->on_mouse_up ({
 					client_pos,
 					args.buttons
 				});
