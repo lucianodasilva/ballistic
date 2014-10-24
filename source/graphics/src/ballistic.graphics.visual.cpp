@@ -13,17 +13,15 @@ namespace ballistic {
 
 		void visual::require_properties (entity_type * new_type, component_info & info) {
 			
-			new_type->properties.require < id_t > (id::graphics::material_id, id::null);
-			new_type->properties.require < id_t > (id::graphics::mesh_id, id::null);
-			new_type->properties.require < id_t > (id::graphics::rig_id, id::null);
-
-			new_type->properties.require < material * > (id::graphics::material, nullptr);
-			new_type->properties.require < imesh * > (id::graphics::mesh, nullptr);
-			new_type->properties.require < rig_frame_tween * > (id::graphics::rig_tween, &rig_frame_tween::null_frame_tween);
-
-			new_type->properties.require < uint8_t > (id::graphics::layer, 0);
-
-			new_type->properties.require < mat4 > (id::transform, mat4 ());
+			new_type->properties
+				.require < id_t > (id::graphics::material_id, id::null)
+				.require < id_t > (id::graphics::mesh_id, id::null)
+				.require < id_t > (id::graphics::rig_id, id::null)
+				.require < material * > (id::graphics::material, nullptr)
+				.require < imesh * > (id::graphics::mesh, nullptr)
+				.require < rig_frame_tween * > (id::graphics::rig_tween, &rig_frame_tween::null_frame_tween)
+				.require < uint8_t > (id::graphics::layer, 0)
+				.require < mat4 > (id::transform, mat4 ());
 		}
 
 		void visual::setup (entity * parent, ballistic::containers::property_container & parameters)

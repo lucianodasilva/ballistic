@@ -1,14 +1,14 @@
-#ifndef _ballistic_frontend_ui_control_h_
-#define _ballistic_frontend_ui_control_h_
+#ifndef _ballistic_ui_control_h_
+#define _ballistic_ui_control_h_
 
 #include <functional>
 
 #include <ballistic.graphics.h>
-#include "ballistic.frontend.draw.h"
+#include "ballistic.ui.draw.h"
 #include "ballistic.frontend.defines.h"
 
 namespace ballistic {
-	namespace frontend {
+	namespace ui {
 
 		class control;
 

@@ -1,7 +1,7 @@
-#include "ballistic.frontend.draw.h"
+#include "ballistic.ui.draw.h"
 
 namespace ballistic {
-	namespace frontend {
+	namespace ui {
 
 		void draw::evaluate_config () {
 			_valid_config =

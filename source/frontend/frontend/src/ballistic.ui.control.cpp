@@ -1,7 +1,7 @@
-#include "ballistic.frontend.ui_control.h"
+#include "ballistic.ui.control.h"
 
 namespace ballistic {
-	namespace frontend {
+	namespace ui {
 
 		control * control::find_containing (const vec2 & p) {
 			for (control * c : _controls) {

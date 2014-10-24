@@ -8,11 +8,11 @@ namespace ballistic {
 
 
 	void transform::require_properties (entity_type * new_type, component_info & info) {																	   
-		new_type->properties.require_notify (id::transform_position, vec3 ());
-		new_type->properties.require_notify (id::transform_scale, vec3 {real (1), real (1), real (1)});
-		new_type->properties.require_notify (id::transform_rotation, quat());
-
-		new_type->properties.require (id::transform, mat4 ());
+		new_type->properties
+			.require_notify < vec3 > (id::transform_position)
+			.require_notify (id::transform_scale, vec3 {real (1), real (1), real (1)})
+			.require_notify < vec3 > (id::transform_rotation)
+			.require < mat4 > (id::transform);
 	}
 
 	void transform::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {

@@ -1,11 +1,11 @@
-#ifndef	_ballistic_model_viewer_camera_controler_h_
-#define _ballistic_model_viewer_camera_controler_h_
+#ifndef	_ballistic_model_viewer_camera_controller_h_
+#define _ballistic_model_viewer_camera_controller_h_
 
 #include <ballistic.base.h>
 
 using namespace ballistic;
 
-class camera_controler : public component {
+class camera_controller : public component {
 private:
 
 	property < vec3 > * _cam_position;

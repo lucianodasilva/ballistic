@@ -90,7 +90,7 @@ bool load_instances (game & g, int argc, char ** argv) {
 		real camera_radius = (math::length (bb.v_max) / real (std::tan (45.0 / 2.0))) * real (1.5);
 
 		entity * camera = g.entities.create (camera_entity_type, camera_entity);
-		camera->properties [camera_controler::starting_radius] = camera_radius;
+		camera->properties [camera_controller::starting_radius] = camera_radius;
 
 		// lights
 		entity * light = nullptr;

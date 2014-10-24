@@ -4,9 +4,10 @@
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
 
-#include "camera_controler.h"
+#include "camera_controller.h"
 #include "fps_counter.h"
 #include "resources.h"
+#include "ui_controller.h"
 
 using namespace ballistic;
 
@@ -17,6 +18,9 @@ define_id (model_entity);
 define_id_ext (fps_counter_entity_type, "fps_counter.entity_type");
 define_id (fps_counter_entity);
 
+define_id_ext (ui_entity_type, "ui.entity_type");
+define_id (ui_entity);
+
 define_id_ext (light_entity_type, "light.entity_type");
 
 inline void define_internals (game & g) {
@@ -24,7 +28,7 @@ inline void define_internals (game & g) {
 	g.resources.load (default_res_file);
 
 	// define components
-	component::declare < camera_controler > (g);
+	component::declare < camera_controller > (g);
 	component::declare < fps_counter > (g);
 
 	// define entity types
@@ -33,7 +37,7 @@ inline void define_internals (game & g) {
 	{
 		entity_type * camera_type = entity_type::declare <
 			graphics::camera,
-			camera_controler
+			camera_controller
 		>
 		(g, camera_entity_type);
 
@@ -80,8 +84,17 @@ inline void define_internals (game & g) {
 		> (g, model_entity_type);
 	}
 
+	// create ui
+	{
+		entity_type::declare <
+			ui_controller
+		> (g, ui_entity_type);
+	}
+
 	// create entities
 	g.entities.create (fps_counter_entity_type, fps_counter_entity);
+	g.entities.create (ui_entity_type, ui_entity);
+
 }
 
 #endif

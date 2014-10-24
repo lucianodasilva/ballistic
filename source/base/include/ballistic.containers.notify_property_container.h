@@ -17,6 +17,8 @@ namespace ballistic {
 
 		class notify_property_container : public property_container {
 		public:
+
+			using property_container::require;
 			
 			entity * parent;
 
@@ -26,28 +28,33 @@ namespace ballistic {
 			inline notify_property_container (entity * p) : parent (p) {}
 
 			template < class value_t >
-			inline property < value_t > * require_notify (const id_t & id, const value_t & default_value) {
-				auto prop = this->find (id);
+			inline notify_property_container & require_notify (const id_t & id, const value_t & default_value, notify_property < value_t > *& p) {
+				auto fp = this->find (id);
 
-				if (!prop) {
-					auto new_p = new notify_property < value_t > (id, default_value);
-					new_p->parent = parent;
-					this->insert (new_p);
-					return new_p;
+				if (!fp) {
+					p = new notify_property < value_t > (id, default_value);
+					p->parent = parent;
+					this->insert (p);
 				} else {
-					auto typed_p = dynamic_cast < property < value_t > *> (prop);
+					p = dynamic_cast < property < value_t > *> (fp);
 
-					if (!typed_p) {
+					if (!p) {
 						debug_print ("property " << id << " already exists with different type. property overriden.");
-						delete prop;
+						delete p;
 
-						typed_p = new notify_property < value_t > (id, default_value);
-						typed_p->parent = parent;
-						insert (typed_p);
+						p = new notify_property < value_t > (id, default_value);
+						p->parent = parent;
+						insert (p);
 					}
-
-					return typed_p;
 				}
+
+				return *this;
+			}
+
+			template < class value_t >
+			inline notify_property_container & require_notify (const id_t & id, const value_t & default_value) {
+				notify_property < value_t > * p = nullptr;
+				return require_notify (id, default_value, p);
 			}
 		};
 

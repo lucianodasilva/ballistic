@@ -32,8 +32,9 @@ namespace ballistic {
 		public:
 
 			inline static void require_parameters (containers::property_container & parameters) {
-				parameters.require < target_value_t > (id::start, target_value_t ());
-				parameters.require < target_value_t > (id::end, target_value_t ());
+				parameters
+					.require < target_value_t > (id::start)
+					.require < target_value_t > (id::end);
 			}
 
 			inline virtual void setup (containers::property_container & parameters) override {
@@ -81,10 +82,11 @@ namespace ballistic {
 		public:
 
 			inline static void require_parameters (containers::property_container & parameters) {
-				parameters.require < target_value_t > (id::start, target_value_t ());
-				parameters.require < target_value_t > (id::end, target_value_t ());
-				parameters.require < target_value_t > (id::control_1, target_value_t ());
-				parameters.require < target_value_t > (id::control_2, target_value_t ());
+				parameters
+					.require < target_value_t > (id::start)
+					.require < target_value_t > (id::end)
+					.require < target_value_t > (id::control_1)
+					.require < target_value_t > (id::control_2);
 			}
 
 			inline virtual void setup (containers::property_container & parameters) override {

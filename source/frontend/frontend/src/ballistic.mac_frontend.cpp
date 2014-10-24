@@ -89,10 +89,11 @@ namespace ballistic {
 		frontend::frontend (game & game_ref, const point & client_size ) :
 			_window_client_size (client_size)
 		{
-			_on_mouse_message.require < point > (id::frontend::mouse_position);
-			_on_mouse_message.require < uint32_t > (id::frontend::mouse_buttons);
-			_on_mouse_message.require < int > (id::frontend::mouse_wheel_delta);
-			_on_mouse_message.require < uint32_t > (id::frontend::mouse_event_type);
+			_on_mouse_message
+				.require < point > (id::frontend::mouse_position)
+				.require < uint32_t > (id::frontend::mouse_buttons)
+				.require < int > (id::frontend::mouse_wheel_delta)
+				.require < uint32_t > (id::frontend::mouse_event_type);
 			
 			_on_mouse_message [id::frontend::mouse_event_type] = (uint32_t)mouse_event_none;
 			_on_mouse_message [id::frontend::mouse_position] = point {0, 0};

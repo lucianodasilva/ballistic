@@ -94,14 +94,12 @@ namespace ballistic {
 		}
 
 		void overlay_text::require_properties (entity_type * new_type, component_info & info) {
-			new_type->properties.require < id_t >(id::graphics::text::font_id, id::null);
-			new_type->properties.require < font * >(id::graphics::text::font, nullptr);
-
-			new_type->properties.require < uint8_t >(id::graphics::layer, 0);
-
-			new_type->properties.require < mat4 >(id::transform, mat4());
-
-			new_type->properties.require_notify < std::string > (id::graphics::text::text, "");
+			new_type->properties
+				.require < id_t >(id::graphics::text::font_id, id::null)
+				.require < font * >(id::graphics::text::font, nullptr)
+				.require < uint8_t >(id::graphics::layer, 0)
+				.require < mat4 >(id::transform, mat4())
+				.require_notify < std::string > (id::graphics::text::text, "");
 		}
 
 		const id_t overlay_text::component_id = ballistic::id::graphics::overlay_text;

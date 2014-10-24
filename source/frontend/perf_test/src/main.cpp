@@ -62,8 +62,9 @@ public:
 	box_brain () : _start_time (-1) {}
 
 	static void require_properties (entity_type * new_type, component_info & info) {
-		new_type->properties.require < vec3 > (text_to_id ("bounce"), vec3 ());
-		new_type->properties.require < vec3 > (text_to_id ("start_pos"), vec3 ());
+		new_type->properties
+			.require < vec3 > (text_to_id ("bounce"), vec3 ())
+			.require < vec3 > (text_to_id ("start_pos"), vec3 ());
 	}
 
 	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {

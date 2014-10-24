@@ -1,11 +1,11 @@
-#ifndef _ballistic_frontend_draw_h_
-#define _ballistic_frontend_draw_h_
+#ifndef _ballistic_ui_draw_h_
+#define _ballistic_ui_draw_h_
 
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
 
 namespace ballistic {
-	namespace frontend {
+	namespace ui {
 
 		class draw {
 		private:

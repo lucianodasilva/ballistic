@@ -8,21 +8,23 @@ namespace ballistic {
 		void camera::require_properties (entity_type * new_type, component_info & info) {
 
 			// entity requirements
-			new_type->properties.require (id::position, vec3 ({.0, .0, .0}));
-			new_type->properties.require (id::target, vec3 ({.0, .0, .0}));
-			new_type->properties.require (id::up, vec3 ({.0, 1.0, .0}));
-			new_type->properties.require (id::graphics::camera_proj, mat4 ());
-			new_type->properties.require (id::graphics::camera_view, mat4 ());
+			new_type->properties
+				.require (id::position, vec3 ({.0, .0, .0}))
+				.require (id::target, vec3 ({.0, .0, .0}))
+				.require (id::up, vec3 ({.0, 1.0, .0}))
+				.require < mat4 > (id::graphics::camera_proj)
+				.require < mat4 > (id::graphics::camera_view);
 
 			// component arguments
-			info.properties.require < string > (id::graphics::projection, "ortho");
-			info.properties.require < real > (id::graphics::near, .0);
-			info.properties.require < real > (id::graphics::far, .0);
-			info.properties.require < real > (id::graphics::left, .0);
-			info.properties.require < real > (id::graphics::right, .0);
-			info.properties.require < real > (id::graphics::top, .0); 
-			info.properties.require < real > (id::graphics::bottom, .0);
-			info.properties.require < real > (id::graphics::fov, .0);
+			info.properties
+				.require < string > (id::graphics::projection, "ortho")
+				.require < real > (id::graphics::near, .0)
+				.require < real > (id::graphics::far, .0)
+				.require < real > (id::graphics::left, .0)
+				.require < real > (id::graphics::right, .0)
+				.require < real > (id::graphics::top, .0)
+				.require < real > (id::graphics::bottom, .0)
+				.require < real > (id::graphics::fov, .0);
 		}
 
 		const id_t camera::component_id = id::graphics::camera;

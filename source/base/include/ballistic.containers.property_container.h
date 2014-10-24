@@ -86,30 +86,35 @@ namespace ballistic {
 			base_property_container & operator = (const base_property_container < iproperty, default_property_t > & o) = delete;
 
 			template < class value_t >
-			inline default_property_t < value_t > * require (const id_t & id, const value_t & default_value) {
-				auto p = this->find (id);
+			inline base_property_container < base_property_t, default_property_t > & require (const id_t & id, const value_t & default_value, default_property_t < value_t > *&p) {
+				auto fp = this->find (id);
 
-				if (!p) {
-					auto new_p = new default_property_t < value_t > (id, default_value );
-					this->insert (new_p);
-					return new_p;
+				if (!fp) {
+					p = new default_property_t < value_t > (id, default_value );
+					this->insert (fp);
 				} else {
-					auto typed_p = dynamic_cast <default_property_t < value_t > *> (p);
+					p = dynamic_cast <default_property_t < value_t > *> (fp);
 
-					if (!typed_p) {
+					if (!p) {
 						debug_print ("property " << id << " already exists with different type. property overriden.");
 						delete p;
 
-						typed_p = new default_property_t < value_t > (id, default_value );
-						this->insert (typed_p);
+						p = new default_property_t < value_t > (id, default_value );
+						this->insert (p);
 					}
-
-					return typed_p;
 				}
+
+				return *this;
 			}
 
 			template < class value_t >
-			inline default_property_t < value_t > * require (const id_t & id) {
+			inline base_property_container < base_property_t, default_property_t > & require (const id_t & id, const value_t & default_value) {
+				default_property_t < value_t > * p = nullptr;
+				return require < value_t > (id, default_value, p);
+			}
+
+			template < class value_t >
+			inline base_property_container < base_property_t, default_property_t > & require (const id_t & id) {
 				return require < value_t > (id, value_t ());
 			}
 

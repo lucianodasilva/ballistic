@@ -8,10 +8,11 @@ namespace ballistic {
 	namespace animation {
 
 		void storyboard::action::require_parameters (containers::property_container & parameters) {
-			parameters.require < real > (id::start_time, 0);
-			parameters.require < real > (id::duration, 0);
-			parameters.require < id_t > (id::target_id, id::null);
-			parameters.require < id_t > (id::repeat, id::repeat_none);
+			parameters
+				.require < real > (id::start_time, 0)
+				.require < real > (id::duration, 0)
+				.require < id_t > (id::target_id, id::null)
+				.require < id_t > (id::repeat, id::repeat_none);
 		}
 
 		storyboard::action::action (

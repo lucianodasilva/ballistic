@@ -1,17 +1,18 @@
-#include "camera_controler.h"
+#include "camera_controller.h"
 
 #include <ballistic.frontend.h>
 #include <ballistic.graphics.h>
 
-const ballistic::id_t camera_controler::component_id = text_to_id ("camera_controler");
-const ballistic::id_t camera_controler::starting_radius = text_to_id ("camera_controller.starting_radius");
+const ballistic::id_t camera_controller::component_id = text_to_id ("camera_controller");
+const ballistic::id_t camera_controller::starting_radius = text_to_id ("camera_controller.starting_radius");
 
-void camera_controler::require_properties (entity_type * new_type, component_info & info) {
-	new_type->properties.require < vec3 > (id::position);
-	new_type->properties.require < real > (starting_radius, .0);
+void camera_controller::require_properties (entity_type * new_type, component_info & info) {
+	new_type->properties
+		.require < vec3 > (id::position)
+		.require < real > (starting_radius, .0);
 }
 
-void camera_controler::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
+void camera_controller::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
 	component::setup (parent, parameters);
 
 	_mouse_is_down = false;
@@ -31,7 +32,7 @@ void camera_controler::setup (ballistic::entity * parent, ballistic::containers:
 	);
 }
 
-void camera_controler::terminate () {
+void camera_controller::terminate () {
 	parent ()->game ().global_notifier.detach (
 		{
 			id::message::update,
@@ -41,7 +42,7 @@ void camera_controler::terminate () {
 	);
 }
 
-void camera_controler::notify (ballistic::entity * sender, ballistic::message & message) {
+void camera_controller::notify (ballistic::entity * sender, ballistic::message & message) {
 
 	ballistic::id_t message_id = message.id ();
 

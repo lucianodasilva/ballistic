@@ -16,9 +16,10 @@ namespace ballistic {
 		_frame_id = 1;
 		_running = true;
 
-		_m_update_game_time = _m_update.require < real > (id::game_time, .0);
-		_m_update_frame_time = _m_update.require < real > (id::frame_time, .0);
-		_m_update_frame_count = _m_update.require < uint32_t > (id::frame_count, 0);
+		_m_update
+			.require < real > (id::game_time, .0, _m_update_game_time)
+			.require < real > (id::frame_time, .0, _m_update_frame_time)
+			.require < uint32_t > (id::frame_count, 0, _m_update_frame_count);
 
 		// default resources and others
 		animation::define_resources (*this);

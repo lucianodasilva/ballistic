@@ -94,48 +94,69 @@ namespace ballistic {
 			property_definition_container & operator = (const property_definition_container & o) = delete;
 
 			template < class value_t >
-			inline void require (const id_t & id, const value_t & default_value) {
-				auto p = this->find (id);
+			inline property_definition_container & require (const id_t & id, const value_t & default_value, property_definition < value_t > *& p ) {
+				auto fp = this->find (id);
 
-				if (!p) {
-					auto new_p = new property_definition < value_t > (id, default_value);
-					this->insert (new_p);
+				if (!fp) {
+					p = new property_definition < value_t > (id, default_value);
+					this->insert (p);
 				} else {
-					auto typed_p = dynamic_cast <property_definition < value_t > *> (p);
+					p = dynamic_cast <property_definition < value_t > *> (fp);
 
-					if (!typed_p) {
+					if (!p) {
 						debug_print ("property " << id << " already exists with different type. property overriden.");
 						delete p;
 
-						typed_p = new property_definition < value_t > (id, default_value);
-						insert (typed_p);
+						p = new property_definition < value_t > (id, default_value);
+						insert (p);
 					}
 				}
+
+				return *this;
 			}
 
 			template < class value_t >
-			inline void require (const id_t & id) {
+			inline property_definition_container & require (const id_t & id, const value_t & default_value) {
+				property_definition < value_t > * p = nullptr;
+				return require < value_t > (id, default_value, p);
+			}
+
+			template < class value_t >
+			inline property_definition_container & require (const id_t & id) {
 				return require < value_t > (id, value_t ());
 			}
 
 			template < class value_t >
-			inline void require_notify (const id_t & id, const value_t & default_value) {
-				auto p = this->find (id);
+			inline property_definition_container & require_notify (const id_t & id, const value_t & default_value, notify_property_definition < value_t > *& p ) {
+				auto fp = this->find (id);
 
-				if (!p) {
-					auto new_p = new notify_property_definition < value_t > (id, default_value);
-					this->insert (new_p);
+				if (!fp) {
+					p = new notify_property_definition < value_t > (id, default_value);
+					this->insert (p);
 				} else {
-					auto typed_p = dynamic_cast < notify_property_definition < value_t > *> (p);
+					p = dynamic_cast < notify_property_definition < value_t > *> (fp);
 
-					if (!typed_p) {
+					if (!p) {
 						debug_print ("property " << id << " already exists with different type. property overriden.");
 						delete p;
 
-						typed_p = new notify_property_definition < value_t > (id, default_value);
-						insert (typed_p);
+						p = new notify_property_definition < value_t > (id, default_value);
+						insert (p);
 					}
 				}
+
+				return *this;
+			}
+
+			template < class value_t >
+			inline property_definition_container & require_notify (const id_t & id, const value_t & default_value) {
+				notify_property_definition < value_t > * p = nullptr;
+				return require_notify (id, default_value, p);
+			}
+
+			template < class value_t >
+			inline property_definition_container & require_notify (const id_t & id) {
+				return require_notify (id, value_t ());
 			}
 
 			inline details::property_accessor < iproperty_definition, property_definition > operator [](id_t id) {
