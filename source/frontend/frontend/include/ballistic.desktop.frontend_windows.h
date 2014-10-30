@@ -1,8 +1,9 @@
-#ifndef	_ballistic_win_frontend_h_
-#define _ballistic_win_frontend_h_
+#ifndef	_ballistic_desktop_frontend_windows_h_
+#define _ballistic_desktop_frontend_windows_h_
 
 #include <ballistic.base.h>
-#include "ballistic.frontend.defines.h"
+#include "ballistic.ifrontend.h"
+#include "ballistic.ui.common.h"
 
 #ifdef BALLISTIC_OS_WINDOWS
 
@@ -15,7 +16,7 @@
 #undef far
 
 namespace ballistic {
-	namespace win_desktop {
+	namespace desktop {
 
 		class frontend : public ballistic::ifrontend {
 		private:
@@ -37,31 +38,32 @@ namespace ballistic {
 
 			void on_resize ();
 			void on_mouse_event (
-				mouse_event_type m_event,
+				ui::mouse_event_type m_event,
 				const point & position,
-				mouse_button buttons,
+				ui::mouse_button buttons,
 				int wheel_delta
 			);
 
-			static void send_mouse_message (mouse_event_type m_event, HWND hWnd, WPARAM wParam,LPARAM lParam);
+			static void send_mouse_message (ui::mouse_event_type m_event, HWND hWnd, WPARAM wParam,LPARAM lParam);
+
+			virtual bool create ();
+			virtual void destroy ();
 
 		public:
 
-			virtual point get_client_size ();
+			// implement ifrontend
+			virtual void show ();
+			virtual void close ();
+
+			virtual void run ();
+			// -------------------
 
 			frontend (game & game_ref, const point & client_size);
 			virtual ~frontend ();
 
-			virtual bool create ();
-
-			virtual void show ();
-			virtual void destroy ();
-
 			virtual void update ();
 
-			virtual void do_event_loop ();
-
-			HWND get_window_handle ();
+			HWND get_handle ();
 		};
 
 	}

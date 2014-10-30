@@ -97,8 +97,8 @@ namespace ballistic {
 			new_type->properties.require < rig_frame_tween * > (id::graphics::rig_tween, &rig_frame_tween::null_frame_tween);
 		}
 
-		void rigged::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-			component::setup (parent, parameters);
+		void rigged::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+			component::setup (parent, parameters, game_inst);
 
 			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
 

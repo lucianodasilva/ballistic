@@ -16,7 +16,7 @@ namespace ballistic {
 		}
 
 		icomponent * component_container::create (component_info & info) {
-			icomponent * new_comp = info.create (_container);
+			icomponent * new_comp = info.create (_container, _container->game ());
 
 			if (new_comp)
 				data.push_back (new_comp);

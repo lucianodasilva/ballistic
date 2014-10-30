@@ -5,7 +5,7 @@
 
 #include <ballistic.graphics.h>
 #include "ballistic.ui.draw.h"
-#include "ballistic.frontend.defines.h"
+#include "ballistic.ui.common.h"
 
 namespace ballistic {
 	namespace ui {

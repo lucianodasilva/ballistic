@@ -84,50 +84,16 @@ namespace ballistic {
 
 	namespace containers {
 
-		class property_definition_container : public iproperty_container < iproperty_definition > {
+		class property_definition_container : public ballistic::containers::base_property_container < iproperty_definition, property_definition > {
 		public:
 
-			inline property_definition_container () {}
-		
-			// delete copy and assignment
-			property_definition_container (const property_definition_container & o) = delete;
-			property_definition_container & operator = (const property_definition_container & o) = delete;
+			using this_type = property_definition_container;
+
+			using base_t = ballistic::containers::base_property_container < iproperty_definition, property_definition > ;
+			using base_t::require;
 
 			template < class value_t >
-			inline property_definition_container & require (const id_t & id, const value_t & default_value, property_definition < value_t > *& p ) {
-				auto fp = this->find (id);
-
-				if (!fp) {
-					p = new property_definition < value_t > (id, default_value);
-					this->insert (p);
-				} else {
-					p = dynamic_cast <property_definition < value_t > *> (fp);
-
-					if (!p) {
-						debug_print ("property " << id << " already exists with different type. property overriden.");
-						delete p;
-
-						p = new property_definition < value_t > (id, default_value);
-						insert (p);
-					}
-				}
-
-				return *this;
-			}
-
-			template < class value_t >
-			inline property_definition_container & require (const id_t & id, const value_t & default_value) {
-				property_definition < value_t > * p = nullptr;
-				return require < value_t > (id, default_value, p);
-			}
-
-			template < class value_t >
-			inline property_definition_container & require (const id_t & id) {
-				return require < value_t > (id, value_t ());
-			}
-
-			template < class value_t >
-			inline property_definition_container & require_notify (const id_t & id, const value_t & default_value, notify_property_definition < value_t > *& p ) {
+			inline property_definition_container & require_notify (const id_t & id, const value_t & default_value, notify_property_definition < value_t > *& p) {
 				auto fp = this->find (id);
 
 				if (!fp) {
@@ -157,10 +123,6 @@ namespace ballistic {
 			template < class value_t >
 			inline property_definition_container & require_notify (const id_t & id) {
 				return require_notify (id, value_t ());
-			}
-
-			inline details::property_accessor < iproperty_definition, property_definition > operator [](id_t id) {
-				return details::property_accessor < iproperty_definition, property_definition > (find (id));
 			}
 
 			inline void setup_container (iproperty_container < iproperty > & container) {

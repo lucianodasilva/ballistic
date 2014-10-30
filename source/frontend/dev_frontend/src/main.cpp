@@ -19,13 +19,13 @@ ballistic::graphics::imesh *	_mesh;
 #ifdef BALLISTIC_OS_WINDOWS
 
 ballistic::ifrontend * create_frontend (game & game_ref, const point & size ) {
-	return new ballistic::win_desktop::frontend (game_ref, size);
+	return new ballistic::desktop::frontend (game_ref, size);
 }
 
 #elif defined (BALLISTIC_OS_DARWIN)
 #	include <GLUT/GLUT.h>
 ballistic::ifrontend * create_frontend (const point & size) {
-	return new ballistic::mac_desktop::frontend (size);
+	return new ballistic::desktop::frontend (size);
 }
 #endif
 
@@ -149,8 +149,8 @@ public:
 		new_type->properties.require < graphics::material * > (id::graphics::material);
 	}
 
-	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-		component::setup (parent, parameters);
+	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+		component::setup (parent, parameters, game_inst);
 
 		_material = parent->properties.aquire < graphics::material * > (id::graphics::material);
 
@@ -278,7 +278,6 @@ int main ( int argc, char ** argv) {
 	game g;
 
 	_frontend = create_frontend (g, {800, 800});
-	_frontend->create ();
 	_frontend->show ();
 
 	_device = create_device ();
@@ -286,7 +285,6 @@ int main ( int argc, char ** argv) {
 
 	// initialize
 	g.initialize ();
-	g.frontend (_frontend);
 
 	// setup game stuffs
 	ballistic::graphics::define_resources (g, _device);
@@ -308,7 +306,7 @@ int main ( int argc, char ** argv) {
 	glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 
-	_frontend->do_event_loop ();
+	_frontend->run ();
 
 	return 0;
 }

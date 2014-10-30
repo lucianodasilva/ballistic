@@ -1,7 +1,8 @@
-#include "ballistic.mac_frontend.h"
-#include "ballistic.frontend.defines.h"
+#include <ballistic.base.h>
 
 #ifdef BALLISTIC_OS_DARWIN
+
+#include "ballistic.desktop.frontend_osx.h"
 
 #include <GLUT/GLUT.h>
 

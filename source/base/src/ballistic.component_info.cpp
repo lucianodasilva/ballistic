@@ -19,7 +19,7 @@ namespace ballistic {
 		_ctor = ctor_v;
 	}
 		
-	icomponent * component_info::create (entity * parent) {
+	icomponent * component_info::create (entity * parent, ballistic::game & game_inst) {
 		if (!_ctor) {
 			debug_error ("component constructor not set. cannot create component instance.");
 			return nullptr;
@@ -27,7 +27,7 @@ namespace ballistic {
 			
 		icomponent * new_component = nullptr;
 
-		new_component = _ctor->create (parent, properties);
+		new_component = _ctor->create (parent, properties, game_inst);
 	
 		return new_component;
 	}

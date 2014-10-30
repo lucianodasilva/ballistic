@@ -33,19 +33,19 @@ namespace ballistic {
 
 	bool game::is_running () { return _running; }
 
-	void game::do_loop (function < void ( game * ) > system_callback) {
-
-		if (!_frontend) {
-			debug_error ("[ballistic::game::do_loop] frontend not set!")
-		}
-
-		while (frame ()){
-			if (system_callback)
-				system_callback (this);
-
-			_frontend->update ();
-		}
-	}
+	//void game::do_loop (function < void ( game * ) > system_callback) {
+	//
+	//	if (!_frontend) {
+	//		debug_error ("[ballistic::game::do_loop] frontend not set!")
+	//	}
+	//
+	//	while (frame ()){
+	//		if (system_callback)
+	//			system_callback (this);
+	//
+	//		_frontend->update ();
+	//	}
+	//}
 
 	bool game::frame () {
 		
@@ -81,8 +81,7 @@ namespace ballistic {
 
 	game::game () :
 		entity (*this, 0, nullptr), 
-		_m_update (this, id::message::update), 
-		_frontend (nullptr),
+		_m_update (this, id::message::update),
 		global_notifier (this),
 		entities (*this),
 		systems (),
@@ -91,11 +90,4 @@ namespace ballistic {
 
 	game::~game () {}
 
-	void game::frontend (ifrontend * fend) {
-		_frontend = fend;
-	}
-
-	ifrontend * game::frontend () {
-		return _frontend;
-	}
 }

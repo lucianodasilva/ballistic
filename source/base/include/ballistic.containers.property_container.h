@@ -13,7 +13,7 @@ namespace ballistic {
 		class iproperty_container : public icontainer < std::map < id_t, base_property_t * > > {
 		public:
 			
-			typedef icontainer < std::map < id_t, base_property_t * > > base_t;
+			using base_t = icontainer < std::map < id_t, base_property_t * > > ;
 
 			inline virtual ~iproperty_container () {
 				for (auto & pair : base_t::data) {
@@ -79,6 +79,8 @@ namespace ballistic {
 		class base_property_container : public iproperty_container < base_property_t > {
 		public:
 
+			using this_type = base_property_container < base_property_t, default_property_t > ;
+
 			inline base_property_container () {}
 		
 			// delete copy and assignment
@@ -86,7 +88,7 @@ namespace ballistic {
 			base_property_container & operator = (const base_property_container < iproperty, default_property_t > & o) = delete;
 
 			template < class value_t >
-			inline base_property_container < base_property_t, default_property_t > & require (const id_t & id, const value_t & default_value, default_property_t < value_t > *&p) {
+			inline this_type & require (const id_t & id, const value_t & default_value, default_property_t < value_t > *&p) {
 				auto fp = this->find (id);
 
 				if (!fp) {
@@ -108,13 +110,13 @@ namespace ballistic {
 			}
 
 			template < class value_t >
-			inline base_property_container < base_property_t, default_property_t > & require (const id_t & id, const value_t & default_value) {
+			inline this_type & require (const id_t & id, const value_t & default_value) {
 				default_property_t < value_t > * p = nullptr;
 				return require < value_t > (id, default_value, p);
 			}
 
 			template < class value_t >
-			inline base_property_container < base_property_t, default_property_t > & require (const id_t & id) {
+			inline this_type & require (const id_t & id) {
 				return require < value_t > (id, value_t ());
 			}
 

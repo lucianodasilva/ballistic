@@ -12,8 +12,8 @@ void camera_controller::require_properties (entity_type * new_type, component_in
 		.require < real > (starting_radius, .0);
 }
 
-void camera_controller::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-	component::setup (parent, parameters);
+void camera_controller::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+	component::setup (parent, parameters, game_inst);
 
 	_mouse_is_down = false;
 
@@ -26,7 +26,7 @@ void camera_controller::setup (ballistic::entity * parent, ballistic::containers
 		parent ->game ().global_notifier.attach (
 		{
 			id::message::update,
-			id::frontend::on_mouse_event
+			id::ui::on_mouse_event
 		},
 			this
 	);
@@ -36,7 +36,7 @@ void camera_controller::terminate () {
 	parent ()->game ().global_notifier.detach (
 		{
 			id::message::update,
-			id::frontend::on_mouse_event
+			id::ui::on_mouse_event
 		},
 			this
 	);
@@ -49,34 +49,34 @@ void camera_controller::notify (ballistic::entity * sender, ballistic::message &
 	real move_mult = real(0.01);
 	real delta_mult = real (0.02);
 
-	if (message_id == id::frontend::on_mouse_event) {
-		switch (message [id::frontend::mouse_event_type].as < uint32_t > ()) {
-		case mouse_event_down:
-			if (message [id::frontend::mouse_buttons].as < uint32_t > () & mouse_button_left ) {
+	if (message_id == id::ui::on_mouse_event) {
+		switch (message [id::ui::mouse_event_type].as < uint32_t > ()) {
+		case ui::mouse_event_down:
+			if (message [id::ui::mouse_buttons].as < uint32_t > () & ui::mouse_button_left ) {
 				_mouse_is_down = true;
-				_mouse_start = message [id::frontend::mouse_position];
+				_mouse_start = message [id::ui::mouse_position];
 				_start_yaw = _yaw;
 				_start_pitch = _pitch;
 			}
 			break;
-		case mouse_event_move:
-			if (_mouse_is_down && message [id::frontend::mouse_buttons].as < uint32_t > () & mouse_button_left) {
-				point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
+		case ui::mouse_event_move:
+			if (_mouse_is_down && message [id::ui::mouse_buttons].as < uint32_t > () & ui::mouse_button_left) {
+				point dif = _mouse_start - message [id::ui::mouse_position].as < point > ();
 				_yaw = _start_yaw + real (dif.x) * move_mult;
 				_pitch = _start_pitch - real (dif.y) * move_mult;
 			}
 			break;
-		case mouse_event_up:
-			if (message [id::frontend::mouse_buttons].as < uint32_t > () & mouse_button_left) {
+		case ui::mouse_event_up:
+			if (message [id::ui::mouse_buttons].as < uint32_t > () & ui::mouse_button_left) {
 				_mouse_is_down = false;
-				point dif = _mouse_start - message [id::frontend::mouse_position].as < point > ();
+				point dif = _mouse_start - message [id::ui::mouse_position].as < point > ();
 				_yaw = _start_yaw + real (dif.x) * move_mult;
 				_pitch = _start_pitch - real (dif.y) * move_mult;
 			}
 			break;
-		case mouse_event_wheel:
+		case ui::mouse_event_wheel:
 			{
-				int delta = message [id::frontend::mouse_wheel_delta];
+				int delta = message [id::ui::mouse_wheel_delta];
 				_radius -= (real (delta) * delta_mult);
 			}
 			break;

@@ -18,6 +18,7 @@ namespace ballistic {
 		template < 
 			class value_t, 
 			bool is_fundamental = std::is_fundamental < value_t >::value, 
+			bool is_enum = std::is_enum < value_t >::value,
 			bool is_pointer = std::is_pointer < value_t >::value 
 		>
 		struct property_parser {
@@ -34,14 +35,26 @@ namespace ballistic {
 		};
 
 		template < class value_t >
-		struct property_parser < value_t, false, false > {
+		struct property_parser < value_t, false, true, false > {
+			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
+				try {
+					ret = (value_t)convert_to < typename std::underlying_type < value_t >::type > (value->Value ());
+					return true;
+				} catch (...) {
+					return false;
+				}
+			}
+		};
+
+		template < class value_t >
+		struct property_parser < value_t, false, false, false > {
 			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
 				return value_t::parse (value, ret);
 			}
 		};
 
 		template < >
-		struct property_parser < id_t, std::is_fundamental < id_t >::value, false > {
+		struct property_parser < id_t, std::is_fundamental < id_t >::value, false, false > {
 			inline static bool parse (const tinyxml2::XMLAttribute * value, id_t & ret) {
 				try {
 					ret = text_to_id (value->Value());
@@ -53,7 +66,7 @@ namespace ballistic {
 		};
 
 		template < >
-		struct property_parser < string, false, false > {
+		struct property_parser < string, false, false, false > {
 			inline static bool parse (const tinyxml2::XMLAttribute * value, string & ret) {
 				try {
 					ret = value->Value ();
@@ -65,7 +78,7 @@ namespace ballistic {
 		};
 
 		template < class value_t, bool is_fundamental >
-		struct property_parser < value_t, is_fundamental, true > {
+		struct property_parser < value_t, is_fundamental, false, true > {
 			inline static bool parse (const tinyxml2::XMLAttribute * value, value_t & ret) {
 				debug_print ("pointer type value cannot be parsed");
 				return false;

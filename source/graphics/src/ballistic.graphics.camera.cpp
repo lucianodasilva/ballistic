@@ -6,7 +6,6 @@ namespace ballistic {
 	namespace graphics {
 
 		void camera::require_properties (entity_type * new_type, component_info & info) {
-
 			// entity requirements
 			new_type->properties
 				.require (id::position, vec3 ({.0, .0, .0}))
@@ -144,8 +143,8 @@ namespace ballistic {
 
 		}
 
-		void camera::setup (entity * parent, containers::property_container & parameters) {
-			component::setup (parent, parameters);
+		void camera::setup (entity * parent, containers::property_container & parameters, ballistic::game & game_inst) {
+			component::setup (parent, parameters, game_inst);
 
 			// bind to global message notifier
 			parent->game ().global_notifier.attach (id::message::update, this);

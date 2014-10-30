@@ -4,7 +4,6 @@
 #include "ballistic.containers.entity_container.h"
 #include "ballistic.containers.system_container.h"
 #include "ballistic.entity.h"
-#include "ballistic.ifrontend.h"
 #include "ballistic.message_notifier.h"
 #include "ballistic.resource_container.h"
 #include "ballistic.system.h"
@@ -39,8 +38,6 @@ namespace ballistic {
 		property < uint32_t > 
 			* _m_update_frame_count;
 
-		ifrontend * _frontend;
-
 	public:
 
 		inline real game_time () const { return *_m_update_game_time; }
@@ -54,12 +51,9 @@ namespace ballistic {
 
 		resource_container resources;
 
-
 		virtual void initialize ();
 
 		virtual bool is_running ();
-
-		virtual void do_loop (function < void ( game * )> system_callback = nullptr);
 
 		virtual bool frame ();
 
@@ -67,10 +61,6 @@ namespace ballistic {
 
 		game ();
 		virtual ~game ();
-
-		// ---------------------
-		virtual ifrontend * frontend ();
-		virtual void frontend (ifrontend * frontend);
 
 	};
 

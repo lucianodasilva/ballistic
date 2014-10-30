@@ -23,13 +23,13 @@ namespace ballistic {
 			info.properties.require < id_t > (id::storyboard_id, id::null);
 		}
 
-		void component::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-			ballistic::component::setup (parent, parameters);
+		void component::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+			ballistic::component::setup (parent, parameters, game_inst);
 			
 			id_t storyboard_id = parameters [id::storyboard_id];
 
 			if (storyboard_id != id::null) {
-				_storyboard = parent->game ().resources [storyboard_id];
+				_storyboard = game_inst.resources [storyboard_id];
 				
 				if (!_storyboard) {
 					debug_print ("storyboard id \"" << storyboard_id << "\" does not evaluate to a loaded storyboard");
@@ -39,7 +39,7 @@ namespace ballistic {
 
 			// attach animation drivers
 			_storyboard->create_drivers (this);
-			parent->game ().global_notifier.attach (id::message::update, this);
+			game_inst.global_notifier.attach (id::message::update, this);
 		}
 
 		void component::terminate () {

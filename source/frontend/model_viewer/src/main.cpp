@@ -13,7 +13,7 @@ using namespace ballistic;
 
 #ifdef BALLISTIC_OS_WINDOWS
 ballistic::ifrontend * create_frontend (game & game_ref, const point & size ) {
-	return new ballistic::win_desktop::frontend (game_ref, size);
+	return new ballistic::desktop::frontend (game_ref, size);
 }
 #elif defined (BALLISTIC_OS_DARWIN)
 #	include <GLUT/GLUT.h>
@@ -134,7 +134,7 @@ int main ( int argc, char ** argv) {
 		return -1;
 
 	g.initialize ();
-	_frontend->do_event_loop ();
+	_frontend->run ();
 
 	return 0;
 }

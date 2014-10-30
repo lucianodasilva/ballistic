@@ -95,10 +95,12 @@ namespace ballistic {
 
 		void overlay_text::require_properties (entity_type * new_type, component_info & info) {
 			new_type->properties
-				.require < id_t >(id::graphics::text::font_id, id::null)
-				.require < font * >(id::graphics::text::font, nullptr)
-				.require < uint8_t >(id::graphics::layer, 0)
-				.require < mat4 >(id::transform, mat4())
+				.require < id_t > (id::graphics::text::font_id, id::null)
+				.require < font * > (id::graphics::text::font, nullptr)
+				.require < uint8_t > (id::graphics::layer, 0)
+				.require < mat4 > (id::transform, mat4 ());
+
+			new_type->properties
 				.require_notify < std::string > (id::graphics::text::text, "");
 		}
 
@@ -110,8 +112,8 @@ namespace ballistic {
 			_overlay_text (nullptr)
 		{}
 
-		void overlay_text::setup (entity * parent, ballistic::containers::property_container & parameters) {
-			component::setup(parent, parameters);
+		void overlay_text::setup (entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+			component::setup(parent, parameters, game_inst);
 
 			parent->game ().global_notifier.attach(id::message::render, this);
 

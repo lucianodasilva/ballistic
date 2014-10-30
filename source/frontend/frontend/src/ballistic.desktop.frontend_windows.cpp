@@ -1,22 +1,24 @@
-#include "ballistic.win_frontend.h"
-#include "ballistic.frontend.defines.h"
+#include <ballistic.base.h>
 
 #ifdef BALLISTIC_OS_WINDOWS
+
+#include "ballistic.desktop.frontend_windows.h"
+#include "ballistic.ui.common.h"
 
 #include <GL/glew.h>
 
 namespace ballistic {
-	namespace win_desktop {
+	namespace desktop {
 
-		void frontend::send_mouse_message (mouse_event_type m_event, HWND hWnd, WPARAM wParam, LPARAM lParam) {
+		void frontend::send_mouse_message (ui::mouse_event_type m_event, HWND hWnd, WPARAM wParam, LPARAM lParam) {
 
 			point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
 
-			mouse_button buttons = mouse_button_none;
+			ui::mouse_button buttons = ui::mouse_button_none;
 
-			buttons = mouse_button (buttons | (wParam & MK_LBUTTON ? mouse_button_left : mouse_button_none));
-			buttons = mouse_button (buttons | (wParam & MK_RBUTTON ? mouse_button_right : mouse_button_none));
-			buttons = mouse_button (buttons | (wParam & MK_MBUTTON ? mouse_button_middle : mouse_button_none));
+			buttons = ui::mouse_button (buttons | (wParam & MK_LBUTTON ? ui::mouse_button_left : ui::mouse_button_none));
+			buttons = ui::mouse_button (buttons | (wParam & MK_RBUTTON ? ui::mouse_button_right : ui::mouse_button_none));
+			buttons = ui::mouse_button (buttons | (wParam & MK_MBUTTON ? ui::mouse_button_middle : ui::mouse_button_none));
 
 			int delta = GET_WHEEL_DELTA_WPARAM (wParam);
 
@@ -45,32 +47,32 @@ namespace ballistic {
 			}
 			case WM_MOUSEMOVE:
 			{
-				send_mouse_message (mouse_event_move, hWnd, wParam, lParam);
+				send_mouse_message (ui::mouse_event_move, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_LBUTTONDOWN:
 			{
-				send_mouse_message (mouse_event_down, hWnd, wParam, lParam);
+				send_mouse_message (ui::mouse_event_down, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_LBUTTONUP:
 			{
-				send_mouse_message (mouse_event_up, hWnd, wParam, lParam);
+				send_mouse_message (ui::mouse_event_up, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_RBUTTONDOWN:
 			{
-				send_mouse_message (mouse_event_down, hWnd, wParam, lParam);
+				send_mouse_message (ui::mouse_event_down, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_RBUTTONUP:
 			{
-				send_mouse_message (mouse_event_up, hWnd, wParam, lParam);
+				send_mouse_message (ui::mouse_event_up, hWnd, wParam, lParam);
 				return 0;
 			}
 			case WM_MOUSEWHEEL:
 			{
-				send_mouse_message (mouse_event_wheel, hWnd, wParam, lParam);
+				send_mouse_message (ui::mouse_event_wheel, hWnd, wParam, lParam);
 				return 0;
 			}
 			default:
@@ -91,33 +93,18 @@ namespace ballistic {
 		}
 
 		void frontend::on_mouse_event (
-			mouse_event_type m_event,
+			ui::mouse_event_type m_event,
 			const point & position,
-			mouse_button buttons,
+			ui::mouse_button buttons,
 			int wheel_delta
 		) {
-			_on_mouse_message [id::frontend::mouse_event_type] = (uint32_t)m_event;
-			_on_mouse_message [id::frontend::mouse_position] = position;
-			_on_mouse_message [id::frontend::mouse_buttons] = (uint32_t)buttons;
-			_on_mouse_message [id::frontend::mouse_wheel_delta] = wheel_delta;
+			_on_mouse_message [id::ui::mouse_event_type] = m_event;
+			_on_mouse_message [id::ui::mouse_position] = position;
+			_on_mouse_message [id::ui::mouse_buttons] = buttons;
+			_on_mouse_message [id::ui::mouse_wheel_delta] = wheel_delta;
 
 			_game.global_notifier.notify (_on_mouse_message);
 		}
-
-		point frontend::get_client_size () { return _window_client_size; }
-
-		frontend::frontend (game & game_ref, const point & client_size) :
-			_game (game_ref),
-			_window_client_size (client_size),
-			_on_mouse_message (id::frontend::on_mouse_event)
-		{
-			_on_mouse_message.require < point > (id::frontend::mouse_position);
-			_on_mouse_message.require < uint32_t > (id::frontend::mouse_buttons);
-			_on_mouse_message.require < int > (id::frontend::mouse_wheel_delta);
-			_on_mouse_message.require < uint32_t > (id::frontend::mouse_event_type);
-		}
-
-		frontend::~frontend () {}
 
 		bool frontend::create () {
 
@@ -203,21 +190,34 @@ namespace ballistic {
 				return false;
 			}
 
-			//glViewport (0, 0, 
-			//			_window_client_size.x,
-			//			_window_client_size.y);
-
 #			endif // --------------------------------------------------------------
 
 			return true;
 		}
 
-		void frontend::show () {
-			ShowWindow (_window_handle, SW_SHOW);
-		}
-
 		void frontend::destroy () {
 			DestroyWindow (_window_handle);
+		}
+
+		frontend::frontend (game & game_ref, const point & client_size) :
+			_game (game_ref),
+			_window_client_size (client_size),
+			_on_mouse_message (id::ui::on_mouse_event)
+		{
+			_on_mouse_message.require < point > (id::ui::mouse_position);
+			_on_mouse_message.require < ballistic::ui::mouse_button > (id::ui::mouse_buttons);
+			_on_mouse_message.require < int > (id::ui::mouse_wheel_delta);
+			_on_mouse_message.require < ballistic::ui::mouse_event_type > (id::ui::mouse_event_type);
+
+			create ();
+		}
+
+		frontend::~frontend () {
+			destroy ();
+		}
+
+		void frontend::show () {
+			ShowWindow (_window_handle, SW_SHOW);
 		}
 
 		void frontend::update () {
@@ -235,13 +235,14 @@ namespace ballistic {
 #			endif
 		}
 
-		void frontend::do_event_loop () {
+		void frontend::run () {
 			while (_game.frame ()) {
 				update ();
 			}
 		}
 
-		HWND frontend::get_window_handle () { return _window_handle; }
+		HWND frontend::get_handle () { return _window_handle; }
 	}
 }
+
 #endif

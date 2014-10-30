@@ -1,5 +1,5 @@
 #include "ballistic.ui.component.h"
-#include "ballistic.frontend.defines.h"
+#include "ballistic.ui.common.h"
 
 namespace ballistic {
 	namespace ui {
@@ -31,12 +31,12 @@ namespace ballistic {
 				.require < uint8_t > (id::graphics::layer, 0);
 		}
 
-		void component::setup (entity * parent, ballistic::containers::property_container & parameters) {
-			ballistic::component::setup (parent, parameters);
+		void component::setup (entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+			ballistic::component::setup (parent, parameters, game_inst);
 
 			parent->game ().global_notifier.attach (
 				{
-					id::frontend::on_mouse_event,
+					id::ui::on_mouse_event,
 					id::message::render_overlay
 				},
 				this
@@ -50,7 +50,7 @@ namespace ballistic {
 			ballistic::component::terminate ();
 			ballistic::component::parent ()->game ().global_notifier.detach (
 				{
-					id::frontend::on_mouse_event,
+					id::ui::on_mouse_event,
 					id::message::render_overlay
 				},
 				this
@@ -66,23 +66,23 @@ namespace ballistic {
 				if (_system)
 					_system->push_overlay_item (nullptr, nullptr, *_layer, mat4 ());
 			} else 
-			if (message_id == id::frontend::on_mouse_event) {
-				auto event_type = (mouse_event_type)message [id::frontend::mouse_event_type].as < uint32_t > ();
+			if (message_id == id::ui::on_mouse_event) {
+				auto event_type = (mouse_event_type)message [id::ui::mouse_event_type].as < uint32_t > ();
 
 				switch (event_type) {
 				case (mouse_event_move) :
-					on_mouse_move (message [id::frontend::mouse_position]);
+					on_mouse_move (message [id::ui::mouse_position]);
 					break;
 				case (mouse_event_down) :
 					on_mouse_down ({
-						message [id::frontend::mouse_position],
-						(mouse_button)message [id::frontend::mouse_buttons].as < uint32_t > ()
+						message [id::ui::mouse_position],
+						(mouse_button)message [id::ui::mouse_buttons].as < uint32_t > ()
 					});
 					break;
 				case (mouse_event_up) :
 					on_mouse_up ({
-						message [id::frontend::mouse_position],
-						(mouse_button)message [id::frontend::mouse_buttons].as < uint32_t > ()
+						message [id::ui::mouse_position],
+						(mouse_button)message [id::ui::mouse_buttons].as < uint32_t > ()
 					});
 					break;
 				}

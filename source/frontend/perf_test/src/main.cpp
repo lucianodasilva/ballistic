@@ -2,6 +2,7 @@
 #include <ballistic.base.h>
 #include <ballistic.graphics.h>
 #include <ballistic.graphics.render_list.h>
+#include <ballistic.frontend.h>
 
 #include <map>
 #include <chrono>
@@ -15,17 +16,15 @@ ballistic::graphics::idevice *	_device;
 ballistic::graphics::imesh *	_mesh;
 
 #ifdef BALLISTIC_OS_WINDOWS
-#	include "ballistic.win_frontend.h"
 
 ballistic::ifrontend * create_frontend (game & game_ref, const point & size ) {
-	return new ballistic::win_desktop::frontend (game_ref, size);
+	return new ballistic::desktop::frontend (game_ref, size);
 }
 
 #elif defined (BALLISTIC_OS_DARWIN)
-#	include "ballistic.mac_frontend.h"
 #	include <GLUT/GLUT.h>
 ballistic::ifrontend * create_frontend (game & game_ref, const point & size) {
-	return new ballistic::mac_desktop::frontend (game_ref, size);
+	return new ballistic::desktop::frontend (game_ref, size);
 }
 #endif
 
@@ -67,8 +66,8 @@ public:
 			.require < vec3 > (text_to_id ("start_pos"), vec3 ());
 	}
 
-	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-		component::setup (parent, parameters);
+	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+		component::setup (parent, parameters, game_inst);
 
 		_bounce = parent->properties.aquire < vec3 > (text_to_id ("bounce"));
 		_start_pos = parent->properties.aquire < vec3 > (text_to_id ("start_pos"));
@@ -122,8 +121,8 @@ public:
 		_random_numbers.reserve (200000);
 	}
 
-	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-		component::setup (parent, parameters);
+	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+		component::setup (parent, parameters, game_inst);
 		parent->game ().global_notifier.attach (id::message::update, this);
 	}
 
@@ -174,15 +173,12 @@ int main ( int argc, char ** argv) {
 	game g;
 
 	_frontend = create_frontend (g, point{600, 600});
-	_frontend->create ();
 	_frontend->show ();
 
 	_device = create_device ();
 	_device->clear_color (color{.0F, .6F, 1.F, 1.F});
 
 	g.initialize ();
-
-	g.frontend (_frontend);
 
 	// setup game stuffs
 	ballistic::graphics::define_resources (g, _device);
@@ -205,7 +201,7 @@ int main ( int argc, char ** argv) {
 	// initialize
 	g.initialize ();
 
-	_frontend->do_event_loop ();
+	_frontend->run ();
 
 	return 0;
 }

@@ -24,9 +24,9 @@ namespace ballistic {
 				.require < mat4 > (id::transform, mat4 ());
 		}
 
-		void visual::setup (entity * parent, ballistic::containers::property_container & parameters)
+		void visual::setup (entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst)
 		{
-			component::setup (parent, parameters);
+			component::setup (parent, parameters, game_inst);
 
 			parent->game ().global_notifier.attach (id::message::render, this);
 

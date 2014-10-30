@@ -21,8 +21,8 @@ namespace ballistic {
 			new_type->properties.require < real > (id::graphics::light_fallout);
 		}
 
-		void light::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-			component::setup (parent, parameters);
+		void light::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+			component::setup (parent, parameters, game_inst);
 
 			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
 

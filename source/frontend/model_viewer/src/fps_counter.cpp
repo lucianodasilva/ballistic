@@ -9,8 +9,8 @@ void fps_counter::require_properties (entity_type * new_type, component_info & i
 	new_type->properties.require_notify < string > (id::graphics::text::text, "");
 }
 
-void fps_counter::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters) {
-	component::setup (parent, parameters);
+void fps_counter::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
+	component::setup (parent, parameters, game_inst);
 
 	_last_frame = 0;
 	_last_time = 0;
