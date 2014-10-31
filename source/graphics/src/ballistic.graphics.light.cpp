@@ -21,20 +21,20 @@ namespace ballistic {
 			new_type->properties.require < real > (id::graphics::light_fallout);
 		}
 
-		void light::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-			component::setup (parent, parameters, game_inst);
+		void light::setup (ballistic::containers::property_container & parameters) {
+			component::setup (parameters);
 
-			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
+			_system = dynamic_cast <graphics_system *> (game ().systems [ballistic::id::graphics::system]);
 
-			_p_position = parent->properties.aquire < vec3 > (id::position);
-			_p_color = parent->properties.aquire < color > (id::graphics::light_color);
-			_p_fallout = parent->properties.aquire < real > (id::graphics::light_fallout);
+			_p_position = parent().properties.aquire < vec3 > (id::position);
+			_p_color = parent().properties.aquire < color > (id::graphics::light_color);
+			_p_fallout = parent().properties.aquire < real > (id::graphics::light_fallout);
 
-			parent->game ().global_notifier.attach (id::message::render, this);
+			game ().global_notifier.attach (id::message::render, this);
 		}
 
 		void light::terminate () {
-			parent ()->game ().global_notifier.detach (id::message::render, this);
+			game ().global_notifier.detach (id::message::render, this);
 		}
 
 		void light::notify (ballistic::entity * sender, ballistic::message & message) {
@@ -47,7 +47,7 @@ namespace ballistic {
 			if (_system)
 				_system->push_light (info);
 			else
-				_system = dynamic_cast <graphics_system *> (parent ()->game ().systems [ballistic::id::graphics::system]);
+				_system = dynamic_cast <graphics_system *> (game ().systems [ballistic::id::graphics::system]);
 		}
 
 	}

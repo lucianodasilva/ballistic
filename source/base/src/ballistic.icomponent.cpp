@@ -1,5 +1,6 @@
 #include "ballistic.icomponent.h"
 #include "ballistic.component.h"
+#include "ballistic.game.h"
 
 #include "ballistic.debug.h"
 
@@ -9,17 +10,20 @@ using namespace std;
 
 namespace ballistic {
 
+	icomponent::icomponent () : _parent (nullptr) {}
 	icomponent::~icomponent () {}
 
-	entity * component::parent () const {
-		return _parent;
+	entity & icomponent::parent () const {
+		return *_parent;
 	}
 
-	component::component () : _parent (nullptr) {}
-
-	void component::setup (entity * parent_v, containers::property_container & parameters, ballistic::game & game_inst) {
-		_parent = parent_v;
+	game & icomponent::game () const {
+		return *_game;
 	}
+
+	component::component () : icomponent () {}
+
+	void component::setup (containers::property_container & parameters) {}
 	
 	void component::terminate () {}
 

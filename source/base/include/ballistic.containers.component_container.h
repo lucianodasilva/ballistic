@@ -21,7 +21,7 @@ namespace ballistic {
 			entity *				_container;
 		public:
 
-			component_container (entity * container);
+			component_container (entity & container);
 			virtual ~component_container ();
 
 			virtual icomponent * create (component_info & info);

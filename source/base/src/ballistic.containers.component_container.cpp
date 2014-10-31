@@ -6,7 +6,7 @@
 namespace ballistic {
 	namespace containers {
 
-		component_container::component_container (entity * cont) : _container (cont) {}
+		component_container::component_container (entity & cont) : _container (&cont) {}
 
 		component_container::~component_container () {
 			for (icomponent * c : data) {
@@ -16,7 +16,7 @@ namespace ballistic {
 		}
 
 		icomponent * component_container::create (component_info & info) {
-			icomponent * new_comp = info.create (_container, _container->game ());
+			icomponent * new_comp = info.create (*_container);
 
 			if (new_comp)
 				data.push_back (new_comp);

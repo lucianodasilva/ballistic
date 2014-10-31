@@ -149,20 +149,20 @@ public:
 		new_type->properties.require < graphics::material * > (id::graphics::material);
 	}
 
-	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-		component::setup (parent, parameters, game_inst);
+	virtual void setup (ballistic::containers::property_container & parameters) {
+		component::setup (parameters);
 
-		_material = parent->properties.aquire < graphics::material * > (id::graphics::material);
+		_material = parent ().properties.aquire < graphics::material * > (id::graphics::material);
 
-		_camera = parent->game ().entities [text_to_id ("mah_camerah")];
+		_camera = game ().entities [text_to_id ("mah_camerah")];
 		
-		parent->game ().global_notifier.attach (id::message::render, this);
-		parent->game ().global_notifier.attach (id::message::update, this);
+		game ().global_notifier.attach (id::message::render, this);
+		game ().global_notifier.attach (id::message::update, this);
 	}
 
 	virtual void terminate () {
-		parent ()->game ().global_notifier.detach (id::message::render, this);
-		parent ()->game ().global_notifier.detach (id::message::update, this);
+		game ().global_notifier.detach (id::message::render, this);
+		game ().global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {

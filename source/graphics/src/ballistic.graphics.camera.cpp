@@ -143,14 +143,14 @@ namespace ballistic {
 
 		}
 
-		void camera::setup (entity * parent, containers::property_container & parameters, ballistic::game & game_inst) {
-			component::setup (parent, parameters, game_inst);
+		void camera::setup (containers::property_container & parameters) {
+			component::setup (parameters);
 
 			// bind to global message notifier
-			parent->game ().global_notifier.attach (id::message::update, this);
+			game ().global_notifier.attach (id::message::update, this);
 
 			// get graphics system in use
-			_system = dynamic_cast <graphics_system *> (parent->game ().systems [id::graphics::system]);
+			_system = dynamic_cast <graphics_system *> (game ().systems [id::graphics::system]);
 			
 			real
 				left = 0,
@@ -193,18 +193,20 @@ namespace ballistic {
 				//make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
 
-			_p_position = parent->properties.aquire < vec3 > (id::position);
-			_p_target = parent->properties.aquire < vec3 > (id::target);
-			_p_up = parent->properties.aquire < vec3 > (id::up);
+			auto & properties = parent ().properties;
 
-			_p_view = parent->properties.aquire < mat4 > (id::graphics::camera_view);
-			_p_proj = parent->properties.aquire < mat4 > (id::graphics::camera_proj);
+			_p_position = properties.aquire < vec3 > (id::position);
+			_p_target = properties.aquire < vec3 > (id::target);
+			_p_up = properties.aquire < vec3 > (id::up);
+
+			_p_view = properties.aquire < mat4 > (id::graphics::camera_view);
+			_p_proj = properties.aquire < mat4 > (id::graphics::camera_proj);
 			*_p_proj = _proj;
 		}
 
 		void camera::terminate () {
 			// unbind to global message notifier
-			parent ()->game ().global_notifier.detach (id::message::update, this);
+			game ().global_notifier.detach (id::message::update, this);
 		}
 
 	}

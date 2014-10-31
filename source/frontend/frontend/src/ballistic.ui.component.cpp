@@ -31,10 +31,13 @@ namespace ballistic {
 				.require < uint8_t > (id::graphics::layer, 0);
 		}
 
-		void component::setup (entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-			ballistic::component::setup (parent, parameters, game_inst);
+		void component::setup (ballistic::containers::property_container & parameters) {
+			ballistic::component::setup (parameters);
 
-			parent->game ().global_notifier.attach (
+			ballistic::game & g = game ();
+			ballistic::entity & p = ballistic::component::parent ();
+
+			g.global_notifier.attach (
 				{
 					id::ui::on_mouse_event,
 					id::message::render_overlay
@@ -42,13 +45,13 @@ namespace ballistic {
 				this
 			);
 
-			_system = dynamic_cast <graphics::graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
-			_layer = parent->properties.aquire < uint8_t > (id::graphics::layer);
+			_system = dynamic_cast <graphics::graphics_system *> (g.systems [ballistic::id::graphics::system]);
+			_layer = p.properties.aquire < uint8_t > (id::graphics::layer);
 		}
 
 		void component::terminate () {
 			ballistic::component::terminate ();
-			ballistic::component::parent ()->game ().global_notifier.detach (
+			game ().global_notifier.detach (
 				{
 					id::ui::on_mouse_event,
 					id::message::render_overlay

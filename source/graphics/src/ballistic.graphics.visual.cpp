@@ -24,41 +24,44 @@ namespace ballistic {
 				.require < mat4 > (id::transform, mat4 ());
 		}
 
-		void visual::setup (entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst)
+		void visual::setup (ballistic::containers::property_container & parameters)
 		{
-			component::setup (parent, parameters, game_inst);
+			component::setup (parameters);
 
-			parent->game ().global_notifier.attach (id::message::render, this);
+			ballistic::game & g = game ();
+			ballistic::entity & p = parent ();
 
-			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
+			g.global_notifier.attach (id::message::render, this);
 
-			_material = parent->properties.aquire < material * > (
+			_system = dynamic_cast <graphics_system *> (g.systems [ballistic::id::graphics::system]);
+
+			_material = p.properties.aquire < material * > (
 				id::graphics::material
 			);
 
-			_mesh = parent->properties.aquire < imesh * > (
+			_mesh = p.properties.aquire < imesh * > (
 				id::graphics::mesh
 			);
 
-			_transform = parent->properties.aquire < mat4 > (id::transform);
+			_transform = p.properties.aquire < mat4 > (id::transform);
 
 			if (!*_material)
-				*_material = parent->game ().resources [
-					parent->properties [id::graphics::material_id].as < id_t >()
+				*_material = g.resources [
+					p.properties [id::graphics::material_id].as < id_t >()
 				].as < material > () ;
 
 			if (!*_mesh)
-				*_mesh = parent->game ().resources [
-					parent->properties [id::graphics::mesh_id].as < id_t > ()
+				*_mesh = g.resources [
+					p.properties [id::graphics::mesh_id].as < id_t > ()
 				].as < imesh > ();
 
-			_rig_tween = parent->properties.aquire < rig_frame_tween * > (id::graphics::rig_tween);
+			_rig_tween = p.properties.aquire < rig_frame_tween * > (id::graphics::rig_tween);
 
-			_layer = parent->properties.aquire < uint8_t > (id::graphics::layer);
+			_layer = p.properties.aquire < uint8_t > (id::graphics::layer);
 		}
 
 		void visual::terminate () {
-			parent ()->game ().global_notifier.detach (id::message::render, this);
+			game ().global_notifier.detach (id::message::render, this);
 		}
 
 		visual::visual ()

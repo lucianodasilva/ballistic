@@ -66,22 +66,22 @@ public:
 			.require < vec3 > (text_to_id ("start_pos"), vec3 ());
 	}
 
-	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-		component::setup (parent, parameters, game_inst);
+	virtual void setup (ballistic::containers::property_container & parameters) {
+		component::setup (parameters);
 
-		_bounce = parent->properties.aquire < vec3 > (text_to_id ("bounce"));
-		_start_pos = parent->properties.aquire < vec3 > (text_to_id ("start_pos"));
+		_bounce = parent ().properties.aquire < vec3 > (text_to_id ("bounce"));
+		_start_pos = parent().properties.aquire < vec3 > (text_to_id ("start_pos"));
 
-		parent->game ().global_notifier.attach (id::message::update, this);
+		game ().global_notifier.attach (id::message::update, this);
 	}
 
 	virtual void terminate () {
-		parent ()->game ().global_notifier.detach (id::message::update, this);
+		game ().global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
 		// update position with animation
-		parent ()->properties [id::transform_position] = vec3(*_start_pos) + vec3(*_bounce);															 
+		parent ().properties [id::transform_position] = vec3(*_start_pos) + vec3(*_bounce);															 
 	}
 
 };
@@ -121,26 +121,26 @@ public:
 		_random_numbers.reserve (200000);
 	}
 
-	virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-		component::setup (parent, parameters, game_inst);
-		parent->game ().global_notifier.attach (id::message::update, this);
+	virtual void setup (ballistic::containers::property_container & parameters) {
+		component::setup (parameters);
+		game ().global_notifier.attach (id::message::update, this);
 	}
 
 	virtual void terminate () {
-		parent ()->game ().global_notifier.detach (id::message::update, this);
+		game ().global_notifier.detach (id::message::update, this);
 	}
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
 
 		if (!_cube_count)
-			_cube_count = parent ()->game ().entities [text_to_id ("cube_count")];
+			_cube_count = game ().entities [text_to_id ("cube_count")];
 
 		real frame_time = message [id::frame_time];
 
 		if (frame_time < 0.017) {
 
 			for (int i = 0; i < 10; ++i) {
-				entity * new_entity = parent ()->game ().entities.create (res_cube);
+				entity * new_entity = game ().entities.create (res_cube);
 				new_entity->properties [text_to_id ("start_pos")] = vec3 ({
 					real ((pop_rand () % 100) - 50),
 					real (0),

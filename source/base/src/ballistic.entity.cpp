@@ -14,7 +14,7 @@ namespace ballistic {
 		_game (game_ref),
 		local_notifier (this),
 		properties (this),
-		components (this)
+		components (*this)
 	{}
 
 	void entity::kill () {

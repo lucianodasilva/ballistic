@@ -30,7 +30,7 @@ namespace ballistic {
 
 			static void require_properties (entity_type * new_type, component_info & info);
 
-			virtual void setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst);
+			virtual void setup (ballistic::containers::property_container & parameters);
 
 			virtual void terminate ();
 

@@ -1,35 +1,37 @@
 #include "ballistic.transform.h"
+#include "ballistic.game.h"
+#include "ballistic.entity.h"
+#include "ballistic.entity_type.h"
 
 namespace ballistic {
 
 	const id_t transform::component_id = id::transform;
 
-	transform::transform () {}
-
-
 	void transform::require_properties (entity_type * new_type, component_info & info) {																	   
 		new_type->properties
-			.require_notify < vec3 > (id::transform_position)
-			.require_notify (id::transform_scale, vec3 {real (1), real (1), real (1)})
-			.require_notify < vec3 > (id::transform_rotation)
+			.require < vec3 > (id::transform_position)
+			.require (id::transform_scale, vec3 {real (1), real (1), real (1)})
+			.require < vec3 > (id::transform_rotation)
 			.require < mat4 > (id::transform);
 	}
 
-	void transform::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-		ballistic::component::setup (parent, parameters, game_inst);
+	void transform::setup (ballistic::containers::property_container & parameters) {
+		ballistic::component::setup (parameters);
 			
-		parent->game ().global_notifier.attach (id::message::update, this);
+		game ().global_notifier.attach (id::message::update, this);
 
-		_position = parent->properties.aquire < vec3 > (id::transform_position);
-		_rotation = parent->properties.aquire < quat > (id::transform_rotation);
-		_scale = parent->properties.aquire < vec3 > (id::transform_scale);
+		auto & properties = parent ().properties;
 
-		_transform = parent->properties.aquire < mat4 > (id::transform);
+		_position = properties.aquire < vec3 > (id::transform_position);
+		_rotation = properties.aquire < quat > (id::transform_rotation);
+		_scale = properties.aquire < vec3 > (id::transform_scale);
+
+		_transform = properties.aquire < mat4 > (id::transform);
 		update_transform();
 	}
 
 	void transform::terminate () {
-		this->parent()->game ().global_notifier.detach (id::message::update, this);
+		game ().global_notifier.detach (id::message::update, this);
 	}
 
 	void transform::notify (ballistic::entity * sender, ballistic::message & message) {

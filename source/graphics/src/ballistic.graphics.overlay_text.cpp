@@ -112,26 +112,28 @@ namespace ballistic {
 			_overlay_text (nullptr)
 		{}
 
-		void overlay_text::setup (entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-			component::setup(parent, parameters, game_inst);
+		void overlay_text::setup (ballistic::containers::property_container & parameters) {
+			component::setup(parameters);
 
-			parent->game ().global_notifier.attach(id::message::render, this);
+			entity & p = parent ();
 
-			_system = dynamic_cast <graphics_system *> (parent->game ().systems [ballistic::id::graphics::system]);
+			game ().global_notifier.attach(id::message::render, this);
 
-			_overlay_font = parent->properties.aquire < font * >(id::graphics::text::font);
-			_transform = parent->properties.aquire < mat4 >(id::transform);
+			_system = dynamic_cast <graphics_system *> (game ().systems [ballistic::id::graphics::system]);
+
+			_overlay_font = p.properties.aquire < font * >(id::graphics::text::font);
+			_transform = p.properties.aquire < mat4 >(id::transform);
 
 			if (!*_overlay_font)
-				*_overlay_font = parent->game ().resources [
-					parent->properties[id::graphics::text::font_id].as < id_t >()
+				*_overlay_font = game ().resources [
+					p.properties[id::graphics::text::font_id].as < id_t >()
 				].as < font >();
 
-			_layer = parent->properties.aquire < uint8_t >(id::graphics::layer);
+			_layer = p.properties.aquire < uint8_t >(id::graphics::layer);
 
-			_overlay_text = parent->properties.aquire < std::string > (id::graphics::text::text);
+			_overlay_text = p.properties.aquire < std::string > (id::graphics::text::text);
 
-			parent->local_notifier.attach (id::message::property_changed, this);
+			p.local_notifier.attach (id::message::property_changed, this);
 
 			_mesh = _system->device()->create_mesh(id::null);
 
@@ -146,8 +148,8 @@ namespace ballistic {
 
 		void overlay_text::terminate () {
 			overlay::terminate ();
-			parent ()->game ().global_notifier.detach (id::message::render, this);
-			this->parent ()->local_notifier.detach (id::message::render, this);
+			game ().global_notifier.detach (id::message::render, this);
+			parent ().local_notifier.detach (id::message::render, this);
 		}
 
 		void overlay_text::notify (entity * sender, ballistic::message & message) {

@@ -12,18 +12,18 @@ void camera_controller::require_properties (entity_type * new_type, component_in
 		.require < real > (starting_radius, .0);
 }
 
-void camera_controller::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-	component::setup (parent, parameters, game_inst);
+void camera_controller::setup (ballistic::containers::property_container & parameters) {
+	component::setup (parameters);
 
 	_mouse_is_down = false;
 
-	_cam_position = parent->properties.aquire < vec3 > (id::position);
+	_cam_position = parent ().properties.aquire < vec3 > (id::position);
 
 	_yaw = real (.0);
 	_pitch = real (.0);
-	_radius = parent->properties [starting_radius];
+	_radius = parent ().properties [starting_radius];
 
-		parent ->game ().global_notifier.attach (
+		game ().global_notifier.attach (
 		{
 			id::message::update,
 			id::ui::on_mouse_event
@@ -33,7 +33,7 @@ void camera_controller::setup (ballistic::entity * parent, ballistic::containers
 }
 
 void camera_controller::terminate () {
-	parent ()->game ().global_notifier.detach (
+	game ().global_notifier.detach (
 		{
 			id::message::update,
 			id::ui::on_mouse_event

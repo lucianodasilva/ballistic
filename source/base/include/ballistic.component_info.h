@@ -13,7 +13,6 @@ namespace ballistic {
 	class entity;
 	class icomponent;
 	class icomponent_constructor;
-	class game;
 
 	class component_info {
 	private:
@@ -28,7 +27,7 @@ namespace ballistic {
 
 		containers::property_container properties;
 
-		icomponent * create (entity * parent, ballistic::game & game_inst);
+		icomponent * create (entity & parent);
 	};
 
 }

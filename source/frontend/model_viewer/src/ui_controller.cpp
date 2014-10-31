@@ -12,8 +12,8 @@ const ballistic::id_t ui_controller::component_id = text_to_id ("ui_controller")
 //}
 //
 
-void ui_controller::setup (ballistic::entity * parent, ballistic::containers::property_container & parameters, ballistic::game & game_inst) {
-	component::setup (parent, parameters, game_inst);
+void ui_controller::setup (ballistic::containers::property_container & parameters) {
+	component::setup (parameters);
 
 	// create ui controls and other stuffs
 }
