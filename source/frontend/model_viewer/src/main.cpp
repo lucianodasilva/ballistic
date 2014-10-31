@@ -37,15 +37,11 @@ void initialize_defaults (game & g) {
 	g.initialize ();
 
 	_frontend = create_frontend (g, {300, 300});
-	_frontend->create ();
 	_frontend->show ();
 
 	// setup graphics stuffs
 	_device = create_device ();
 	_device->clear_color ({.0F, .6F, 1.F, 1.F});
-
-	g.frontend (_frontend);
-
 
 	ballistic::graphics::define_resources (g, _device);
 

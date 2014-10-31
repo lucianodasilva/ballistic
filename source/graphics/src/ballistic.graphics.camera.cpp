@@ -189,8 +189,8 @@ namespace ballistic {
 			if (type == proj_type_ortho)
 				make_ortho_projection (left, right, bottom, top, near, far);
 			else if (type == proj_type_persp) {
-				point size = parent->game ().frontend ()->get_client_size ();
-				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
+				//point size = parent->game ().frontend ()->get_client_size ();
+				//make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
 
 			_p_position = parent->properties.aquire < vec3 > (id::position);

@@ -220,6 +220,10 @@ namespace ballistic {
 			ShowWindow (_window_handle, SW_SHOW);
 		}
 
+		void frontend::close () {
+			CloseWindow (_window_handle);
+		}
+
 		void frontend::update () {
 			// Process windows events ------------------------------------
 			MSG msg = {};
