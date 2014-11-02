@@ -1,5 +1,5 @@
-#ifndef _ballistic_transform_h_
-#define _ballistic_transform_h_
+#ifndef _ballistic_transformed_h_
+#define _ballistic_transformed_h_
 
 #include "ballistic.component.h"
 #include "ballistic.math.h"
@@ -8,7 +8,7 @@
 
 namespace ballistic {
 
-	class transform : public ballistic::component {
+	class transformed : public ballistic::component {
 	private:
 
 		property < vec3 > * _position;

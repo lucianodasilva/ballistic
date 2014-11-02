@@ -93,7 +93,7 @@ namespace ballistic {
 
 				if (!fp) {
 					p = new default_property_t < value_t > (id, default_value );
-					this->insert (fp);
+					this->insert (p);
 				} else {
 					p = dynamic_cast <default_property_t < value_t > *> (fp);
 

@@ -92,18 +92,18 @@ namespace ballistic {
 			if (!_material_effect)
 				return;
 
-			_c_effect_diffuse = _material_effect->constant (id::graphics::effect::diffuse);
-			_c_effect_texture = _material_effect->constant (id::graphics::effect::texture);
-			_c_effect_t_eye = _material_effect->constant (id::graphics::effect::t_eye);
-			_c_effect_t_model = _material_effect->constant (id::graphics::effect::t_model);
-			_c_effect_t_view = _material_effect->constant (id::graphics::effect::t_view);
-			_c_effect_t_proj = _material_effect->constant (id::graphics::effect::t_proj);
-			_c_effect_t_normal = _material_effect->constant (id::graphics::effect::t_normal);
-			_c_effect_t_mvp = _material_effect->constant (id::graphics::effect::t_mvp);
-			_c_effect_bone_count = _material_effect->constant (id::graphics::effect::bone_count);
-			_c_effect_t_bones = _material_effect->constant (id::graphics::effect::t_bones);
-			_c_effect_light_count = _material_effect->constant (id::graphics::effect::light_count);
-			_c_effect_lights = _material_effect->constant (id::graphics::effect::lights);
+			_c_effect_diffuse = _material_effect->constant (id::effect::diffuse);
+			_c_effect_texture = _material_effect->constant (id::effect::texture);
+			_c_effect_t_eye = _material_effect->constant (id::effect::t_eye);
+			_c_effect_t_model = _material_effect->constant (id::effect::t_model);
+			_c_effect_t_view = _material_effect->constant (id::effect::t_view);
+			_c_effect_t_proj = _material_effect->constant (id::effect::t_proj);
+			_c_effect_t_normal = _material_effect->constant (id::effect::t_normal);
+			_c_effect_t_mvp = _material_effect->constant (id::effect::t_mvp);
+			_c_effect_bone_count = _material_effect->constant (id::effect::bone_count);
+			_c_effect_t_bones = _material_effect->constant (id::effect::t_bones);
+			_c_effect_light_count = _material_effect->constant (id::effect::light_count);
+			_c_effect_lights = _material_effect->constant (id::effect::lights);
 
 			evaluate_render ();
 		}
@@ -118,9 +118,9 @@ namespace ballistic {
 			if (!_material_effect)
 				return;
 
-			_c_overlay_diffuse = _overlay_effect->constant (id::graphics::effect::diffuse);
-			_c_overlay_texture = _overlay_effect->constant (id::graphics::effect::texture);
-			_c_overlay_t_model = _overlay_effect->constant (id::graphics::effect::t_model);
+			_c_overlay_diffuse = _overlay_effect->constant (id::effect::diffuse);
+			_c_overlay_texture = _overlay_effect->constant (id::effect::texture);
+			_c_overlay_t_model = _overlay_effect->constant (id::effect::t_model);
 
 			evaluate_render ();
 		}

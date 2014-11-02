@@ -33,13 +33,13 @@ namespace ballistic {
 
 			inline static void require_parameters (containers::property_container & parameters) {
 				parameters
-					.require < target_value_t > (id::start)
-					.require < target_value_t > (id::end);
+					.require < target_value_t > (id::animation::start)
+					.require < target_value_t > (id::animation::end);
 			}
 
 			inline virtual void setup (containers::property_container & parameters) override {
-				_start = parameters[id::start];
-				_end = parameters [id::end];
+				_start = parameters[id::animation::start];
+				_end = parameters [id::animation::end];
 			}
 
 			template < class value_t >
@@ -83,17 +83,17 @@ namespace ballistic {
 
 			inline static void require_parameters (containers::property_container & parameters) {
 				parameters
-					.require < target_value_t > (id::start)
-					.require < target_value_t > (id::end)
-					.require < target_value_t > (id::control_1)
-					.require < target_value_t > (id::control_2);
+					.require < target_value_t > (id::animation::start)
+					.require < target_value_t > (id::animation::end)
+					.require < target_value_t > (id::animation::control_1)
+					.require < target_value_t > (id::animation::control_2);
 			}
 
 			inline virtual void setup (containers::property_container & parameters) override {
-				_start = parameters[id::start];
-				_end = parameters[id::end];
-				_cp1 = parameters[id::control_1];
-				_cp2 = parameters[id::control_2];
+				_start = parameters[id::animation::start];
+				_end = parameters[id::animation::end];
+				_cp1 = parameters[id::animation::control_1];
+				_cp2 = parameters[id::animation::control_2];
 			}
 
 			template < class value_t >

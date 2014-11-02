@@ -146,13 +146,13 @@ public:
 	}
 
 	static void require_properties (entity_type * new_type, component_info & info) {
-		new_type->properties.require < graphics::material * > (id::graphics::material);
+		new_type->properties.require < graphics::material * > (id::visual::material);
 	}
 
 	virtual void setup (ballistic::containers::property_container & parameters) {
 		component::setup (parameters);
 
-		_material = parent ().properties.aquire < graphics::material * > (id::graphics::material);
+		_material = parent ().properties.aquire < graphics::material * > (id::visual::material);
 
 		_camera = game ().entities [text_to_id ("mah_camerah")];
 		
@@ -170,7 +170,7 @@ public:
 
 		if (message.id () == id::message::update) {
 
-			real time = message [id::frame_time];
+			real time = message [id::game::frame_time];
 			angle += (0.5F * mult) * time;
 
 			if (angle > 1.5) {
@@ -189,8 +189,8 @@ public:
 			temp_bones [0] = tbone{bones [0].t, bones [0].r, {-1., .0, .0}, quat::from_axis ({.0, .0, 1.0}, angle)};
 			temp_bones [1] = tbone{bones [1].t, bones [1].r, {1, .0, .0}, quat::from_axis (math::normalize (vec3 {1.0, .0, 1.0}), angle)};
 
-			const mat4 & view = _camera->properties [id::graphics::camera_view];
-			const mat4 & proj = _camera->properties [id::graphics::camera_proj];
+			const mat4 & view = _camera->properties [id::camera::view];
+			const mat4 & proj = _camera->properties [id::camera::proj];
 
 			// project
 			mat4 m_vp = view * proj;

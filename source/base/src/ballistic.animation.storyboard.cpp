@@ -9,10 +9,10 @@ namespace ballistic {
 
 		void storyboard::action::require_parameters (containers::property_container & parameters) {
 			parameters
-				.require < real > (id::start_time, 0)
-				.require < real > (id::duration, 0)
-				.require < id_t > (id::target_id, id::null)
-				.require < id_t > (id::repeat, id::repeat_none);
+				.require < real > (id::animation::start_time, 0)
+				.require < real > (id::animation::duration, 0)
+				.require < id_t > (id::animation::target_id, id::null)
+				.require < id_t > (id::animation::repeat, id::animation::repeat_none);
 		}
 
 		storyboard::action::action (
@@ -38,13 +38,13 @@ namespace ballistic {
 			ifunction * func
 		){
 			repeat_mode mode;
-			id_t repeat_id = parameters [id::repeat];
+			id_t repeat_id = parameters [id::animation::repeat];
 
-			if (repeat_id == id::repeat_none)
+			if (repeat_id == id::animation::repeat_none)
 				mode = repeat_mode_none;
-			else if (repeat_id == id::repeat_loop)
+			else if (repeat_id == id::animation::repeat_loop)
 				mode = repeat_mode_loop;
-			else if (repeat_id == id::repeat_reverse)
+			else if (repeat_id == id::animation::repeat_reverse)
 				mode = repeat_mode_reverse;
 			else {
 				debug_print ("unknown animation repeat mode \"" << repeat_id << "\"");
@@ -53,10 +53,10 @@ namespace ballistic {
 
 			_animation_actions.push_back (
 				action (
-					parameters [id::start_time].as < real > (),
-					parameters [id::duration].as < real > (),
+				parameters [id::animation::start_time].as < real > (),
+				parameters [id::animation::duration].as < real > (),
 					mode,
-					parameters [id::target_id].as < id_t > (),
+					parameters [id::animation::target_id].as < id_t > (),
 					func
 				)
 			);

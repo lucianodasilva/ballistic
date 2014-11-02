@@ -74,17 +74,17 @@ namespace ballistic {
 				return;
 			}
 
-			_effect = reinterpret_cast <opengl_effect *> (effect);
+			_effect = static_cast <opengl_effect *> (effect);
 			_effect->apply (this);
 		}
 
 		void opengl_device::activate (imesh * mesh) {
-			_mesh = reinterpret_cast <opengl_mesh *>(mesh);
+			_mesh = static_cast <opengl_mesh *>(mesh);
 			_mesh->apply (this);
 		}
 
 		void opengl_device::activate (itexture * texture) {
-			_texture = reinterpret_cast <opengl_texture *> (texture);
+			_texture = static_cast <opengl_texture *> (texture);
 			_texture->apply (this);
 		}
 

@@ -8,7 +8,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		const id_t overlay::component_id = ballistic::id::graphics::overlay;
+		const id_t overlay::component_id = ballistic::id::overlay::id;
 
 		overlay::overlay ()
 			:

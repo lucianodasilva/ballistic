@@ -82,8 +82,8 @@ namespace ballistic {
 			}
 
 			_mesh->update_data (
-				reinterpret_cast < uint8_t * > (vertex_data),
-				20 * char_count * sizeof(real)
+				(uint8_t *)(vertex_data),
+				char_count * sizeof (real) * (5/*members*/ * 4/*vertices*/)
 			);
 
 			_mesh->update_index (index_data, 6 * char_count);
@@ -95,16 +95,16 @@ namespace ballistic {
 
 		void overlay_text::require_properties (entity_type * new_type, component_info & info) {
 			new_type->properties
-				.require < id_t > (id::graphics::text::font_id, id::null)
-				.require < font * > (id::graphics::text::font, nullptr)
-				.require < uint8_t > (id::graphics::layer, 0)
+				.require < id_t > (id::overlay_text::font_id, id::null)
+				.require < font * > (id::overlay_text::font, nullptr)
+				.require < uint8_t > (id::visual::layer, 0)
 				.require < mat4 > (id::transform, mat4 ());
 
 			new_type->properties
-				.require_notify < std::string > (id::graphics::text::text, "");
+				.require_notify < std::string > (id::overlay_text::text, "");
 		}
 
-		const id_t overlay_text::component_id = ballistic::id::graphics::overlay_text;
+		const id_t overlay_text::component_id = ballistic::id::overlay_text::id;
 
 		overlay_text::overlay_text ()
 			:
@@ -121,17 +121,17 @@ namespace ballistic {
 
 			_system = dynamic_cast <graphics_system *> (game ().systems [ballistic::id::graphics::system]);
 
-			_overlay_font = p.properties.aquire < font * >(id::graphics::text::font);
+			_overlay_font = p.properties.aquire < font * > (id::overlay_text::font);
 			_transform = p.properties.aquire < mat4 >(id::transform);
 
 			if (!*_overlay_font)
 				*_overlay_font = game ().resources [
-					p.properties[id::graphics::text::font_id].as < id_t >()
+					p.properties [id::overlay_text::font_id].as < id_t > ()
 				].as < font >();
 
-			_layer = p.properties.aquire < uint8_t >(id::graphics::layer);
+			_layer = p.properties.aquire < uint8_t >(id::visual::layer);
 
-			_overlay_text = p.properties.aquire < std::string > (id::graphics::text::text);
+			_overlay_text = p.properties.aquire < std::string > (id::overlay_text::text);
 
 			p.local_notifier.attach (id::message::property_changed, this);
 

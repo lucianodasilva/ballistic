@@ -28,7 +28,7 @@ namespace ballistic {
 
 		void component::require_properties (entity_type * new_type, component_info & info) {
 			new_type->properties
-				.require < uint8_t > (id::graphics::layer, 0);
+				.require < uint8_t > (id::visual::layer, 0);
 		}
 
 		void component::setup (ballistic::containers::property_container & parameters) {
@@ -46,7 +46,7 @@ namespace ballistic {
 			);
 
 			_system = dynamic_cast <graphics::graphics_system *> (g.systems [ballistic::id::graphics::system]);
-			_layer = p.properties.aquire < uint8_t > (id::graphics::layer);
+			_layer = p.properties.aquire < uint8_t > (id::visual::layer);
 		}
 
 		void component::terminate () {

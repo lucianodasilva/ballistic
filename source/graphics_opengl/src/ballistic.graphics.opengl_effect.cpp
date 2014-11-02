@@ -148,7 +148,7 @@ namespace ballistic {
 			glUseProgram (_shader_program_id);
 
 			// reset texture unit
-			auto texture_unit = _constants[id::graphics::effect::texture];
+			auto texture_unit = _constants[id::effect::texture];
 			if (texture_unit)
 				texture_unit->set_value (0);
 		}

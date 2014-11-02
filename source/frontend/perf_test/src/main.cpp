@@ -81,7 +81,7 @@ public:
 
 	virtual void notify (ballistic::entity * sender, ballistic::message & message) {
 		// update position with animation
-		parent ().properties [id::transform_position] = vec3(*_start_pos) + vec3(*_bounce);															 
+		parent ().properties [id::position] = vec3(*_start_pos) + vec3(*_bounce);															 
 	}
 
 };
@@ -135,7 +135,7 @@ public:
 		if (!_cube_count)
 			_cube_count = game ().entities [text_to_id ("cube_count")];
 
-		real frame_time = message [id::frame_time];
+		real frame_time = message [id::game::frame_time];
 
 		if (frame_time < 0.017) {
 
@@ -150,7 +150,7 @@ public:
 				_entity_list.push_back (new_entity);
 			}
 
-			_cube_count->properties [id::graphics::text::text] = convert_to < std::string > (_entity_list.size ());
+			_cube_count->properties [id::overlay_text::text] = convert_to < std::string > (_entity_list.size ());
 		} else if (frame_time > 0.020 ) {
 			auto entity_count = _entity_list.size ();
 
@@ -160,7 +160,7 @@ public:
 			_entity_list.back ()->kill ();
 			_entity_list.pop_back ();
 
-			_cube_count->properties [id::graphics::text::text] = convert_to < std::string > (entity_count - 1);
+			_cube_count->properties [id::overlay_text::text] = convert_to < std::string > (entity_count - 1);
 		}
 	}
 

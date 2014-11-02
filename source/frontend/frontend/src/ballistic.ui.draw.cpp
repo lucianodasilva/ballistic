@@ -54,7 +54,7 @@ namespace ballistic {
 			_overlay_effect = v;
 
 			if (v)
-				_effect_diffuse = v->constant (id::graphics::effect::diffuse);
+				_effect_diffuse = v->constant (id::effect::diffuse);
 			else
 				_effect_diffuse = &graphics::null_constant::instance;
 

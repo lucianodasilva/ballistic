@@ -5,7 +5,7 @@
 #include "ballistic.system.h"
 
 #include "ballistic.animation.h"
-#include "ballistic.transform.h"
+#include "ballistic.transformed.h"
 
 #include <functional>
 
@@ -17,15 +17,15 @@ namespace ballistic {
 		_running = true;
 
 		_m_update
-			.require < real > (id::game_time, .0, _m_update_game_time)
-			.require < real > (id::frame_time, .0, _m_update_frame_time)
-			.require < uint32_t > (id::frame_count, 0, _m_update_frame_count);
+			.require < real > (id::game::game_time, .0, _m_update_game_time)
+			.require < real > (id::game::frame_time, .0, _m_update_frame_time)
+			.require < uint32_t > (id::game::frame_count, 0, _m_update_frame_count);
 
 		// default resources and others
 		animation::define_resources (*this);
 
 		// define base components
-		ballistic::component::declare < transform > (*this);
+		ballistic::component::declare < transformed > (*this);
 
 		message m (this, id::message::initialize);
 		global_notifier.notify (m);

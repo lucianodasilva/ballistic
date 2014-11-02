@@ -24,9 +24,11 @@ namespace ballistic {
 
 		define_id (null);
 
-		define_id (game_time);
-		define_id (frame_time);
-		define_id (frame_count);
+		namespace game {
+			define_id_ext (game_time, game.game_time);
+			define_id_ext (frame_time, game.frame_time);
+			define_id_ext (frame_count, game.frame_count);
+		}
 
 		// -------------------------------------- 
 
@@ -34,29 +36,38 @@ namespace ballistic {
 		define_id (id);
 		define_id (value);
 
-		// --------------------------------------
-		define_id_ext (transform_position, transform.position);
-		define_id_ext (transform_rotation, transform.rotation);
-		define_id_ext (transform_scale, transform.scale);
+		define_id (position);
+		define_id (rotation);
+		define_id (scale);
+
 		define_id (transform);
+
+		define_id (target);
+		define_id (up);
+
+		// --------------------------------------
+		namespace transformed {
+			define_id_ext (id, transformed);
+		}
 
 		// --------------------------------------
 		// ANIMATION 
 		// --------------------------------------
-		define_id (animation);
-		define_id (storyboard_id);
-		define_id (start_time);
-		define_id (duration);
-		define_id (repeat);
-		define_id (start);
-		define_id (end);
-		define_id (control_1);
-		define_id (control_2);
-		define_id (target_id);
-
-		define_id (repeat_none);
-		define_id (repeat_loop);
-		define_id (repeat_reverse);
+		namespace animation {
+			define_id_ext (id, animation);
+			define_id_ext (storyboard_id, animation.storyboard_id);
+			define_id_ext (start_time, animation.start_time);
+			define_id_ext (duration, animation.duration);
+			define_id_ext (repeat, animation.repeat);
+			define_id_ext (start, animation.start);
+			define_id_ext (end, animation.end);
+			define_id_ext (control_1, animation.control_1);
+			define_id_ext (control_2, animation.control_2);
+			define_id_ext (target_id, animation.target_id);
+			define_id_ext (repeat_none, animation.repeat_none);
+			define_id_ext (repeat_loop, animation.repeat_loop);
+			define_id_ext (repeat_reverse, animation.repeat_reverse);
+		}
 
 	}
 }

@@ -7,7 +7,7 @@
 namespace ballistic {
 	namespace animation {
 
-		const id_t component::component_id = id::animation;
+		const id_t component::component_id = id::animation::id;
 
 		component::component () : _start_time (-1) {}
 
@@ -20,7 +20,7 @@ namespace ballistic {
 		}
 
 		void component::require_properties (entity_type * new_type, component_info & info) {
-			info.properties.require < id_t > (id::storyboard_id, id::null);
+			info.properties.require < id_t > (id::animation::storyboard_id, id::null);
 		}
 
 		void component::setup (ballistic::containers::property_container & parameters) {
@@ -28,7 +28,7 @@ namespace ballistic {
 
 			ballistic::game & g = this->game ();
 			
-			id_t storyboard_id = parameters [id::storyboard_id];
+			id_t storyboard_id = parameters [id::animation::storyboard_id];
 
 			if (storyboard_id != id::null) {
 				_storyboard = g.resources [storyboard_id];
@@ -55,7 +55,7 @@ namespace ballistic {
 
 		void component::notify (ballistic::entity * sender, ballistic::message & message) {
 
-			real game_time = message [id::game_time];
+			real game_time = message [id::game::game_time];
 
 			if (_start_time < 0)
 				_start_time = game_time;

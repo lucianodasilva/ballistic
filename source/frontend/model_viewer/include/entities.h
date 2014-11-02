@@ -43,10 +43,10 @@ inline void define_internals (game & g) {
 
 		auto & cam_props = camera_type->components [0].properties;
 
-		cam_props [id::graphics::projection] = string ("perspective");
-		cam_props [id::graphics::fov] = real (45);
-		cam_props [id::graphics::near] = real (.1);
-		cam_props [id::graphics::far] = real (100.0);
+		cam_props [id::camera::projection] = string ("perspective");
+		cam_props [id::camera::fov] = real (45);
+		cam_props [id::camera::near] = real (.1);
+		cam_props [id::camera::far] = real (100.0);
 
 		auto & entity_props = camera_type->properties;
 		entity_props [id::position] = vec3{.0, .0, 50.};
@@ -65,21 +65,21 @@ inline void define_internals (game & g) {
 	{
 		auto fps_counter_type = entity_type::declare <
 			fps_counter,
-			ballistic::transform,
+			transformed,
 			graphics::overlay_text
 		> (g, fps_counter_entity_type);
 
 		auto & fps_props = fps_counter_type->properties;
 
-		fps_props [id::transform_position] = vec3{-.9, .9, .0};
-		fps_props [id::transform_scale] = vec3{.05, .05, .05};
-		fps_props [id::graphics::text::font_id] = text_to_id ("consolas_16.font");
+		fps_props [id::position] = vec3{-.9, .9, .0};
+		fps_props [id::scale] = vec3{.05, .05, .05};
+		fps_props [id::overlay_text::font_id] = text_to_id ("consolas_16.font");
 	}
 
 	// create model
 	{
 		entity_type * model_type = entity_type::declare <
-			ballistic::transform,
+			transformed,
 			graphics::visual
 		> (g, model_entity_type);
 	}

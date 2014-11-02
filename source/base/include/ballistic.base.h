@@ -49,6 +49,6 @@
 #include "ballistic.res_id.h"
 #include "ballistic.resource_container.h"
 #include "ballistic.system.h"
-#include "ballistic.transform.h"
+#include "ballistic.transformed.h"
 
 #endif

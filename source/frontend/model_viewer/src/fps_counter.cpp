@@ -6,7 +6,7 @@
 const ballistic::id_t fps_counter::component_id = text_to_id ("fps_counter");
 
 void fps_counter::require_properties (entity_type * new_type, component_info & info) {
-	new_type->properties.require_notify < string > (id::graphics::text::text, "");
+	new_type->properties.require_notify < string > (id::overlay_text::text, "");
 }
 
 void fps_counter::setup (ballistic::containers::property_container & parameters) {
@@ -15,7 +15,7 @@ void fps_counter::setup (ballistic::containers::property_container & parameters)
 	_last_frame = 0;
 	_last_time = 0;
 
-	_text = parent ().properties.aquire < string > (id::graphics::text::text);
+	_text = parent ().properties.aquire < string > (id::overlay_text::text);
 
 	game ().global_notifier.attach (
 		id::message::update,

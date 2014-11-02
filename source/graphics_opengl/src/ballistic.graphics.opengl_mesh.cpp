@@ -28,7 +28,7 @@ namespace ballistic {
 			aabox box = {0};
 
 			for (uint32_t i = 0; i < data_buffer_size; i += offset) {
-				vec3 & position = *reinterpret_cast < vec3 * > (data_buffer + i);
+				vec3 & position = *(vec3 *)(data_buffer + i);
 				box.wrap (position);
 			}
 
@@ -105,7 +105,7 @@ namespace ballistic {
 				gl_type,         // type
 				GL_FALSE,     // normalized?
 				stride,
-				reinterpret_cast < GLvoid* > (offset) // array buffer offset in bytes
+				(GLvoid*)(offset) // array buffer offset in bytes
 				);
 
 			glEnableVertexAttribArray (id);
@@ -247,7 +247,7 @@ namespace ballistic {
 		
 		void opengl_mesh::render () {
 			gl_eval_scope (ballistic::graphics::opengl_mesh::render);
-			glDrawElements (GL_TRIANGLES, _index_buffer_size / sizeof (uint16_t), GL_UNSIGNED_SHORT, 0);
+			glDrawElements (GL_TRIANGLES, _index_buffer_size, GL_UNSIGNED_SHORT, 0);
 		}
 
 		aabox opengl_mesh::bounding_box () const {

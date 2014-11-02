@@ -79,8 +79,8 @@ bool load_instances (game & g, int argc, char ** argv) {
 	if (mesh && material) {
 
 		entity * model = g.entities.create (model_entity_type, model_entity);
-		model->properties [id::graphics::mesh] = mesh;
-		model->properties [id::graphics::material] = material;
+		model->properties [id::visual::mesh] = mesh;
+		model->properties [id::visual::material] = material;
 
 		auto bb = mesh->bounding_box ();
 		real camera_radius = (math::length (bb.v_max) / real (std::tan (45.0 / 2.0))) * real (1.5);
@@ -93,18 +93,18 @@ bool load_instances (game & g, int argc, char ** argv) {
 		
 		light = g.entities.create (light_entity_type);
 		light->properties [id::position] = vec3{camera_radius, camera_radius, .0};
-		light->properties [id::graphics::light_color] = color {0.1, 0.5, 1., 1.};
-		light->properties [id::graphics::light_fallout] = real (camera_radius * 2.0);
+		light->properties [id::light::color] = color {0.1, 0.5, 1., 1.};
+		light->properties [id::light::fallout] = real (camera_radius * 2.0);
 
 		light = g.entities.create (light_entity_type);
 		light->properties [id::position] = vec3{camera_radius, .0, camera_radius};
-		light->properties [id::graphics::light_color] = color{1.0, 1.0, 1., 1.};
-		light->properties [id::graphics::light_fallout] = real (camera_radius * 2.0);
+		light->properties [id::light::color] = color{1.0, 1.0, 1., 1.};
+		light->properties [id::light::fallout] = real (camera_radius * 2.0);
 
 		light = g.entities.create (light_entity_type);
 		light->properties [id::position] = vec3{-camera_radius, -camera_radius, .0};
-		light->properties [id::graphics::light_color] = color{0.1, 0.1, 0.0, 0.25};
-		light->properties [id::graphics::light_fallout] = real (camera_radius * 2.0);
+		light->properties [id::light::color] = color{0.1, 0.1, 0.0, 0.25};
+		light->properties [id::light::fallout] = real (camera_radius * 2.0);
 
 	} else {
 		std::cout << "Error. Resources Not Found." << std::endl;

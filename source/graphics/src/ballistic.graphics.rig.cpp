@@ -82,7 +82,7 @@ namespace ballistic {
 			it->second.update_frame_tween (tween, time);
 		}
 
-		const id_t rigged::component_id = id::graphics::rigged;
+		const id_t rigged::component_id = id::rigged::id;
 
 		rigged::rigged () :
 			_state (rig_state_stopped),
@@ -92,9 +92,9 @@ namespace ballistic {
 		{}
 
 		void rigged::require_properties (entity_type * new_type, component_info & info) {
-			new_type->properties.require < id_t > (id::graphics::rig_id, id::null);
-			new_type->properties.require < rig * > (id::graphics::rig, nullptr);
-			new_type->properties.require < rig_frame_tween * > (id::graphics::rig_tween, &rig_frame_tween::null_frame_tween);
+			new_type->properties.require < id_t > (id::rigged::rig_id, id::null);
+			new_type->properties.require < rig * > (id::rigged::rig, nullptr);
+			new_type->properties.require < rig_frame_tween * > (id::rigged::rig_tween, &rig_frame_tween::null_frame_tween);
 		}
 
 		void rigged::setup (ballistic::containers::property_container & parameters) {
@@ -106,7 +106,7 @@ namespace ballistic {
 
 			if (!*_p_rig)
 				*_p_rig = game ().resources [
-					p.properties [id::graphics::rig_id].as < id_t > ()
+					p.properties [id::rigged::rig_id].as < id_t > ()
 				].as < rig > ();
 
 			if (*_p_rig) {
@@ -128,44 +128,44 @@ namespace ballistic {
 
 		void rigged::notify (ballistic::entity * sender, ballistic::message & message) {
 			
-			id_t message_id = message.id ();
-
-			if (message_id == id::message::update) {
-
-				if (_state == rig_state_stopped)
-					return;
-
-				//TODO: check if object "in" camera... if not, don't update
-
-				real game_time = message [id::game_time];
-				real elapsed = game_time - _animation_start;
-
-				real lapse = elapsed;
-
-				if (_state != rig_state_looping && elapsed > _rig_tween.animation.duration) {
-					lapse = _rig_tween.animation.duration;
-					_state = rig_state_stopped;
-				}
-
-				_rig_tween.update (lapse);
-
-			} else {
-
-				if (message_id == id::message::start_rig_animation) {
-
-					rig * rig_inst = *_p_rig;
-
-					_animation_start = game ().game_time ();
-					rig_inst->set_frame_tween (
-						_rig_tween,
-						message [id::graphics::rig_animation_id].as < id_t > (),
-						0
-					);
-				} else if (message_id == id::message::stop_rig_animation) {
-					_state = rig_state_stopped;
-				}
-
-			}
+			//id_t message_id = message.id ();
+			//
+			//if (message_id == id::message::update) {
+			//
+			//	if (_state == rig_state_stopped)
+			//		return;
+			//
+			//	//TODO: check if object "in" camera... if not, don't update
+			//
+			//	real game_time = message [id::game::game_time];
+			//	real elapsed = game_time - _animation_start;
+			//
+			//	real lapse = elapsed;
+			//
+			//	if (_state != rig_state_looping && elapsed > _rig_tween.animation.duration) {
+			//		lapse = _rig_tween.animation.duration;
+			//		_state = rig_state_stopped;
+			//	}
+			//
+			//	_rig_tween.update (lapse);
+			//
+			//} else {
+			//
+			//	if (message_id == id::message::start_rig_animation) {
+			//
+			//		rig * rig_inst = *_p_rig;
+			//
+			//		_animation_start = game ().game_time ();
+			//		rig_inst->set_frame_tween (
+			//			_rig_tween,
+			//			message [id::graphics::rig_animation_id].as < id_t > (),
+			//			0
+			//		);
+			//	} else if (message_id == id::message::stop_rig_animation) {
+			//		_state = rig_state_stopped;
+			//	}
+			//
+			//}
 
 		}
 

@@ -11,22 +11,22 @@ namespace ballistic {
 				.require (id::position, vec3 ({.0, .0, .0}))
 				.require (id::target, vec3 ({.0, .0, .0}))
 				.require (id::up, vec3 ({.0, 1.0, .0}))
-				.require < mat4 > (id::graphics::camera_proj)
-				.require < mat4 > (id::graphics::camera_view);
+				.require < mat4 > (id::camera::proj)
+				.require < mat4 > (id::camera::view);
 
 			// component arguments
 			info.properties
-				.require < string > (id::graphics::projection, "ortho")
-				.require < real > (id::graphics::near, .0)
-				.require < real > (id::graphics::far, .0)
-				.require < real > (id::graphics::left, .0)
-				.require < real > (id::graphics::right, .0)
-				.require < real > (id::graphics::top, .0)
-				.require < real > (id::graphics::bottom, .0)
-				.require < real > (id::graphics::fov, .0);
+				.require < string > (id::camera::projection, "ortho")
+				.require < real >	(id::camera::near, .0)
+				.require < real >	(id::camera::far, .0)
+				.require < real >	(id::camera::left, .0)
+				.require < real >	(id::camera::right, .0)
+				.require < real >	(id::camera::top, .0)
+				.require < real >	(id::camera::bottom, .0)
+				.require < real >	(id::camera::fov, .0);
 		}
 
-		const id_t camera::component_id = id::graphics::camera;
+		const id_t camera::component_id = id::camera::id;
 
 		camera::camera () : 
 			_system (nullptr)
@@ -167,7 +167,7 @@ namespace ballistic {
 				proj_type_persp
 			} type = proj_type_ortho;
 
-			string projection_type = parameters [id::graphics::projection].as < string > ();
+			string projection_type = parameters [id::camera::projection].as < string > ();
 
 			if (projection_type == "ortho")
 				type = proj_type_ortho;
@@ -177,20 +177,20 @@ namespace ballistic {
 				debug_print ("unknown projection type \"" << projection_type << "\". default to ortho.");
 			}
 			
-			left	= parameters [id::graphics::left];
-			right	= parameters [id::graphics::right];
-			top		= parameters [id::graphics::top];
-			bottom	= parameters [id::graphics::bottom];
-			near	= parameters [id::graphics::near];
-			far		= parameters [id::graphics::far];
-			fovy	= parameters [id::graphics::fov];
+			left	= parameters [id::camera::left];
+			right	= parameters [id::camera::right];
+			top		= parameters [id::camera::top];
+			bottom	= parameters [id::camera::bottom];
+			near	= parameters [id::camera::near];
+			far		= parameters [id::camera::far];
+			fovy	= parameters [id::camera::fov];
 			
 			
 			if (type == proj_type_ortho)
 				make_ortho_projection (left, right, bottom, top, near, far);
 			else if (type == proj_type_persp) {
-				//point size = parent->game ().frontend ()->get_client_size ();
-				//make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
+				point size = game ().properties [id::frontend::client_size];
+				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
 			}
 
 			auto & properties = parent ().properties;
@@ -199,8 +199,8 @@ namespace ballistic {
 			_p_target = properties.aquire < vec3 > (id::target);
 			_p_up = properties.aquire < vec3 > (id::up);
 
-			_p_view = properties.aquire < mat4 > (id::graphics::camera_view);
-			_p_proj = properties.aquire < mat4 > (id::graphics::camera_proj);
+			_p_view = properties.aquire < mat4 > (id::camera::view);
+			_p_proj = properties.aquire < mat4 > (id::camera::proj);
 			*_p_proj = _proj;
 		}
 

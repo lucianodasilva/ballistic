@@ -5,6 +5,7 @@
 #include "ballistic.desktop.frontend_windows.h"
 #include "ballistic.ui.common.h"
 
+#include <ballistic.graphics.h>
 #include <GL/glew.h>
 
 namespace ballistic {
@@ -210,6 +211,7 @@ namespace ballistic {
 			_on_mouse_message.require < ballistic::ui::mouse_event_type > (id::ui::mouse_event_type);
 
 			create ();
+			_game.properties.require (id::frontend::client_size, client_size);
 		}
 
 		frontend::~frontend () {
