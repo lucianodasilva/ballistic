@@ -16,6 +16,7 @@
 #include "ballistic.graphics.font.h"
 #include "ballistic.graphics.ieffect.h"
 #include "ballistic.graphics.imesh.h"
+#include "ballistic.graphics.irenderable.h"
 #include "ballistic.graphics.itexture.h"
 #include "ballistic.graphics.light.h"
 #include "ballistic.graphics.material.h"
@@ -80,7 +81,9 @@ namespace ballistic {
 		// default constructors for resource objects
 		ieffect::ieffect (const id_t & id) : iresource (id) {}
 
-		imesh::imesh (const id_t & id) : iresource (id) {}
+		irenderable::irenderable (const id_t & id) : iresource (id) {}
+
+		imesh::imesh (const id_t & id) : irenderable (id) {}
 
 		itexture::itexture (const id_t & id) : iresource (id) {}
 

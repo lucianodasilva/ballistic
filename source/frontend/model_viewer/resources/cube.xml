@@ -99,11 +99,11 @@
 	</mesh>
 
   <entity_type name="cube.entity_type"
-    graphics.material.id="cube.material"
-    graphics.mesh.id="cube.mesh"
+    visual.material_id="cube.material"
+    visual.mesh_id="cube.mesh"
 	 >
-    <transform/>
-    <graphics.visual/>
+    <transformed/>
+    <visual/>
   </entity_type>
   
 </package>

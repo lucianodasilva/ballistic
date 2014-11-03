@@ -13,7 +13,6 @@ namespace ballistic {
 	namespace graphics {
 
 		class opengl_effect;
-		class opengl_mesh;
 		class opengl_texture;
 		
 		class opengl_device : public idevice {
@@ -24,11 +23,11 @@ namespace ballistic {
 			color _clear_color;
 
 			atomic <unsigned char> _effect_run_id;
-			atomic <unsigned char> _mesh_run_id;
+			atomic <unsigned char> _renderable_run_id;
 			atomic <unsigned char> _texture_run_id;
 
 			opengl_effect *		_effect;
-			opengl_mesh *		_mesh;
+			irenderable *		_renderable;
 			opengl_texture *	_texture;
 
 		public:
@@ -40,7 +39,7 @@ namespace ballistic {
 			virtual itexture *	create_texture (const id_t & id);
 
 			virtual void		activate (ieffect * effect);
-			virtual void		activate (imesh * mesh);
+			virtual void		activate (irenderable * renderable);
 			virtual void		activate (itexture * texture);
 
 			virtual bool		alpha_blend ();
@@ -58,7 +57,10 @@ namespace ballistic {
 			
 			virtual void		destroy ();
 
-			virtual void		draw_active_mesh ();
+			virtual void		draw_active_renderable ();
+
+			virtual uint8_t		reserve_renderable_run_id ();
+
 		};
 		
 	}

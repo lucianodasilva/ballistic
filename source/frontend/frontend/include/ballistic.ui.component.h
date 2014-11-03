@@ -2,16 +2,21 @@
 #define _ballistic_ui_component_h_
 
 #include <ballistic.graphics.h>
+
 #include "ballistic.ui.control.h"
+#include "ballistic.ui.renderer.h"
 
 namespace ballistic {
 	namespace ui {
 
-		class component : public ballistic::component, public control {
+		class component : public ballistic::component {
 		private:
-		
-			property < uint8_t > * _layer;
-			graphics::graphics_system * _system;
+			
+			renderer					_renderer;
+			graphics::material			_material;
+			graphics::graphics_system *	_system;
+			property < uint8_t > *		_layer;
+			property < control * > *	_control;
 
 		public:
 

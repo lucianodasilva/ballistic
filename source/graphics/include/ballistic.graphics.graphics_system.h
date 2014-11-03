@@ -14,6 +14,7 @@ namespace ballistic {
 	namespace graphics {
 
 		class rig;
+		class irenderable;
 
 		class graphics_system : public ballistic::isystem {
 		private:
@@ -86,8 +87,8 @@ namespace ballistic {
 			virtual void detach ();
 
 			// methods
-			void push_item (material * material, imesh * mesh, rig_frame_tween * rig, uint8_t layer, const mat4 & transform);
-			void push_overlay_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform);
+			void push_item (material * material, irenderable * renderable, rig_frame_tween * rig, uint8_t layer, const mat4 & transform);
+			void push_overlay_item (material * material, irenderable * renderable, uint8_t layer, const mat4 & transform);
 			void push_light (const light_info & info);
 		};
 				  

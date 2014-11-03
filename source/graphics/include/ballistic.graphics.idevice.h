@@ -2,6 +2,7 @@
 #define _ballistic_graphics_idevice_h_
 
 #include <ballistic.base.h>
+#include <ballistic.graphics.irenderable.h>
 #include <string>
 
 using namespace std;
@@ -23,7 +24,7 @@ namespace ballistic {
 			// ---------------------------
 
 			virtual void		activate (ieffect * effect) = 0;
-			virtual void		activate (imesh * mesh) = 0;
+			virtual void		activate (irenderable * renderable) = 0;
 			virtual void		activate (itexture * texture) = 0;
 
 			// ---------------------------
@@ -43,7 +44,9 @@ namespace ballistic {
 
 			virtual void		destroy () = 0;
 
-			virtual void		draw_active_mesh () = 0;
+			virtual void		draw_active_renderable () = 0;
+
+			virtual uint8_t		reserve_renderable_run_id () = 0;
 		};
 
 	}

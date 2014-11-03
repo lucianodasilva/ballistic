@@ -44,6 +44,7 @@ void initialize_defaults (game & g) {
 	_device->clear_color ({.0F, .6F, 1.F, 1.F});
 
 	ballistic::graphics::define_resources (g, _device);
+	ballistic::frontend::define_resources (g);
 
 	auto graphics = new ballistic::graphics::graphics_system (g);
 	graphics->device (_device);
@@ -115,6 +116,18 @@ bool load_instances (game & g, int argc, char ** argv) {
 	return true;
 }
 
+void load_ui (game & g) {
+	entity * ui_ent = g.entities.create (ui_entity_type, ui_entity);
+
+	ui::control * ctrl = new ui::panel ();
+	ui_ent->properties [id::ui::control] = ctrl;
+	ctrl->background_color (color{1.0, .0, .0, 1.0});
+
+	ctrl->on_mouse_down_event += [](ui::control * sender, const ui::mouse_event_args & e) {
+		std::cout << "mouse down pressed" << std::endl;
+	};
+}
+
 int main ( int argc, char ** argv) {
 
 	debug_init();
@@ -128,6 +141,8 @@ int main ( int argc, char ** argv) {
 	// load file
 	if (!load_instances (g, argc, argv))
 		return -1;
+
+	load_ui (g);
 
 	g.initialize ();
 	_frontend->run ();

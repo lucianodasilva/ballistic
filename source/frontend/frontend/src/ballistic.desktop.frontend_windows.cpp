@@ -13,7 +13,7 @@ namespace ballistic {
 
 		void frontend::send_mouse_message (ui::mouse_event_type m_event, HWND hWnd, WPARAM wParam, LPARAM lParam) {
 
-			point pos = {GET_X_LPARAM (lParam), GET_Y_LPARAM (lParam)};
+			vec2 pos = {real (GET_X_LPARAM (lParam)), real (GET_Y_LPARAM (lParam))};
 
 			ui::mouse_button buttons = ui::mouse_button_none;
 
@@ -95,7 +95,7 @@ namespace ballistic {
 
 		void frontend::on_mouse_event (
 			ui::mouse_event_type m_event,
-			const point & position,
+			const vec2 & position,
 			ui::mouse_button buttons,
 			int wheel_delta
 		) {
@@ -205,7 +205,7 @@ namespace ballistic {
 			_window_client_size (client_size),
 			_on_mouse_message (id::ui::on_mouse_event)
 		{
-			_on_mouse_message.require < point > (id::ui::mouse_position);
+			_on_mouse_message.require < vec2 > (id::ui::mouse_position);
 			_on_mouse_message.require < ballistic::ui::mouse_button > (id::ui::mouse_buttons);
 			_on_mouse_message.require < int > (id::ui::mouse_wheel_delta);
 			_on_mouse_message.require < ballistic::ui::mouse_event_type > (id::ui::mouse_event_type);

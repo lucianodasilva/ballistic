@@ -149,7 +149,7 @@ namespace ballistic {
 		void overlay_text::terminate () {
 			overlay::terminate ();
 			game ().global_notifier.detach (id::message::render, this);
-			parent ().local_notifier.detach (id::message::render, this);
+			parent ().local_notifier.detach (id::message::property_changed, this);
 		}
 
 		void overlay_text::notify (entity * sender, ballistic::message & message) {

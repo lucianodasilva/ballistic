@@ -46,7 +46,7 @@ namespace ballistic {
 			opengl_mesh ( const id_t & id, uint8_t run_id );
 			~opengl_mesh ();
 
-			virtual uint8_t run_id ();
+			virtual uint8_t run_id () const;
 			
 			virtual void set_data (
 				uint8_t *		data_buffer,

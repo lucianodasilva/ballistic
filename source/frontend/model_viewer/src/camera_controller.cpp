@@ -54,14 +54,14 @@ void camera_controller::notify (ballistic::entity * sender, ballistic::message &
 		case ui::mouse_event_down:
 			if (message [id::ui::mouse_buttons].as < ui::mouse_button > () & ui::mouse_button_left ) {
 				_mouse_is_down = true;
-				_mouse_start = message [id::ui::mouse_position];
+				_mouse_start = message [id::ui::mouse_position].as < vec2 > ();
 				_start_yaw = _yaw;
 				_start_pitch = _pitch;
 			}
 			break;
 		case ui::mouse_event_move:
 			if (_mouse_is_down && message [id::ui::mouse_buttons].as < ui::mouse_button > () & ui::mouse_button_left) {
-				point dif = _mouse_start - message [id::ui::mouse_position].as < point > ();
+				vec2 dif = _mouse_start - message [id::ui::mouse_position].as < vec2 > ();
 				_yaw = _start_yaw + real (dif.x) * move_mult;
 				_pitch = _start_pitch - real (dif.y) * move_mult;
 			}
@@ -69,7 +69,7 @@ void camera_controller::notify (ballistic::entity * sender, ballistic::message &
 		case ui::mouse_event_up:
 			if (message [id::ui::mouse_buttons].as < ui::mouse_button > () & ui::mouse_button_left) {
 				_mouse_is_down = false;
-				point dif = _mouse_start - message [id::ui::mouse_position].as < point > ();
+				vec2 dif = _mouse_start - message [id::ui::mouse_position].as < vec2 > ();
 				_yaw = _start_yaw + real (dif.x) * move_mult;
 				_pitch = _start_pitch - real (dif.y) * move_mult;
 			}

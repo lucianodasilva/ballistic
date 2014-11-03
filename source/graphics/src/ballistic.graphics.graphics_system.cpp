@@ -2,7 +2,7 @@
 #include "ballistic.graphics.common_id.h"
 
 #include "ballistic.graphics.ieffect.h"
-#include "ballistic.graphics.imesh.h"
+#include "ballistic.graphics.irenderable.h"
 #include "ballistic.graphics.material.h"
 #include "ballistic.graphics.rig.h"
 
@@ -160,9 +160,9 @@ namespace ballistic {
 			_device->alpha_blend (false);
 
 			// render loop ---------------------------
-			material * material = nullptr;
-			imesh * mesh = nullptr;
-			itexture * texture = nullptr;
+			material *		material = nullptr;
+			irenderable *	renderable = nullptr;
+			itexture *		texture = nullptr;
 
 			bool alpha_blend = false;
 
@@ -204,9 +204,9 @@ namespace ballistic {
 					_device->alpha_blend (true);
 				}
 
-				if (item.mesh != mesh) {
-					mesh = item.mesh;
-					_device->activate (mesh);
+				if (item.renderable != renderable) {
+					renderable = item.renderable;
+					_device->activate (renderable);
 				}
 
 				// update model / normal matrices
@@ -226,14 +226,14 @@ namespace ballistic {
 				_c_effect_t_bones->set_value (item.rig->bones);
 				
 				// render the stuffs
-				_device->draw_active_mesh ();
+				_device->draw_active_renderable ();
 
 				++render_index;
 			}
 
 			// overlay render setup
 			material = nullptr;
-			mesh = nullptr;
+			renderable = nullptr;
 			texture = nullptr;
 
 			alpha_blend = false;
@@ -254,7 +254,7 @@ namespace ballistic {
 				if (item.material->texture != texture) {
 					texture = item.material->texture;
 					_device->activate (texture);
-					_c_overlay_texture->set_value(0);
+					_c_overlay_texture->set_value (0);
 				}
 
 				if (item.material->opaque != alpha_blend) {
@@ -262,27 +262,25 @@ namespace ballistic {
 					_device->alpha_blend (true);
 				}
 
-				if (item.mesh != mesh) {
-					mesh = item.mesh;
-					_device->activate (mesh);
+				if (item.renderable != renderable) {
+					renderable = item.renderable;
+					_device->activate (renderable);
 				}
 
 				// update model
 				_c_overlay_t_model->set_value (item.transform);
 
 				// render the stuffs
-				_device->draw_active_mesh ();
+				_device->draw_active_renderable ();
 
 				++render_index;
 			}
 
-			// r-----------------------
-			_render_list.clear();
-			_light_list.clear ();
-
+			// -----------------------
 			_device->end_frame ();
 			_device->present ();
 
+			_light_list.clear ();
 			_render_list.clear ();
 		}
 
@@ -298,11 +296,11 @@ namespace ballistic {
 			this->game ().global_notifier.detach (id::message::update, this);
 		}
 
-		void graphics_system::push_item (material * material, imesh * mesh, rig_frame_tween * rig, uint8_t layer, const mat4 & transform) {
+		void graphics_system::push_item (material * material, irenderable * renderable, rig_frame_tween * rig, uint8_t layer, const mat4 & transform) {
 			render_item & item = _render_list.reserve_item ();
 
 			item.material = material;
-			item.mesh = mesh;
+			item.renderable = renderable;
 			item.rig = rig;
 			item.transform = transform;
 			item.layer = layer;
@@ -310,11 +308,11 @@ namespace ballistic {
 			render_item::set_render_bucket (item, _camera, 0x0);
 		}
 
-		void graphics_system::push_overlay_item (material * material, imesh * mesh, uint8_t layer, const mat4 & transform) {
+		void graphics_system::push_overlay_item (material * material, irenderable * renderable, uint8_t layer, const mat4 & transform) {
 			render_item & item = _render_list.reserve_item ();
 
 			item.material = material;
-			item.mesh = mesh;
+			item.renderable = renderable;
 			item.transform = transform;
 			item.layer = layer;
 

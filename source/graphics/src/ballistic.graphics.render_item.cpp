@@ -11,7 +11,7 @@ namespace ballistic {
 	namespace graphics {
 
 		render_item::render_item ()	:
-			mesh (nullptr),
+			renderable (nullptr),
 			material (nullptr),
 			bucket (std::numeric_limits < render_bucket >::max ())
 		{}
@@ -60,7 +60,7 @@ namespace ballistic {
 					byte_handler.b3 = 0;
 					byte_handler.b2 = 0;
 					byte_handler.b1 = item.material->texture->run_id ();
-					byte_handler.b0 = item.mesh->run_id ();
+					byte_handler.b0 = item.renderable->run_id ();
 
 				} else {
 

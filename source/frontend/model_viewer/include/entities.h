@@ -7,21 +7,20 @@
 #include "camera_controller.h"
 #include "fps_counter.h"
 #include "resources.h"
-#include "ui_controller.h"
 
 using namespace ballistic;
 
-define_id_ext (camera_entity_type, "camera.entity_type");
+define_id_ext (camera_entity_type, camera.entity_type);
 define_id (camera_entity);
-define_id_ext (model_entity_type, "model.entity_type");
+define_id_ext (model_entity_type, model.entity_type);
 define_id (model_entity);
-define_id_ext (fps_counter_entity_type, "fps_counter.entity_type");
+define_id_ext (fps_counter_entity_type, fps_counter.entity_type);
 define_id (fps_counter_entity);
 
-define_id_ext (ui_entity_type, "ui.entity_type");
+define_id_ext (ui_entity_type, ui.entity_type);
 define_id (ui_entity);
 
-define_id_ext (light_entity_type, "light.entity_type");
+define_id_ext (light_entity_type, light.entity_type);
 
 inline void define_internals (game & g) {
 	// load resources
@@ -87,13 +86,12 @@ inline void define_internals (game & g) {
 	// create ui
 	{
 		entity_type::declare <
-			ui_controller
+			ui::component
 		> (g, ui_entity_type);
 	}
 
 	// create entities
 	g.entities.create (fps_counter_entity_type, fps_counter_entity);
-	g.entities.create (ui_entity_type, ui_entity);
 
 }
 

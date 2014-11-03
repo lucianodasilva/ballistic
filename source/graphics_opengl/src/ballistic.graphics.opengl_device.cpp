@@ -13,9 +13,9 @@ namespace ballistic {
 			:
 			_alpha_blend (false),
 			_effect_run_id (0),
-			_mesh_run_id (0),
+			_renderable_run_id (0),
 			_effect (nullptr),
-			_mesh (nullptr)
+			_renderable (nullptr)
 		{
 
 			glewExperimental = true;
@@ -60,7 +60,7 @@ namespace ballistic {
 		
 		imesh *	opengl_device::create_mesh (const id_t & id)
 		{
-			return new opengl_mesh (id, ++_mesh_run_id);
+			return new opengl_mesh (id, ++_renderable_run_id);
 		}
 		
 		itexture * opengl_device::create_texture (const id_t & id)
@@ -78,14 +78,16 @@ namespace ballistic {
 			_effect->apply (this);
 		}
 
-		void opengl_device::activate (imesh * mesh) {
-			_mesh = static_cast <opengl_mesh *>(mesh);
-			_mesh->apply (this);
+		void opengl_device::activate (irenderable * renderable) {
+			_renderable = static_cast <opengl_mesh *>(renderable);
+			_renderable->apply (this);
 		}
 
 		void opengl_device::activate (itexture * texture) {
 			_texture = static_cast <opengl_texture *> (texture);
-			_texture->apply (this);
+
+			if (_texture)
+				_texture->apply (this);
 		}
 
 		bool opengl_device::alpha_blend () {
@@ -142,19 +144,23 @@ namespace ballistic {
 		
 		}
 
-		void opengl_device::draw_active_mesh () {
+		void opengl_device::draw_active_renderable () {
 
 			if (!_effect) {
 				debug_error ("render_mesh: No active instance of effect set.");
 				return;
 			}
 
-			if (!_mesh) {
+			if (!_renderable) {
 				debug_error ("render_mesh: No active instance of mesh set.");
 				return;
 			}
 
-			_mesh->render ();
+			_renderable->render ();
+		}
+
+		uint8_t opengl_device::reserve_renderable_run_id () {
+			return ++_renderable_run_id;
 		}
 
 	

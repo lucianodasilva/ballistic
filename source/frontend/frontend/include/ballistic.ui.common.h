@@ -8,12 +8,16 @@ namespace ballistic {
 	namespace id {
 		namespace ui {
 
+			define_id_ext (id, ui);
+
 			define_id (on_mouse_event);
 			define_id (mouse_event_type);
 
 			define_id (mouse_buttons);
 			define_id (mouse_position);
 			define_id (mouse_wheel_delta);
+
+			define_id_ext (control, ui.control);
 
 		}
 	}

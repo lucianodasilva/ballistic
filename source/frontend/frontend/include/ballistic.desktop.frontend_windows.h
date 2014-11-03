@@ -39,7 +39,7 @@ namespace ballistic {
 			void on_resize ();
 			void on_mouse_event (
 				ui::mouse_event_type m_event,
-				const point & position,
+				const vec2 & position,
 				ui::mouse_button buttons,
 				int wheel_delta
 			);

@@ -11,6 +11,8 @@ namespace ballistic {
 	namespace ui {
 
 		class control;
+		class renderer;
+		class component;
 
 		template < class ... _param_tv >
 		struct event {
@@ -80,6 +82,9 @@ namespace ballistic {
 			virtual void on_draw (const draw & d);
 
 		public:
+
+			friend class renderer;
+			friend class component;
 
 			on_draw_event_type on_draw_event;
 			on_mouse_move_event_type on_mouse_move_event;

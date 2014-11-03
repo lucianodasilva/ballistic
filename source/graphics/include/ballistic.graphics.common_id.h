@@ -12,7 +12,6 @@ namespace ballistic {
 
 		namespace message {
 			define_id_ext (render, message.render);
-			define_id_ext (render_overlay, message.render_overlay);
 			define_id_ext (start_rig_animation, message.start_rig_animation);
 			define_id_ext (stop_rig_animation, message.stop_rig_animation);
 		}

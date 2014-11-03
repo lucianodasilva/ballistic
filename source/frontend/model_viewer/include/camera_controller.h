@@ -17,7 +17,7 @@ private:
 
 	bool _mouse_is_down;
 
-	point _mouse_start;
+	vec2 _mouse_start;
 
 	real
 		_start_yaw,

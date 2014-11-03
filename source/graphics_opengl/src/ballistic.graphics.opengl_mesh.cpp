@@ -129,7 +129,7 @@ namespace ballistic {
 			}
 		}
 		
-		uint8_t opengl_mesh::run_id () { return _run_id; }
+		uint8_t opengl_mesh::run_id () const { return _run_id; }
 
 		void opengl_mesh::set_data (
 			uint8_t *			data_buffer,

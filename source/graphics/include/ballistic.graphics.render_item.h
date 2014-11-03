@@ -8,7 +8,7 @@
 namespace ballistic {
 	namespace graphics {
 
-		class imesh;
+		class irenderable;
 		class material;
 		struct rig_frame_tween;
 
@@ -16,7 +16,7 @@ namespace ballistic {
 
 		struct render_item {
 
-			imesh *				mesh;
+			irenderable *		renderable;
 			material *			material;
 			mat4				transform;
 			rig_frame_tween *	rig;
