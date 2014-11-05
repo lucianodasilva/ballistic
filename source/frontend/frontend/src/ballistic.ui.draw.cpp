@@ -86,7 +86,7 @@ namespace ballistic {
 		}
 
 		void draw::begin_frame () const {
-			_effect_t_model->set_value (mat4 ());
+			_effect_t_model->set_value (mat4::identity);
 		}
 
 		void draw::draw_line (const color & col, const vec2 & p1, const vec2 & p2) const {

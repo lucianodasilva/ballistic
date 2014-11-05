@@ -1,4 +1,5 @@
 uniform vec4        effect_diffuse;
+uniform vec4		effect_mask = vec4 (1, 1, 1, 1);
 uniform mat4        effect_t_model;
 
 #ifdef VERTEX_SHADER
@@ -28,9 +29,7 @@ out vec4 out_color;
 
 void main () {
 	vec4 texture_color = texture (effect_texture, var_uv);
-	texture_color.z = 1.0;
-	//out_color = texture_color * effect_diffuse;
-	out_color = vec4 (1.0, .0, .0, 1.0);
+	out_color = effect_mask * (effect_diffuse + texture_color);
 }
 
 #endif
