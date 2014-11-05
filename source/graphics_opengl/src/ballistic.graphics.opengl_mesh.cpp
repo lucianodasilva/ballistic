@@ -155,7 +155,7 @@ namespace ballistic {
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
 			
 			// Set index buffer data
-			glBufferData (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_size, (GLvoid *)index_buffer, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+			glBufferData (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_size * sizeof (uint16_t), (GLvoid *)index_buffer, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
 			// Unbind buffers
 			glBindBuffer (GL_ARRAY_BUFFER, 0);
@@ -232,7 +232,7 @@ namespace ballistic {
 			glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, _index_buffer_id);
 
 			if (_index_buffer_size > 0)
-				glBufferSubData (GL_ELEMENT_ARRAY_BUFFER, 0, _index_buffer_size, (GLvoid *)index_buffer);
+				glBufferSubData (GL_ELEMENT_ARRAY_BUFFER, 0, _index_buffer_size  * sizeof (uint16_t), (GLvoid *)index_buffer);
 
 			// Reset state machine
 			glBindVertexArray (0);

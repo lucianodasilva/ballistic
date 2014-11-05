@@ -13,12 +13,12 @@ namespace ballistic {
 		class renderer : public ballistic::graphics::irenderable {
 		private:
 
-			control *	_root;
-			draw		_draw_instance;
+			control *		_root;
+			const draw &	_draw_instance;
 
 		public:
 
-			renderer ();
+			renderer (const draw & d);
 
 			control * root () const;
 			control * root (control * r);

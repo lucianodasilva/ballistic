@@ -60,15 +60,17 @@ namespace ballistic {
 			
 			// activate texture
 			glBindTexture (GL_TEXTURE_2D, _texture_id);
+
+			_format = convert_format_to_gl (format);
 		 
 			glTexImage2D (
 				GL_TEXTURE_2D,
 				0,
-				convert_format_to_gl (format),
+				_format,
 				width,
 				height,
 				0,
-				convert_format_to_gl (format),
+				_format,
 				GL_UNSIGNED_BYTE,
 				data
 			);
@@ -92,17 +94,36 @@ namespace ballistic {
 			glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -1.0F);
 		}
 
-		//void opengl_texture::update_data (
-		//	char * data,
-		//	int width,
-		//	int height,
-		//	const texture_wrap & wrap_s_v,
-		//	const texture_wrap & wrap_t_v,
-		//	const texture_filter & mag_filter_v,
-		//	const texture_filter & min_filter_v
-		//) {
-		//
-		//}
+		void opengl_texture::update_data (
+			char * data,
+			uint32_t x,
+			uint32_t y,
+			uint32_t width,
+			uint32_t height
+		) {
+		
+			glBindTexture (GL_TEXTURE_2D, _texture_id);
+
+			glTexSubImage2D (
+				GL_TEXTURE_2D,
+				0,
+				x, y, width, height,
+				_format,
+				GL_UNSIGNED_BYTE,
+				data
+			);
+
+			glGenerateMipmap (GL_TEXTURE_2D);
+
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _mag_filter);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _min_filter);
+
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrap_s);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrap_t);
+
+			// offset for better quality
+			glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -1.0F);
+		}
 
 		void opengl_texture::apply (idevice * device) {
 			glActiveTexture (GL_TEXTURE0);

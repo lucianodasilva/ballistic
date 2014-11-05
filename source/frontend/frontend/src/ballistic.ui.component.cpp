@@ -23,7 +23,7 @@ namespace ballistic {
 
 		component::component () : 
 			ballistic::component (),
-			_renderer (),
+			_renderer (_draw),
 			_material (id::null),
 			_system (nullptr),
 			_layer (nullptr),
@@ -55,6 +55,9 @@ namespace ballistic {
 			_system = dynamic_cast <graphics::graphics_system *> (g.systems [ballistic::id::graphics::system]);
 			_layer = p.properties.aquire < uint8_t > (id::visual::layer);
 			_control = p.properties.aquire < control * > (id::ui::control);
+
+			_draw.device (_system->device ());
+			_draw.overlay_effect (_system->overlay_effect ());
 		}
 
 		void component::terminate () {

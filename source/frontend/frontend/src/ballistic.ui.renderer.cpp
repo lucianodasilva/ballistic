@@ -5,7 +5,7 @@
 namespace ballistic {
 	namespace ui {
 
-		renderer::renderer () : irenderable (id::null), _root (nullptr) {}
+		renderer::renderer (const draw & d) : irenderable (id::null), _root (nullptr), _draw_instance (d) {}
 
 		control * renderer::root () const {
 			return _root;
@@ -21,12 +21,13 @@ namespace ballistic {
 		}
 
 		void renderer::apply (graphics::idevice * device) {
-			_draw_instance.device (device);
 		}
 
 		void renderer::render () {
-			if (_root)
+			if (_root) {
+				_draw_instance.begin_frame ();
 				_root->on_draw (_draw_instance);
+			}
 			debug_run (
 			else
 				debug_print ("undefined root control. cannot render controls.");

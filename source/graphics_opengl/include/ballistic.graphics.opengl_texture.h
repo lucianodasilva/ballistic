@@ -16,6 +16,9 @@ namespace ballistic {
 			uint8_t _run_id;
 
 			GLint
+				_format;
+
+			GLint
 				_wrap_s,
 				_wrap_t;
 
@@ -49,15 +52,13 @@ namespace ballistic {
 				const texture_filter & min_filter_v = texture_filter_nearest
 			);
 
-			//virtual void update_data (
-			//	char * data,
-			//	int width,
-			//	int height,
-			//	const texture_wrap & wrap_s_v = texture_wrap_clamp_to_border,
-			//	const texture_wrap & wrap_t_v = texture_wrap_clamp_to_border,
-			//	const texture_filter & mag_filter_v = texture_filter_nearest,
-			//	const texture_filter & min_filter_v = texture_filter_nearest
-			//);
+			virtual void update_data (
+				char * data,
+				uint32_t x,
+				uint32_t y,
+				uint32_t width,
+				uint32_t height
+			);
 
 			virtual void apply (idevice * device);
 			

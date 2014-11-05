@@ -12,6 +12,7 @@ namespace ballistic {
 		class component : public ballistic::component {
 		private:
 			
+			draw						_draw;
 			renderer					_renderer;
 			graphics::material			_material;
 			graphics::graphics_system *	_system;

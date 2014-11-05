@@ -9,13 +9,10 @@ layout (location = 2) in vec2 in_uv;
 out vec2            var_uv;
 
 void main () {
-
 	var_uv = in_uv;
 	// opengl invert texture
 	var_uv.y = 1.0 - var_uv.y;
-
 	vec4 pos = effect_t_model * vec4 (in_position.xyz, 1.0);
-
 	gl_Position = pos;
 }
 
@@ -30,11 +27,10 @@ in vec2 var_uv;
 out vec4 out_color;
 
 void main () {
-
 	vec4 texture_color = texture (effect_texture, var_uv);
-	//texture_color = vec4 (1.0, 1.0, 1.0, 1.0);
-	out_color = texture_color * effect_diffuse;
-
+	texture_color.z = 1.0;
+	//out_color = texture_color * effect_diffuse;
+	out_color = vec4 (1.0, .0, .0, 1.0);
 }
 
 #endif

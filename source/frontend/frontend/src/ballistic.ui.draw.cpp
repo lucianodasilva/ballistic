@@ -26,19 +26,21 @@ namespace ballistic {
 			_line_mesh = _device->create_mesh (text_to_id ("__ui_line_mesh__"));
 			_line_mesh->set_data (
 				nullptr,
-				sizeof (real) * 3 * 2,
+				sizeof (vec3) * 2, // information volume for 2 vertices
 				nullptr,
-				2,
+				2, // 2 index count
 				graphics::mesh_attribute_position,
 				true
 			);
 
+			uint16_t square_index [6] = {0, 1, 2, 0, 2, 3};
+
 			_square_mesh = _device->create_mesh (text_to_id ("__ui_square_mesh__"));
 			_square_mesh->set_data (
 				nullptr,
-				sizeof (real) * 3 * 4,
-				nullptr,
-				8,
+				sizeof (vec3) * 4, // information volume for 4 vertices
+				+square_index,
+				6, // 6 index count
 				graphics::mesh_attribute_position,
 				true
 			);
@@ -53,10 +55,15 @@ namespace ballistic {
 		graphics::ieffect * draw::overlay_effect (graphics::ieffect * v) {
 			_overlay_effect = v;
 
-			if (v)
+			if (v) {
 				_effect_diffuse = v->constant (id::effect::diffuse);
-			else
+				_effect_texture = v->constant (id::effect::texture);
+				_effect_t_model = v->constant (id::effect::t_model);
+			} else {
 				_effect_diffuse = &graphics::null_constant::instance;
+				_effect_texture = &graphics::null_constant::instance;
+				_effect_t_model = &graphics::null_constant::instance;
+			}
 
 			evaluate_config ();
 			return v;
@@ -66,6 +73,8 @@ namespace ballistic {
 			_device (nullptr),
 			_overlay_effect (nullptr),
 			_effect_diffuse (&graphics::null_constant::instance),
+			_effect_texture (&graphics::null_constant::instance),
+			_effect_t_model (&graphics::null_constant::instance),
 			_valid_config (false)
 		{}
 
@@ -74,6 +83,10 @@ namespace ballistic {
 				delete _line_mesh;
 				delete _square_mesh;
 			}
+		}
+
+		void draw::begin_frame () const {
+			_effect_t_model->set_value (mat4 ());
 		}
 
 		void draw::draw_line (const color & col, const vec2 & p1, const vec2 & p2) const {
@@ -103,6 +116,29 @@ namespace ballistic {
 		}
 
 		void draw::draw_rect (const color & col, const vec2 & p1, const vec2 & p2) const {
+			if (!_valid_config) {
+				report_config_fail ("[rect]");
+				return;
+			}
+
+			real data [12] = {									// 12 units ( 4 vectors * 3 dimentions )
+				p1.x, p1.y, real (.0),
+				p2.x, p1.y, real (.0),
+				p2.x, p2.y, real (.0),
+				p1.x, p2.y, real (.0),
+			};
+
+			_square_mesh->update_data (
+				(uint8_t *)(+data),
+				sizeof (vec3) * 4
+			);
+
+			// update uniforms for color and stuffs
+			_effect_diffuse->set_value (col);
+			_effect_texture->set_value ((int)0);
+			
+			_square_mesh->apply (_device);
+			_square_mesh->render ();
 		}
 
 		void draw::fill_rect (const color & col, const vec2 & p1, const vec2 & p2) const {

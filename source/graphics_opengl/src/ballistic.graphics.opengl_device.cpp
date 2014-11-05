@@ -88,6 +88,8 @@ namespace ballistic {
 
 			if (_texture)
 				_texture->apply (this);
+			else
+				glBindTexture (GL_TEXTURE_2D, 0);
 		}
 
 		bool opengl_device::alpha_blend () {

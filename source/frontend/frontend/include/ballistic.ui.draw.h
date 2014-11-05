@@ -21,7 +21,9 @@ namespace ballistic {
 				* _square_mesh;
 
 			graphics::iconstant
-				* _effect_diffuse;
+				* _effect_diffuse,
+				*_effect_texture,
+				*_effect_t_model;
 
 			bool _valid_config;
 
@@ -38,6 +40,8 @@ namespace ballistic {
 
 			draw ();
 			virtual ~draw ();
+
+			void begin_frame () const;
 
 			void draw_line (const color & col, const vec2 & p1, const vec2 & p2) const;
 			void draw_rect (const color & col, const vec2 & p1, const vec2 & p2) const;
