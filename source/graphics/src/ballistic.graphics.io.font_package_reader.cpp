@@ -47,9 +47,14 @@ namespace ballistic {
 						color tmp;
 						color::parse(cursor, tmp);
 						mat->diffuse = tmp;
-					}
-					else if (strcmp(cursor->Name(), "opaque") == 0) {
-						mat->opaque = convert_to < bool >(cursor->Value());
+					} else if (strcmp (cursor->Name (), "color_mask") == 0) {
+						color tmp;
+						color::parse (cursor, tmp);
+						mat->color_mask = tmp;
+					} else if (strcmp (cursor->Name (), "blended") == 0) {
+						mat->blended = convert_to < bool > (cursor->Value ());
+					} else if (strcmp (cursor->Name (), "opacity") == 0) {
+						mat->opacity = convert_to < real > (cursor->Value ());
 					} else if (strcmp(cursor->Name(), "texture") == 0) {
 						itexture * texture = container[text_to_id(cursor->Value())];
 						mat->texture = texture;

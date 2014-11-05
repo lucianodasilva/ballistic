@@ -39,6 +39,7 @@ namespace ballistic {
 
 			define_id_ext (color, light.color);
 			define_id_ext (fallout, light.fallout);
+			define_id_ext (intensity, light.intensity);
 			define_id_ext (position, light.position);
 		}
 
@@ -94,10 +95,15 @@ namespace ballistic {
 		namespace effect {
 
 			define_id_ext (diffuse, effect_diffuse);
+			define_id_ext (color_mask, effect_color_mask);
+			define_id_ext (ambient_sky, effect_ambient_sky);
+			define_id_ext (ambient_ground, effect_ambient_ground);
+			define_id_ext (ambient_intensity, effect_ambient_intensity);
 			define_id_ext (specular, effect_specular);
+			define_id_ext (specular_hardness, effect_specular_hardness);
 			define_id_ext (specular_intensity, effect_specular_intensity);
+			define_id_ext (opacity, effect_opacity);
 			define_id_ext (texture, effect_texture);
-			define_id_ext (ambient, effect_ambient);
 
 			define_id_ext (t_eye, effect_t_eye);
 			define_id_ext (t_model, effect_t_model);

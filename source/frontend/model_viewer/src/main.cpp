@@ -41,7 +41,7 @@ void initialize_defaults (game & g) {
 
 	// setup graphics stuffs
 	_device = create_device ();
-	_device->clear_color ({.0F, .6F, 1.F, 1.F});
+	_device->clear_color ({.0F, .6F, 1.F});
 
 	ballistic::graphics::define_resources (g, _device);
 	ballistic::frontend::define_resources (g);
@@ -94,17 +94,20 @@ bool load_instances (game & g, int argc, char ** argv) {
 		
 		light = g.entities.create (light_entity_type);
 		light->properties [id::position] = vec3{camera_radius, camera_radius, .0};
-		light->properties [id::light::color] = color {0.1, 0.5, 1., 1.};
+		light->properties [id::light::color] = color {0.1, 0.5, 1.};
+		light->properties [id::light::intensity] = real (1.0);
 		light->properties [id::light::fallout] = real (camera_radius * 2.0);
 
 		light = g.entities.create (light_entity_type);
 		light->properties [id::position] = vec3{camera_radius, .0, camera_radius};
-		light->properties [id::light::color] = color{1.0, 1.0, 1., 1.};
+		light->properties [id::light::color] = color{1.0, 1.0, 1.};
+		light->properties [id::light::intensity] = real (1.0);
 		light->properties [id::light::fallout] = real (camera_radius * 2.0);
 
 		light = g.entities.create (light_entity_type);
 		light->properties [id::position] = vec3{-camera_radius, -camera_radius, .0};
-		light->properties [id::light::color] = color{0.1, 0.1, 0.0, 0.25};
+		light->properties [id::light::color] = color{0.1, 0.1, 0.0};
+		light->properties [id::light::intensity] = real (.25);
 		light->properties [id::light::fallout] = real (camera_radius * 2.0);
 
 	} else {
@@ -124,7 +127,7 @@ void load_ui (game & g) {
 	ctrl->size ({0.5, 0.5});
 
 	ui_ent->properties [id::ui::control] = ctrl;
-	ctrl->background_color (color{1.0, .0, .0, 1.0});
+	ctrl->background_color (color{1.0, .0, .0});
 
 	ctrl->on_mouse_down_event += [](ui::control * sender, const ui::mouse_event_args & e) {
 		std::cout << "mouse down pressed" << std::endl;

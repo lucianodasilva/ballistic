@@ -55,7 +55,7 @@ namespace ballistic {
 			} byte_handler;
 
 			try {
-				if (item.material->opaque) {
+				if (item.material->blended) {
 
 					byte_handler.b3 = 0;
 					byte_handler.b2 = 0;

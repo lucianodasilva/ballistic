@@ -192,21 +192,22 @@ namespace ballistic {
 
 	}
 
-	typedef math::details::vec2_t < int32_t > point;
+	using point = math::details::vec2_t < int32_t >;
 
-	typedef math::details::vec2_t < real > vec2;
-	typedef math::details::vec3_t < real > vec3;
-	typedef math::details::vec4_t < real > vec4;
-
-	typedef math::details::vec2_t < int32_t > ivec2;
-	typedef math::details::vec3_t < int32_t > ivec3;
-	typedef math::details::vec4_t < int32_t > ivec4;
-
-	typedef math::details::vec2_t < uint32_t > uvec2;
-	typedef math::details::vec3_t < uint32_t > uvec3;
-	typedef math::details::vec4_t < uint32_t > uvec4;
-
-	typedef math::details::vec4_t < real > color;
+	using vec2 = math::details::vec2_t < real >;
+	using vec3 = math::details::vec3_t < real >;
+	using vec4 = math::details::vec4_t < real >;
+	
+	using ivec2 = math::details::vec2_t < int32_t >;
+	using ivec3 = math::details::vec3_t < int32_t >;
+	using ivec4 = math::details::vec4_t < int32_t >;
+	
+	using uvec2 = math::details::vec2_t < uint32_t >;
+	using uvec3 = math::details::vec3_t < uint32_t >;
+	using uvec4 = math::details::vec4_t < uint32_t >;
+	
+	using color = math::details::vec3_t < real >;
+	using color4 = math::details::vec4_t < real >;
 
 }
 

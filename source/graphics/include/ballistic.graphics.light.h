@@ -13,9 +13,9 @@ namespace ballistic {
 				real data [8];
 				vec3 position;
 				struct {
-					vec4
-						_h1,
-						color;
+					vec4 _h1;
+					vec3 color;
+					real intensity;
 				};
 				struct {
 					vec3 _h2;
@@ -30,6 +30,7 @@ namespace ballistic {
 			graphics_system * _system;
 			property < vec3 > * _p_position;
 			property < color > * _p_color;
+			property < real > * _p_intensity;
 			property < real > * _p_fallout;
 
 		public:

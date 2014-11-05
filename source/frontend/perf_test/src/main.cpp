@@ -176,7 +176,7 @@ int main ( int argc, char ** argv) {
 	_frontend->show ();
 
 	_device = create_device ();
-	_device->clear_color (color{.0F, .6F, 1.F, 1.F});
+	_device->clear_color (color{.0F, .6F, 1.F});
 
 	g.initialize ();
 

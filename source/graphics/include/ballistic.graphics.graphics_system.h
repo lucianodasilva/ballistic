@@ -35,6 +35,13 @@ namespace ballistic {
 			// effect constants
 			iconstant
 				*_c_effect_diffuse,
+				*_c_effect_specular,
+				*_c_effect_specular_intensity,
+				*_c_effect_specular_hardness,
+				*_c_effect_ambient_sky,
+				*_c_effect_ambient_ground,
+				*_c_effect_ambient_intensity,
+				*_c_effect_opacity,
 				*_c_effect_texture,
 				*_c_effect_t_eye,
 				*_c_effect_t_model,
@@ -52,6 +59,7 @@ namespace ballistic {
 			// overlay constants
 			iconstant
 				* _c_overlay_diffuse,
+				* _c_overlay_color_mask,
 				* _c_overlay_texture,
 				* _c_overlay_t_model;
 

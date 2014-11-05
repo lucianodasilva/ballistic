@@ -120,7 +120,7 @@ namespace ballistic {
 				_clear_color.r,
 				_clear_color.g,
 				_clear_color.b,
-				_clear_color.a
+				1
 			);
 
 			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

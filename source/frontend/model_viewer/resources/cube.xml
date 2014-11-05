@@ -1,7 +1,7 @@
 <package>
 
   <texture name="cube.texture" min_filter="linear_mipmap_linear" mag_filter="linear" file="model_viewer_res/cube.png"/>
-  <material name="cube.material" diffuse="0.800000,0.800000,0.800000,1." opaque="false" texture="cube.texture" />
+  <material name="cube.material" diffuse="0.800000,0.800000,0.800000" texture="cube.texture" />
   
   <mesh name="cube.mesh">
     <position>

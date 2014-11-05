@@ -19,11 +19,23 @@ namespace ballistic {
 			material (const id_t & id);
 			virtual ~material();
 
-			color		diffuse;
-			itexture *	texture;
-			bool		opaque;
+			color		
+				diffuse,
+				specular,
+				color_mask,
+				ambient_sky,
+				ambient_ground;
 
-			
+			real		
+				specular_hardness,
+				specular_intensity,
+				ambient_intensity,
+				opacity;
+
+			bool
+				blended;
+
+			itexture *	texture;
 
 		};
 

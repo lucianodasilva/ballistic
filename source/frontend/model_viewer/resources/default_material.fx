@@ -14,14 +14,19 @@ uniform mat4        effect_t_mvp;
 	mat [1].w		= intensity
 */
 uniform mat2x4		effect_lights [8];
-uniform int		effect_light_count;
+uniform int			effect_light_count;
 
 // material
-uniform vec4        effect_diffuse;
-uniform vec4		effect_specular;
+uniform vec3        effect_diffuse;
+uniform vec3		effect_specular;
 uniform float		effect_specular_intensity;
+uniform float		effect_specular_hardness;
 
-uniform vec4		effect_ambient;
+uniform vec3 		effect_ambient_sky;
+uniform vec3		effect_ambient_ground;
+uniform float		effect_ambient_intensity;
+
+uniform float		effect_opacity;
 
 #ifdef VERTEX_SHADER
 
@@ -64,26 +69,18 @@ void main () {
 	vec3
 		light_pos,
 		light_vec,
-
 		light_col,
-		skycol = vec3 (0.76, 0.83, 0.89),
-		gndcol = vec3 (0.07, 0.11, 0.13),
-		diff_col = vec3 (0.23, 0.14, 0.07),//effect_diffuse,
-		spec_col = vec3 (1.0, 1.0, 1.0), //effect_specular;
 		temp_col = vec3 (.0, .0, .0);
 
 	float
-		ambient_int = 0.05,
 		light_fal,
 		light_dst,
 		light_int,
-		spec_hard = 100.0,// effect_specular_hardness,
-		spec_int = 0.8, // effect_specular_int
 		att = 0.0,
 		bgt = 0.0,
 		sky_bgt = 0.0;
 
-	temp_col = diff_col;
+	temp_col = effect_diffuse;
 
 	vec3 normal = normalize (var_normal);
 
@@ -91,7 +88,7 @@ void main () {
 	vec3 up = vec3 (.0, 1.0, .0);
 	sky_bgt = 0.5 * (1.0 + dot (up, normal));
 	
-	temp_col *= (sky_bgt * skycol + (1.0 - sky_bgt) * gndcol);
+	temp_col *= ((sky_bgt * effect_ambient_sky + (1.0 - sky_bgt) * effect_ambient_ground) * effect_ambient_intensity);
 	
 	// --- lights ---
 	for (int i = 0; i < effect_light_count; ++i) {
@@ -116,25 +113,25 @@ void main () {
 			att = 1.0 / (att * att);
 		}
 	
-		light_col =  bgt * att * light_col * diff_col;
+		light_col =  bgt * att * light_col * effect_diffuse;
 	
 		// --- specular ---
-		if (spec_int > 0.0) {
+		if (effect_specular_intensity > 0.0) {
 		
 			vec3 eye_v = normalize (effect_t_eye - var_position);
 		
 			float spec_bgt = dot (normal, light_vec);
 		
 			if (spec_bgt > 0.0) {
-				spec_bgt = pow (max (0.0, dot (eye_v, reflect (-light_vec, normal))), spec_hard), 1.0;
-				light_col += spec_bgt * att * effect_lights [i] [1].xyz * spec_int;
+				spec_bgt = pow (max (0.0, dot (eye_v, reflect (-light_vec, normal))), effect_specular_hardness), 1.0;
+				light_col += spec_bgt * att * effect_lights [i] [1].xyz * effect_specular_intensity;
 			}
 		}
 	
 		temp_col += light_col;
 	}
 
-	out_color = vec4 (temp_col, 1.0);
+	out_color = vec4 (temp_col, effect_opacity);
 }
 
 #endif

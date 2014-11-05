@@ -28,9 +28,7 @@ namespace ballistic {
 			_system (nullptr),
 			_layer (nullptr),
 			_control (nullptr)
-		{
-			_material.opaque = false;
-		}
+		{}
 
 		void component::require_properties (entity_type * new_type, component_info & info) {
 			new_type->properties

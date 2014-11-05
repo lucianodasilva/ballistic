@@ -124,8 +124,8 @@ inline void draw_rect (const vec3 & center, real size, const color & color_v) {
 }
 
 inline void draw_bones (const vec3 & parent, const vec3 & child) {
-	ballistic::graphics::opengl_debug::draw_line (parent, child, {.0, 1.0, .0, 1.});
-	draw_rect (parent, 0.01F, {.0, 1.0, .0, 1.});
+	ballistic::graphics::opengl_debug::draw_line (parent, child, {.0, 1.0, .0});
+	draw_rect (parent, 0.01F, {.0, 1.0, .0});
 }
 
 // -----------
@@ -252,7 +252,7 @@ public:
 					vec3 mtv = m * v.pos;
 					mtv = transform_to_screen (m_vp, mtv);
 
-					draw_rect (mtv, 0.01F, {.0, .0, 1.0, 1.});
+					draw_rect (mtv, 0.01F, {.0, .0, 1.0});
 				}
 			}
 			
@@ -281,7 +281,7 @@ int main ( int argc, char ** argv) {
 	_frontend->show ();
 
 	_device = create_device ();
-	_device->clear_color ({.0F, .6F, 1.F, 1.F});
+	_device->clear_color ({.0F, .6F, 1.F});
 
 	// initialize
 	g.initialize ();

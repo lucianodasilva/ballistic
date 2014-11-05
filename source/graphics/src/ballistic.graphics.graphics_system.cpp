@@ -47,6 +47,13 @@ namespace ballistic {
 			_material_effect (nullptr),
 
 			_c_effect_diffuse (&null_constant::instance),
+			_c_effect_specular (&null_constant::instance),
+			_c_effect_specular_intensity (&null_constant::instance),
+			_c_effect_specular_hardness (&null_constant::instance),
+			_c_effect_ambient_sky (&null_constant::instance),
+			_c_effect_ambient_ground (&null_constant::instance),
+			_c_effect_ambient_intensity (&null_constant::instance),
+			_c_effect_opacity (&null_constant::instance),
 			_c_effect_texture (&null_constant::instance),
 			_c_effect_t_eye (&null_constant::instance),
 			_c_effect_t_model (&null_constant::instance),
@@ -62,6 +69,7 @@ namespace ballistic {
 			_overlay_effect (nullptr),
 
 			_c_overlay_diffuse (&null_constant::instance),
+			_c_overlay_color_mask (&null_constant::instance),
 			_c_overlay_texture (&null_constant::instance),
 			_c_overlay_t_model (&null_constant::instance),
 
@@ -93,6 +101,13 @@ namespace ballistic {
 				return;
 
 			_c_effect_diffuse = _material_effect->constant (id::effect::diffuse);
+			_c_effect_specular = _material_effect->constant (id::effect::specular);
+			_c_effect_specular_intensity = _material_effect->constant (id::effect::specular_intensity);
+			_c_effect_specular_hardness = _material_effect->constant (id::effect::specular_hardness);
+			_c_effect_ambient_sky = _material_effect->constant (id::effect::ambient_sky);
+			_c_effect_ambient_ground = _material_effect->constant (id::effect::ambient_ground);
+			_c_effect_ambient_intensity = _material_effect->constant (id::effect::ambient_intensity);
+			_c_effect_opacity = _material_effect->constant (id::effect::opacity);
 			_c_effect_texture = _material_effect->constant (id::effect::texture);
 			_c_effect_t_eye = _material_effect->constant (id::effect::t_eye);
 			_c_effect_t_model = _material_effect->constant (id::effect::t_model);
@@ -119,6 +134,7 @@ namespace ballistic {
 				return;
 
 			_c_overlay_diffuse = _overlay_effect->constant (id::effect::diffuse);
+			_c_overlay_color_mask = _overlay_effect->constant (id::effect::color_mask);
 			_c_overlay_texture = _overlay_effect->constant (id::effect::texture);
 			_c_overlay_t_model = _overlay_effect->constant (id::effect::t_model);
 
@@ -191,17 +207,24 @@ namespace ballistic {
 				if (item.material != material) {
 					material = item.material;
 					_c_effect_diffuse->set_value (material->diffuse);
+					_c_effect_specular->set_value (material->specular);
+					_c_effect_specular_hardness->set_value (material->specular_hardness);
+					_c_effect_specular_intensity->set_value (material->specular_intensity);
+					_c_effect_ambient_sky->set_value (material->ambient_sky);
+					_c_effect_ambient_ground->set_value (material->ambient_ground);
+					_c_effect_ambient_intensity->set_value (material->ambient_intensity);
+					_c_effect_opacity->set_value (material->opacity);
+
+					if (material->blended != alpha_blend) {
+						alpha_blend = true;
+						_device->alpha_blend (true);
+					}
 				}
 
 				if (item.material->texture != texture) {
 					texture = item.material->texture;
 					_device->activate (texture);
 					_c_effect_texture->set_value (0);
-				}
-
-				if (item.material->opaque != alpha_blend) {
-					alpha_blend = true;
-					_device->alpha_blend (true);
 				}
 
 				if (item.renderable != renderable) {
@@ -249,17 +272,19 @@ namespace ballistic {
 				if (item.material != material) {
 					material = item.material;
 					_c_overlay_diffuse->set_value (material->diffuse);
+					_c_overlay_color_mask->set_value (material->color_mask);
+
+					if (item.material->blended != alpha_blend) {
+						alpha_blend = true;
+						_device->alpha_blend (true);
+					}
 				}
 
 				if (item.material->texture != texture) {
 					texture = item.material->texture;
 					_device->activate (texture);
+					
 					_c_overlay_texture->set_value (0);
-				}
-
-				if (item.material->opaque != alpha_blend) {
-					alpha_blend = true;
-					_device->alpha_blend (true);
 				}
 
 				if (item.renderable != renderable) {
