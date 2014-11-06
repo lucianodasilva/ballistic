@@ -18,7 +18,7 @@ namespace ballistic {
 			control * c = find_containing (position);
 
 			if (c) {
-				vec2 client_pos = position - c->location ();
+				vec2 client_pos = position - (vec2)c->location;
 				c->on_mouse_move (client_pos);
 			} else {
 				on_mouse_move_event (this, position);
@@ -29,7 +29,7 @@ namespace ballistic {
 			control * c = find_containing (args.position);
 
 			if (c) {
-				vec2 client_pos = args.position - c->location ();
+				vec2 client_pos = args.position - (vec2)c->location;
 				c->on_mouse_down ({
 					client_pos,
 					args.buttons
@@ -43,7 +43,7 @@ namespace ballistic {
 			control * c = find_containing (args.position);
 
 			if (c) {
-				vec2 client_pos = args.position - c->location ();
+				vec2 client_pos = args.position - (vec2)c->location;
 				c->on_mouse_up ({
 					client_pos,
 					args.buttons
@@ -55,9 +55,9 @@ namespace ballistic {
 
 		void control::on_draw (const draw & d) {
 			d.fill_rect (
-				_background_color,
-				to_absolute (_location),
-				to_absolute (_location + _size)
+				background_color,
+				to_absolute (location),
+				to_absolute ((vec2)location + (vec2)size)
 			);
 			
 			on_draw_event (this, d);
@@ -68,9 +68,7 @@ namespace ballistic {
 		}
 
 		control::control () :
-			_parent (nullptr),
-			_location (),
-			_size ()
+			_parent (nullptr)
 		{}
 
 		control::~control () {}
@@ -85,28 +83,10 @@ namespace ballistic {
 			return _controls;
 		}
 
-		vec2 control::location () const { return _location; }
-		vec2 control::location (const vec2 & v) {
-			_location = v;
-			return _location;
-		}
-
-		vec2 control::size () const { return _size; }
-		vec2 control::size (const vec2 & v) {
-			_size = v;
-			return v;
-		}
-
-		color control::background_color () const { return _background_color; }
-		color control::background_color (const color & v) {
-			_background_color = v;
-			return v;
-		}
-
 		rect control::bounds () const {
 			rect r;
-			r.position = _location;
-			r.size = _size;
+			r.position = location;
+			r.size = size;
 
 			return r;
 		}
@@ -117,7 +97,7 @@ namespace ballistic {
 
 			rect temp;
 
-			temp.position = client_rect.position + _location;
+			temp.position = client_rect.position + (vec2)location;
 			temp.size = client_rect.size;
 
 			return _parent->to_absolute (temp);
@@ -127,7 +107,7 @@ namespace ballistic {
 			if (!_parent)
 				return client_location;
 
-			vec2 temp = client_location + _location;
+			vec2 temp = client_location + (vec2)location;
 
 			return _parent->to_absolute (temp);
 		}
@@ -138,7 +118,7 @@ namespace ballistic {
 
 			rect temp = to_absolute (bounds ());
 
-			temp.position = _location - temp.position;
+			temp.position = (vec2)location - temp.position;
 
 			return temp;
 		}
@@ -147,7 +127,7 @@ namespace ballistic {
 			if (!_parent)
 				return absolute_location;
 
-			return absolute_location - to_absolute (_location);
+			return absolute_location - to_absolute (location);
 		}
 
 	}

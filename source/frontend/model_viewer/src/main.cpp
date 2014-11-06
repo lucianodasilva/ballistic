@@ -123,11 +123,11 @@ void load_ui (game & g) {
 	entity * ui_ent = g.entities.create (ui_entity_type, ui_entity);
 
 	ui::control * ctrl = new ui::panel ();
-	ctrl->location ({0.1, 0.1});
-	ctrl->size ({0.5, 0.5});
+	ctrl->location = vec2 {0.1, 0.1};
+	ctrl->size = vec2 {0.5, 0.5};
 
 	ui_ent->properties [id::ui::control] = ctrl;
-	ctrl->background_color (color{1.0, .0, .0});
+	ctrl->background_color = color {1.0, .0, .0};
 
 	ctrl->on_mouse_down_event += [](ui::control * sender, const ui::mouse_event_args & e) {
 		std::cout << "mouse down pressed" << std::endl;

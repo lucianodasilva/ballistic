@@ -30,8 +30,8 @@ out vec4 out_color;
 
 void main () {
 	vec4 texture_color = texture (effect_texture, var_uv);
-	out_color = effect_color_mask * (effect_diffuse + texture_color);
-	out_color.a = out_color.a * effect_opacity;
+	out_color.rgb = effect_color_mask * (effect_diffuse + texture_color.rgb);
+	out_color.a = texture_color.a * effect_opacity;
 }
 
 #endif

@@ -70,6 +70,7 @@ namespace ballistic {
 
 			_c_overlay_diffuse (&null_constant::instance),
 			_c_overlay_color_mask (&null_constant::instance),
+			_c_overlay_opacity (&null_constant::instance),
 			_c_overlay_texture (&null_constant::instance),
 			_c_overlay_t_model (&null_constant::instance),
 
@@ -135,6 +136,7 @@ namespace ballistic {
 
 			_c_overlay_diffuse = _overlay_effect->constant (id::effect::diffuse);
 			_c_overlay_color_mask = _overlay_effect->constant (id::effect::color_mask);
+			_c_overlay_opacity = _overlay_effect->constant (id::effect::opacity);
 			_c_overlay_texture = _overlay_effect->constant (id::effect::texture);
 			_c_overlay_t_model = _overlay_effect->constant (id::effect::t_model);
 
@@ -273,6 +275,7 @@ namespace ballistic {
 					material = item.material;
 					_c_overlay_diffuse->set_value (material->diffuse);
 					_c_overlay_color_mask->set_value (material->color_mask);
+					_c_overlay_opacity->set_value (material->opacity);
 
 					if (item.material->blended != alpha_blend) {
 						alpha_blend = true;

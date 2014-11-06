@@ -4,6 +4,7 @@
 #include <functional>
 
 #include <ballistic.graphics.h>
+#include "ballistic.ui.bindable.h"
 #include "ballistic.ui.draw.h"
 #include "ballistic.ui.common.h"
 
@@ -64,11 +65,6 @@ namespace ballistic {
 
 			control * _parent;
 
-			vec2	_location;
-			vec2	_size;
-
-			color	_background_color;
-
 			std::vector < control * > _controls;
 
 			control * find_containing (const vec2 & p);
@@ -101,14 +97,9 @@ namespace ballistic {
 
 			std::vector < control * > & controls ();
 			 
-			vec2 location () const;
-			vec2 location (const vec2 & v);
-			 
-			vec2 size () const;
-			vec2 size (const vec2 & v);
-
-			color background_color () const;
-			color background_color (const color & v);
+			bindable < vec2 > location;
+			bindable < vec2 > size;
+			bindable < color > background_color;
 
 			rect bounds () const;
 

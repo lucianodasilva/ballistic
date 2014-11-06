@@ -60,6 +60,7 @@ namespace ballistic {
 			iconstant
 				* _c_overlay_diffuse,
 				* _c_overlay_color_mask,
+				* _c_overlay_opacity,
 				* _c_overlay_texture,
 				* _c_overlay_t_model;
 
