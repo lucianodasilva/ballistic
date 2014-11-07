@@ -14,6 +14,7 @@ namespace ballistic {
 			define_id_ext (render, message.render);
 			define_id_ext (start_rig_animation, message.start_rig_animation);
 			define_id_ext (stop_rig_animation, message.stop_rig_animation);
+			define_id_ext (client_size_changed, message.client_size_changed);
 		}
 
 		namespace camera {

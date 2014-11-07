@@ -84,30 +84,29 @@ namespace ballistic {
 			return *_p_position;
 		}
 
-		void camera::make_ortho_projection (real left, real right, real bottom, real top, real near, real far) {
+		void camera::make_ortho_projection () {
 
 			_proj = {
-				real (2) / (right - left), real (0), real (0), real (0),
-				real (0), real (2) / (top - bottom), real (0), real (0),
-				real (0), real (0), real (1) / (far - near), real (0),
-				real (0), real (0), near / (near - far), real (1)
+				real (2) / (_right - _left), real (0), real (0), real (0),
+				real (0), real (2) / (_top - _bottom), real (0), real (0),
+				real (0), real (0), real (1) / (_far - _near), real (0),
+				real (0), real (0), _near / (_near - _far), real (1)
 			};
 
-			_far = far;
-			_near = near;
-
 			_depth_divisor =
-				far / (far - near)
+				_far / (_far - _near)
 				+
-				far * near / (near - far);
+				_far * _near / (_near - _far);
 
 		}
 
-		void camera::make_perspective_proj (real fov, real aspect, real near, real far ) {
+		void camera::make_perspective_proj () {
+
+			real aspect = real (_client_size.x) / real (_client_size.y);
 
 			real
-				fov_r = math::radians (fov),
-				range = tan (fov_r / real (2)) * near,
+				fov_r = math::radians (_fovy),
+				range = tan (fov_r / real (2)) * _near,
 				l = -range * aspect,
 				r = range * aspect,
 				b = -range,
@@ -115,31 +114,44 @@ namespace ballistic {
 
 
 			_proj = {
-				(real (2) * near) / (r - l), .0, .0, .0,
-				.0, (real (2) * near) / (t - b), .0, .0,
-				.0, .0, -(far + near) / (far - near), real (-1),
-				.0, .0, -(real (2) * far * near) / (far - near), .0
+				(real (2) * _near) / (r - l), .0, .0, .0,
+				.0, (real (2) * _near) / (t - b), .0, .0,
+				.0, .0, -(_far + _near) / (_far - _near), real (-1),
+				.0, .0, -(real (2) * _far * _near) / (_far - _near), .0
 			};
-			
-			_far = far;
-			_near = near;
 
 			_depth_divisor =
-				far / (far - near)
+				_far / (_far - _near)
 				+
-				far * near / (near - far);
+				_far * _near / (_near - _far);
 
+		}
+
+		void camera::update_proj () {
+
+			if (_projection_type == projection_ortho)
+				make_ortho_projection ();
+			else if (_projection_type == projection_perspective) {
+				_client_size = game ().properties [id::frontend::client_size];
+				make_perspective_proj ();
+			}
 		}
 
 		void camera::notify (entity * sender, ballistic::message & message) {
 
-			if (_system)
-				_system->camera (this);
-			debug_run (else
-				debug_print ("graphics system not set!");
-			);
+			id_t message_id = message.id ();
 
-			*_p_view = view ();
+			if (message_id == id::message::update) {
+				if (_system)
+					_system->camera (this);
+				debug_run (else
+						   debug_print ("graphics system not set!");
+				);
+
+				*_p_view = view ();
+			} else if (message_id == id::message::client_size_changed) {
+				update_proj ();
+			}
 
 		}
 
@@ -147,51 +159,30 @@ namespace ballistic {
 			component::setup (parameters);
 
 			// bind to global message notifier
-			game ().global_notifier.attach (id::message::update, this);
+			game ().global_notifier.attach ({id::message::update, id::message::client_size_changed}, this);
 
 			// get graphics system in use
 			_system = dynamic_cast <graphics_system *> (game ().systems [id::graphics::system]);
 			
-			real
-				left = 0,
-				right = 0,
-				top = 0,
-				bottom = 0,
-				near = 0,
-				far = 0,
-				fovy = 0;
-			
-			
-			enum {
-				proj_type_ortho,
-				proj_type_persp
-			} type = proj_type_ortho;
+			string str_proj = parameters [id::camera::projection].as < string > ();
 
-			string projection_type = parameters [id::camera::projection].as < string > ();
-
-			if (projection_type == "ortho")
-				type = proj_type_ortho;
-			else if (projection_type == "perspective")
-				type = proj_type_persp;
+			if (str_proj == "ortho")
+				_projection_type = projection_ortho;
+			else if (str_proj == "perspective")
+				_projection_type = projection_perspective;
 			else {
-				debug_print ("unknown projection type \"" << projection_type << "\". default to ortho.");
+				debug_print ("unknown projection type \"" << str_proj << "\". default to ortho.");
 			}
 			
-			left	= parameters [id::camera::left];
-			right	= parameters [id::camera::right];
-			top		= parameters [id::camera::top];
-			bottom	= parameters [id::camera::bottom];
-			near	= parameters [id::camera::near];
-			far		= parameters [id::camera::far];
-			fovy	= parameters [id::camera::fov];
+			_left	= parameters [id::camera::left];
+			_right	= parameters [id::camera::right];
+			_top	= parameters [id::camera::top];
+			_bottom	= parameters [id::camera::bottom];
+			_near	= parameters [id::camera::near];
+			_far	= parameters [id::camera::far];
+			_fovy	= parameters [id::camera::fov];
 			
-			
-			if (type == proj_type_ortho)
-				make_ortho_projection (left, right, bottom, top, near, far);
-			else if (type == proj_type_persp) {
-				point size = game ().properties [id::frontend::client_size];
-				make_perspective_proj (fovy, real (size.x) / real (size.y), near, far);
-			}
+			update_proj ();
 
 			auto & properties = parent ().properties;
 
@@ -206,7 +197,7 @@ namespace ballistic {
 
 		void camera::terminate () {
 			// unbind to global message notifier
-			game ().global_notifier.detach (id::message::update, this);
+			game ().global_notifier.detach ({id::message::update, id::message::client_size_changed}, this);
 		}
 
 	}

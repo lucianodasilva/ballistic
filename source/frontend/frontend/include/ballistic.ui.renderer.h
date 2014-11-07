@@ -27,7 +27,6 @@ namespace ballistic {
 
 			virtual void apply (graphics::idevice * device);
 			virtual void render ();
-
 			virtual aabox bounding_box () const;
 
 

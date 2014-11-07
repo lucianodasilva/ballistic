@@ -91,6 +91,10 @@ namespace ballistic {
 			};
 
 			glViewport (0, 0, _window_client_size.x, _window_client_size.y);
+
+			_game.properties [id::frontend::client_size] = _window_client_size;
+			message m (id::message::client_size_changed);
+			_game.global_notifier.notify (m);
 		}
 
 		void frontend::on_mouse_event (

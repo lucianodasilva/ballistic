@@ -6,15 +6,33 @@
 namespace ballistic {
 	namespace graphics {
 
+		enum projection_type {
+			projection_perspective,
+			projection_ortho
+		};
+
 		class graphics_system;
 
 		class camera : public ballistic::component {
 		private:
 
-			real _near;
-			real _far;
+			projection_type
+				_projection_type;
 
-			real _depth_divisor;
+			real
+				_left,
+				_right,
+				_top,
+				_bottom,
+				_near,
+				_far,
+				_fovy;
+
+			real 
+				_depth_divisor;
+
+			point
+				_client_size;
 
 			graphics_system *	_system;
 
@@ -26,6 +44,11 @@ namespace ballistic {
 
 			property < mat4 > * _p_proj;
 			property < mat4 > * _p_view;
+
+			void make_ortho_projection ();
+			void make_perspective_proj ();
+
+			void update_proj ();
 
 		public:
 
@@ -45,9 +68,6 @@ namespace ballistic {
 
 			vec3 position () const;
 
-			// utilities
-			void make_ortho_projection (real left, real right, real bottom, real top, real near, real far);
-			void make_perspective_proj (real fov, real aspect, real near, real far );
 
 			// component
 			virtual void notify (entity * sender, ballistic::message & message) override;
