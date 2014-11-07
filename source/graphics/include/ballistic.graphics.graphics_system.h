@@ -35,7 +35,6 @@ namespace ballistic {
 			// effect constants
 			iconstant
 				*_c_effect_diffuse,
-				*_c_effect_specular,
 				*_c_effect_specular_intensity,
 				*_c_effect_specular_hardness,
 				*_c_effect_ambient_sky,

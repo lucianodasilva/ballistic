@@ -18,7 +18,6 @@ uniform int			effect_light_count;
 
 // material
 uniform vec3        effect_diffuse;
-uniform vec3		effect_specular;
 uniform float		effect_specular_intensity;
 uniform float		effect_specular_hardness;
 

@@ -31,10 +31,6 @@ namespace ballistic {
 						color tmp;
 						color::parse (cursor, tmp);
 						mat->diffuse = tmp;
-					} else if (strcmp (cursor->Name (), "specular") == 0) {
-						color tmp;
-						color::parse (cursor, tmp);
-						mat->specular = tmp;
 					} else if (strcmp (cursor->Name (), "color_mask") == 0) {
 						color tmp;
 						color::parse (cursor, tmp);

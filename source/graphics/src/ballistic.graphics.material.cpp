@@ -8,7 +8,6 @@ namespace ballistic {
 		material::material (const id_t & id) :
 			iresource (id),
 			diffuse ({real (1), real (1), real (1)}),
-			specular ({real (1), real (1), real (1)}),
 			color_mask ({real (1), real (1), real (1)}),
 			ambient_sky ({real (.76), real (.83), real(.89)}),
 			ambient_ground ({real (.07), real (.11), real (.13)}),

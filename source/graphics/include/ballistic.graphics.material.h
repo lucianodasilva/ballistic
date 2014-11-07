@@ -21,7 +21,6 @@ namespace ballistic {
 
 			color		
 				diffuse,
-				specular,
 				color_mask,
 				ambient_sky,
 				ambient_ground;

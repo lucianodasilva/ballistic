@@ -99,7 +99,6 @@ namespace ballistic {
 			define_id_ext (ambient_sky, effect_ambient_sky);
 			define_id_ext (ambient_ground, effect_ambient_ground);
 			define_id_ext (ambient_intensity, effect_ambient_intensity);
-			define_id_ext (specular, effect_specular);
 			define_id_ext (specular_hardness, effect_specular_hardness);
 			define_id_ext (specular_intensity, effect_specular_intensity);
 			define_id_ext (opacity, effect_opacity);

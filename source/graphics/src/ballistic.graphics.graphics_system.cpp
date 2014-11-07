@@ -47,7 +47,6 @@ namespace ballistic {
 			_material_effect (nullptr),
 
 			_c_effect_diffuse (&null_constant::instance),
-			_c_effect_specular (&null_constant::instance),
 			_c_effect_specular_intensity (&null_constant::instance),
 			_c_effect_specular_hardness (&null_constant::instance),
 			_c_effect_ambient_sky (&null_constant::instance),
@@ -102,7 +101,6 @@ namespace ballistic {
 				return;
 
 			_c_effect_diffuse = _material_effect->constant (id::effect::diffuse);
-			_c_effect_specular = _material_effect->constant (id::effect::specular);
 			_c_effect_specular_intensity = _material_effect->constant (id::effect::specular_intensity);
 			_c_effect_specular_hardness = _material_effect->constant (id::effect::specular_hardness);
 			_c_effect_ambient_sky = _material_effect->constant (id::effect::ambient_sky);
@@ -209,7 +207,6 @@ namespace ballistic {
 				if (item.material != material) {
 					material = item.material;
 					_c_effect_diffuse->set_value (material->diffuse);
-					_c_effect_specular->set_value (material->specular);
 					_c_effect_specular_hardness->set_value (material->specular_hardness);
 					_c_effect_specular_intensity->set_value (material->specular_intensity);
 					_c_effect_ambient_sky->set_value (material->ambient_sky);
