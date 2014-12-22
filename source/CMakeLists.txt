@@ -19,41 +19,58 @@ message (STATUS "ballistic version: ${BALLISTIC_REVISION_COUNT}.${BALLISTIC_REVI
 set ( proj_dir ${CMAKE_CURRENT_LIST_DIR} )
 
 set ( ballistic_base_dir       			${proj_dir}/base )
+set ( ballistic_frontend_dir			${proj_dir}/frontend )
 set ( ballistic_graphics_dir   			${proj_dir}/graphics )
 set ( ballistic_graphics_opengl3_dir	${proj_dir}/graphics_opengl )
+set ( ballistic_ui_dir					${proj_dir}/ui )
 
-set ( build_ballistic_opengl3 TRUE CACHE BOOL "Build for OpenGL 3")
+set ( ballistic_opengl TRUE CACHE BOOL "Build for OpenGL 3")
 
 # library source code path settings
-set ( ballistic_base_dir      ${ballistic_base_dir}     CACHE PATH "Path to Base Library" )
-set ( ballistic_graphics_dir  ${ballistic_graphics_dir} CACHE PATH "Path to Graphics Library" )
+set ( ballistic_base_dir      	${ballistic_base_dir}     CACHE PATH "Path to Base Library" )
+set ( ballistic_graphics_dir  	${ballistic_graphics_dir} CACHE PATH "Path to Graphics Library" )
+set ( ballistic_frontend_dir  	${ballistic_frontend_dir} CACHE PATH "Path to Frontend Library" )
+set ( ballistic_ui_dir  		${ballistic_ui_dir} CACHE PATH "Path to UI Library" )
 
-set ( ballistic_graphics_opengl3_dir ${ballistic_graphics_opengl3_dir} CACHE PATH "Path to OpenGL device implementation")
+if ( ballistic_opengl )
+	set ( ballistic_graphics_opengl3_dir ${ballistic_graphics_opengl3_dir} CACHE PATH "Path to OpenGL device implementation")
+endif()
 
+set ( ballistic_graphics_dependencies )
 # --------- dependencies ----------
 include (${proj_dir}/deps/tinyxml2/CMakeLists.txt )
-include (${proj_dir}/deps/glew/CMakeLists.txt)
 include (${proj_dir}/deps/zlib/CMakeLists.txt)
 include (${proj_dir}/deps/lpng/CMakeLists.txt)
 
 # --------- core projects ----------
 include ( ${ballistic_base_dir}/CMakeLists.txt )
-
 include ( ${ballistic_graphics_dir}/CMakeLists.txt )
 
-if ( build_ballistic_opengl3 )
+if ( ballistic_opengl )
+	if (APPLE)
+		include_directories (/System/Library/Frameworks)
+		find_library ( OpenGL_LIBRARY OpenGL )
+		mark_as_advanced ( 
+				OpenGL_LIBRARY
+		)
+		set ( ballistic_gl_dependencies ${OpenGL_LIBRARY})
+	else ()
+		find_package (OpenGL REQUIRED)
+		set ( ballistic_gl_dependencies ${OPENGL_LIBRARY})
+	endif ()
 	include (${ballistic_graphics_opengl3_dir}/CMakeLists.txt)
 endif()
 
-# --------- frontends ---------
+include ( ${ballistic_frontend_dir}/CMakeLists.txt )
+include ( ${ballistic_ui_dir}/CMakeLists.txt )
+
+# --------- demos / tools ---------
 
 # development frontend
-include ( ${proj_dir}/frontend/frontend/CMakeLists.txt )
-include ( ${proj_dir}/frontend/dev_frontend/CMakeLists.txt )
-include ( ${proj_dir}/frontend/perf_test/CMakeLists.txt )
-include ( ${proj_dir}/frontend/model_viewer/CMakeLists.txt )
-include ( ${proj_dir}/frontend/material_editor/CMakeLists.txt )
-
+include ( ${proj_dir}/demo/dev/CMakeLists.txt )
+include ( ${proj_dir}/demo/perf_test/CMakeLists.txt )
+include ( ${proj_dir}/tools/material_editor/CMakeLists.txt )
+include ( ${proj_dir}/tools/model_viewer/CMakeLists.txt )
 # -----------------------------
 
 # enable c++11

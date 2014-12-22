@@ -240,12 +240,12 @@ namespace ballistic {
 				_c_effect_t_model->set_value (item.transform);
 				_c_effect_t_mvp->set_value (m_mvp);
 
-				_c_effect_bone_count->set_value ((int32_t)item.rig->bones.size());
-				_c_effect_t_bones->set_value (item.rig->bones);
-
-				// update rig
-				_c_effect_bone_count->set_value ((int32_t)item.rig->bones.size ());
-				_c_effect_t_bones->set_value (item.rig->bones);
+//				_c_effect_bone_count->set_value ((int32_t)item.rig->bones.size());
+//				_c_effect_t_bones->set_value (item.rig->bones);
+//
+//				// update rig
+//				_c_effect_bone_count->set_value ((int32_t)item.rig->bones.size ());
+//				_c_effect_t_bones->set_value (item.rig->bones);
 				
 				// render the stuffs
 				_device->draw_active_renderable ();
@@ -327,6 +327,7 @@ namespace ballistic {
 			item.material = material;
 			item.renderable = renderable;
 			item.rig = rig;
+
 			item.transform = transform;
 			item.layer = layer;
 

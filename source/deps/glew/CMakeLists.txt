@@ -14,20 +14,6 @@ file ( GLOB glew_source
 
 add_library(glew STATIC ${glew_source})
 
-if (APPLE)
-	include_directories (/System/Library/Frameworks)
-	find_library ( OpenGL_LIBRARY OpenGL )
-	mark_as_advanced ( 
-			OpenGL_LIBRARY
-	)
-
-	set (BALLISTIC_GL_LIBRARIES ${OpenGL_LIBRARY})
-	
-else ()
-	find_package (OpenGL REQUIRED)
-	set ( BALLISTIC_GL_LIBRARIES ${OPENGL_LIBRARY})
-endif ()
-
-target_link_libraries ( glew ${BALLISTIC_GL_LIBRARIES})
+target_link_libraries ( glew ${ballistic_gl_dependencies})
 
 set_property (TARGET glew PROPERTY FOLDER "deps")

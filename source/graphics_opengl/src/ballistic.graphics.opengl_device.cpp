@@ -114,6 +114,14 @@ namespace ballistic {
 		color opengl_device::clear_color() const {
 			return _clear_color;
 		}
+		
+		vec2 opengl_device::viewport () const {
+			return _viewport;
+		}
+		
+		void opengl_device::viewport ( const vec2 & v ) {
+			_viewport = v;
+		}
 
 		void opengl_device::clear () {
 			glClearColor (

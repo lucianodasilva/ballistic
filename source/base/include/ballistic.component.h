@@ -8,8 +8,6 @@
 
 namespace ballistic {
 
-	class game;
-
 	// abstract implementation
 	class component : public icomponent {
 	public:

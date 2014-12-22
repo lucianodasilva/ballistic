@@ -7,6 +7,8 @@
 #include "ballistic.icomponent.h"
 #include "ballistic.iresource.h"
 
+#include "ballistic.entity_type.h"
+
 using namespace std;
 
 namespace ballistic {

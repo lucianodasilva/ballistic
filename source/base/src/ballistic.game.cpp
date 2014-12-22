@@ -33,20 +33,6 @@ namespace ballistic {
 
 	bool game::is_running () { return _running; }
 
-	//void game::do_loop (function < void ( game * ) > system_callback) {
-	//
-	//	if (!_frontend) {
-	//		debug_error ("[ballistic::game::do_loop] frontend not set!")
-	//	}
-	//
-	//	while (frame ()){
-	//		if (system_callback)
-	//			system_callback (this);
-	//
-	//		_frontend->update ();
-	//	}
-	//}
-
 	bool game::frame () {
 		
 		*_m_update_game_time =	system::get_elapsed_seconds (_game_start_time);

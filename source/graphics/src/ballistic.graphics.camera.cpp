@@ -112,7 +112,6 @@ namespace ballistic {
 				b = -range,
 				t = range;
 
-
 			_proj = {
 				(real (2) * _near) / (r - l), .0, .0, .0,
 				.0, (real (2) * _near) / (t - b), .0, .0,

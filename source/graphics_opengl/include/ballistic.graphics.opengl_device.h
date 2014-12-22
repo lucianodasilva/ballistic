@@ -21,6 +21,7 @@ namespace ballistic {
 			bool _alpha_blend;
 
 			color _clear_color;
+			vec2  _viewport;
 
 			atomic <unsigned char> _effect_run_id;
 			atomic <unsigned char> _renderable_run_id;
@@ -47,6 +48,9 @@ namespace ballistic {
 			
 			virtual void		clear_color ( const color & cr );
 			virtual color		clear_color() const;
+			
+			virtual vec2		viewport () const;
+			virtual void		viewport ( const vec2 & v );
 
 			virtual void		clear ();
 

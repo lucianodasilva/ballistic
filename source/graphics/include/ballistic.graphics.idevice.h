@@ -34,6 +34,9 @@ namespace ballistic {
 
 			virtual void		clear_color ( const color & cr ) = 0;
 			virtual color		clear_color() const = 0;
+			
+			virtual vec2		viewport () const = 0;
+			virtual void		viewport ( const vec2 & v ) = 0;
 
 			virtual void		clear () = 0;
 
@@ -41,7 +44,6 @@ namespace ballistic {
 			virtual void		end_frame () = 0;
 	
 			virtual void		present () = 0;
-
 			virtual void		destroy () = 0;
 
 			virtual void		draw_active_renderable () = 0;

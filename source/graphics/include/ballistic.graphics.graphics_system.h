@@ -97,6 +97,7 @@ namespace ballistic {
 			// methods
 			void push_item (material * material, irenderable * renderable, rig_frame_tween * rig, uint8_t layer, const mat4 & transform);
 			void push_overlay_item (material * material, irenderable * renderable, uint8_t layer, const mat4 & transform);
+
 			void push_light (const light_info & info);
 		};
 				  
